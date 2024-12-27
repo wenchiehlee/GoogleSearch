@@ -21,8 +21,9 @@ jobs:
         
        # Need to fetch reqs if needed
       - name: Installing all necessary packages
-        run: pip install -r requirements.txt
-
+        run: |
+          pip install -r requirements.txt
+          which markitdown
       - name: Running Python
         env:
           GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
