@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: "10 2 * * *"     # Runs every day at 2:10 AM UTC
 jobs:
-  API:
+  GoogleSearch:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repo
