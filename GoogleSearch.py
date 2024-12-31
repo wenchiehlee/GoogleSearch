@@ -4,6 +4,7 @@ import csv
 from urllib.parse import urlparse, unquote, parse_qs
 from dotenv import load_dotenv
 import subprocess  # For executing Markitdown command
+import platform
 
 # Load environment variables
 load_dotenv()
@@ -11,6 +12,22 @@ load_dotenv()
 GOOGLE_SEARCH_API_KEY = os.getenv("GOOGLE_SEARCH_API_KEY")
 GOOGLE_SEARCH_CSE_ID = os.getenv("GOOGLE_SEARCH_CSE_ID")
 os.environ["PYTHONIOENCODING"] = "utf-8"
+
+# Ensure Markitdown command is valid
+def is_markitdown_valid():
+    try:
+        # Check for Markitdown executable based on OS
+        command = "where" if platform.system() == "Windows" else "which"
+        result = subprocess.run([command, "markitdown"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell=True)
+        if result.returncode == 0:
+            print(f"Markitdown found at: {result.stdout.decode().strip()}")
+            return True
+        else:
+            print("Markitdown not found.")
+            return False
+    except FileNotFoundError:
+        print("Markitdown is not installed or not found in the PATH.")
+        return False
 
 def google_search(api_key, cse_id, query, num_results=10, max_results=500, last_days=180, language="lang_zh-TW", country="countryTW"):
     """
@@ -87,6 +104,10 @@ def download_files_from_links_and_convert(csv_filename="GoogleResults.csv"):
     Args:
         csv_filename (str): Name of the input/output CSV file.
     """
+    if not is_markitdown_valid():
+        print("Markitdown validation failed. Please ensure it is installed and accessible.")
+        return
+
     with open(csv_filename, mode="r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
         rows = list(reader)
