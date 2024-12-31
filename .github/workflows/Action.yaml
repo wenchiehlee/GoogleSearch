@@ -24,6 +24,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install markitdown
+          which markitdown
       - name: Running Python
         env:
           GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
