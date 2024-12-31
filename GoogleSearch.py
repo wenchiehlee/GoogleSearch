@@ -4,7 +4,7 @@ import csv
 from urllib.parse import urlparse, unquote, parse_qs
 from dotenv import load_dotenv
 import subprocess  # For executing Markitdown command
-import platform
+import platform  # For platform-specific logic
 
 # Load environment variables
 load_dotenv()
@@ -13,20 +13,25 @@ GOOGLE_SEARCH_API_KEY = os.getenv("GOOGLE_SEARCH_API_KEY")
 GOOGLE_SEARCH_CSE_ID = os.getenv("GOOGLE_SEARCH_CSE_ID")
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
-# Ensure Markitdown command is valid
 def is_markitdown_valid():
+    """
+    Check if the Markitdown command is available on the system.
+
+    Returns:
+        bool: True if Markitdown is available, False otherwise.
+    """
+    command = "where" if platform.system() == "Windows" else "which"
     try:
-        # Check for Markitdown executable based on OS
-        command = "where" if platform.system() == "Windows" else "which"
-        result = subprocess.run([command, "markitdown"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell=True)
-        if result.returncode == 0:
-            print(f"Markitdown found at: {result.stdout.decode().strip()}")
-            return True
-        else:
-            print("Markitdown not found.")
-            return False
-    except FileNotFoundError:
-        print("Markitdown is not installed or not found in the PATH.")
+        result = subprocess.run(
+            [command, "markitdown"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            shell=True
+        )
+        return result.returncode == 0
+    except subprocess.CalledProcessError as e:
+        print(f"Error: Markitdown is not available. Please ensure it is installed and accessible in your PATH. {e}")
         return False
 
 def google_search(api_key, cse_id, query, num_results=10, max_results=500, last_days=180, language="lang_zh-TW", country="countryTW"):
@@ -105,7 +110,7 @@ def download_files_from_links_and_convert(csv_filename="GoogleResults.csv"):
         csv_filename (str): Name of the input/output CSV file.
     """
     if not is_markitdown_valid():
-        print("Markitdown validation failed. Please ensure it is installed and accessible.")
+        print("Markitdown is not installed or cannot be found. Exiting.")
         return
 
     with open(csv_filename, mode="r", newline="", encoding="utf-8") as file:
@@ -121,12 +126,10 @@ def download_files_from_links_and_convert(csv_filename="GoogleResults.csv"):
         link = row["Link"]
         if link:
             try:
-                # Decode the URL to handle redirects and special characters
                 decoded_link = unquote(link)
                 if decoded_link.lower().endswith(".pdf") or "fileredirect.aspx" in decoded_link:
                     response = requests.get(link, stream=True, allow_redirects=True)
                     if response.status_code == 200:
-                        # Handle redirected URLs to extract actual file path
                         final_url = response.url
                         parsed_url = urlparse(final_url)
                         if "fileredirect.aspx" in parsed_url.path:
@@ -150,7 +153,6 @@ def download_files_from_links_and_convert(csv_filename="GoogleResults.csv"):
                                 f.write(chunk)
                         row["File"] = filepath
 
-                        # Convert the PDF to Markdown using Markitdown
                         md_filepath = os.path.join("MD", os.path.basename(filepath).replace(".pdf", ".md"))
                         os.makedirs("MD", exist_ok=True)
                         try:
