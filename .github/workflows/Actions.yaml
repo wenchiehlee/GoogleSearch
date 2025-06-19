@@ -22,27 +22,65 @@ jobs:
       - name: Installing package list
         run: apt list --installed    
         
-      # Need to fetch reqs if needed
+      # Install system dependencies for web page processing
+      - name: Installing system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wkhtmltopdf xvfb
+          
+      # Verify wkhtmltopdf installation
+      - name: Verify wkhtmltopdf installation
+        run: |
+          which wkhtmltopdf
+          wkhtmltopdf --version
+          
+      # Install Python dependencies
       - name: Installing all necessary packages
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install markitdown
           which python3
           which markitdown
           
-      - name: Running Python
+      # Verify Python tools
+      - name: Verify Python tools
+        run: |
+          python --version
+          markitdown --help || echo "Markitdown help not available, but installed"
+          
+      - name: Running Python Script
         env:
           GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
           GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
         run: |
-          python GoogleSearch.py
+          # Run with virtual display for wkhtmltopdf if needed
+          xvfb-run -a python GoogleSearch.py
+
+      - name: List generated files
+        run: |
+          echo "Generated CSV files:"
+          ls -la *.csv 2>/dev/null || echo "No CSV files found"
+          echo "Generated PDF files:"
+          ls -la PDF/ 2>/dev/null || echo "No PDF directory found"
+          echo "Generated MD files:"
+          ls -la MD/ 2>/dev/null || echo "No MD directory found"
 
       - name: Commit and Push The Results From Python Action
         run: |
          git config --global user.name "github-actions[bot]"
          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-         git add *.csv 
-         git add PDF/*.pdf 2>/dev/null || true
-         git add MD/*.md 2>/dev/null || true
-         git commit -m "⬆️ GitHub Actions Results added" || true
-         git push || true
+         
+         # Add files with error handling
+         git add *.csv 2>/dev/null || echo "No CSV files to add"
+         git add PDF/*.pdf 2>/dev/null || echo "No PDF files to add"
+         git add PDF/*.txt 2>/dev/null || echo "No TXT files to add"
+         git add MD/*.md 2>/dev/null || echo "No MD files to add"
+         
+         # Check if there are any changes to commit
+         if git diff --staged --quiet; then
+           echo "No changes to commit"
+         else
+           git commit -m "⬆️ GitHub Actions Results added (Ubuntu v2.0.3)" || echo "Commit failed"
+           git push || echo "Push failed"
+         fi
