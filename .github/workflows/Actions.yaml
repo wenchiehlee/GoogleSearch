@@ -6,26 +6,30 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "10 2 * * *"     # Runs every day at 2:10 AM UTC
+
 jobs:
   GoogleSearch:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repo
         uses: actions/checkout@v4
+        
       - name: Setting up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          
       - name: Installing package list
         run: apt list --installed    
         
-       # Need to fetch reqs if needed
+      # Need to fetch reqs if needed
       - name: Installing all necessary packages
         run: |
           pip install -r requirements.txt
           pip install markitdown
           which python3
           which markitdown
+          
       - name: Running Python
         env:
           GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
@@ -37,9 +41,8 @@ jobs:
         run: |
          git config --global user.name "github-actions[bot]"
          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-         git add -A
          git add *.csv 
-         git add *.pdf
-         git add *.md 
+         git add PDF/*.pdf 2>/dev/null || true
+         git add MD/*.md 2>/dev/null || true
          git commit -m "⬆️ GitHub Actions Results added" || true
          git push || true
