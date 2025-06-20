@@ -43,7 +43,6 @@
   + [進階搜尋](/etf/eb/et305001.djhtm)
   + [指數搜尋](/etf/x/Search/Search0001.xdjhtm)
 * ETF排行 ![](/etf/images/Arrow_Orange.gif)
-  + [熱門排行](/etf/x/Rank/Rank0014.xdjhtm?eRank=vol&eOrd=T800100&eMid=TW&eTab=0)
   + 報酬排行 ![](/etf/images/Arrow_White_Right.gif)
     - [漲幅排行](/etf/x/Rank/Rank0001.xdjhtm?eRank=up&eOrd=T800500)
     - [跌幅排行](/etf/x/Rank/Rank0001.xdjhtm?eRank=dn&eOrd=T800500&eSort=2)

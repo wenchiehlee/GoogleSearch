@@ -22,7 +22,7 @@
 
 熱搜
 
-[以色列空襲](https://tw.search.yahoo.com/search?p=以色列空襲&fr=ush-bt1) [林芳郁](https://tw.search.yahoo.com/search?p=林芳郁&fr=ush-bt1) [釜山自由行](https://tw.search.yahoo.com/search?p=釜山自由行&fr=ush-bt1) [15.5億威力彩](https://tw.search.yahoo.com/search?p=15.5億威力彩&fr=ush-bt1) [愛爾蘭旅遊](https://tw.search.yahoo.com/search?p=愛爾蘭旅遊&fr=ush-bt1) [NBA總冠軍賽](https://tw.search.yahoo.com/search?p=NBA總冠軍賽&fr=ush-bt1) [二胎房貸利率](https://tw.search.yahoo.com/search?p=二胎房貸利率&fr=ush-bt1) [Albee熱戀](https://tw.search.yahoo.com/search?p=Albee熱戀&fr=ush-bt1) [黃金價格](https://tw.search.yahoo.com/search?p=黃金價格&fr=ush-bt1) [美股休市](https://tw.search.yahoo.com/search?p=美股休市&fr=ush-bt1)
+[以色列空襲](https://tw.search.yahoo.com/search?p=以色列空襲&fr=ush-bt1) [林芳郁](https://tw.search.yahoo.com/search?p=林芳郁&fr=ush-bt1) [純瑞士旅遊](https://tw.search.yahoo.com/search?p=純瑞士旅遊&fr=ush-bt1) [NBA總冠軍賽](https://tw.search.yahoo.com/search?p=NBA總冠軍賽&fr=ush-bt1) [房貸二胎](https://tw.search.yahoo.com/search?p=房貸二胎&fr=ush-bt1) [Albee熱戀](https://tw.search.yahoo.com/search?p=Albee熱戀&fr=ush-bt1) [越南航空](https://tw.search.yahoo.com/search?p=越南航空&fr=ush-bt1) [美股休市](https://tw.search.yahoo.com/search?p=美股休市&fr=ush-bt1) [15.5億威力彩](https://tw.search.yahoo.com/search?p=15.5億威力彩&fr=ush-bt1) [大谷翔平](https://tw.search.yahoo.com/search?p=大谷翔平&fr=ush-bt1)
 
 * [焦點](https://tw.news.yahoo.com/)
 
@@ -203,7 +203,7 @@
 
   [FTNN新聞網]記者林廷宇／綜合報導元大台灣50（0050）完成一拆四後，18日以每股47.32元重新掛牌交易，單張門檻降至不到4.8萬元，吸引大量小資族進場搶購。豈...
 
-  [**Reactions**17](https://tw.stock.yahoo.com/news/0050%E7%88%86%E9%87%8F%E8%B7%8C%E7%A0%B4%E6%8E%9B%E7%89%8C%E5%83%B9-%E5%B0%8F%E8%B3%87%E6%97%8F%E5%93%AD%E5%96%8A-%E7%8F%BE%E8%B2%B7%E7%8F%BE%E5%A5%97-%E5%B0%88%E5%AE%B6%E6%9B%9D-1%E6%8A%95%E8%B3%87%E7%AD%96%E7%95%A5-233900485.html)
+  [**Reactions**18](https://tw.stock.yahoo.com/news/0050%E7%88%86%E9%87%8F%E8%B7%8C%E7%A0%B4%E6%8E%9B%E7%89%8C%E5%83%B9-%E5%B0%8F%E8%B3%87%E6%97%8F%E5%93%AD%E5%96%8A-%E7%8F%BE%E8%B2%B7%E7%8F%BE%E5%A5%97-%E5%B0%88%E5%AE%B6%E6%9B%9D-1%E6%8A%95%E8%B3%87%E7%AD%96%E7%95%A5-233900485.html)
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   CTWANT·
@@ -223,6 +223,13 @@
   「中鋼 高雄最U質的企業 給我V起來!」、「中鋼造了一座山，又套死一堆韭菜」、「中鋼中鋼整天中鋼，今天就鋼到你哀哀叫！」、「大家感覺對中鋼由愛生恨」、「很多股票補完缺口後就下去了 很慘 中鋼還破底 夭壽」、「我今天只買到一張中鋼 另一張還沒成交 :)」
 
   [**Reactions**8](https://tw.stock.yahoo.com/news/%E3%80%90hot%E5%8F%B0%E8%82%A1%E3%80%91%E4%B8%AD%E9%8B%BC%E7%A0%B4%E5%BA%95-%E7%B6%B2%E5%96%8A%E3%80%8C%E9%80%A0%E4%BA%86%E4%B8%80%E5%BA%A7%E5%B1%B1%E3%80%8D%E5%B0%88%E5%AE%B6%EF%BC%9A%E6%B2%92%E6%88%B0%E7%88%AD%EF%BC%8C%E6%98%8E%E5%B9%B4-043023771.html)
+* 中時財經即時·
+
+  #### [誰買的？台積電尾盤爆3.8萬張大量 強拉20元收1055 台股瞬間翻紅](https://tw.stock.yahoo.com/news/%E8%AA%B0%E8%B2%B7%E7%9A%84-%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%863-8%E8%90%AC%E5%BC%B5%E5%A4%A7%E9%87%8F-%E5%BC%B7%E6%8B%8920%E5%85%83%E6%94%B61055-%E5%8F%B0%E8%82%A1%E7%9E%AC%E9%96%93%E7%BF%BB%E7%B4%85-054752749.html)
+
+  台股今（20日）開低走高，台積電盤中一度下跌10元觸及1025元，後段陷入平盤震盪，尾盤爆出3.8萬張大量，一口氣將股價拉至1055元，大漲20元，幫助台股驚險守住22000萬點關卡，收在22045.74點，小漲42.24點。聯發科下殺15元收在1250元，鴻海漲1.5元收在155.5元，同樣出現3.4萬張大量。
+
+  [**Reactions**17](https://tw.stock.yahoo.com/news/%E8%AA%B0%E8%B2%B7%E7%9A%84-%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%863-8%E8%90%AC%E5%BC%B5%E5%A4%A7%E9%87%8F-%E5%BC%B7%E6%8B%8920%E5%85%83%E6%94%B61055-%E5%8F%B0%E8%82%A1%E7%9E%AC%E9%96%93%E7%BF%BB%E7%B4%85-054752749.html)
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   Yahoo奇摩股市·
@@ -231,14 +238,7 @@
 
   台積電（2330）今（20）日一度下跌10元至1025元，尾盤爆出高達3.8萬張大量買盤收在1055元，專家分析，該筆大量買單極可能為外資趁勢低接，不過，投資人要留意目前不確定性很大，建議多看少做。
 
-  [**Reactions**17](https://tw.stock.yahoo.com/news/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%8638%E8%90%AC%E5%BC%B5%E8%B2%B7%E5%96%AE%EF%BC%81%E6%8A%95%E9%A1%A7%E8%91%A3%E5%BA%A7%E6%9B%9D%EF%BC%9A%E5%A4%96%E8%B3%87%E8%B6%81%E5%8B%A2%E9%80%B2%E5%A0%B4%E6%92%BF%E4%BE%BF%E5%AE%9C-063231973.html)
-* 中時財經即時·
-
-  #### [誰買的？台積電尾盤爆3.8萬張大量 強拉20元收1055 台股瞬間翻紅](https://tw.stock.yahoo.com/news/%E8%AA%B0%E8%B2%B7%E7%9A%84-%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%863-8%E8%90%AC%E5%BC%B5%E5%A4%A7%E9%87%8F-%E5%BC%B7%E6%8B%8920%E5%85%83%E6%94%B61055-%E5%8F%B0%E8%82%A1%E7%9E%AC%E9%96%93%E7%BF%BB%E7%B4%85-054752749.html)
-
-  台股今（20日）開低走高，台積電盤中一度下跌10元觸及1025元，後段陷入平盤震盪，尾盤爆出3.8萬張大量，一口氣將股價拉至1055元，大漲20元，幫助台股驚險守住22000萬點關卡，收在22045.74點，小漲42.24點。聯發科下殺15元收在1250元，鴻海漲1.5元收在155.5元，同樣出現3.4萬張大量。
-
-  [**Reactions**10](https://tw.stock.yahoo.com/news/%E8%AA%B0%E8%B2%B7%E7%9A%84-%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%863-8%E8%90%AC%E5%BC%B5%E5%A4%A7%E9%87%8F-%E5%BC%B7%E6%8B%8920%E5%85%83%E6%94%B61055-%E5%8F%B0%E8%82%A1%E7%9E%AC%E9%96%93%E7%BF%BB%E7%B4%85-054752749.html)
+  [**Reactions**16](https://tw.stock.yahoo.com/news/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%B0%BE%E7%9B%A4%E7%88%8638%E8%90%AC%E5%BC%B5%E8%B2%B7%E5%96%AE%EF%BC%81%E6%8A%95%E9%A1%A7%E8%91%A3%E5%BA%A7%E6%9B%9D%EF%BC%9A%E5%A4%96%E8%B3%87%E8%B6%81%E5%8B%A2%E9%80%B2%E5%A0%B4%E6%92%BF%E4%BE%BF%E5%AE%9C-063231973.html)
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   今日新聞NOWnews·
@@ -255,6 +255,13 @@
   台積電（2330）股價於6月9日站回千元之後，從當日至6月18日止，盤後鉅額成交熱絡，且價格都在千元之上最高達1,145元，惟昨（19）日卻意外出現二筆共50張成交價低於977元，為近九個交易日來首度出現千元以下鉅額交易。
 
   [**Reactions**6](https://tw.stock.yahoo.com/news/%E6%95%A3%E6%88%B6%E8%A6%81%E5%B0%8F%E5%BF%83%E4%BA%86-%E5%8F%B0%E7%A9%8D%E9%9B%BB%E6%98%A8%E7%9B%A4%E5%BE%8C%E9%89%85%E9%A1%8D%E4%BA%A4%E6%98%93-%E9%A9%9A%E7%8F%BE50%E5%BC%B5%E6%88%90%E4%BA%A4%E5%9C%A8977%E5%85%83%E4%BB%A5%E4%B8%8B-023324109.html)
+* 時報資訊·
+
+  #### [《基金》0056、00919都能高配3年？內行人：這檔更有撐！](https://tw.stock.yahoo.com/news/%E5%9F%BA%E9%87%91-0056-919%E9%AB%98%E9%85%8D3%E5%B9%B4-%E5%85%A7%E8%A1%8C-%E4%BB%96%E6%9B%B4%E6%9C%89%E6%92%90-015601091.html)
+
+  【時報-台北電】2大規模高股息0056、00919守住高配令人驚艷，但它們還有多少底氣能夠維持引發投資人好奇，Smart智富月刊社長林正峰認為，以2檔收益平準金和資本損益平準金佔淨值3成、年化配息率12%計算，兩者還有2年多、將近3年的「高配底氣」；若要兩者擇一，他認為，0056有可能比00919撐得更久。 受到川普關稅的襲擊，台股大盤走勢疲弱，今年到昨(6/18)為止跌幅2.94%，不少高股息ETF配息縮水，惟前5大規模高股息中，以元大高股息(0056)、群益台灣精選高息(00919)配息維持在高檔令市場印象深刻。 根據統計，最新季配息ETF配息平新高的有3檔，分別是00919、永豐台灣ESG(00888)及第一金工業30(00728)，而0056自2023年5月改為季配後，除當年第4季配息1.2元外，已經連續4季配次高1.07元；另外也有不少配息大縮水者，降息70%、80%的比比皆是，包含FT臺灣Smart(00905)、兆豐永續高息等權(00932)、復華富時高息低波(00731)等，都是抵不住大盤回落而降息的ETF。 00919和0056之所以能夠維持上次配息水平，自是因為成分
+
+  [**Reactions**1](https://tw.stock.yahoo.com/news/%E5%9F%BA%E9%87%91-0056-919%E9%AB%98%E9%85%8D3%E5%B9%B4-%E5%85%A7%E8%A1%8C-%E4%BB%96%E6%9B%B4%E6%9C%89%E6%92%90-015601091.html)
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   Yahoo奇摩股市·
@@ -294,11 +301,15 @@
   美股三大指數6月來走高並逼近其歷史高點，專家擔心在美股漲高而變得更脆弱的情況下，只要川普決定出兵伊朗，不但會引發全球政經危機，美股也會立即因為市場的本能反應而湧現拋售浪潮。
 
   [**Reactions**2](https://tw.stock.yahoo.com/news/%E5%B7%9D%E6%99%AE%E5%96%8A%E5%87%BA%E5%85%B5%E4%BC%8A%E6%9C%97-%E5%B0%88%E5%AE%B6%E6%86%82%E5%BC%95%E7%88%86%E7%BE%8E%E8%82%A1%E6%8B%8B%E5%94%AE%E6%BD%AE-201000910.html)
-* 時報資訊·
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [《基金》0056、00919都能高配3年？內行人：這檔更有撐！](https://tw.stock.yahoo.com/news/%E5%9F%BA%E9%87%91-0056-919%E9%AB%98%E9%85%8D3%E5%B9%B4-%E5%85%A7%E8%A1%8C-%E4%BB%96%E6%9B%B4%E6%9C%89%E6%92%90-015601091.html)
+  Yahoo奇摩股市·
 
-  【時報-台北電】2大規模高股息0056、00919守住高配令人驚艷，但它們還有多少底氣能夠維持引發投資人好奇，Smart智富月刊社長林正峰認為，以2檔收益平準金和資本損益平準金佔淨值3成、年化配息率12%計算，兩者還有2年多、將近3年的「高配底氣」；若要兩者擇一，他認為，0056有可能比00919撐得更久。 受到川普關稅的襲擊，台股大盤走勢疲弱，今年到昨(6/18)為止跌幅2.94%，不少高股息ETF配息縮水，惟前5大規模高股息中，以元大高股息(0056)、群益台灣精選高息(00919)配息維持在高檔令市場印象深刻。 根據統計，最新季配息ETF配息平新高的有3檔，分別是00919、永豐台灣ESG(00888)及第一金工業30(00728)，而0056自2023年5月改為季配後，除當年第4季配息1.2元外，已經連續4季配次高1.07元；另外也有不少配息大縮水者，降息70%、80%的比比皆是，包含FT臺灣Smart(00905)、兆豐永續高息等權(00932)、復華富時高息低波(00731)等，都是抵不住大盤回落而降息的ETF。 00919和0056之所以能夠維持上次配息水平，自是因為成分
+  #### [【Yahoo早盤】台股跌近300點陷2萬2保衛戰 分析師蔡明翰「橫向震盪」：難轉強翻紅](https://tw.stock.yahoo.com/news/%E3%80%90yahoo%E6%97%A9%E7%9B%A4%E3%80%91%E5%8F%B0%E8%82%A1%E8%B7%8C%E8%BF%91300%E9%BB%9E%E9%99%B72%E8%90%AC2%E4%BF%9D%E8%A1%9B%E6%88%B0-%E5%88%86%E6%9E%90%E5%B8%AB%E8%94%A1%E6%98%8E%E7%BF%B0%E3%80%8C%E6%A9%AB%E5%90%91%E9%9C%87%E7%9B%AA%E3%80%8D%EF%BC%9A%E9%9B%A3%E8%BD%89%E5%BC%B7%E7%BF%BB%E7%B4%85-014131576.html)
+
+  台股今（19）日以22,238點開出，最低一度跌近300百點靠近2萬2，觸及22,088點。國泰證期顧問處協理蔡明翰表示，受以伊衝突、Fed利率決議影響，市場疑慮仍重，今日成交量約落在3300億元，呈現價跌量縮，技術面上屬於正向，不過今日要翻紅轉強機會不大。
+
+  [**Reactions**1](https://tw.stock.yahoo.com/news/%E3%80%90yahoo%E6%97%A9%E7%9B%A4%E3%80%91%E5%8F%B0%E8%82%A1%E8%B7%8C%E8%BF%91300%E9%BB%9E%E9%99%B72%E8%90%AC2%E4%BF%9D%E8%A1%9B%E6%88%B0-%E5%88%86%E6%9E%90%E5%B8%AB%E8%94%A1%E6%98%8E%E7%BF%B0%E3%80%8C%E6%A9%AB%E5%90%91%E9%9C%87%E7%9B%AA%E3%80%8D%EF%BC%9A%E9%9B%A3%E8%BD%89%E5%BC%B7%E7%BF%BB%E7%B4%85-014131576.html)
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   聯合新聞網·
@@ -306,15 +317,6 @@
   #### [日資釋股 吳東進握新光三越主導權](https://tw.news.yahoo.com/%E6%97%A5%E8%B3%87%E9%87%8B%E8%82%A1-%E5%90%B3%E6%9D%B1%E9%80%B2%E6%8F%A1%E6%96%B0%E5%85%89%E4%B8%89%E8%B6%8A%E4%B8%BB%E5%B0%8E%E6%AC%8A-223433342.html)
 
   百貨龍頭新光三越董監事下周改選，傳出新光三越日方大股東三越伊勢丹出售半數、百分之廿一點五股權，由泛新光派的新昕資本以每股...
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  Yahoo奇摩股市·
-
-  #### [【中鋼股東會】董座示警「鋼市越來越緊張」：拚第4季逆轉勝 請祝福我們](https://tw.stock.yahoo.com/news/%E3%80%90%E4%B8%AD%E9%8B%BC%E8%82%A1%E6%9D%B1%E6%9C%83%E3%80%91%E8%91%A3%E5%BA%A7%E7%A4%BA%E8%AD%A6%E3%80%8C%E9%8B%BC%E5%B8%82%E8%B6%8A%E4%BE%86%E8%B6%8A%E7%B7%8A%E5%BC%B5%E3%80%8D%EF%BC%9A%E6%8B%9A%E7%AC%AC4%E5%AD%A3%E9%80%86%E8%BD%89%E5%8B%9D-%E8%AB%8B%E7%A5%9D%E7%A6%8F%E6%88%91%E5%80%91-005656716.html)
-
-  中鋼今（19）日股東會，中鋼董事長黃建智會前受訪時表示，目前鋼市景氣會越來越緊張，但看好第四季會逆轉勝，希望「大家祝福我們。」
-
-  [**Reactions**1](https://tw.stock.yahoo.com/news/%E3%80%90%E4%B8%AD%E9%8B%BC%E8%82%A1%E6%9D%B1%E6%9C%83%E3%80%91%E8%91%A3%E5%BA%A7%E7%A4%BA%E8%AD%A6%E3%80%8C%E9%8B%BC%E5%B8%82%E8%B6%8A%E4%BE%86%E8%B6%8A%E7%B7%8A%E5%BC%B5%E3%80%8D%EF%BC%9A%E6%8B%9A%E7%AC%AC4%E5%AD%A3%E9%80%86%E8%BD%89%E5%8B%9D-%E8%AB%8B%E7%A5%9D%E7%A6%8F%E6%88%91%E5%80%91-005656716.html)
 * 時報資訊·
 
   #### [《國際產業》揪台積電加入！傳孫正義擬在美國打造AI機器人超級園區](https://tw.stock.yahoo.com/news/%E5%9C%8B%E9%9A%9B%E7%94%A2%E6%A5%AD-%E6%8F%AA%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%8A%A0%E5%85%A5-%E5%82%B3%E5%AD%AB%E6%AD%A3%E7%BE%A9%E6%93%AC%E5%9C%A8%E7%BE%8E%E5%9C%8B%E6%89%93%E9%80%A0ai%E6%A9%9F%E5%99%A8%E4%BA%BA%E8%B6%85%E7%B4%9A%E5%9C%92%E5%8D%80-065332598.html)
@@ -385,11 +387,6 @@
   中天新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [日女星產後「陰道流出糞便」　哀訴：罹萬中選一罕病](https://tw.news.yahoo.com/%E6%97%A5%E5%A5%B3%E6%98%9F%E7%94%A2%E5%BE%8C-%E9%99%B0%E9%81%93%E6%B5%81%E5%87%BA%E7%B3%9E%E4%BE%BF-%E5%93%80%E8%A8%B4-%E7%BD%B9%E8%90%AC%E4%B8%AD%E9%81%B8-%E7%BD%95%E7%97%85-081033477.html)
-
-  CTWANT
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
   #### [MLB／道奇教士7次觸身釀大場面　大谷翔平又被砸！緊急阻止隊友衝上場](https://tw.news.yahoo.com/mlb-%E9%81%93%E5%A5%87%E6%95%99%E5%A3%AB7%E6%AC%A1%E8%A7%B8%E8%BA%AB%E9%87%80%E5%A4%A7%E5%A0%B4%E9%9D%A2-%E5%A4%A7%E8%B0%B7%E7%BF%94%E5%B9%B3%E5%8F%88%E8%A2%AB%E7%A0%B8-%E7%B7%8A%E6%80%A5%E9%98%BB%E6%AD%A2%E9%9A%8A%E5%8F%8B%E8%A1%9D%E4%B8%8A%E5%A0%B4-055300961.html)
 
   三立新聞網 setn.com
@@ -400,9 +397,14 @@
   匯流新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [紐時：川普一旦出兵 中國實力就會看破手腳](https://tw.news.yahoo.com/%E7%B4%90%E6%99%82-%E5%B7%9D%E6%99%AE-%E6%97%A6%E5%87%BA%E5%85%B5-%E4%B8%AD%E5%9C%8B%E5%AF%A6%E5%8A%9B%E5%B0%B1%E6%9C%83%E7%9C%8B%E7%A0%B4%E6%89%8B%E8%85%B3-070756566.html)
+  #### [日女星產後「陰道流出糞便」　哀訴：罹萬中選一罕病](https://tw.news.yahoo.com/%E6%97%A5%E5%A5%B3%E6%98%9F%E7%94%A2%E5%BE%8C-%E9%99%B0%E9%81%93%E6%B5%81%E5%87%BA%E7%B3%9E%E4%BE%BF-%E5%93%80%E8%A8%B4-%E7%BD%B9%E8%90%AC%E4%B8%AD%E9%81%B8-%E7%BD%95%E7%97%85-081033477.html)
 
-  新頭殼
+  CTWANT
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [基隆安樂中學運動服 澳洲古著店現蹤！學生驚喜:真的很好穿](https://tw.news.yahoo.com/%E5%9F%BA%E9%9A%86%E5%AE%89%E6%A8%82%E4%B8%AD%E5%AD%B8%E9%81%8B%E5%8B%95%E6%9C%8D-%E6%BE%B3%E6%B4%B2%E5%8F%A4%E8%91%97%E5%BA%97%E7%8F%BE%E8%B9%A4-%E5%AD%B8%E7%94%9F%E9%A9%9A%E5%96%9C-%E7%9C%9F%E7%9A%84%E5%BE%88%E5%A5%BD%E7%A9%BF-135353676.html)
+
+  民視影音
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [出事了…遭自己人爆破打臉示範帶！黃國昌「切割張啓楷」開嗆這句](https://tw.news.yahoo.com/%E5%87%BA%E4%BA%8B%E4%BA%86-%E9%81%AD%E8%87%AA%E5%B7%B1%E4%BA%BA%E7%88%86%E7%A0%B4%E6%89%93%E8%87%89%E7%A4%BA%E7%AF%84%E5%B8%B6-%E9%BB%83%E5%9C%8B%E6%98%8C-%E5%88%87%E5%89%B2%E5%BC%B5%E5%95%93%E6%A5%B7-%E9%96%8B%E5%97%86%E9%80%99%E5%8F%A5-031354830.html)
@@ -410,9 +412,19 @@
   民視
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
+  #### [紐時：川普一旦出兵 中國實力就會看破手腳](https://tw.news.yahoo.com/%E7%B4%90%E6%99%82-%E5%B7%9D%E6%99%AE-%E6%97%A6%E5%87%BA%E5%85%B5-%E4%B8%AD%E5%9C%8B%E5%AF%A6%E5%8A%9B%E5%B0%B1%E6%9C%83%E7%9C%8B%E7%A0%B4%E6%89%8B%E8%85%B3-070756566.html)
+
+  新頭殼
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
   #### [MLB》教士投手K到大谷翔平　柯蕭一隻腳都跨出來了「被他勸回去」](https://tw.sports.yahoo.com/news/mlb-%E6%95%99%E5%A3%AB%E6%8A%95%E6%89%8Bk%E5%88%B0%E5%A4%A7%E8%B0%B7%E7%BF%94%E5%B9%B3-%E6%9F%AF%E8%95%AD-%E9%9A%BB%E8%85%B3%E9%83%BD%E8%B7%A8%E5%87%BA%E4%BE%86%E4%BA%86-%E8%A2%AB%E4%BB%96%E5%8B%B8%E5%9B%9E%E5%8E%BB-071505281.html)
 
   麗台運動報
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [跳水》全紅嬋泳衣被破壞？國家隊邊緣化？退出2大賽爆陰謀論](https://tw.news.yahoo.com/%E8%B7%B3%E6%B0%B4-%E5%85%A8%E7%B4%85%E5%AC%8B%E6%B3%B3%E8%A1%A3%E8%A2%AB%E7%A0%B4%E5%A3%9E-%E5%9C%8B%E5%AE%B6%E9%9A%8A%E5%AD%A4%E7%AB%8B-%E9%80%80%E5%87%BA2%E5%A4%A7%E8%B3%BD%E7%88%86%E9%99%B0%E8%AC%80%E8%AB%96-045532625.html)
+
+  中時新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [郭台銘16歲女兒偏鄉當小老師　長髮美照曝光！曾馨瑩驕傲：超有意義](https://tw.news.yahoo.com/%E9%83%AD%E5%8F%B0%E9%8A%9816%E6%AD%B2%E5%A5%B3%E5%85%92%E5%81%8F%E9%84%89%E7%95%B6%E5%B0%8F%E8%80%81%E5%B8%AB-%E9%95%B7%E9%AB%AE%E7%BE%8E%E7%85%A7%E6%9B%9D%E5%85%89-%E6%9B%BE%E9%A6%A8%E7%91%A9%E9%A9%95%E5%82%B2-%E8%B6%85%E6%9C%89%E6%84%8F%E7%BE%A9-042800960.html)
@@ -420,14 +432,9 @@
   鏡週刊Mirror Media
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [于北辰稱「若台撐住1個月」　郭正亮1句嗆爆](https://tw.news.yahoo.com/%E4%BA%8E%E5%8C%97%E8%BE%B0%E7%A8%B1-%E8%8B%A5%E5%8F%B0%E6%92%90%E4%BD%8F1%E5%80%8B%E6%9C%88-%E9%83%AD%E6%AD%A3%E4%BA%AE1%E5%8F%A5%E5%97%86%E7%88%86-012213088.html)
+  #### [【房地產週報】央行按兵不動！房市降溫買氣凍 議價空間大開 3大熱區罕見砍到8折價](https://tw.stock.yahoo.com/news/%E3%80%90%E6%88%BF%E5%9C%B0%E7%94%A2%E9%80%B1%E5%A0%B1%E3%80%91%E5%A4%AE%E8%A1%8C%E6%8C%89%E5%85%B5%E4%B8%8D%E5%8B%95%EF%BC%81%E6%88%BF%E5%B8%82%E9%99%8D%E6%BA%AB%E8%B2%B7%E6%B0%A3%E5%87%8D-%E8%AD%B0%E5%83%B9%E7%A9%BA%E9%96%93%E5%A4%A7%E9%96%8B-3%E5%A4%A7%E7%86%B1%E5%8D%80%E7%BD%95%E8%A6%8B%E7%A0%8D%E5%88%B08%E6%8A%98%E5%83%B9-011101947.html)
 
-  今日新聞NOWnews
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [台灣人愛吃！「2種魚」超傷腦　醫：加速失智、增罹癌風險](https://tw.news.yahoo.com/%E5%8F%B0%E7%81%A3%E4%BA%BA%E6%84%9B%E5%90%83-2%E7%A8%AE%E9%AD%9A-%E8%B6%85%E5%82%B7%E8%85%A6-%E9%86%AB-%E5%8A%A0%E9%80%9F%E5%A4%B1%E6%99%BA-130200566.html)
-
-  三立新聞網 setn.com
+  Yahoo奇摩房地產編輯部
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [美國參戰倒數！3航母群圍逼伊朗　以色列F-35遭擊落](https://tw.news.yahoo.com/%E7%BE%8E%E5%9C%8B%E5%8F%83%E6%88%B0%E5%80%92%E6%95%B8-3%E8%88%AA%E6%AF%8D%E7%BE%A4%E5%9C%8D%E9%80%BC%E4%BC%8A%E6%9C%97-%E4%BB%A5%E8%89%B2%E5%88%97f-35%E9%81%AD%E6%93%8A%E8%90%BD-135631742.html)
@@ -435,29 +442,24 @@
   TVBS新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [義大利81歲阿伯開賓士「下樓梯」 卡在古蹟「西班牙階梯」警方吊車救援](https://tw.news.yahoo.com/%E7%BE%A9%E5%A4%A7%E5%88%A981%E6%AD%B2%E9%98%BF%E4%BC%AF%E9%96%8B%E8%B3%93%E5%A3%AB-%E4%B8%8B%E6%A8%93%E6%A2%AF-%E5%8D%A1%E5%9C%A8%E5%8F%A4%E8%B9%9F-%E8%A5%BF%E7%8F%AD%E7%89%99%E9%9A%8E%E6%A2%AF-%E8%AD%A6%E6%96%B9%E5%90%8A%E8%BB%8A%E6%95%91%E6%8F%B4-081641975.html)
-
-  Yahoo奇摩（國際通）
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
   #### [大谷翔平被砸會有衝動想輸贏？ 道奇主帥「這一回覆」網友全笑翻](https://tw.news.yahoo.com/%E5%A4%A7%E8%B0%B7%E7%BF%94%E5%B9%B3%E8%A2%AB%E7%A0%B8%E6%9C%83%E6%9C%89%E8%A1%9D%E5%8B%95%E6%83%B3%E8%BC%B8%E8%B4%8F-%E9%81%93%E5%A5%87%E4%B8%BB%E5%B8%A5-%E9%80%99-%E5%9B%9E%E8%A6%86-%E7%B6%B2%E5%8F%8B%E5%85%A8%E7%AC%91%E7%BF%BB-081313003.html)
 
   民視
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [【房地產週報】央行按兵不動！房市降溫買氣凍 議價空間大開 3大熱區罕見砍到8折價](https://tw.stock.yahoo.com/news/%E3%80%90%E6%88%BF%E5%9C%B0%E7%94%A2%E9%80%B1%E5%A0%B1%E3%80%91%E5%A4%AE%E8%A1%8C%E6%8C%89%E5%85%B5%E4%B8%8D%E5%8B%95%EF%BC%81%E6%88%BF%E5%B8%82%E9%99%8D%E6%BA%AB%E8%B2%B7%E6%B0%A3%E5%87%8D-%E8%AD%B0%E5%83%B9%E7%A9%BA%E9%96%93%E5%A4%A7%E9%96%8B-3%E5%A4%A7%E7%86%B1%E5%8D%80%E7%BD%95%E8%A6%8B%E7%A0%8D%E5%88%B08%E6%8A%98%E5%83%B9-011101947.html)
-
-  Yahoo奇摩房地產編輯部
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [倒數滿50歲！玉女歌手曬健身照「真實體態震撼全場」　凍齡如20歲少女](https://tw.news.yahoo.com/%E5%80%92%E6%95%B8%E6%BB%BF50%E6%AD%B2-%E7%8E%89%E5%A5%B3%E6%AD%8C%E6%89%8B%E6%9B%AC%E5%81%A5%E8%BA%AB%E7%85%A7-%E7%9C%9F%E5%AF%A6%E9%AB%94%E6%85%8B%E9%9C%87%E6%92%BC%E5%85%A8%E5%A0%B4-%E5%87%8D%E9%BD%A1%E5%A6%8220%E6%AD%B2%E5%B0%91%E5%A5%B3-055800333.html)
+  #### [台灣人愛吃！「2種魚」超傷腦　醫：加速失智、增罹癌風險](https://tw.news.yahoo.com/%E5%8F%B0%E7%81%A3%E4%BA%BA%E6%84%9B%E5%90%83-2%E7%A8%AE%E9%AD%9A-%E8%B6%85%E5%82%B7%E8%85%A6-%E9%86%AB-%E5%8A%A0%E9%80%9F%E5%A4%B1%E6%99%BA-130200566.html)
 
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [半年激瘦7公斤！70歲婦早餐改吃1食物，免挨餓還甩掉脂肪肝！醫師看完狂點頭](https://tw.news.yahoo.com/%E5%8D%8A%E5%B9%B4%E6%BF%80%E7%98%A67%E5%85%AC%E6%96%A4-70%E6%AD%B2%E5%A9%A6%E6%97%A9%E9%A4%90%E6%94%B9%E5%90%831%E9%A3%9F%E7%89%A9-%E5%85%8D%E6%8C%A8%E9%A4%93%E9%82%84%E7%94%A9%E6%8E%89%E8%84%82%E8%82%AA%E8%82%9D-%E9%86%AB%E5%B8%AB%E7%9C%8B%E5%AE%8C%E7%8B%82%E9%BB%9E%E9%A0%AD-000000783.html)
+  #### [于北辰稱「若台撐住1個月」　郭正亮1句嗆爆](https://tw.news.yahoo.com/%E4%BA%8E%E5%8C%97%E8%BE%B0%E7%A8%B1-%E8%8B%A5%E5%8F%B0%E6%92%90%E4%BD%8F1%E5%80%8B%E6%9C%88-%E9%83%AD%E6%AD%A3%E4%BA%AE1%E5%8F%A5%E5%97%86%E7%88%86-012213088.html)
 
-  女人我最大
+  今日新聞NOWnews
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [梧桐妹「一片布」蔽體火辣迎20歲　裸背深U挖到股溝！一轉側身露螞蟻腰](https://tw.news.yahoo.com/%E6%A2%A7%E6%A1%90%E5%A6%B9-%E7%89%87%E5%B8%83-%E8%94%BD%E9%AB%94%E7%81%AB%E8%BE%A3%E8%BF%8E20%E6%AD%B2-%E8%A3%B8%E8%83%8C%E6%B7%B1u%E6%8C%96%E5%88%B0%E8%82%A1%E6%BA%9D-%E8%BD%89%E5%81%B4%E8%BA%AB%E9%9C%B2%E8%9E%9E%E8%9F%BB%E8%85%B0-161500013.html)
+
+  三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [快訊／以色列國防軍：伊朗又發動新一波飛彈攻擊　傳微軟公司遭殃](https://tw.news.yahoo.com/%E5%BF%AB%E8%A8%8A-%E4%BB%A5%E8%89%B2%E5%88%97%E5%9C%8B%E9%98%B2%E8%BB%8D-%E4%BC%8A%E6%9C%97%E5%8F%88%E7%99%BC%E5%8B%95%E6%96%B0-%E6%B3%A2%E9%A3%9B%E5%BD%88%E6%94%BB%E6%93%8A-%E5%82%B3%E5%BE%AE%E8%BB%9F%E5%85%AC%E5%8F%B8%E9%81%AD%E6%AE%83-034800927.html)
@@ -470,19 +472,19 @@
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
+  #### [半年激瘦7公斤！70歲婦早餐改吃1食物，免挨餓還甩掉脂肪肝！醫師看完狂點頭](https://tw.news.yahoo.com/%E5%8D%8A%E5%B9%B4%E6%BF%80%E7%98%A67%E5%85%AC%E6%96%A4-70%E6%AD%B2%E5%A9%A6%E6%97%A9%E9%A4%90%E6%94%B9%E5%90%831%E9%A3%9F%E7%89%A9-%E5%85%8D%E6%8C%A8%E9%A4%93%E9%82%84%E7%94%A9%E6%8E%89%E8%84%82%E8%82%AA%E8%82%9D-%E9%86%AB%E5%B8%AB%E7%9C%8B%E5%AE%8C%E7%8B%82%E9%BB%9E%E9%A0%AD-000000783.html)
+
+  女人我最大
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
   #### [綠營元老看館長登陸！1句話嗆問民進黨](https://tw.news.yahoo.com/%E7%B6%A0%E7%87%9F%E5%85%83%E8%80%81%E7%9C%8B%E9%A4%A8%E9%95%B7%E7%99%BB%E9%99%B8-1%E5%8F%A5%E8%A9%B1%E5%97%86%E5%95%8F%E6%B0%91%E9%80%B2%E9%BB%A8-005921190.html)
 
   中天新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [梧桐妹「一片布」蔽體火辣迎20歲　裸背深U挖到股溝！一轉側身露螞蟻腰](https://tw.news.yahoo.com/%E6%A2%A7%E6%A1%90%E5%A6%B9-%E7%89%87%E5%B8%83-%E8%94%BD%E9%AB%94%E7%81%AB%E8%BE%A3%E8%BF%8E20%E6%AD%B2-%E8%A3%B8%E8%83%8C%E6%B7%B1u%E6%8C%96%E5%88%B0%E8%82%A1%E6%BA%9D-%E8%BD%89%E5%81%B4%E8%BA%AB%E9%9C%B2%E8%9E%9E%E8%9F%BB%E8%85%B0-161500013.html)
+  #### [倒數滿50歲！玉女歌手曬健身照「真實體態震撼全場」　凍齡如20歲少女](https://tw.news.yahoo.com/%E5%80%92%E6%95%B8%E6%BB%BF50%E6%AD%B2-%E7%8E%89%E5%A5%B3%E6%AD%8C%E6%89%8B%E6%9B%AC%E5%81%A5%E8%BA%AB%E7%85%A7-%E7%9C%9F%E5%AF%A6%E9%AB%94%E6%85%8B%E9%9C%87%E6%92%BC%E5%85%A8%E5%A0%B4-%E5%87%8D%E9%BD%A1%E5%A6%8220%E6%AD%B2%E5%B0%91%E5%A5%B3-055800333.html)
 
   三立新聞網 setn.com
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [慈惠首曝「全家現況」！「被問孩子的爸」本人回應了](https://tw.news.yahoo.com/%E6%85%88%E6%83%A0%E9%A6%96%E6%9B%9D-%E5%85%A8%E5%AE%B6%E7%8F%BE%E6%B3%81-%E8%A2%AB%E5%95%8F%E5%AD%A9%E5%AD%90%E7%9A%84%E7%88%B8-%E6%9C%AC%E4%BA%BA%E5%9B%9E%E6%87%89%E4%BA%86-013922503.html)
-
-  民視
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [伊9大科學家睡夢中遭以「特殊武器」暗殺! 傳假緊急會議電話聚殲伊軍高層](https://tw.news.yahoo.com/%E4%BC%8A9%E5%A4%A7%E7%A7%91%E5%AD%B8%E5%AE%B6%E7%9D%A1%E5%A4%A2%E4%B8%AD%E9%81%AD%E4%BB%A5-%E7%89%B9%E6%AE%8A%E6%AD%A6%E5%99%A8-%E6%9A%97%E6%AE%BA-%E5%82%B3%E5%81%87%E7%B7%8A%E6%80%A5%E6%9C%83%E8%AD%B0%E9%9B%BB%E8%A9%B1%E8%81%9A%E6%AE%B2%E4%BC%8A%E8%BB%8D%E9%AB%98%E5%B1%A4-030344339.html)
@@ -490,9 +492,24 @@
   新頭殼
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
+  #### [慈惠首曝「全家現況」！「被問孩子的爸」本人回應了](https://tw.news.yahoo.com/%E6%85%88%E6%83%A0%E9%A6%96%E6%9B%9D-%E5%85%A8%E5%AE%B6%E7%8F%BE%E6%B3%81-%E8%A2%AB%E5%95%8F%E5%AD%A9%E5%AD%90%E7%9A%84%E7%88%B8-%E6%9C%AC%E4%BA%BA%E5%9B%9E%E6%87%89%E4%BA%86-013922503.html)
+
+  民視
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [西門町水果「4樣1480元」　攤商：按重量計價](https://tw.news.yahoo.com/%E8%A5%BF%E9%96%80%E7%94%BA%E6%B0%B4%E6%9E%9C-4%E6%A8%A31480%E5%85%83-%E6%94%A4%E5%95%86-%E6%8C%89%E9%87%8D%E9%87%8F%E8%A8%88%E5%83%B9-044200495.html)
+
+  華視影音
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
   #### [堅果開封後要「常溫or冷藏」保存？營養師曝正確做法 小心你吃的堅果可能已經發霉](https://tw.news.yahoo.com/%E5%A0%85%E6%9E%9C%E9%96%8B%E5%B0%81%E5%BE%8C%E8%A6%81-%E5%B8%B8%E6%BA%ABor%E5%86%B7%E8%97%8F-%E4%BF%9D%E5%AD%98-%E7%87%9F%E9%A4%8A%E5%B8%AB%E6%9B%9D%E6%AD%A3%E7%A2%BA%E5%81%9A%E6%B3%95-%E5%B0%8F%E5%BF%83%E4%BD%A0%E5%90%83%E7%9A%84%E5%A0%85%E6%9E%9C%E5%8F%AF%E8%83%BD%E5%B7%B2%E7%B6%93%E7%99%BC%E9%9C%89-013000894.html)
 
   常春月刊
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [李珠珢「球場哭哭」後1舉動超敢　台粉：跟外表反差太大](https://tw.news.yahoo.com/%E6%9D%8E%E7%8F%A0%E7%8F%A2-%E7%90%83%E5%A0%B4%E5%93%AD%E5%93%AD-%E5%BE%8C1%E8%88%89%E5%8B%95%E8%B6%85%E6%95%A2-%E5%8F%B0%E7%B2%89-%E8%B7%9F%E5%A4%96%E8%A1%A8%E5%8F%8D%E5%B7%AE%E5%A4%AA%E5%A4%A7-005151137.html)
+
+  民視
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [婦服用「薑黃」3個月…末期大腸癌肝轉移腫瘤竟縮小](https://tw.news.yahoo.com/%E5%A9%A6%E6%9C%8D%E7%94%A8-%E8%96%91%E9%BB%83-3%E5%80%8B%E6%9C%88-%E6%9C%AB%E6%9C%9F%E5%A4%A7%E8%85%B8%E7%99%8C%E8%82%9D%E8%BD%89%E7%A7%BB%E8%85%AB%E7%98%A4%E7%AB%9F%E7%B8%AE%E5%B0%8F-030907554.html)
@@ -500,9 +517,14 @@
   中天新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [李珠珢「球場哭哭」後1舉動超敢　台粉：跟外表反差太大](https://tw.news.yahoo.com/%E6%9D%8E%E7%8F%A0%E7%8F%A2-%E7%90%83%E5%A0%B4%E5%93%AD%E5%93%AD-%E5%BE%8C1%E8%88%89%E5%8B%95%E8%B6%85%E6%95%A2-%E5%8F%B0%E7%B2%89-%E8%B7%9F%E5%A4%96%E8%A1%A8%E5%8F%8D%E5%B7%AE%E5%A4%AA%E5%A4%A7-005151137.html)
+  #### [運勢大爆發！3生肖6月底「貴人狂降臨」　旺到家人也沾光](https://tw.news.yahoo.com/%E9%81%8B%E5%8B%A2%E5%A4%A7%E7%88%86%E7%99%BC-3%E7%94%9F%E8%82%966%E6%9C%88%E5%BA%95-%E8%B2%B4%E4%BA%BA%E7%8B%82%E9%99%8D%E8%87%A8-%E6%97%BA%E5%88%B0%E5%AE%B6%E4%BA%BA%E4%B9%9F%E6%B2%BE%E5%85%89-072006001.html)
 
-  民視
+  中天新聞網
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [6/21夏至到！6大禁忌注意「剃頭讓衰事上門」，屬猴、虎、兔當日記得躲夏](https://tw.news.yahoo.com/6-21%E5%A4%8F%E8%87%B3%E5%88%B0-6%E5%A4%A7%E7%A6%81%E5%BF%8C%E6%B3%A8%E6%84%8F-%E5%89%83%E9%A0%AD%E8%AE%93%E8%A1%B0%E4%BA%8B%E4%B8%8A%E9%96%80-%E5%B1%AC%E7%8C%B4-230027871.html)
+
+  姊妹淘
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [漫改韓劇《再婚皇后》神選角！朱智勛攜小三回宮　申敏兒復仇下嫁李鍾碩](https://tw.news.yahoo.com/%E6%BC%AB%E6%94%B9%E9%9F%93%E5%8A%87-%E5%86%8D%E5%A9%9A%E7%9A%87%E5%90%8E-%E7%A5%9E%E9%81%B8%E8%A7%92-%E6%9C%B1%E6%99%BA%E5%8B%9B%E6%94%9C%E5%B0%8F%E4%B8%89%E5%9B%9E%E5%AE%AE-%E7%94%B3%E6%95%8F%E5%85%92%E5%BE%A9%E4%BB%87%E4%B8%8B%E5%AB%81%E6%9D%8E%E9%8D%BE%E7%A2%A9-104500175.html)
@@ -515,19 +537,9 @@
   今日新聞NOWnews
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [紅極一時餅乾走入歷史！ 工廠原址變「這樣」 新北市：要翻頁了](https://tw.stock.yahoo.com/news/%E7%B4%85%E6%A5%B5-%E6%99%82%E9%A4%85%E4%B9%BE%E8%B5%B0%E5%85%A5%E6%AD%B7%E5%8F%B2-%E5%B7%A5%E5%BB%A0%E5%8E%9F%E5%9D%80%E8%AE%8A-%E9%80%99%E6%A8%A3-%E6%96%B0%E5%8C%97%E5%B8%82-031000170.html)
+  #### [白米飯不健康？醫揭「驚人真相」：不吃下場慘、一輩子後悔](https://tw.news.yahoo.com/%E7%99%BD%E7%B1%B3%E9%A3%AF%E4%B8%8D%E5%81%A5%E5%BA%B7-%E9%86%AB%E6%8F%AD-%E9%A9%9A%E4%BA%BA%E7%9C%9F%E7%9B%B8-%E4%B8%8D%E5%90%83%E4%B8%8B%E5%A0%B4%E6%85%98-%E8%BC%A9%E5%AD%90%E5%BE%8C%E6%82%94-005000909.html)
 
-  EBC東森財經新聞
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [西門町水果「4樣1480元」　攤商：按重量計價](https://tw.news.yahoo.com/%E8%A5%BF%E9%96%80%E7%94%BA%E6%B0%B4%E6%9E%9C-4%E6%A8%A31480%E5%85%83-%E6%94%A4%E5%95%86-%E6%8C%89%E9%87%8D%E9%87%8F%E8%A8%88%E5%83%B9-044200495.html)
-
-  華視影音
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [6/21夏至到！6大禁忌注意「剃頭讓衰事上門」，屬猴、虎、兔當日記得躲夏](https://tw.news.yahoo.com/6-21%E5%A4%8F%E8%87%B3%E5%88%B0-6%E5%A4%A7%E7%A6%81%E5%BF%8C%E6%B3%A8%E6%84%8F-%E5%89%83%E9%A0%AD%E8%AE%93%E8%A1%B0%E4%BA%8B%E4%B8%8A%E9%96%80-%E5%B1%AC%E7%8C%B4-230027871.html)
-
-  姊妹淘
+  三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [機場相擁而泣！亞亞接女兒去中國原因曝光　八炯揭「最大疑點」酸爆了](https://tw.news.yahoo.com/%E6%A9%9F%E5%A0%B4%E7%9B%B8%E6%93%81%E8%80%8C%E6%B3%A3-%E4%BA%9E%E4%BA%9E%E6%8E%A5%E5%A5%B3%E5%85%92%E5%8E%BB%E4%B8%AD%E5%9C%8B%E5%8E%9F%E5%9B%A0%E6%9B%9D%E5%85%89-%E5%85%AB%E7%82%AF%E6%8F%AD-%E6%9C%80%E5%A4%A7%E7%96%91%E9%BB%9E-%E9%85%B8%E7%88%86%E4%BA%86-022400410.html)
@@ -535,9 +547,9 @@
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [運勢大爆發！3生肖6月底「貴人狂降臨」　旺到家人也沾光](https://tw.news.yahoo.com/%E9%81%8B%E5%8B%A2%E5%A4%A7%E7%88%86%E7%99%BC-3%E7%94%9F%E8%82%966%E6%9C%88%E5%BA%95-%E8%B2%B4%E4%BA%BA%E7%8B%82%E9%99%8D%E8%87%A8-%E6%97%BA%E5%88%B0%E5%AE%B6%E4%BA%BA%E4%B9%9F%E6%B2%BE%E5%85%89-072006001.html)
+  #### [奈良美智現身北海岸 看展順遊金瓜石景點！漫步山城老街、神秘金礦隧道、看海小秘境](https://tw.news.yahoo.com/%E5%A5%88%E8%89%AF%E7%BE%8E%E6%99%BA%E7%8F%BE%E8%BA%AB%E5%8C%97%E6%B5%B7%E5%B2%B8-%E7%9C%8B%E5%B1%95%E9%A0%86%E9%81%8A%E9%87%91%E7%93%9C%E7%9F%B3%E6%99%AF%E9%BB%9E%EF%BC%81%E6%BC%AB%E6%AD%A5%E5%B1%B1%E5%9F%8E%E8%80%81%E8%A1%97%E3%80%81%E7%A5%9E%E7%A7%98%E9%87%91%E7%A4%A6%E9%9A%A7%E9%81%93%E3%80%81%E7%9C%8B%E6%B5%B7%E5%B0%8F%E7%A7%98%E5%A2%83-075939171.html)
 
-  中天新聞網
+  Yahoo奇摩旅遊夯即時
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [最髒蔬果排行曝！第一名「飯桌常見」　小心吃下一堆致癌物](https://tw.news.yahoo.com/%E6%9C%80%E9%AB%92%E8%94%AC%E6%9E%9C%E6%8E%92%E8%A1%8C%E6%9B%9D-%E7%AC%AC-%E5%90%8D-%E9%A3%AF%E6%A1%8C%E5%B8%B8%E8%A6%8B-%E5%B0%8F%E5%BF%83%E5%90%83%E4%B8%8B-125600243.html)
@@ -545,9 +557,9 @@
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [白米飯不健康？醫揭「驚人真相」：不吃下場慘、一輩子後悔](https://tw.news.yahoo.com/%E7%99%BD%E7%B1%B3%E9%A3%AF%E4%B8%8D%E5%81%A5%E5%BA%B7-%E9%86%AB%E6%8F%AD-%E9%A9%9A%E4%BA%BA%E7%9C%9F%E7%9B%B8-%E4%B8%8D%E5%90%83%E4%B8%8B%E5%A0%B4%E6%85%98-%E8%BC%A9%E5%AD%90%E5%BE%8C%E6%82%94-005000909.html)
+  #### [僅次陸攻台！欲摧毀伊朗核設施　美國推演16年不敢下手](https://tw.news.yahoo.com/%E5%83%85%E6%AC%A1%E9%99%B8%E6%94%BB%E5%8F%B0-%E6%AC%B2%E6%91%A7%E6%AF%80%E4%BC%8A%E6%9C%97%E6%A0%B8%E8%A8%AD%E6%96%BD-%E7%BE%8E%E5%9C%8B%E6%8E%A8%E6%BC%9416%E5%B9%B4%E4%B8%8D%E6%95%A2%E4%B8%8B%E6%89%8B-222154469.html)
 
-  三立新聞網 setn.com
+  CTWANT
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [0050爆量跌破掛牌價！小資族哭喊「現買現套」　專家曝「1投資策略」：00919也適用](https://tw.stock.yahoo.com/news/0050%E7%88%86%E9%87%8F%E8%B7%8C%E7%A0%B4%E6%8E%9B%E7%89%8C%E5%83%B9-%E5%B0%8F%E8%B3%87%E6%97%8F%E5%93%AD%E5%96%8A-%E7%8F%BE%E8%B2%B7%E7%8F%BE%E5%A5%97-%E5%B0%88%E5%AE%B6%E6%9B%9D-1%E6%8A%95%E8%B3%87%E7%AD%96%E7%95%A5-233900485.html)
@@ -555,17 +567,32 @@
   FTNN新聞網
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [僅次陸攻台！欲摧毀伊朗核設施　美國推演16年不敢下手](https://tw.news.yahoo.com/%E5%83%85%E6%AC%A1%E9%99%B8%E6%94%BB%E5%8F%B0-%E6%AC%B2%E6%91%A7%E6%AF%80%E4%BC%8A%E6%9C%97%E6%A0%B8%E8%A8%AD%E6%96%BD-%E7%BE%8E%E5%9C%8B%E6%8E%A8%E6%BC%9416%E5%B9%B4%E4%B8%8D%E6%95%A2%E4%B8%8B%E6%89%8B-222154469.html)
+  #### [紅極一時餅乾走入歷史！ 工廠原址變「這樣」 新北市：要翻頁了](https://tw.stock.yahoo.com/news/%E7%B4%85%E6%A5%B5-%E6%99%82%E9%A4%85%E4%B9%BE%E8%B5%B0%E5%85%A5%E6%AD%B7%E5%8F%B2-%E5%B7%A5%E5%BB%A0%E5%8E%9F%E5%9D%80%E8%AE%8A-%E9%80%99%E6%A8%A3-%E6%96%B0%E5%8C%97%E5%B8%82-031000170.html)
 
-  CTWANT
+  EBC東森財經新聞
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [奈良美智現身北海岸 看展順遊金瓜石景點！漫步山城老街、神秘金礦隧道、看海小秘境](https://tw.news.yahoo.com/%E5%A5%88%E8%89%AF%E7%BE%8E%E6%99%BA%E7%8F%BE%E8%BA%AB%E5%8C%97%E6%B5%B7%E5%B2%B8-%E7%9C%8B%E5%B1%95%E9%A0%86%E9%81%8A%E9%87%91%E7%93%9C%E7%9F%B3%E6%99%AF%E9%BB%9E%EF%BC%81%E6%BC%AB%E6%AD%A5%E5%B1%B1%E5%9F%8E%E8%80%81%E8%A1%97%E3%80%81%E7%A5%9E%E7%A7%98%E9%87%91%E7%A4%A6%E9%9A%A7%E9%81%93%E3%80%81%E7%9C%8B%E6%B5%B7%E5%B0%8F%E7%A7%98%E5%A2%83-075939171.html)
+  #### [不是拍戲！林志玲突棄車「街頭狂奔」 背後原因太真實](https://tw.news.yahoo.com/%E4%B8%8D%E6%98%AF%E6%8B%8D%E6%88%B2-%E6%9E%97%E5%BF%97%E7%8E%B2%E7%AA%81%E6%A3%84%E8%BB%8A-%E8%A1%97%E9%A0%AD%E7%8B%82%E5%A5%94-%E8%83%8C%E5%BE%8C%E5%8E%9F%E5%9B%A0%E5%A4%AA%E7%9C%9F%E5%AF%A6-063400029.html)
 
-  Yahoo奇摩旅遊夯即時
+  EBC東森娛樂
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [5歲男童僅106公分確診「矮小症」　幕後元兇竟是爸爸！](https://tw.news.yahoo.com/5%E6%AD%B2%E7%94%B7%E7%AB%A5%E5%83%85106%E5%85%AC%E5%88%86%E7%A2%BA%E8%A8%BA-%E7%9F%AE%E5%B0%8F%E7%97%87-%E5%B9%95%E5%BE%8C%E5%85%83%E5%85%87%E7%AB%9F%E6%98%AF%E7%88%B8%E7%88%B8-004000389.html)
+
+  三立新聞網 setn.com
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [不僅包養學生妹又爆人妻生子 王文洋2聲明急回應](https://tw.news.yahoo.com/%E4%B8%8D%E5%83%85%E5%8C%85%E9%A4%8A%E5%AD%B8%E7%94%9F%E5%A6%B9%E5%8F%88%E7%88%86%E4%BA%BA%E5%A6%BB%E7%94%9F%E5%AD%90-%E7%8E%8B%E6%96%87%E6%B4%8B2%E8%81%B2%E6%98%8E%E6%80%A5%E5%9B%9E%E6%87%89-025800205.html)
+
+  EBC東森新聞
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [義大利81歲阿伯開賓士「下樓梯」 卡在古蹟「西班牙階梯」警方吊車救援](https://tw.news.yahoo.com/%E7%BE%A9%E5%A4%A7%E5%88%A981%E6%AD%B2%E9%98%BF%E4%BC%AF%E9%96%8B%E8%B3%93%E5%A3%AB-%E4%B8%8B%E6%A8%93%E6%A2%AF-%E5%8D%A1%E5%9C%A8%E5%8F%A4%E8%B9%9F-%E8%A5%BF%E7%8F%AD%E7%89%99%E9%9A%8E%E6%A2%AF-%E8%AD%A6%E6%96%B9%E5%90%8A%E8%BB%8A%E6%95%91%E6%8F%B4-081641975.html)
+
+  Yahoo奇摩（國際通）
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [舊iPhone不賣了？蘋果回收暴跌22%原因曝　1招無痛換新機](https://tw.news.yahoo.com/%E8%88%8Aiphone%E4%B8%8D%E8%B3%A3%E4%BA%86-%E8%98%8B%E6%9E%9C%E5%9B%9E%E6%94%B6%E6%9A%B4%E8%B7%8C22-%E5%8E%9F%E5%9B%A0%E6%9B%9D-1%E6%8B%9B%E7%84%A1%E7%97%9B%E6%8F%9B%E6%96%B0%E6%A9%9F-040800367.html)
 
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
@@ -575,9 +602,9 @@
   EBC東森娛樂
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [不僅包養學生妹又爆人妻生子 王文洋2聲明急回應](https://tw.news.yahoo.com/%E4%B8%8D%E5%83%85%E5%8C%85%E9%A4%8A%E5%AD%B8%E7%94%9F%E5%A6%B9%E5%8F%88%E7%88%86%E4%BA%BA%E5%A6%BB%E7%94%9F%E5%AD%90-%E7%8E%8B%E6%96%87%E6%B4%8B2%E8%81%B2%E6%98%8E%E6%80%A5%E5%9B%9E%E6%87%89-025800205.html)
+  #### [45÷9(3+2)答案是？一堆人「沒依照準則」算錯](https://tw.news.yahoo.com/45-9-3-2-%E7%AD%94%E6%A1%88%E6%98%AF-084500435.html)
 
-  EBC東森新聞
+  三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
   #### [80歲癌末伯求「3事」！清醒走完最後一哩路：真有福報、智慧](https://tw.news.yahoo.com/80%E6%AD%B2%E7%99%8C%E6%9C%AB%E4%BC%AF%E6%B1%82-3%E4%BA%8B-%E6%B8%85%E9%86%92%E5%96%84%E7%B5%82%E8%B5%B0%E6%9C%80%E5%BE%8C-%E5%93%A9%E8%B7%AF-%E7%9C%9F%E6%9C%89%E7%A6%8F%E5%A0%B1-071300337.html)
@@ -585,42 +612,12 @@
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [舊iPhone不賣了？蘋果回收暴跌22%原因曝　1招無痛換新機](https://tw.news.yahoo.com/%E8%88%8Aiphone%E4%B8%8D%E8%B3%A3%E4%BA%86-%E8%98%8B%E6%9E%9C%E5%9B%9E%E6%94%B6%E6%9A%B4%E8%B7%8C22-%E5%8E%9F%E5%9B%A0%E6%9B%9D-1%E6%8B%9B%E7%84%A1%E7%97%9B%E6%8F%9B%E6%96%B0%E6%A9%9F-040800367.html)
-
-  三立新聞網 setn.com
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [45÷9(3+2)答案是？一堆人「沒依照準則」算錯](https://tw.news.yahoo.com/45-9-3-2-%E7%AD%94%E6%A1%88%E6%98%AF-084500435.html)
-
-  三立新聞網 setn.com
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [Andy 家寧合體出庭有人「踩禁忌」 遭批做秀做很大!網酸「穿得像來結婚」](https://tw.tv.yahoo.com/andy-%E5%AE%B6%E5%AF%A7%E5%90%88%E9%AB%94%E5%87%BA%E5%BA%AD%E6%9C%89%E4%BA%BA-%E8%B8%A9%E7%A6%81%E5%BF%8C-%E9%81%AD%E6%89%B9%E5%81%9A%E7%A7%80%E5%81%9A%E5%BE%88%E5%A4%A7-%E7%B6%B2%E9%85%B8-171843292.html)
-
-  娛樂星聞
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [不是拍戲！林志玲突棄車「街頭狂奔」 背後原因太真實](https://tw.news.yahoo.com/%E4%B8%8D%E6%98%AF%E6%8B%8D%E6%88%B2-%E6%9E%97%E5%BF%97%E7%8E%B2%E7%AA%81%E6%A3%84%E8%BB%8A-%E8%A1%97%E9%A0%AD%E7%8B%82%E5%A5%94-%E8%83%8C%E5%BE%8C%E5%8E%9F%E5%9B%A0%E5%A4%AA%E7%9C%9F%E5%AF%A6-063400029.html)
-
-  EBC東森娛樂
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
   #### [陳玉珍言論惹議！梁文傑1句回應吸大票稱讚](https://tw.news.yahoo.com/%E9%99%B3%E7%8E%89%E7%8F%8D%E8%A8%80%E8%AB%96%E6%83%B9%E8%AD%B0-%E6%A2%81%E6%96%87%E5%82%911%E5%8F%A5%E5%9B%9E%E6%87%89%E5%90%B8%E5%A4%A7%E7%A5%A8%E7%A8%B1%E8%AE%9A-113010509.html)
 
   今日新聞NOWnews
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
 
-  #### [美國不幫以色列「等於告訴中國不會保衛台灣」？　白宮發言人回應了](https://tw.news.yahoo.com/%E7%BE%8E%E5%9C%8B%E4%B8%8D%E5%B9%AB%E4%BB%A5%E8%89%B2%E5%88%97-%E7%AD%89%E6%96%BC%E5%91%8A%E8%A8%B4%E4%B8%AD%E5%9C%8B%E4%B8%8D%E6%9C%83%E4%BF%9D%E8%A1%9B%E5%8F%B0%E7%81%A3-%E7%99%BD%E5%AE%AE%E7%99%BC%E8%A8%80%E4%BA%BA%E5%9B%9E%E6%87%89%E4%BA%86-014300539.html)
-
-  鏡週刊Mirror Media
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [快訊／雨彈來襲！16縣市大雨特報　雙北小心大雷雨猛轟](https://tw.news.yahoo.com/%E5%BF%AB%E8%A8%8A-%E9%9B%A8%E5%BD%88%E4%BE%86%E8%A5%B2-16%E7%B8%A3%E5%B8%82%E5%A4%A7%E9%9B%A8%E7%89%B9%E5%A0%B1-%E9%9B%99%E5%8C%97%E5%B0%8F%E5%BF%83%E5%A4%A7%E9%9B%B7%E9%9B%A8%E7%8C%9B%E8%BD%9F-085600940.html)
-
-  三立新聞網 setn.com
-* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
-
-  #### [李珠珢李多慧來台撈金！韓民眾揭啦啦隊「辛酸內幕」：她們只領日薪](https://tw.news.yahoo.com/%E6%9D%8E%E7%8F%A0%E7%8F%A2%E6%9D%8E%E5%A4%9A%E6%85%A7%E4%BE%86%E5%8F%B0%E6%92%88%E9%87%91-%E9%9F%93%E6%B0%91%E7%9C%BE%E6%8F%AD%E5%95%A6%E5%95%A6%E9%9A%8A-%E8%BE%9B%E9%85%B8%E5%85%A7%E5%B9%95-%E5%A5%B9%E5%80%91%E5%8F%AA%E9%A0%98%E6%97%A5%E8%96%AA-024800993.html)
+  #### [伊朗再襲以色列！飛彈擊中微軟設施　副外長嗆美：這不是你們的戰爭](https://tw.news.yahoo.com/%E4%BC%8A%E6%9C%97%E5%86%8D%E8%A5%B2%E4%BB%A5%E8%89%B2%E5%88%97-%E9%A3%9B%E5%BD%88%E6%93%8A%E4%B8%AD%E5%BE%AE%E8%BB%9F%E8%A8%AD%E6%96%BD-%E5%89%AF%E5%A4%96%E9%95%B7%E5%97%86%E7%BE%8E-%E9%80%99%E4%B8%8D%E6%98%AF%E4%BD%A0%E5%80%91%E7%9A%84%E6%88%B0%E7%88%AD-094300287.html)
 
   三立新聞網 setn.com
 * ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
@@ -628,6 +625,11 @@
   #### [胡瓜爆分產「沒有她」！6億房產分子女買保單　丁柔安4字回應了](https://tw.news.yahoo.com/%E8%83%A1%E7%93%9C%E7%88%86%E5%88%86%E7%94%A2-%E6%B2%92%E6%9C%89%E5%A5%B9-6%E5%84%84%E6%88%BF%E7%94%A2%E5%88%86%E5%AD%90%E5%A5%B3%E8%B2%B7%E4%BF%9D%E5%96%AE-%E4%B8%81%E6%9F%94%E5%AE%894%E5%AD%97%E5%9B%9E%E6%87%89%E4%BA%86-011500658.html)
 
   三立新聞網 setn.com
+* ![](https://s.yimg.com/cv/apiv2/default/20190501/placeholder.gif)
+
+  #### [賀瓏、Albee爆熱戀！ 牽手同遊日本「嘟嘴自拍」全都錄](https://tw.news.yahoo.com/%E8%B3%80%E7%93%8F%E3%80%81albee%E7%88%86%E7%86%B1%E6%88%80%EF%BC%81-%E7%89%BD%E6%89%8B%E5%90%8C%E9%81%8A%E6%97%A5%E6%9C%AC%E3%80%8C%E5%98%9F%E5%98%B4%E8%87%AA%E6%8B%8D%E3%80%8D%E5%85%A8%E9%83%BD%E9%8C%84-124436114.html)
+
+  簡子喬｜Yahoo名人娛樂特派記者
 
 廣告
 

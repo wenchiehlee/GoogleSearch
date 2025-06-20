@@ -156,6 +156,6 @@ SmartBeta投資型
 * 地址：110615 台北市信義區信義路五段7號39樓
 * 電話：02-8729-9000
 * 傳真：02-8729-9004
-* [[email protected]](/cdn-cgi/l/email-protection#d4a7b1a6a2bdb7b194a0b5bda3b5babdbab0b1acfab7bbb9faa0a3)
+* [[email protected]](/cdn-cgi/l/email-protection#61120413170802042115000816000f080f0504194f020e0c4f1516)
 
 Copyright © 2016 Taiwan Index Plus Corporation. All rights reserved. 網站指數資訊提供係服務性質，本公司不對資訊正確性與即時性負責。
