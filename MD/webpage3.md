@@ -1,315 +1,323 @@
-Oops, something went wrong
+* [首頁](https://www.cnyes.com)
+* [新聞](https://news.cnyes.com/news/cat/headline)
+* [台股](https://www.cnyes.com/twstock)
+* [美股](https://www.cnyes.com/usstock)
+* [陸港股](https://www.cnyes.com/hkstock)
+* [基金](https://fund.cnyes.com)
+* [外匯](https://www.cnyes.com/forex)
+* [全球](https://invest.cnyes.com/indices/major)
+* [虛擬幣](https://crypto.cnyes.com)
+* [鉅亨買](https://anuefund.tw/768tv)
+* [鉅亨號](https://hao.cnyes.com?utm_source=cnyes&utm_medium=nav)
+* [訂閱](https://www.cnyes.com/anuestore)
 
-### [新聞](https://hk.news.yahoo.com/)
+![search icon](/assets/icons/search/icon-search-new.svg)
 
-* [港聞](https://hk.news.yahoo.com/hong-kong/)
-* [娛樂圈](https://hk.news.yahoo.com/celebrity/)
-* [電影](https://hk.news.yahoo.com/movies/)
-* [國際](https://hk.news.yahoo.com/world/)
-* [新聞專題](https://hk.news.yahoo.com/topic/)
-* [Style](https://hk.news.yahoo.com/style/)
-* [飲食](https://hk.news.yahoo.com/food/)
-* [旅遊](https://hk.news.yahoo.com/travel/)
-* [Tech](https://hk.news.yahoo.com/tech/)
-* [著數](https://hk.news.yahoo.com/jetso/)
-* [購物](https://hk.news.yahoo.com/topic/hkshopping/)
-* [親子](https://hk.news.yahoo.com/topic/parenting-education)
-* [健康](https://hk.news.yahoo.com/topic/Yahoo-Health)
-* [Homes](https://hk.news.yahoo.com/topic/yahoo-homes-HK)
-* [App下載](https://hk.mobile.yahoo.com/news)
+‌
 
-### [財經](https://hk.finance.yahoo.com/)
+‌
+‌
 
-* [我的投資組合](https://hk.finance.yahoo.com/portfolios)
-* [定期存款及理財](https://hk.finance.yahoo.com/personal-finance/)
-* [外幣報價](https://hk.finance.yahoo.com/currencies)
-* [地產](https://hk.finance.yahoo.com/properties/)
-* [美股](https://hk.finance.yahoo.com/topic/global/)
-* [Tech](https://hk.finance.yahoo.com/topic/tech/)
-* [專欄](https://hk.finance.yahoo.com/topic/contributors/)
-* [篩選工具](https://hk.finance.yahoo.com/screener/)
-* [最活躍港股](https://hk.finance.yahoo.com/most-active/heatmap)
-* [App下載](https://hk.mobile.yahoo.com/finance?is_retargeting=true&af_sub1=Acquisition&c=HK_Acquisition_YMktg_1058_navigationbar_&pid=interstitial&af_sub4=100000293&af_sub5=navigationbar__Banner_&af_force_deeplink=true&af_sub2=HK_YMktg)
+* [頭條](/news/cat/headline)
+* [台股](/news/cat/tw_stock)
+* [美股](/news/cat/wd_stock)
+* [科技](/news/cat/tech)
+* [陸港股](/news/cat/cn_stock)
+* [熱門時事](/poptopic)
+* [速報](/news/cat/anue_live)
+* [基金](/news/cat/fund)
+* [外匯](/news/cat/forex)
+* [期貨](/news/cat/future)
+* [區塊鏈](/news/cat/bc)
+* [房產](/news/cat/cnyeshouse)
+* [理財](/news/cat/tw_money)
+* [新視界](/news/cat/celebrity_area)
+* [專題](https://news.cnyes.com/projects)
+* [雜誌](/news/cat/mag)
+* [我的新聞](/member/mytag/all)
+* [自選股](https://www.cnyes.com/member/portfolios)
 
-### [Sport](https://hk.sports.yahoo.com/)
+![menu-icon](/assets/icons/menu/menu.svg)
 
-* [足球](https://hk.sports.yahoo.com/soccer/)
-* [NBA](https://hk.sports.yahoo.com/nba/)
-* [本地體壇](https://hk.sports.yahoo.com/local/)
-* [網球](https://hk.sports.yahoo.com/tennis/)
-* [其他運動](https://hk.sports.yahoo.com/topic/sports)
+[![anue logo](/assets/icons/logo/anue-logo-colorful.svg)](/news/cat/headline)
 
-### [TV](https://hk.tv.yahoo.com/)
+[![熱門時事](/assets/icons/icon-poptopic.svg "/poptopic")](/poptopic)[![鉅亨號](/assets/icons/header/hao.png "https://hao.cnyes.com")](https://hao.cnyes.com/)[![鉅亨買幣](/assets/icons/header/crypto.png "https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header")](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header)
 
-* [Yahoo獨家](https://hk.tv.yahoo.com/selfproduction)
-* [新聞](https://hk.tv.yahoo.com/hknewsvideo)
-* [財經](https://hk.tv.yahoo.com/hk-finance-news)
-* [娛樂](https://hk.tv.yahoo.com/%E6%9C%80%E6%96%B0%E5%A8%9B%E6%A8%82%E9%9B%BB%E5%BD%B1%E9%80%9F%E9%81%9E)
-* [生活](https://hk.tv.yahoo.com/hk-style)
-* [美食](https://hk.tv.yahoo.com/foodhk)
-* [旅遊](https://hk.tv.yahoo.com/yahootravelhk)
+![search icon](/assets/icons/search/search.svg)
 
-© 2025  All rights reserved.
+‌
 
-# 雅虎香港財經
+‌
 
- [雅虎香港財經](https://hk.finance.yahoo.com/)
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
 
-搜尋查詢
+[鉅亨速報](/news/cat/anue_live)[美股預估](/news/cat/us_forecast)
 
-* [首頁](https://hk.yahoo.com/)
-* [新聞](https://hk.news.yahoo.com/)
-* [財經](https://hk.finance.yahoo.com/)
-* 更多
+鉅亨速報
 
-  + [新聞](https://hk.news.yahoo.com/)
-    - [港聞](https://hk.news.yahoo.com/hong-kong/)
-    - [娛樂圈](https://hk.news.yahoo.com/celebrity/)
-    - [電影](https://hk.news.yahoo.com/movies/)
-    - [國際](https://hk.news.yahoo.com/world/)
-    - [新聞專題](https://hk.news.yahoo.com/topic/)
-    - [Style](https://hk.news.yahoo.com/style/)
-    - [飲食](https://hk.news.yahoo.com/food/)
-    - [旅遊](https://hk.news.yahoo.com/travel/)
-    - [Tech](https://hk.news.yahoo.com/tech/)
-    - [著數](https://hk.news.yahoo.com/jetso/)
-    - [購物](https://hk.news.yahoo.com/topic/hkshopping/)
-    - [親子](https://hk.news.yahoo.com/topic/parenting-education)
-    - [健康](https://hk.news.yahoo.com/topic/Yahoo-Health)
-    - [Homes](https://hk.news.yahoo.com/topic/yahoo-homes-HK)
-    - [App下載](https://hk.mobile.yahoo.com/news)
-  + [財經](https://hk.finance.yahoo.com/)
-    - [我的投資組合](https://hk.finance.yahoo.com/portfolios)
-    - [定期存款及理財](https://hk.finance.yahoo.com/personal-finance/)
-    - [外幣報價](https://hk.finance.yahoo.com/currencies)
-    - [地產](https://hk.finance.yahoo.com/properties/)
-    - [美股](https://hk.finance.yahoo.com/topic/global/)
-    - [Tech](https://hk.finance.yahoo.com/topic/tech/)
-    - [專欄](https://hk.finance.yahoo.com/topic/contributors/)
-    - [篩選工具](https://hk.finance.yahoo.com/screener/)
-    - [最活躍港股](https://hk.finance.yahoo.com/most-active/heatmap)
-    - [App下載](https://hk.mobile.yahoo.com/finance?is_retargeting=true&af_sub1=Acquisition&c=HK_Acquisition_YMktg_1058_navigationbar_&pid=interstitial&af_sub4=100000293&af_sub5=navigationbar__Banner_&af_force_deeplink=true&af_sub2=HK_YMktg)
-  + [Sport](https://hk.sports.yahoo.com/)
-    - [足球](https://hk.sports.yahoo.com/soccer/)
-    - [NBA](https://hk.sports.yahoo.com/nba/)
-    - [本地體壇](https://hk.sports.yahoo.com/local/)
-    - [網球](https://hk.sports.yahoo.com/tennis/)
-    - [其他運動](https://hk.sports.yahoo.com/topic/sports)
-  + [TV](https://hk.tv.yahoo.com/)
-    - [Yahoo獨家](https://hk.tv.yahoo.com/selfproduction)
-    - [新聞](https://hk.tv.yahoo.com/hknewsvideo)
-    - [財經](https://hk.tv.yahoo.com/hk-finance-news)
-    - [娛樂](https://hk.tv.yahoo.com/%E6%9C%80%E6%96%B0%E5%A8%9B%E6%A8%82%E9%9B%BB%E5%BD%B1%E9%80%9F%E9%81%9E)
-    - [生活](https://hk.tv.yahoo.com/hk-style)
-    - [美食](https://hk.tv.yahoo.com/foodhk)
-    - [旅遊](https://hk.tv.yahoo.com/yahootravelhk)
-  + - [版本](https://www.yahoo.com/everything/world/)
-      * [USEnglish](https://www.yahoo.com/?p=dnr)
-      * [US y LATAMEspañol](https://espanol.yahoo.com/?p=dnr)
-      * [AustraliaEnglish](https://au.yahoo.com/?p=dnr)
-      * [CanadaEnglish](https://ca.yahoo.com/?p=dnr)
-      * [CanadaFrançais](https://qc.yahoo.com/?p=dnr)
-      * [DeutschlandDeutsch](https://de.yahoo.com/?p=dnr)
-      * [FranceFrançais](https://fr.yahoo.com/?p=dnr)
-      * [香港繁中](https://hk.yahoo.com/?p=dnr)
-      * [MalaysiaEnglish](https://malaysia.yahoo.com/?p=dnr)
-      * [New ZealandEnglish](https://nz.yahoo.com/?p=dnr)
-      * [SingaporeEnglish](https://sg.yahoo.com/?p=dnr)
-      * [台灣繁中](https://tw.yahoo.com/?p=dnr)
-      * [UKEnglish](https://uk.yahoo.com/?p=dnr)
+# 鉅亨速報 - Factset 最新調查：波克夏(A)(BRK.A-US)EPS預估下修至29983.06元，預估目標價為735,000.00元
 
-[Mail](https://hk.mail.yahoo.com/)
+鉅亨網新聞中心 2025-06-19 20:15
 
-[登入](https://login.yahoo.com/?.lang=zh-Hant-HK&src=finance)
+‌
 
-* [投資組合](https://hk.finance.yahoo.com/portfolios/)
-* [新聞](https://hk.finance.yahoo.com/topic/latest-news/)
+根據FactSet最新調查，共5位分析師，對波克夏(A)(BRK.A-US)做出2025年EPS預估：中位數由30870元下修至29983.06元，其中最高估值31964.02元，最低估值29543.78元，預估目標價為735,000.00元。
 
-  + [最新新聞](https://hk.finance.yahoo.com/topic/latest-news/)
-  + [Yahoo財經](https://hk.finance.yahoo.com/topic/yahoo-finance-originals/)
-  + [Yahoo Money Talk](https://hk.finance.yahoo.com/topic/yahoo-money-talk/)
-  + [Tech](https://hk.finance.yahoo.com/topic/tech/)
-  + [AI大時代](https://hk.finance.yahoo.com/topic/AI%E5%A4%A7%E6%99%82%E4%BB%A3/)
-* [外幣](https://hk.finance.yahoo.com/markets/currencies/)
+※本篇提及EPS與營收的單位均為「美元」
 
-  + [外幣報價](https://hk.finance.yahoo.com/markets/currencies/)
-  + [日圓兌港元](https://hk.finance.yahoo.com/quote/JPYHKD%3DX?p=JPYHKD%3DX)
-  + [英鎊兌港元](https://hk.finance.yahoo.com/quote/GBPHKD%3DX?p=GBPHKD%3DX)
-  + [澳元兌港元](https://hk.finance.yahoo.com/quote/AUDHKD%3DX/)
-  + [美元兌港元](https://hk.finance.yahoo.com/quote/HKD%3DX?p=HKD%3DX)
-  + [港元兌人民幣](https://hk.finance.yahoo.com/quote/HKDCNY%3DX?p=HKDCNY%3DX)
-  + [港元兌台幣](https://hk.finance.yahoo.com/quote/HKDTWD%3DX/)
-  + [加元兌港元](https://hk.finance.yahoo.com/quote/CADHKD%3DX/)
-  + [歐元兌港元](https://hk.finance.yahoo.com/quote/EURHKD%3DX?p=EURHKD%3DX)
-  + [貨幣轉換器](https://hk.finance.yahoo.com/currency-converter/)
-* [港股](https://hk.finance.yahoo.com/topic/local/)
+*市場預估EPS*
 
-  + [港股首頁](https://hk.finance.yahoo.com/topic/local/)
-  + [恒指](https://hk.finance.yahoo.com/quote/%5EHSI/)
-  + [最活躍股票排行](https://hk.finance.yahoo.com/markets/stocks/most-active/)
-  + [最大升幅股票排行](https://hk.finance.yahoo.com/markets/stocks/gainers/)
-  + [最大跌幅股票排行](https://hk.finance.yahoo.com/markets/stocks/losers/)
-* [美股](https://hk.finance.yahoo.com/topic/global/)
+|  |  |  |  |
+| --- | --- | --- | --- |
+| 預估值 | *2025年* | *2026年* | *2027年* |
+| 最高值 | 31964.02(31964.02) | 34197.9 | 33558.26 |
+| 最低值 | 29543.78(29543.78) | 30794.15 | 33558.26 |
+| 平均值 | 30445.64(30826.71) | 32326.49 | 33558.26 |
+| 中位數 | 29983.06(30870) | 32200 | 33558.26 |
 
-  + [美股首頁](https://hk.finance.yahoo.com/topic/global/)
-  + [美股日誌](https://hk.finance.yahoo.com/topic/yahoo-finance-originals-us-stock)
-  + [道指](https://hk.finance.yahoo.com/quote/%5EDJI/)
-  + [標普500](https://hk.finance.yahoo.com/quote/%5EGSPC/)
-  + [納指](https://hk.finance.yahoo.com/quote/%5EIXIC/)
-* [行情](https://hk.finance.yahoo.com/markets/)
+‌
 
-  + [行情總覽](https://hk.finance.yahoo.com/markets/)
-  + [國際指數](https://hk.finance.yahoo.com/markets/world-indices/)
-  + [期貨](https://hk.finance.yahoo.com/markets/commodities/)
-  + [金價](https://hk.finance.yahoo.com/quote/GC%3DF/)
-  + [紐約期油](https://hk.finance.yahoo.com/quote/CL%3DF/)
-  + [加密貨幣](https://hk.finance.yahoo.com/markets/crypto/all/)
-  + [基金](https://hk.finance.yahoo.com/markets/mutualfunds/top/)
-  + [篩選工具](https://hk.finance.yahoo.com/research-hub/screener)
-* [財經日曆](https://hk.finance.yahoo.com/calendar/)
-* [地產](https://hk.finance.yahoo.com/properties/)
+*市場預估營收*
 
-  + [地產首頁](https://hk.finance.yahoo.com/properties/)
-  + [Yahoo地產](https://hk.finance.yahoo.com/topic/yahoo-properties-originals)
-  + [Video](https://hk.finance.yahoo.com/topic/properties-video)
-* [理財](https://hk.finance.yahoo.com/personal-finance/)
+|  |  |  |  |
+| --- | --- | --- | --- |
+| *預估值* | *2025年* | *2026年* | *2027年* |
+| 最高值 | 3,803.16億 | 4,071.98億 | 3,687.02億 |
+| 最低值 | 3,328.51億 | 3,510.67億 | 3,687.02億 |
+| 平均值 | 3,629.73億 | 3,818.78億 | 3,687.02億 |
+| 中位數 | 3,757.51億 | 3,873.69億 | 3,687.02億 |
 
-  + [理財首頁](https://hk.finance.yahoo.com/personal-finance/)
-  + [加密貨幣](https://hk.finance.yahoo.com/topic/cryptocurrency/)
-  + [定期存款](https://hk.finance.yahoo.com/topic/Time-Deposit/)
-  + [退休攻略](https://hk.finance.yahoo.com/topic/retirement/)
-  + [旅遊理財](https://hk.finance.yahoo.com/topic/%E6%97%85%E9%81%8A%E7%90%86%E8%B2%A1/)
-* [專欄](https://hk.finance.yahoo.com/topic/contributors/)
+*歷史獲利表現*
 
-  + [曾淵滄](https://hk.finance.yahoo.com/author/%E6%9B%BE%E6%B7%B5%E6%BB%84/)
-  + [渾水](https://hk.finance.yahoo.com/author/muddydirtywater/)
-  + [高明](https://hk.finance.yahoo.com/author/bigricetea/)
-  + [何啟聰](https://hk.finance.yahoo.com/author/ivanhkc/)
-  + [Louise Wong](https://hk.finance.yahoo.com/author/louisewong/)
-  + [唐牛](https://hk.finance.yahoo.com/author/tongcow88/)
-  + [青冰](https://hk.finance.yahoo.com/author/%E9%9D%92%E5%86%B0/)
-  + [胡國威](https://hk.finance.yahoo.com/author/%E8%83%A1%E5%9C%8B%E5%A8%81/)
-  + [李聲揚](https://hk.finance.yahoo.com/author/ivanliresearch/)
-  + [泡泡龍](https://hk.finance.yahoo.com/author/bubbledragon/)
-  + [言平](https://hk.finance.yahoo.com/author/yinping/)
-  + [黃合秀](https://hk.finance.yahoo.com/author/season/)
-  + [小勇哥](https://hk.finance.yahoo.com/author/siuyung/)
-  + [邱古奇](https://hk.finance.yahoo.com/author/yaukookei/)
-  + [割柑人](https://hk.finance.yahoo.com/author/hkstockpicker/)
-  + [Benny Yam](https://hk.finance.yahoo.com/author/benny-yam/)
-* [財經大人物](https://hk.finance.yahoo.com/topic/Leaders-Decode/)
+|  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- |
+| 項目 | *2020年* | *2021年* | *2022年* | *2023年* | *2024年* |
+| EPS | 26,668.00 | 59,460.00 | -15,535.00 | 66,412.00 | 61,900.00 |
+| 營業收入 | 2,455.10億 | 2,760.94億 | 3,020.89億 | 3,644.82億 | 3,714.33億 |
 
-  + [投資高峰會](https://hk.finance.yahoo.com/splash/yahooinvest2024)
-  + [峰會精華](https://hk.finance.yahoo.com/topic/%E5%B3%B0%E6%9C%83%E7%B2%BE%E8%8F%AF)
-* [媒體總覽](https://hk.finance.yahoo.com/topic/finance-cps/)
-
-  + [Yahoo財經](https://hk.finance.yahoo.com/topic/finance-originals)
-  + [AASTOCKS](https://hk.finance.yahoo.com/topic/aastocks)
-  + [Bloomberg](https://hk.finance.yahoo.com/topic/bloomberg)
-  + [信報財經新聞](https://hk.finance.yahoo.com/topic/hkej)
-  + [BossMind](https://hk.finance.yahoo.com/topic/BossMind)
-  + [now.com 財經](https://hk.finance.yahoo.com/topic/now-finance)
-  + [Fortune Insight](https://hk.finance.yahoo.com/topic/FortuneInsight)
-  + [28Hse.com](https://hk.finance.yahoo.com/topic/28Hse)
-  + [AM730](https://hk.finance.yahoo.com/topic/AM730)
-  + [Infocast](https://hk.finance.yahoo.com/topic/infocast)
-  + [香港電台－財經](https://hk.finance.yahoo.com/topic/rthk)
-  + [鉅亨網](https://hk.finance.yahoo.com/topic/cnyes)
-  + [詠竹坊](https://hk.finance.yahoo.com/topic/%E8%A9%A0%E7%AB%B9%E5%9D%8A)
-  + [Money Club](https://hk.finance.yahoo.com/topic/hkmoneyclub/)
-* [內捲風暴](https://hk.finance.yahoo.com/topic/%E5%85%A7%E6%8D%B2%E9%A2%A8%E6%9A%B4/)
-* [全球關稅戰](https://hk.finance.yahoo.com/topic/%E5%85%A8%E7%90%83%E9%97%9C%E7%A8%85%E6%88%B0/)
-
-…
-
-[![鉅亨網](https://s.yimg.com/ny/api/res/1.2/pb1QbAW31akC_4Rzu1nKjA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")
-
-# 鉅亨速報 - Factset 最新調查：富世達(6805-TW)目標價調升至833元，幅度約7.48%
-
-![](data:image/gif;base64...)
-
-鉅亨網新聞中心
-
-2025年6月18日週三 上午2:10
-
-根據FactSet最新調查，共6位分析師，對富世達(6805-TW)提出目標價估值：中位數由775元上修至833元，調升幅度7.48%。其中最高估值1000元，最低估值540元。
-
-綜合評級 - 共有6位分析師給予富世達(6805-TW)評價：積極樂觀6位、保持中立1位、保守悲觀0位。
-
-富世達(6805-TW)今(18日)收盤價為789元。近5日股價上漲14.99%，相關零組件業近5日下跌1.62%，集中市場加權指數下跌0.14%，股價漲幅表現優於大盤。
+詳細資訊請看美股內頁：
+波克夏(A)(BRK.A-US)
 
 資料來源：Factset，數據僅供參考，不作為投資建議。
 
-更多鉅亨報導
-•[今日的拉回、要怕嗎？好股票拉回正是機會、緯穎、雙鴻、神盾、智通](https://news.cnyes.com/news/id/6022424?utm_source=yahoo&utm_medium=RSS&utm_campaign=relate)
-•[【量大強漲股整理】台股震盪回檔，主流股呼之欲出？](https://news.cnyes.com/news/id/6022390?utm_source=yahoo&utm_medium=RSS&utm_campaign=relate)
+* [關稅降息夾殺！免費講座教你如何布局](https://events.cnyes.com/rsc2025H2-35584?utm_source=anue&utm_medium=usstocks_end)
+* 掌握全球財經資訊[點我下載APP](http://www.cnyes.com/app/?utm_source=mweb&utm_medium=HamMenuBanner&utm_campaign=fixed&utm_content=entr)
 
-[Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
+### 文章標籤
 
-[你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)
+[美股](https://news.cnyes.com/tag/%E7%BE%8E%E8%82%A1 "美股")[市場預估](https://news.cnyes.com/tag/%E5%B8%82%E5%A0%B4%E9%A0%90%E4%BC%B0 "市場預估")[EPS](https://news.cnyes.com/tag/EPS "EPS")[BRK.A](https://news.cnyes.com/tag/BRK.A "BRK.A")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
 
-## Recommended Stories
+### 延伸閱讀
 
-版權 © 2025 Yahoo。保留一切權利。
+* [「巴菲特光環」褪色波克夏連跌 華爾街最樂觀分析師也下修預估](/news/id/6005844)
+* [巴菲特退休後計畫曝光：我不會待在家裡看肥皂劇！](/news/id/5992927)
+* [中國科技股大漲24%創三年新高 但美投資人卻悄悄減持中國股](/news/id/5992488)
+* [巴菲特投資錯誤 其實才是最值得學的「聰明錢教訓」](/news/id/5981826)
 
-About
+‌
 
-[資料免責聲明](https://help.yahoo.com/kb/finance-for-web/SLN2310.html?locale=zh_HK) [服務中心](https://hk.help.yahoo.com/kb/finance-for-web) [廣告說明](https://legal.yahoo.com/e2/zh-hant/yahoo/privacy/adinfo/index.html)
+* 上一篇
 
-[Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
+  [鉅亨速報 - Factset 最新調查：歐力士IX-US的目標價調升至128.35元，幅度約3.76%](/news/id/6030690)
+* 下一篇
 
-[你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)
+  [鉅亨速報 - Factset 最新調查：Westlake Corporation(WLK-US)EPS預估下修至1.09元，預估目標價為89.00元](/news/id/6028813)
 
-* 香港股市已收市
+![save](/assets/icons/icon-bookmark.svg)![new tip](/_next/image?url=%2Fassets%2Ficons%2Ficon-new-tip.png&w=64&q=75)
 
-  Hong Kong   US   Europe   Asia   Rates   Commodities   Currencies   Cryptocurrencies
+![chat-icon](/assets/icons/topBar/icon-chat.svg)0
 
-  + [恒指23,530.48 +292.74 (+1.26%)](/quote/%5EHSI/)
-  + [上證綜指3,359.90 -2.21 (-0.07%)](/quote/000001.SS/)
-  + [標普 5005,980.87 -1.85 (-0.03%)](/quote/%5EGSPC/)
-  + [日圓0.0538 +0.0000 (+0.07%)](/quote/JPYHKD%3DX/)
-  + [英鎊10.5920 +0.0260 (+0.25%)](/quote/GBPHKD%3DX/)
-  + [人民幣0.9142 -0.0010 (-0.11%)](/quote/HKDCNY%3DX/)
-* [Portfolio](/portfolios)
+‌
 
-  [Portfolio](/portfolios)
+![Empty](/assets/icons/skeleton/empty-image.svg)
 
-  Sign in to access your portfolio
+‌
 
-  [Sign in](https://login.yahoo.com/config/login?done=https%3A%2F%2Fhk.finance.yahoo.com%2Fnews%2F%25E9%2589%2585%25E4%25BA%25A8%25E9%2580%259F%25E5%25A0%25B1-factset-%25E6%259C%2580%25E6%2596%25B0%25E8%25AA%25BF%25E6%259F%25A5-%25E5%25AF%258C%25E4%25B8%2596%25E9%2581%2594-6805-061018841.html&intl=hk&lang=zh-Hant-HK&activity=dock-portfolio&pspid=1186300001&src=finance)
-* [Top gainers](/gainers/)
+![section icon](/assets/icons/icon-ai.svg)
 
-  + [2510.HK 德翔海運 10.040 +2.640 (+35.68%)](/quote/2510.HK/)
-  + [2531.HK 廣聯科技控股 18.760 +3.900 (+26.24%)](/quote/2531.HK/)
-  + [2157.HK 樂普生物－Ｂ 5.820 +0.500 (+9.40%)](/quote/2157.HK/)
-  + [1126.HK 德林國際 10.720 +0.810 (+8.17%)](/quote/1126.HK/)
-  + [1672.HK 歌禮製藥－Ｂ 9.620 +0.700 (+7.85%)](/quote/1672.HK/)
-* [Top losers](/losers/)
+### AI讀新聞
 
-  + [2453.HK 美中嘉和 6.330 -0.870 (-12.08%)](/quote/2453.HK/)
-  + [9879.HK 米高集團 5.010 -0.640 (-11.33%)](/quote/9879.HK/)
-  + [2465.HK LOPAL TECH 5.920 -0.470 (-7.36%)](/quote/2465.HK/)
-  + [1921.HK 達力普控股 6.280 -0.420 (-6.27%)](/quote/1921.HK/)
-  + [9669.HK 北森控股 9.000 -0.550 (-5.76%)](/quote/9669.HK/)
-* [Most active](/most-active/)
+* 頭條
+* 台股
+* 美股
 
-  + [0467.HK 聯合能源集團 0.660 -0.070 (-9.59%)](/quote/0467.HK/)
-  + [3988.HK 中國銀行 4.540 +0.070 (+1.57%)](/quote/3988.HK/)
-  + [0535.HK 金地商置 0.285 +0.010 (+3.64%)](/quote/0535.HK/)
-  + [0568.HK 山東墨龍 5.200 -0.230 (-4.24%)](/quote/0568.HK/)
-  + [1060.HK 阿里影業 0.890 -0.040 (-4.30%)](/quote/1060.HK/)
-* [Earnings events](/calendar/earnings?day=2025-06-20)
-* [Trending tickers](/trending-tickers)
+# ...
 
-  + [CRCL Circle Internet Group 199.59 +50.44 (+33.82%)](/quote/CRCL/)
-  + [9992.HK 泡泡瑪特 239.600 -9.000 (-3.62%)](/quote/9992.HK/)
-  + [TSLA Tesla, Inc. 322.05 +5.77 (+1.82%)](/quote/TSLA/)
-  + [1810.HK 小米集團－Ｗ 54.050 +1.000 (+1.89%)](/quote/1810.HK/)
-  + [0489.HK 東風集團股份 3.500 -0.100 (-2.78%)](/quote/0489.HK/)
-* [Top economic events](/calendar/economic)
+[![read-more](/_next/image?url=%2Fassets%2Ficons%2Ficon-explore-more.png&w=384&q=75)](/news/cat/headline_ai)
 
-[Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
+![ai-bg](/_next/image?url=%2Fassets%2Fimages%2Fai-bg.png&w=750&q=75)
 
-[你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)
+![section icon](/assets/icons/popularRank.svg)
 
-[Ad Terms](https://legal.yahoo.com/e2/zh-hant/yahoo/privacy/adinfo/index.html)
+### 人氣排行
+
+[看更多](https://news.cnyes.com/trending)
+
+* 總覽
+* 台股
+* 美股
+
+[*1.*
+
+〈美股盤後〉傳美日高層會談取消 標普連三黑 台積電ADR挫近2%](/news/id/6032410 "〈美股盤後〉傳美日高層會談取消 標普連三黑 台積電ADR挫近2% ")[*2.*
+
+普丁擔憂世界正走向第三次世界大戰](/news/id/6032574 "普丁擔憂世界正走向第三次世界大戰")[*3.*
+
+FT：川普政府要求增加國防支出 美日「2+2」安全會談取消](/news/id/6032568 "FT：川普政府要求增加國防支出 美日「2+2」安全會談取消")[*4.*
+
+傳美國擬撤銷對台積電、三星在中授權 白宮：備戰美中談判](/news/id/6032602 "傳美國擬撤銷對台積電、三星在中授權 白宮：備戰美中談判")[*5.*
+
+普丁：俄軍踏足皆為俄土 不排除攻占蘇梅市](/news/id/6032440 "普丁：俄軍踏足皆為俄土 不排除攻占蘇梅市")
+
+‌
+
+![section icon](/assets/icons/editorChoose.svg)
+
+### 主編精選
+
+[看更多](/news/cat/news24h)
+
+‌
+
+![section icon](/assets/icons/pop-topic.svg)
+
+### 熱門時事
+
+[看更多](/poptopic)
+
+‌
+
+‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+![section icon](/assets/icons/section-fund.svg)
+
+### 鉅亨熱基金
+
+[看更多](https://fund.cnyes.com)
+
+* 基金亮點
+* 主題熱議
+
+* 近期亮點
+* 熱門自選
+
+月更多
+
+‌
+
+‌
+
+‌
+
+‌
+
+--
+
+‌
+
+‌
+
+‌
+
+‌
+
+![section icon](/assets/icons/symbol-card-side-icon.svg)
+
+### 熱門排行
+
+[看更多](/member/rankinglist)
+
+* 熱門追蹤
+* 熱門收藏
+
+* 標籤
+* 時事
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+![section icon](/assets/icons/twStockExpert.svg)
+
+### 台股專家觀點
+
+[看更多](/news/cat/stock_report)
+
+![left arrow](/assets/icons/carousel/icon-slider-arrow-left-with-round.svg)
+
+![right arrow](/assets/icons/carousel/icon-slider-arrow-right-with-round.svg)
+
+![section icon](/assets/icons/issueNews.svg)
+
+### 議題新聞
+
+[看更多](/news/cat/topTopics)
+
+![section icon](/assets/icons/anue-lecture.svg)
+
+### 鉅亨講座
+
+[看更多](https://www.cnyes.com/events)
+
+* 講座
+* 公告
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌

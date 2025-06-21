@@ -1,56 +1,327 @@
-[跳至主要內容](#accesskey-c "跳至主要內容")[:::](#accesskey-u "上方導覽區 (Alt+U)")
+* [首頁](https://www.cnyes.com)
+* [新聞](https://news.cnyes.com/news/cat/headline)
+* [台股](https://www.cnyes.com/twstock)
+* [美股](https://www.cnyes.com/usstock)
+* [陸港股](https://www.cnyes.com/hkstock)
+* [基金](https://fund.cnyes.com)
+* [外匯](https://www.cnyes.com/forex)
+* [全球](https://invest.cnyes.com/indices/major)
+* [虛擬幣](https://crypto.cnyes.com)
+* [鉅亨買](https://anuefund.tw/768tv)
+* [鉅亨號](https://hao.cnyes.com?utm_source=cnyes&utm_medium=nav)
+* [訂閱](https://www.cnyes.com/anuestore)
 
-EN [日本語](/ja-jp/about/publication/overview.html) [網站導覽](/zh-tw/sitemap.html)搜尋
+![search icon](/assets/icons/search/icon-search-new.svg)
 
-# [證券櫃檯買賣中心](/zh-tw/ "首頁")
+‌
 
-EN [日本語](/ja-jp/about/publication/overview.html) [網站導覽](/zh-tw/sitemap.html)搜尋
+‌
+‌
 
-TPEx FactSet氣候韌性指數當日成分股
+* [頭條](/news/cat/headline)
+* [台股](/news/cat/tw_stock)
+* [美股](/news/cat/wd_stock)
+* [科技](/news/cat/tech)
+* [陸港股](/news/cat/cn_stock)
+* [熱門時事](/poptopic)
+* [速報](/news/cat/anue_live)
+* [基金](/news/cat/fund)
+* [外匯](/news/cat/forex)
+* [期貨](/news/cat/future)
+* [區塊鏈](/news/cat/bc)
+* [房產](/news/cat/cnyeshouse)
+* [理財](/news/cat/tw_money)
+* [新視界](/news/cat/celebrity_area)
+* [專題](https://news.cnyes.com/projects)
+* [雜誌](/news/cat/mag)
+* [我的新聞](/member/mytag/all)
+* [自選股](https://www.cnyes.com/member/portfolios)
 
-資料查詢
+![menu-icon](/assets/icons/menu/menu.svg)
 
-資料日期：  查詢
+[![anue logo](/assets/icons/logo/anue-logo-colorful.svg)](/news/cat/headline)
 
-列印/匯出 HTML 下載 CSV
+[![熱門時事](/assets/icons/icon-poptopic.svg "/poptopic")](/poptopic)[![鉅亨號](/assets/icons/header/hao.png "https://hao.cnyes.com")](https://hao.cnyes.com/)[![鉅亨買幣](/assets/icons/header/crypto.png "https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header")](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header)
 
-本資訊自民國112年9月25日起開始提供
+![search icon](/assets/icons/search/search.svg)
 
-[:::](#accesskey-b "底部功能區 (Alt+B)")
+‌
 
-**常用交易資訊**
+‌
 
-* [櫃買指數歷史資料](/zh-tw/indices/stock-index/industrial/inxh.html)
-* [上櫃個股歷史行情](/zh-tw/mainboard/trading/info/stock-pricing.html)
-* [興櫃個股歷史行情](/zh-tw/esb/trading/info/stock-pricing.html)
-* [融資融券餘額表](/zh-tw/mainboard/trading/margin-trading/transactions.html)
-* [融券借券賣出餘額](/zh-tw/mainboard/trading/margin-trading/sbl.html)
-* [平盤下得融(借)券賣出之證券名單](/zh-tw/mainboard/trading/margin-trading/exempted.html)
-* [三大法人買賣金額彙總表](/zh-tw/mainboard/trading/major-institutional/summary/day.html)
-* [投信買賣超彙總表](/zh-tw/mainboard/trading/major-institutional/domestic-inst/day.html)
-* [外資及陸資買賣超彙總表](/zh-tw/mainboard/trading/major-institutional/foreign/day.html)
-* [當日可借券賣出股數](https://www.twse.com.tw/zh/trading/margin/twt96u.html)
-* [有價證券借貸](https://www.twse.com.tw/zh/products/sbl/disclosures/twt60u.html)
-* [有價證券借貸交易查詢](https://mis.twse.com.tw/stock/detail-sblInquiry?lang=zhHant)
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
 
-**統計資料**
+[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast)
 
-* [上櫃股票統計](/zh-tw/mainboard/trading/statistics/month/listed.html)
-* [上櫃公司市值、本益比、殖利率、投資報酬率一覽表](/zh-tw/mainboard/trading/statistics/month/value.html)
-* [個股本益比、殖利率、股價淨值比](/zh-tw/mainboard/trading/info/daily-pe.html)
-* [獲利及股利分派情形](/zh-tw/mainboard/listed/month/fundamentals.html)
-* [櫃買市場統計報表](/zh-tw/mainboard/trading/statistics/highlight.html)
+鉅亨速報
 
-**常用資訊**
+# 鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.3元，預估目標價為230元
 
-* [資訊購買](/zh-tw/service/data/overview.html)
-* [開休市日期表](/zh-tw/announce/market/holiday.html)
-* [投資人個人資料查詢](/zh-tw/service/investor/info/personal.html)
-* [向本中心申請上櫃公司](/zh-tw/mainboard/applying/status/company.html)
+鉅亨網新聞中心 2025-03-18 08:10
 
-[回首頁](/zh-tw/index.html "前住「首頁」") [常見問題](/zh-tw/about/company/faq.html "前住「常見問題」頁面") [聯絡我們](/zh-tw/about/company/contact/contact.html "前住「聯絡我們」頁面") [相關網站](/zh-tw/related_links.html "前住「相關網站」頁面") [使用條款](/zh-tw/gtsm_disclaimer.html "前住「使用條款」頁面") [隱私權保護說明](/zh-tw/privacy.html "前住「隱私權保護說明」頁面") [個人資料管理政策聲明](/storage/publish/others/04000001%E5%80%8B%E4%BA%BA%E8%B3%87%E6%96%99%E7%AE%A1%E7%90%86%E6%94%BF%E7%AD%96%E8%81%B2%E6%98%8E.pdf "開啟「個人資料管理政策聲明」PDF檔") [資訊安全政策](/storage/publish/others/%E8%B3%87%E9%80%9A%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96%E5%8F%8A%E5%85%A7%E6%B6%B5.pdf "開啟「資訊安全政策」PDF檔") [營運持續政策](/storage/publish/others/%E7%87%9F%E9%81%8B%E6%8C%81%E7%BA%8C%E6%94%BF%E7%AD%96.pdf "開啟「營運持續政策」PDF檔") [FB粉絲頁](https://www.facebook.com/TaipeiExchange/ "前住臉書粉絲專頁")
+‌
 
-證券櫃檯買賣中心 版權所有©1994-2024 10084台北市中正區羅斯福路二段100號15樓 總機:(02)2369-9555
-投資人服務及投資詐騙檢舉專線:(02)2796-3788
+根據FactSet最新調查，共21位分析師，對鴻海([2317-TW](https://www.cnyes.com/twstock/2317))做出2025年EPS預估：中位數由14.46元下修至14.3元，其中最高估值15.39元，最低估值12.55元，預估目標價為230元。
 
-[![通過AA無障礙網頁檢測](/rsrc/storage/aa.png)](https://accessibility.moda.gov.tw/Applications/DetectLog/172983 "無障礙網站 (另開新視窗)")
+*市場預估EPS*
+
+|  |  |  |  |
+| --- | --- | --- | --- |
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+| 最高值 | 15.39(15.39) | 18.56 | 20.52 |
+| 最低值 | 12.55(12.55) | 14.36 | 17.07 |
+| 平均值 | 14.36(14.39) | 16.52 | 18.79 |
+| 中位數 | 14.3(14.46) | 16.84 | 18.79 |
+
+*市場預估營收*
+
+‌
+
+|  |  |  |  |
+| --- | --- | --- | --- |
+| 預估值 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
+| 最高值 | 8,846,119,430 | 10,500,211,000 | 10,443,819,120 |
+| 最低值 | 7,803,506,000 | 8,417,701,000 | 10,255,969,770 |
+| 平均值 | 8,349,955,810 | 9,489,833,430 | 10,349,894,440 |
+| 中位數 | 8,332,032,450 | 9,520,563,020 | 10,349,894,440 |
+
+*歷史獲利表現*
+
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+| EPS | 11.01 | 10.25 | 10.21 | 10.05 |
+| 營業收入 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 6,859,615,493 | 6,162,221,359 | 6,626,996,750 | 5,994,173,882 |
+
+詳細資訊請看台股內頁：
+<https://www.cnyes.com/twstock/2317/financials/ratios>
+
+資料來源：Factset，數據僅供參考，不作為投資建議。
+
+* [關稅降息夾殺！免費講座教你如何布局](https://www.rsc.com.tw/Cnyes_RSC/SeminarBooking2025InvestmentOutlook.aspx?utm_source=anue&utm_medium=usstocks_end)
+* 掌握全球財經資訊[點我下載APP](http://www.cnyes.com/app/?utm_source=mweb&utm_medium=HamMenuBanner&utm_campaign=fixed&utm_content=entr)
+
+### 文章標籤
+
+[台股](https://news.cnyes.com/tag/%E5%8F%B0%E8%82%A1 "台股")[市場預估](https://news.cnyes.com/tag/%E5%B8%82%E5%A0%B4%E9%A0%90%E4%BC%B0 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
+### 相關行情
+
+[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
+
+[鴻海155.5+0.97%](https://www.cnyes.com/twstock/2317)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
+### 延伸閱讀
+
+* [外商「風」湧！今年前2月僑外投資年增8成 渢妙與彰化大西南風場增資256億](/news/id/5903546)
+* [台積電 啟動千點行情關鍵?【立碁 第2】翻倍趕進度](/news/id/5903456)
+* [【量大強漲股整理】GTC大會登場後，三月季底，選股策略大公開?](/news/id/5903484)
+* [〈台股盤後〉GTC概念股發威 台塑四寶、綠能股助攻 漲154點惜敗年線](/news/id/5903096)
+
+‌
+
+* 上一篇
+
+  [鉅亨速報 - Factset 最新調查：視陽(6782-TW)目標價調降至220元，幅度約7.56%](/news/id/5904201)
+* 下一篇
+
+  [鉅亨速報 - Factset 最新調查：技嘉(2376-TW)EPS預估上修至18.03元，預估目標價為324元](/news/id/5903019)
+
+![save](/assets/icons/icon-bookmark.svg)![new tip](/_next/image?url=%2Fassets%2Ficons%2Ficon-new-tip.png&w=64&q=75)
+
+![chat-icon](/assets/icons/topBar/icon-chat.svg)0
+
+‌
+
+![Empty](/assets/icons/skeleton/empty-image.svg)
+
+‌
+
+![section icon](/assets/icons/icon-ai.svg)
+
+### AI讀新聞
+
+* 頭條
+* 台股
+* 美股
+
+# ...
+
+[![read-more](/_next/image?url=%2Fassets%2Ficons%2Ficon-explore-more.png&w=384&q=75)](/news/cat/headline_ai)
+
+![ai-bg](/_next/image?url=%2Fassets%2Fimages%2Fai-bg.png&w=750&q=75)
+
+![section icon](/assets/icons/popularRank.svg)
+
+### 人氣排行
+
+[看更多](https://news.cnyes.com/trending)
+
+* 總覽
+* 台股
+* 美股
+
+[*1.*
+
+〈美股早盤〉Fed理事華勒喊話7月降息、川普暫緩對伊行動 主要指數開高](/news/id/6032328 "〈美股早盤〉Fed理事華勒喊話7月降息、川普暫緩對伊行動 主要指數開高")[*2.*
+
+美銀：做多美元被視為夏季最大的「痛苦交易」](/news/id/6032270 "美銀：做多美元被視為夏季最大的「痛苦交易」")[*3.*
+
+〈財報〉雜貨需求具韌性 克羅格調升全年銷售目標](/news/id/6032416 "〈財報〉雜貨需求具韌性 克羅格調升全年銷售目標")[*4.*
+
+〈航運指數〉SCFI連2跌 美西線運價暴挫逾3成 恐續修正](/news/id/6032049 "〈航運指數〉SCFI連2跌 美西線運價暴挫逾3成 恐續修正")[*5.*
+
+彭博：xAI被迫開甜頭 債券殖利率升至12.5%拚完成融資](/news/id/6032388 "彭博：xAI被迫開甜頭 債券殖利率升至12.5%拚完成融資")
+
+‌
+
+![section icon](/assets/icons/editorChoose.svg)
+
+### 主編精選
+
+[看更多](/news/cat/news24h)
+
+‌
+
+![section icon](/assets/icons/pop-topic.svg)
+
+### 熱門時事
+
+[看更多](/poptopic)
+
+‌
+
+‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+‌
+
+### ‌
+
+‌
+
+![section icon](/assets/icons/section-fund.svg)
+
+### 鉅亨熱基金
+
+[看更多](https://fund.cnyes.com)
+
+* 基金亮點
+* 主題熱議
+
+* 近期亮點
+* 熱門自選
+
+月更多
+
+‌
+
+‌
+
+‌
+
+‌
+
+--
+
+‌
+
+‌
+
+‌
+
+‌
+
+![section icon](/assets/icons/symbol-card-side-icon.svg)
+
+### 熱門排行
+
+[看更多](/member/rankinglist)
+
+* 熱門追蹤
+* 熱門收藏
+
+* 標籤
+* 時事
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+![section icon](/assets/icons/twStockExpert.svg)
+
+### 台股專家觀點
+
+[看更多](/news/cat/stock_report)
+
+![left arrow](/assets/icons/carousel/icon-slider-arrow-left-with-round.svg)
+
+![right arrow](/assets/icons/carousel/icon-slider-arrow-right-with-round.svg)
+
+![section icon](/assets/icons/issueNews.svg)
+
+### 議題新聞
+
+[看更多](/news/cat/topTopics)
+
+![section icon](/assets/icons/anue-lecture.svg)
+
+### 鉅亨講座
+
+[看更多](https://www.cnyes.com/events)
+
+* 講座
+* 公告
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌
+
+‌

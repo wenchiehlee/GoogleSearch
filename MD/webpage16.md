@@ -1,122 +1,161 @@
-免費註冊，一眼判斷公司值不值得投資
+* [常見問題](/promotion_and_service/investors_zone)
+* [新聞稿](/news)
+* [技術通知](/downloads/technical_notice)
+* [指數定審期程表](/downloads/technical_notice?category_id=3)
+* [發行人專區](/promotion_and_service/issuers_zone)
+* [ENGLISH](/en/indexes/IX0220)
 
-台股和美股 7000+ 家公司，財報狗個股頁提供你：
-7 種進出場參考指標、9 種安全性指標、22 種獲利性指標、13 種成長性指標，
-幫助你一眼判斷公司的投資價值，避開地雷股。
+搜尋
 
-[點我繼續](/users/sign_up)
+* [首頁](/)
+* [各項指數](/indexes)
+* [推廣與服務](/promotion_and_service)
+* [媒體/活動訊息](/media_and_events)
+* [下載專區](/downloads)
+* [關於我們](/company)
 
-[最新動態](/analysis/FDS)
-[財務報表](/analysis/FDS/eps)
-[獲利能力](/analysis/FDS/profit-margin)
-[安全性分析](/analysis/FDS/financial-structure-ratio)
-[成長力分析](/analysis/FDS/revenue-growth-rate)
-[價值評估](/analysis/FDS/pe)
-[關鍵指標](/analysis/FDS/croic)
-[產品組合](/analysis/FDS/ai-search)
+![](/_nuxt/img/icon-search.0764993.svg)
 
-沒有您查詢的這家公司喔
+![](/_nuxt/img/icon-hamburger.b434b2b.png)
 
-請確認輸入的股票名稱或代號是否正確，再重新查詢看看
+SmartBeta投資型
 
-# [追蹤](/users/sign_up)
+# 臺灣市值動能50指數
 
-排除地雷股健診
+[概覽](/indexes/IX0220)
 
-透過 6 個與現金流、資產週轉相關指標，鑑定公司是否有財務風險。解鎖後才能使用。
+[歷史指數值](/indexes/IX0220/history)
 
-[查看完整健診細節](/users/sign_up)
+* [概覽](/indexes/IX0220)
+* [歷史指數值](/indexes/IX0220/history)
 
-/
+※ 每 1 分鐘自動更新，收盤指數值請至歷史指數值查詢
 
-不適用
+## 概覽
 
-解鎖後才能使用
+臺灣指數公司特選FactSet臺灣市值動能50指數(簡稱「臺灣市值動能50指數」)係依據產業分類自具市值代表性或增長動能、且兼顧獲利能力之上市公司中，透過結合市值、成長、價值、品質及動能因子表現之綜合分數，擇優選取50檔成分股。成分股以自由流通市值為基準，依不同定期審核月份分別使用價值與動能因子調整權重，以表彰臺灣上市具市值動能及綜合因子特色者之投資組合績效表現。
 
-健診分析中...
+## 相關資料
 
-定存股健診
+|  |  |
+| --- | --- |
+| 指數母體 | 臺灣證券交易所上市普通股股票 |
+| 加權方法 | 自由流通市值加權及投資因子調整 |
+| 基期 | 2024.09.27 |
+| 發布日 | 2024.09.30 |
+| 基期指數 | 5,000 |
+| 計算頻率 | 每5秒計算一次 |
+| 成分股數目 | 50 |
+| 指數計算類別 | 價格/報酬 |
+| 定期審核 | 每年6、12月 |
 
-透過 5 個和股利發放與殖利率相關指標，鑑定公司是否適合當定存股。解鎖後才能使用。
+## 績效表現
 
-[查看完整健診細節](/users/sign_up)
+| 累計報酬率 | |
+| --- | --- |
+| 近 1 月 | 4.42% |
+| 近 3 月 | 1.82% |
+| 近 6 月 | -0.7% |
+| 近 1 年 | - |
+| 近 3 年 | - |
+| 近 5 年 | - |
 
-解鎖後才能使用
+| 年化報酬率 | |
+| --- | --- |
+| 近 1 年 | - |
+| 近 3 年 | - |
+| 近 5 年 | - |
 
-成長股健診
+| 年化標準差 | |
+| --- | --- |
+| 近 1 年 | - |
+| 近 3 年 | - |
+| 近 5 年 | - |
 
-透過 5 個和公司獲利成長相關的指標，鑑定公司是否為業績成長股。解鎖後才能使用。
+※指數績效表現以報酬指數值做計算。
 
-[查看完整健診細節](/users/sign_up)
+## 下載
 
-解鎖後才能使用
+|  |  |
+| --- | --- |
+| 檔案名稱 | 臺灣指數公司特選FactSet臺灣市值動能50指數編製規則 |
+| 檔案日期 | 2024/09/27 |
+| 連結 | [下載](https://backend.taiwanindex.com.tw/api/downloadFile/IndexFiles/836/tw) |
 
-便宜股健診
+|  |  |
+| --- | --- |
+| 檔案名稱 | 臺灣市值動能50指數單張(2025年第1季) |
+| 檔案日期 | 2025/03/31 |
+| 連結 | [下載](https://backend.taiwanindex.com.tw/api/downloadFile/IndexFiles/856/tw) |
 
-透過 6 個評估股價是否低估的指標，鑑定公司股價被低估的機率高低。解鎖後才能使用。
+|  |  |
+| --- | --- |
+| 檔案名稱 | ETF資料 : 保德信市值動能50ETF |
+| 檔案日期 | - |
+| 連結 | [連結](https://www.twse.com.tw/zh/products/securities/etf/products/content.html?009803#domestic) |
 
-[查看完整健診細節](/users/sign_up)
+| 檔案名稱 | 檔案日期 | 連結 |
+| --- | --- | --- |
+| 臺灣指數公司特選FactSet臺灣市值動能50指數編製規則 | 2024/09/27 | [下載](https://backend.taiwanindex.com.tw/api/downloadFile/IndexFiles/836/tw) |
+| 臺灣市值動能50指數單張(2025年第1季) | 2025/03/31 | [下載](https://backend.taiwanindex.com.tw/api/downloadFile/IndexFiles/856/tw) |
+| ETF資料 : 保德信市值動能50ETF | - | [連結](https://www.twse.com.tw/zh/products/securities/etf/products/content.html?009803#domestic) |
 
-解鎖後才能使用
+* [推廣與服務](/promotion_and_service) ![](/_nuxt/img/icon-arrow-down.31514ec.svg)
+* [下載專區](/downloads) ![](/_nuxt/img/icon-arrow-down.31514ec.svg)
+* [媒體/活動訊息](/media_and_events) ![](/_nuxt/img/icon-arrow-down.31514ec.svg)
+* [關於我們](/company/introduction) ![](/_nuxt/img/icon-arrow-down.31514ec.svg)
+* [各項指數](/indexes) ![](/_nuxt/img/icon-arrow-down.31514ec.svg)
 
-籌碼健診
+[推廣與服務](/promotion_and_service)
 
-透過 3 個評估大股東持股增加或減少的指標，鑑定公司內部人持股是否增加。解鎖後才能使用。
+* [指數資訊銷售](/promotion_and_service/index_data_selling)
+* [發行人專區](/promotion_and_service/issuers_zone)
+* [投資人專區](/promotion_and_service/investors_zone)
+* [國際專區](/promotion_and_service/global_zone)
 
-[查看完整健診細節](/users/sign_up)
+[下載專區](/downloads)
 
-解鎖後才能使用
+* [指數化投資報告](/downloads/investment_report)
+* [技術通知](/downloads/technical_notice)
+* [指數編製規則及相關檔案](/downloads/compilation_rule)
+* [5秒資訊檔](/downloads/five_seconds_information_file)
 
-績優股健診
+[媒體/活動訊息](/media_and_events)
 
-透過 5 個評估績優股的指標，鑑定公司是否為績優股。解鎖後才能使用。
+* [新聞稿](/news)
+* [近期活動](/campaigns)
+* [影音集錦](/videos)
+* [年度論壇](/forum)
 
-[查看完整健診細節](/users/sign_up)
+[關於我們](/company/introduction)
 
-解鎖後才能使用
+* [相關網站](/links)
+* [聲明](/statement)
+* [聯絡我們](/contactus)
+* [性騷擾防治專區](/anti_harassment_enforcement)
 
-轉機股健診
+[各項指數](/indexes)
 
-透過 3 個評估轉機股的指標，鑑定公司是否為轉機股。解鎖後才能使用。
+[指數比較](/indexes/comparison)
 
-[查看完整健診細節](/users/sign_up)
+[市值型](/indexes/categories/4)
 
-解鎖後才能使用
+* [市值參考型](/indexes/categories/4/subcategories/5)
+* [市值投資型](/indexes/categories/4/subcategories/6)
+* [股利點數](/indexes/categories/4/subcategories/12)
 
-很抱歉，無法進行股票健診
+[風格型](/indexes/categories/7)
 
-請確認輸入的股票名稱或代號是否正確，再重新查詢看看
+* [SmartBeta投資型](/indexes/categories/7/subcategories/8)
+* [槓桿/反向型](/indexes/categories/7/subcategories/9)
+* [股市期權策略](/indexes/categories/7/subcategories/11)
+* [多資產](/indexes/categories/7/subcategories/13)
 
-財報狗功能
+[指數看板](/indexes/board/tip)
 
-[個股數據](/analysis)
-[選股功能](/screeners)
-[大盤產業](/taiex)
-[洞見討論區](/insight)
-[個股比較](/compare/tpe)
-[美股列表](/us-stock-list)
-[財報狗網誌](/blog/)
+* 地址：110615 台北市信義區信義路五段7號39樓
+* 電話：02-8729-9000
+* 傳真：02-8729-9004
+* [[email protected]](/cdn-cgi/l/email-protection#1a697f686c73797f5a6e7b736d7b7473747e7f6234797577346e6d)
 
-付費加值
-
-[功能購買](/pricing)
-
-客戶服務
-
-[未收到認證信](/users/recv_auth_fail)
-[聯絡我們](/contact)
-[商業合作聯絡](/contact)
-[臉書粉絲團](//www.facebook.com/statementdog)
-
-條款與聲明
-
-[服務條款](/law/tos)
-[隱私權政策](/law/privacy)
-[免責聲明](/law/disclaimer)
-
-網站資料來源
-
-資料來源参考：[公開資訊觀測站](http://mops.twse.com.tw/mops/web/index)，[台灣證券交易所](http://www.tse.com.tw/)，[櫃檯買賣中心](http://www.otc.org.tw/)。本站提供之分析資料、選股工具僅供參考，不暗示買賣建議，本站對資訊正確、更新延誤或傳輸中斷不負任何責任，依本站資訊交易發生損失需自行負責，請謹慎評估風險。([財報狗免責聲明](/law/disclaimer))
-
-版權所有 © 2010 ~ 2025 財報狗資訊股份有限公司，統一編號：53754983
-網站由財報狗團隊設計，法律顧問：永熙法律事務所
+Copyright © 2016 Taiwan Index Plus Corporation. All rights reserved. 網站指數資訊提供係服務性質，本公司不對資訊正確性與即時性負責。

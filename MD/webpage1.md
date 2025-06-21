@@ -274,10 +274,10 @@ About
 
   + [恒指23,530.48 +292.74 (+1.26%)](/quote/%5EHSI/)
   + [上證綜指3,359.90 -2.21 (-0.07%)](/quote/000001.SS/)
-  + [標普 5005,980.87 -1.85 (-0.03%)](/quote/%5EGSPC/)
-  + [日圓0.0538 +0.0000 (+0.07%)](/quote/JPYHKD%3DX/)
-  + [英鎊10.5920 +0.0260 (+0.25%)](/quote/GBPHKD%3DX/)
-  + [人民幣0.9142 -0.0010 (-0.11%)](/quote/HKDCNY%3DX/)
+  + [標普 5005,967.84 -13.03 (-0.22%)](/quote/%5EGSPC/)
+  + [日圓0.0535 -0.0003 (-0.47%)](/quote/JPYHKD%3DX/)
+  + [英鎊10.5560 -0.0100 (-0.09%)](/quote/GBPHKD%3DX/)
+  + [人民幣0.9139 -0.0013 (-0.14%)](/quote/HKDCNY%3DX/)
 * [Portfolio](/portfolios)
 
   [Portfolio](/portfolios)
@@ -306,14 +306,14 @@ About
   + [0535.HK 金地商置 0.285 +0.010 (+3.64%)](/quote/0535.HK/)
   + [0568.HK 山東墨龍 5.200 -0.230 (-4.24%)](/quote/0568.HK/)
   + [1060.HK 阿里影業 0.890 -0.040 (-4.30%)](/quote/1060.HK/)
-* [Earnings events](/calendar/earnings?day=2025-06-20)
+* [Earnings events](/calendar/earnings?day=2025-06-21)
 * [Trending tickers](/trending-tickers)
 
-  + [CRCL Circle Internet Group 199.59 +50.44 (+33.82%)](/quote/CRCL/)
-  + [9992.HK 泡泡瑪特 239.600 -9.000 (-3.62%)](/quote/9992.HK/)
-  + [TSLA Tesla, Inc. 322.05 +5.77 (+1.82%)](/quote/TSLA/)
+  + [JPYHKD=X 日圓/港元 0.0535 -0.0003 (-0.47%)](/quote/JPYHKD%3DX/)
   + [1810.HK 小米集團－Ｗ 54.050 +1.000 (+1.89%)](/quote/1810.HK/)
   + [0489.HK 東風集團股份 3.500 -0.100 (-2.78%)](/quote/0489.HK/)
+  + [2477.HK 經緯天地 6.840 +0.120 (+1.79%)](/quote/2477.HK/)
+  + [0939.HK 建設銀行 7.730 +0.250 (+3.34%)](/quote/0939.HK/)
 * [Top economic events](/calendar/economic)
 
 [Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
