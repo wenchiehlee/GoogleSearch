@@ -1,11 +1,11 @@
 """
-factset_pipeline.py - Complete Production-Ready FactSet Pipeline (Guideline v3.2.0 Compliant)
+factset_pipeline.py - Complete Production-Ready FactSet Pipeline (Guideline v3.2.4 Compliant)
 
-Version: 3.2.0
+Version: 3.2.4
 Date: 2025-06-22
-Author: FactSet Pipeline - Guideline v3.2.0 Production Architecture
+Author: FactSet Pipeline - Guideline v3.2.4 Production Architecture
 
-GUIDELINE v3.2.0 COMPLIANCE:
+GUIDELINE v3.2.4 COMPLIANCE:
 - ✅ Exact class structure and method signatures from guideline
 - ✅ Immediate stop on 429 errors with fallback to data processing
 - ✅ Enhanced strategy determination (conservative, process_existing, comprehensive)
@@ -59,10 +59,10 @@ import hashlib
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 
-# Version Information - Guideline v3.2.0
-__version__ = "3.2.0"
+# Version Information - Guideline v3.2.4
+__version__ = "3.2.4"
 __date__ = "2025-06-22"
-__author__ = "FactSet Pipeline - Guideline v3.2.0 Production Architecture"
+__author__ = "FactSet Pipeline - Guideline v3.2.4 Production Architecture"
 
 # ============================================================================
 # SAFE EMOJI HANDLING FOR WINDOWS
@@ -186,11 +186,11 @@ def setup_logging():
     return logger
 
 # ============================================================================
-# CONFIGURATION MANAGEMENT - GUIDELINE v3.2.0
+# CONFIGURATION MANAGEMENT - GUIDELINE v3.2.4
 # ============================================================================
 
 class ProductionConfig:
-    """Production-ready configuration management - Guideline v3.2.0"""
+    """Production-ready configuration management - Guideline v3.2.4"""
     
     def __init__(self, config_file=None):
         self.config_file = config_file
@@ -216,7 +216,7 @@ class ProductionConfig:
             print(emoji.safe(f"⚠️ Error loading .env file: {e}"))
     
     def _load_config(self):
-        """Load configuration with comprehensive defaults - Guideline v3.2.0"""
+        """Load configuration with comprehensive defaults - Guideline v3.2.4"""
         default_config = {
             "target_companies": [],
             "watchlist_url": "https://raw.githubusercontent.com/wenchiehlee/GoPublic/refs/heads/main/%E8%A7%80%E5%AF%9F%E5%90%8D%E5%96%AE.csv",
@@ -342,17 +342,17 @@ class ProductionConfig:
         return value
 
 # ============================================================================
-# ENHANCED RATE LIMITING PROTECTION SYSTEM - GUIDELINE v3.2.0
+# ENHANCED RATE LIMITING PROTECTION SYSTEM - GUIDELINE v3.2.4
 # ============================================================================
 
 class RateLimitProtector:
-    """Enhanced rate limiting protection - Guideline v3.2.0 immediate stop strategy"""
+    """Enhanced rate limiting protection - Guideline v3.2.4 immediate stop strategy"""
     
     def __init__(self, config):
         self.config = config
         self.logger = logging.getLogger('factset_pipeline.rate_limiter')
         
-        # Rate limiting state - Guideline v3.2.0
+        # Rate limiting state - Guideline v3.2.4
         self.min_delay = config.get('search.rate_limit_delay', 45)
         self.max_delay = 600  # 10 minutes max
         self.current_delay = self.min_delay
@@ -364,13 +364,13 @@ class RateLimitProtector:
         self.circuit_open_time = None
         self.request_history = []
         
-        # Guideline v3.2.0: Immediate stop flag
+        # Guideline v3.2.4: Immediate stop flag
         self.should_stop_searching = False
         self.stop_reason = None
         self.fallback_to_processing = False
     
     def record_429_error(self):
-        """Record 429 error and trigger immediate stop - Guideline v3.2.0"""
+        """Record 429 error and trigger immediate stop - Guideline v3.2.4"""
         self.consecutive_429s += 1
         self.consecutive_failures += 1
         
@@ -382,7 +382,7 @@ class RateLimitProtector:
         
         self.logger.warning(emoji.safe(f"🚨 Rate limiting detected! (#{self.consecutive_429s}) Delay increased to {self.current_delay} seconds"))
         
-        # Guideline v3.2.0: Immediate stop after first 429 error
+        # Guideline v3.2.4: Immediate stop after first 429 error
         if self.consecutive_429s >= self.circuit_breaker_threshold:
             self.should_stop_searching = True
             self.fallback_to_processing = True
@@ -394,7 +394,7 @@ class RateLimitProtector:
         return False
     
     def should_stop_immediately(self):
-        """Check if search should stop immediately - Guideline v3.2.0"""
+        """Check if search should stop immediately - Guideline v3.2.4"""
         return self.should_stop_searching
     
     def should_fallback_to_processing(self):
@@ -426,11 +426,11 @@ class RateLimitProtector:
         }
 
 # ============================================================================
-# WORKFLOW STATE MANAGEMENT - GUIDELINE v3.2.0
+# WORKFLOW STATE MANAGEMENT - GUIDELINE v3.2.4
 # ============================================================================
 
 class WorkflowState:
-    """Production-ready workflow state management - Guideline v3.2.0"""
+    """Production-ready workflow state management - Guideline v3.2.4"""
     
     def __init__(self, state_file="data/workflow_state.json"):
         self.state_file = state_file
@@ -465,7 +465,7 @@ class WorkflowState:
             "fallback_to_processing": False,
             "execution_mode": "intelligent",
             "search_strategy": "balanced",
-            "guideline_version": "3.2.0"
+            "guideline_version": "3.2.4"
         }
         
         if os.path.exists(self.state_file):
@@ -502,7 +502,7 @@ class WorkflowState:
             self.logger.error(emoji.safe(f"⚠️ Error saving workflow state: {e}"))
     
     def start_workflow(self, search_strategy="intelligent", execution_mode="intelligent"):
-        """Start a new workflow - Guideline v3.2.0"""
+        """Start a new workflow - Guideline v3.2.4"""
         workflow_id = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         self.state.update({
@@ -515,7 +515,7 @@ class WorkflowState:
             "success_count": 0,
             "search_strategy": search_strategy,
             "execution_mode": execution_mode,
-            "guideline_version": "3.2.0",
+            "guideline_version": "3.2.4",
             "rate_limiting_detected": False,
             "consecutive_failures": 0,
             "search_stopped_early": False,
@@ -567,13 +567,37 @@ class WorkflowState:
         
         self.save_state()
         self.logger.info(emoji.safe("✅ Upload phase completed"))
+    
+    def mark_error(self, error_message):
+        """Mark error in workflow - Guideline v3.2.4"""
+        self.state.update({
+            "last_error": error_message,
+            "consecutive_failures": self.state.get("consecutive_failures", 0) + 1
+        })
+        self.save_state()
+        self.logger.error(emoji.safe(f"❌ Workflow error: {error_message}"))
+    
+    def reset_workflow(self):
+        """Reset workflow state - Guideline v3.2.4"""
+        self.state = self._load_state()
+        self.state.update({
+            "workflow_id": None,
+            "search_completed": False,
+            "processing_completed": False,
+            "sheets_uploaded": False,
+            "last_error": None,
+            "success_count": 0,
+            "consecutive_failures": 0
+        })
+        self.save_state()
+        self.logger.info(emoji.safe("🔄 Workflow state reset"))
 
 # ============================================================================
-# PRODUCTION PIPELINE IMPLEMENTATION - GUIDELINE v3.2.0
+# PRODUCTION PIPELINE IMPLEMENTATION - GUIDELINE v3.2.4
 # ============================================================================
 
 class ProductionFactSetPipeline:
-    """Production-ready FactSet pipeline - Guideline v3.2.0 compliant"""
+    """Production-ready FactSet pipeline - Guideline v3.2.4 compliant"""
     
     def __init__(self, config_file=None):
         self.logger = setup_logging()
@@ -584,7 +608,7 @@ class ProductionFactSetPipeline:
         # Create necessary directories
         self._setup_directories()
         
-        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} initialized (Guideline v3.2.0)"))
+        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} initialized (Guideline v3.2.4)"))
     
     def _setup_directories(self):
         """Setup required directories"""
@@ -601,7 +625,7 @@ class ProductionFactSetPipeline:
                 Path(directory).mkdir(parents=True, exist_ok=True)
     
     def analyze_existing_data(self):
-        """Analyze existing data to determine optimal strategy - Guideline v3.2.0"""
+        """Analyze existing data to determine optimal strategy - Guideline v3.2.4"""
         md_dir = self.config.get('output.md_dir')
         
         if not os.path.exists(md_dir):
@@ -648,7 +672,7 @@ class ProductionFactSetPipeline:
             return file_count, "insufficient"
     
     def determine_strategy(self, existing_files, data_status):
-        """Determine optimal execution strategy - Guideline v3.2.0"""
+        """Determine optimal execution strategy - Guideline v3.2.4"""
         self.logger.info(emoji.safe(f"🎯 Determining optimal strategy..."))
         self.logger.info(emoji.safe(f"   📄 Existing files: {existing_files}"))
         self.logger.info(emoji.safe(f"   📊 Data status: {data_status}"))
@@ -672,66 +696,135 @@ class ProductionFactSetPipeline:
         
         return strategy
     
-    def test_search_availability(self):
-        """Test if search API is currently available"""
-        self.logger.info(emoji.safe("🧪 Testing search API availability..."))
+    def run_complete_pipeline(self, strategy="intelligent", force_all=False, skip_phases=None, execution_mode="intelligent"):
+        """Run the complete production pipeline - Guideline v3.2.4"""
+        if skip_phases is None:
+            skip_phases = []
         
-        try:
-            api_key = self.config.get('search.api_key')
-            cse_id = self.config.get('search.cse_id')
+        pipeline_start = time.time()
+        
+        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} (Guideline v3.2.4)"))
+        self.logger.info(emoji.safe(f"📅 Date: {__date__}"))
+        self.logger.info(emoji.safe(f"👨‍💻 Author: {__author__}"))
+        self.logger.info("=" * 80)
+        
+        # Analyze existing data and determine strategy
+        existing_files, data_status = self.analyze_existing_data()
+        optimal_strategy = self.determine_strategy(existing_files, data_status)
+        
+        # Initialize or resume workflow
+        if force_all or not self.state.state.get("workflow_id"):
+            self.state.start_workflow(optimal_strategy, execution_mode)
+        
+        # Load and display target companies
+        if not self.config.config.get('target_companies'):
+            self.config.download_watchlist()
+        
+        companies = self.config.config.get('target_companies', [])
+        self.logger.info(emoji.safe(f"🎯 Target Companies: {len(companies)} companies from 觀察名單.csv"))
+        
+        success_phases = 0
+        total_phases = 3 - len(skip_phases)
+        
+        # Phase 1: Intelligent Search with immediate stop strategy
+        if "search" not in skip_phases:
+            self.logger.info(emoji.safe(f"\n🔍 Starting search phase with strategy: {optimal_strategy}"))
+            self.logger.info(emoji.safe("🛑 Note: Search will stop immediately on rate limiting and process existing data"))
             
-            if not api_key or not cse_id:
-                self.logger.warning(emoji.safe("⚠️ Search API credentials not configured"))
-                return False
-            
-            import requests
-            
-            url = "https://www.googleapis.com/customsearch/v1"
-            params = {
-                'key': api_key,
-                'cx': cse_id,
-                'q': 'test search',
-                'num': 1
-            }
-            
-            response = requests.get(url, params=params, timeout=30)
-            
-            if response.status_code == 200:
-                self.logger.info(emoji.safe("✅ Search API is accessible"))
-                return True
-            elif response.status_code == 429:
-                self.logger.warning(emoji.safe("🚨 Search API is rate limited"))
-                self.rate_protector.record_429_error()
-                return False
-            else:
-                self.logger.warning(emoji.safe(f"⚠️ Search API returned {response.status_code}"))
-                return False
+            if self.run_intelligent_search_phase(optimal_strategy, force=force_all):
+                success_phases += 1
                 
-        except Exception as e:
-            self.logger.error(emoji.safe(f"❌ Search API test failed: {e}"))
-            return False
-    
-    def _fallback_to_existing_data(self, start_time):
-        """Fallback to existing data when search fails"""
-        self.logger.info(emoji.safe("📄 Falling back to existing data processing..."))
+                # Check if search was stopped early
+                if self.state.state.get("search_stopped_early"):
+                    self.logger.warning(emoji.safe("⚠️ Search stopped early due to rate limiting"))
+                    self.logger.info(emoji.safe("📄 Continuing with existing data processing..."))
+                else:
+                    self.logger.info(emoji.safe("✅ Search phase completed successfully"))
+            else:
+                self.logger.error(emoji.safe("❌ Search phase failed"))
+                
+                # Check if we can continue with existing data
+                if self.state.state.get("md_files_generated", 0) > 0:
+                    self.logger.info(emoji.safe("📄 Continuing with existing data..."))
+                    success_phases += 1
+                else:
+                    self.logger.error(emoji.safe("💔 Pipeline stopped - no data available"))
+                    return False
+        else:
+            self.logger.info(emoji.safe("⏭️ Skipping search phase"))
+            success_phases += 1
         
-        existing_files, _ = self.analyze_existing_data()
-        if existing_files > 0:
-            self.state.mark_search_complete(
-                files_generated=0,
-                md_files=existing_files,
-                factset_files=max(1, existing_files // 3),
-                duration=time.time() - start_time,
-                stopped_early=True
-            )
-            self.logger.info(emoji.safe(f"✅ Using existing data: {existing_files} files"))
+        # Phase 2: Enhanced Processing
+        if "processing" not in skip_phases:
+            self.logger.info(emoji.safe(f"\n📊 Starting processing phase..."))
+            
+            if self.run_enhanced_processing_phase(force=force_all):
+                success_phases += 1
+                self.logger.info(emoji.safe("✅ Processing phase completed successfully"))
+            else:
+                self.logger.error(emoji.safe("❌ Processing phase failed"))
+                return False
+        else:
+            self.logger.info(emoji.safe("⏭️ Skipping processing phase"))
+            success_phases += 1
+        
+        # Phase 3: Enhanced Upload
+        if "upload" not in skip_phases:
+            self.logger.info(emoji.safe(f"\n📈 Starting upload phase..."))
+            
+            if self.run_enhanced_upload_phase(force=force_all):
+                success_phases += 1
+                self.logger.info(emoji.safe("✅ Upload phase completed successfully"))
+            else:
+                self.logger.warning(emoji.safe("⚠️ Upload phase failed - pipeline completed with issues"))
+        else:
+            self.logger.info(emoji.safe("⏭️ Skipping upload phase"))
+            success_phases += 1
+        
+        # Final summary and performance report
+        total_duration = time.time() - pipeline_start
+        
+        self.logger.info(emoji.safe(f"\n{'='*80}"))
+        self.logger.info(emoji.safe("🎉 PRODUCTION PIPELINE EXECUTION COMPLETED! (Guideline v3.2.4)"))
+        self.logger.info("="*80)
+        self.logger.info(emoji.safe(f"📊 Success Rate: {success_phases}/{total_phases} phases"))
+        self.logger.info(emoji.safe(f"⏱️ Total Duration: {total_duration:.1f} seconds"))
+        self.logger.info(emoji.safe(f"🎯 Guideline Compliance: v{__version__}"))
+        
+        # Show rate limiting status if applicable
+        if self.state.state.get("search_stopped_early"):
+            self.logger.info(emoji.safe("🛑 Search was stopped early due to rate limiting"))
+            self.logger.info(emoji.safe("📄 Successfully processed existing data instead"))
+        
+        if success_phases == total_phases:
+            self.logger.info(emoji.safe("🏆 All phases completed successfully!"))
+            
+            # Display comprehensive results
+            md_files = self.state.state.get('md_files_generated', 0)
+            factset_files = self.state.state.get('factset_files_generated', 0)
+            companies_found = self.state.state.get('companies_found', 0)
+            
+            self.logger.info(emoji.safe(f"📄 MD Files Generated: {md_files}"))
+            self.logger.info(emoji.safe(f"🎯 FactSet Content Files: {factset_files}"))
+            self.logger.info(emoji.safe(f"🏢 Companies Processed: {companies_found}"))
+            
+            # Quality assessment
+            if md_files >= 50:
+                self.logger.info(emoji.safe("🏆 OUTSTANDING: Comprehensive data collection achieved!"))
+            elif md_files >= 20:
+                self.logger.info(emoji.safe("🎉 EXCELLENT: Substantial data available for analysis!"))
+            elif md_files >= 10:
+                self.logger.info(emoji.safe("✅ GOOD: Sufficient data for portfolio analysis!"))
+            else:
+                self.logger.info(emoji.safe("⚠️ MODERATE: Limited data collected"))
+            
             return True
         else:
-            self.logger.warning(emoji.safe("⚠️ No existing data available"))
+            self.logger.warning(emoji.safe("⚠️ Pipeline completed with some issues"))
             return False
     
     def run_intelligent_search_phase(self, strategy="comprehensive", force=False):
-        """Run search phase with immediate stop on rate limiting - Guideline v3.2.0"""
+        """Run search phase with immediate stop on rate limiting - Guideline v3.2.4"""
         if self.state.state["search_completed"] and not force:
             self.logger.info(emoji.safe("ℹ️ Search phase already completed (use --force to re-run)"))
             return True
@@ -739,18 +832,13 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"🔍 PHASE 1: INTELLIGENT SEARCH EXECUTION (Guideline v3.2.0)"))
+        self.logger.info(emoji.safe(f"🔍 PHASE 1: INTELLIGENT SEARCH EXECUTION (Guideline v3.2.4)"))
         self.logger.info(emoji.safe(f"📊 Strategy: {strategy.upper()}"))
         self.logger.info("="*80)
         
         # Skip search if strategy indicates processing existing data
         if strategy == "process_existing":
             self.logger.info(emoji.safe("📄 Strategy indicates processing existing data only"))
-            return self._fallback_to_existing_data(start_time)
-        
-        # Test search availability before proceeding
-        if not self.test_search_availability():
-            self.logger.warning(emoji.safe("🚨 Search API not available - switching to existing data processing"))
             return self._fallback_to_existing_data(start_time)
         
         try:
@@ -823,6 +911,7 @@ class ProductionFactSetPipeline:
                 return self._fallback_to_existing_data(start_time)
             
             self.logger.error(emoji.safe(f"❌ Search phase failed: {e}"))
+            self.state.mark_error(str(e))
             
             # Check for existing data as fallback
             existing_files, _ = self.analyze_existing_data()
@@ -830,6 +919,25 @@ class ProductionFactSetPipeline:
                 self.logger.info(emoji.safe("📄 Found existing data - continuing with processing"))
                 return self._fallback_to_existing_data(start_time)
             
+            return False
+    
+    def _fallback_to_existing_data(self, start_time):
+        """Fallback to existing data when search fails"""
+        self.logger.info(emoji.safe("📄 Falling back to existing data processing..."))
+        
+        existing_files, _ = self.analyze_existing_data()
+        if existing_files > 0:
+            self.state.mark_search_complete(
+                files_generated=0,
+                md_files=existing_files,
+                factset_files=max(1, existing_files // 3),
+                duration=time.time() - start_time,
+                stopped_early=True
+            )
+            self.logger.info(emoji.safe(f"✅ Using existing data: {existing_files} files"))
+            return True
+        else:
+            self.logger.warning(emoji.safe("⚠️ No existing data available"))
             return False
     
     def _run_protected_search(self, companies, strategy):
@@ -946,7 +1054,7 @@ class ProductionFactSetPipeline:
         return 0
     
     def run_enhanced_processing_phase(self, force=False):
-        """Run processing phase with enhanced error handling - Guideline v3.2.0"""
+        """Run processing phase with enhanced error handling - Guideline v3.2.4"""
         if self.state.state["processing_completed"] and not force:
             self.logger.info(emoji.safe("ℹ️ Processing phase already completed (use --force to re-run)"))
             return True
@@ -954,7 +1062,7 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"📊 PHASE 2: ENHANCED DATA PROCESSING (Guideline v3.2.0)"))
+        self.logger.info(emoji.safe(f"📊 PHASE 2: ENHANCED DATA PROCESSING (Guideline v3.2.4)"))
         self.logger.info("="*80)
         
         try:
@@ -1006,7 +1114,7 @@ class ProductionFactSetPipeline:
                         summary_df = pd.read_csv(summary_file)
                         companies_found = len(summary_df)
                         
-                        # Log quality metrics for guideline v3.2.0
+                        # Log quality metrics for guideline v3.2.4
                         if 'MD資料筆數' in summary_df.columns:
                             companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
                             self.logger.info(emoji.safe(f"📊 Companies with data: {companies_with_data}"))
@@ -1023,7 +1131,7 @@ class ProductionFactSetPipeline:
                         self.logger.warning(emoji.safe(f"⚠️ Error analyzing results: {e}"))
                 
                 self.state.mark_processing_complete(companies_found, duration)
-                self.logger.info(emoji.safe(f"✅ Processing completed: {companies_found} companies processed (Guideline v3.2.0)"))
+                self.logger.info(emoji.safe(f"✅ Processing completed: {companies_found} companies processed (Guideline v3.2.4)"))
                 return True
             else:
                 return False
@@ -1031,12 +1139,13 @@ class ProductionFactSetPipeline:
         except Exception as e:
             duration = time.time() - start_time
             self.logger.error(emoji.safe(f"❌ Processing phase failed: {e}"))
+            self.state.mark_error(str(e))
             if self.config.get('debug'):
                 traceback.print_exc()
             return False
     
     def run_enhanced_upload_phase(self, force=False):
-        """Run upload phase with enhanced validation - Guideline v3.2.0"""
+        """Run upload phase with enhanced validation - Guideline v3.2.4"""
         if self.state.state["sheets_uploaded"] and not force:
             self.logger.info(emoji.safe("ℹ️ Upload phase already completed (use --force to re-run)"))
             return True
@@ -1044,7 +1153,7 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"📈 PHASE 3: ENHANCED GOOGLE SHEETS UPLOAD (Guideline v3.2.0)"))
+        self.logger.info(emoji.safe(f"📈 PHASE 3: ENHANCED GOOGLE SHEETS UPLOAD (Guideline v3.2.4)"))
         self.logger.info("="*80)
         
         try:
@@ -1114,9 +1223,9 @@ class ProductionFactSetPipeline:
                 if sheet_id:
                     dashboard_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit"
                     self.logger.info(emoji.safe(f"📊 Dashboard available: {dashboard_url}"))
-                    self.logger.info(emoji.safe("🎯 Features: Portfolio Summary (v3.2.0), Detailed Data (EPS breakdown), Statistics"))
+                    self.logger.info(emoji.safe("🎯 Features: Portfolio Summary (v3.2.4), Detailed Data (EPS breakdown), Statistics"))
                 
-                self.logger.info(emoji.safe("✅ Upload completed successfully (Guideline v3.2.0)"))
+                self.logger.info(emoji.safe("✅ Upload completed successfully (Guideline v3.2.4)"))
                 return True
             else:
                 return False
@@ -1124,148 +1233,22 @@ class ProductionFactSetPipeline:
         except Exception as e:
             duration = time.time() - start_time
             self.logger.error(emoji.safe(f"❌ Upload phase failed: {e}"))
+            self.state.mark_error(str(e))
             if self.config.get('debug'):
                 traceback.print_exc()
             return False
-    
-    def run_complete_pipeline(self, strategy="intelligent", force_all=False, skip_phases=None, execution_mode="intelligent"):
-        """Run the complete production pipeline - Guideline v3.2.0"""
-        if skip_phases is None:
-            skip_phases = []
-        
-        pipeline_start = time.time()
-        
-        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} (Guideline v3.2.0)"))
-        self.logger.info(emoji.safe(f"📅 Date: {__date__}"))
-        self.logger.info(emoji.safe(f"👨‍💻 Author: {__author__}"))
-        self.logger.info("=" * 80)
-        
-        # Analyze existing data and determine strategy
-        existing_files, data_status = self.analyze_existing_data()
-        optimal_strategy = self.determine_strategy(existing_files, data_status)
-        
-        # Initialize or resume workflow
-        if force_all or not self.state.state.get("workflow_id"):
-            self.state.start_workflow(optimal_strategy, execution_mode)
-        
-        # Load and display target companies
-        if not self.config.config.get('target_companies'):
-            self.config.download_watchlist()
-        
-        companies = self.config.config.get('target_companies', [])
-        self.logger.info(emoji.safe(f"🎯 Target Companies: {len(companies)} companies from 觀察名單.csv"))
-        
-        success_phases = 0
-        total_phases = 3 - len(skip_phases)
-        
-        # Phase 1: Intelligent Search with immediate stop strategy
-        if "search" not in skip_phases:
-            self.logger.info(emoji.safe(f"\n🔍 Starting search phase with strategy: {optimal_strategy}"))
-            self.logger.info(emoji.safe("🛑 Note: Search will stop immediately on rate limiting and process existing data"))
-            
-            if self.run_intelligent_search_phase(optimal_strategy, force=force_all):
-                success_phases += 1
-                
-                # Check if search was stopped early
-                if self.state.state.get("search_stopped_early"):
-                    self.logger.warning(emoji.safe("⚠️ Search stopped early due to rate limiting"))
-                    self.logger.info(emoji.safe("📄 Continuing with existing data processing..."))
-                else:
-                    self.logger.info(emoji.safe("✅ Search phase completed successfully"))
-            else:
-                self.logger.error(emoji.safe("❌ Search phase failed"))
-                
-                # Check if we can continue with existing data
-                if self.state.state.get("md_files_generated", 0) > 0:
-                    self.logger.info(emoji.safe("📄 Continuing with existing data..."))
-                    success_phases += 1
-                else:
-                    self.logger.error(emoji.safe("💔 Pipeline stopped - no data available"))
-                    return False
-        else:
-            self.logger.info(emoji.safe("⏭️ Skipping search phase"))
-            success_phases += 1
-        
-        # Phase 2: Enhanced Processing
-        if "processing" not in skip_phases:
-            self.logger.info(emoji.safe(f"\n📊 Starting processing phase..."))
-            
-            if self.run_enhanced_processing_phase(force=force_all):
-                success_phases += 1
-                self.logger.info(emoji.safe("✅ Processing phase completed successfully"))
-            else:
-                self.logger.error(emoji.safe("❌ Processing phase failed"))
-                return False
-        else:
-            self.logger.info(emoji.safe("⏭️ Skipping processing phase"))
-            success_phases += 1
-        
-        # Phase 3: Enhanced Upload
-        if "upload" not in skip_phases:
-            self.logger.info(emoji.safe(f"\n📈 Starting upload phase..."))
-            
-            if self.run_enhanced_upload_phase(force=force_all):
-                success_phases += 1
-                self.logger.info(emoji.safe("✅ Upload phase completed successfully"))
-            else:
-                self.logger.warning(emoji.safe("⚠️ Upload phase failed - pipeline completed with issues"))
-        else:
-            self.logger.info(emoji.safe("⏭️ Skipping upload phase"))
-            success_phases += 1
-        
-        # Final summary and performance report
-        total_duration = time.time() - pipeline_start
-        
-        self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe("🎉 PRODUCTION PIPELINE EXECUTION COMPLETED! (Guideline v3.2.0)"))
-        self.logger.info("="*80)
-        self.logger.info(emoji.safe(f"📊 Success Rate: {success_phases}/{total_phases} phases"))
-        self.logger.info(emoji.safe(f"⏱️ Total Duration: {total_duration:.1f} seconds"))
-        self.logger.info(emoji.safe(f"🎯 Guideline Compliance: v{__version__}"))
-        
-        # Show rate limiting status if applicable
-        if self.state.state.get("search_stopped_early"):
-            self.logger.info(emoji.safe("🛑 Search was stopped early due to rate limiting"))
-            self.logger.info(emoji.safe("📄 Successfully processed existing data instead"))
-        
-        if success_phases == total_phases:
-            self.logger.info(emoji.safe("🏆 All phases completed successfully!"))
-            
-            # Display comprehensive results
-            md_files = self.state.state.get('md_files_generated', 0)
-            factset_files = self.state.state.get('factset_files_generated', 0)
-            companies_found = self.state.state.get('companies_found', 0)
-            
-            self.logger.info(emoji.safe(f"📄 MD Files Generated: {md_files}"))
-            self.logger.info(emoji.safe(f"🎯 FactSet Content Files: {factset_files}"))
-            self.logger.info(emoji.safe(f"🏢 Companies Processed: {companies_found}"))
-            
-            # Quality assessment
-            if md_files >= 50:
-                self.logger.info(emoji.safe("🏆 OUTSTANDING: Comprehensive data collection achieved!"))
-            elif md_files >= 20:
-                self.logger.info(emoji.safe("🎉 EXCELLENT: Substantial data available for analysis!"))
-            elif md_files >= 10:
-                self.logger.info(emoji.safe("✅ GOOD: Sufficient data for portfolio analysis!"))
-            else:
-                self.logger.info(emoji.safe("⚠️ MODERATE: Limited data collected"))
-            
-            return True
-        else:
-            self.logger.warning(emoji.safe("⚠️ Pipeline completed with some issues"))
-            return False
 
 # ============================================================================
-# PRODUCTION CLI INTERFACE - GUIDELINE v3.2.0
+# PRODUCTION CLI INTERFACE - GUIDELINE v3.2.4
 # ============================================================================
 
 def create_production_parser():
-    """Create production-ready argument parser - Guideline v3.2.0"""
+    """Create production-ready argument parser - Guideline v3.2.4"""
     parser = argparse.ArgumentParser(
-        description=f'Production FactSet Pipeline v{__version__} - Guideline v3.2.0 Compliant',
+        description=f'Production FactSet Pipeline v{__version__} - Guideline v3.2.4 Compliant',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
-Production Pipeline Examples (Guideline v3.2.0):
+Production Pipeline Examples (Guideline v3.2.4):
 
   # Intelligent execution (recommended)
   python factset_pipeline.py                     # Auto-detect strategy with immediate stop
@@ -1285,7 +1268,7 @@ Production Pipeline Examples (Guideline v3.2.0):
   python factset_pipeline.py --status            # Comprehensive status
   python factset_pipeline.py --analyze-data      # Analyze existing data
 
-GUIDELINE v3.2.0 FEATURES:
+GUIDELINE v3.2.4 FEATURES:
 - Immediate stop on 429 errors with fallback to data processing
 - Portfolio Summary: 14-column exact format
 - Detailed Data: Enhanced EPS breakdown (2025/2026/2027)
@@ -1320,12 +1303,12 @@ Windows Users: Use Command Prompt or PowerShell for best emoji support
     
     # Version info
     parser.add_argument('--version', action='version', 
-                       version=f'Production FactSet Pipeline v{__version__} (Guideline v3.2.0)')
+                       version=f'Production FactSet Pipeline v{__version__} (Guideline v3.2.4)')
     
     return parser
 
 def main():
-    """Production main entry point - Guideline v3.2.0"""
+    """Production main entry point - Guideline v3.2.4"""
     parser = create_production_parser()
     args = parser.parse_args()
     
@@ -1340,12 +1323,12 @@ def main():
     try:
         # Initialize production pipeline
         pipeline = ProductionFactSetPipeline(args.config)
-        logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} started (Guideline v3.2.0)"))
+        logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} started (Guideline v3.2.4)"))
         
         # Handle monitoring requests
         if args.status:
             # Simple status display
-            print(emoji.safe("📊 Pipeline Status (Guideline v3.2.0):"))
+            print(emoji.safe("📊 Pipeline Status (Guideline v3.2.4):"))
             print(f"   Version: {__version__}")
             print(f"   Configuration: Loaded")
             print(f"   Rate Protector: Active (threshold=1)")
@@ -1396,13 +1379,13 @@ def main():
         
         # Provide helpful guidance on failure
         if not success:
-            logger.error(emoji.safe("\n💡 Troubleshooting suggestions (Guideline v3.2.0):"))
+            logger.error(emoji.safe("\n💡 Troubleshooting suggestions (Guideline v3.2.4):"))
             logger.error("1. Analyze data: python factset_pipeline.py --analyze-data")
             logger.error("2. Try conservative mode: python factset_pipeline.py --mode conservative")
             logger.error("3. Process existing data: python factset_pipeline.py --mode process-only")
             logger.error("4. Check API credentials and rate limiting status")
         else:
-            logger.info(emoji.safe("🎉 Pipeline completed successfully! (Guideline v3.2.0)"))
+            logger.info(emoji.safe("🎉 Pipeline completed successfully! (Guideline v3.2.4)"))
         
         sys.exit(0 if success else 1)
         

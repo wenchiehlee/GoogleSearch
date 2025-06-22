@@ -1,12 +1,12 @@
 """
-data_processor.py - Data Processing Module (Updated for Guideline v3.2.0)
+data_processor.py - Data Processing Module (Updated for Guideline v3.2.4)
 
-Version: 3.2.0
+Version: 3.2.4
 Date: 2025-06-22
-Author: Google Search FactSet Pipeline - Guideline v3.2.0 Compliant
+Author: Google Search FactSet Pipeline - Guideline v3.2.4 Compliant
 License: MIT
 
-GUIDELINE v3.2.0 COMPLIANCE:
+GUIDELINE v3.2.4 COMPLIANCE:
 - ✅ Updated output format to match exact guideline specifications
 - ✅ Portfolio Summary: 代號,名稱,股票代號,MD最舊日期,MD最新日期,MD資料筆數,分析師數量,目標價,2025EPS平均值,2026EPS平均值,2027EPS平均值,品質評分,狀態,更新日期
 - ✅ Detailed Data: Enhanced with EPS high/low/avg for 2025/2026/2027
@@ -16,7 +16,7 @@ GUIDELINE v3.2.0 COMPLIANCE:
 - ✅ Enhanced company mapping with 觀察名單.csv integration
 
 Description:
-    Data processing module for FactSet pipeline aligned with guideline v3.2.0:
+    Data processing module for FactSet pipeline aligned with guideline v3.2.4:
     - Parses markdown files for financial data
     - Groups data by company from 觀察名單.csv
     - Generates guideline-compliant portfolio summaries
@@ -55,13 +55,13 @@ try:
 except ImportError as e:
     print(f"⚠️ Could not import local modules: {e}")
 
-# Version Information - Guideline v3.2.0
-__version__ = "3.2.0"
+# Version Information - Guideline v3.2.4
+__version__ = "3.2.4"
 __date__ = "2025-06-22"
-__author__ = "Google Search FactSet Pipeline - Guideline v3.2.0 Compliant"
+__author__ = "Google Search FactSet Pipeline - Guideline v3.2.4 Compliant"
 
 # ============================================================================
-# CONFIGURATION AND CONSTANTS - GUIDELINE v3.2.0
+# CONFIGURATION AND CONSTANTS - GUIDELINE v3.2.4
 # ============================================================================
 
 # Enhanced financial data extraction patterns for multi-year EPS
@@ -90,7 +90,7 @@ FACTSET_PATTERNS = {
         r'([0-9]+).*?analyst',
     ],
     
-    # Enhanced multi-year EPS patterns - Guideline v3.2.0
+    # Enhanced multi-year EPS patterns - Guideline v3.2.4
     'eps_2025_high': [
         r'2025.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?High[：:\s]*([0-9]+\.?[0-9]*)',
@@ -145,7 +145,7 @@ FACTSET_PATTERNS = {
     ],
 }
 
-# Guideline v3.2.0 - Exact column specifications
+# Guideline v3.2.4 - Exact column specifications
 PORTFOLIO_SUMMARY_COLUMNS = [
     '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
     '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
@@ -161,11 +161,11 @@ DETAILED_DATA_COLUMNS = [
 ]
 
 # ============================================================================
-# COMPANY MAPPING AND 觀察名單 INTEGRATION - GUIDELINE v3.2.0
+# COMPANY MAPPING AND 觀察名單 INTEGRATION - GUIDELINE v3.2.4
 # ============================================================================
 
 def load_watchlist(watchlist_path: str = '觀察名單.csv') -> Optional[pd.DataFrame]:
-    """Load the 觀察名單.csv file - Guideline v3.2.0"""
+    """Load the 觀察名單.csv file - Guideline v3.2.4"""
     try:
         if os.path.exists(watchlist_path):
             df = pd.read_csv(watchlist_path, encoding='utf-8')
@@ -197,13 +197,13 @@ def get_company_from_watchlist(code: str, watchlist_df: Optional[pd.DataFrame] =
                 'stock_code': f"{row['代號']}-TW"
             }
     except Exception as e:
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             print(f"   ⚠️ Error matching company {code}: {e}")
     
     return None
 
 def extract_company_info_from_filename(filename: str, watchlist_df: Optional[pd.DataFrame] = None) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-    """Extract company info from MD filename - Enhanced for Guideline v3.2.0"""
+    """Extract company info from MD filename - Enhanced for Guideline v3.2.4"""
     if not filename:
         return None, None, None
     
@@ -244,7 +244,7 @@ def extract_company_info_from_filename(filename: str, watchlist_df: Optional[pd.
     return company_name, stock_code, f"{stock_code}-TW" if stock_code else None
 
 # ============================================================================
-# MD FILE ANALYSIS AND DATE EXTRACTION - GUIDELINE v3.2.0
+# MD FILE ANALYSIS AND DATE EXTRACTION - GUIDELINE v3.2.4
 # ============================================================================
 
 def extract_md_file_date(md_file_path: Path) -> Optional[datetime]:
@@ -292,13 +292,13 @@ def extract_md_file_date(md_file_path: Path) -> Optional[datetime]:
         return datetime.fromtimestamp(md_file_path.stat().st_mtime)
         
     except Exception as e:
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             print(f"   ⚠️ Error extracting date from {md_file_path}: {e}")
         # Ultimate fallback: use current time
         return datetime.now()
 
 def get_company_md_files(company_code: str, md_dir: Path) -> List[Path]:
-    """Get all MD files for a specific company - Guideline v3.2.0"""
+    """Get all MD files for a specific company - Guideline v3.2.4"""
     company_files = []
     
     if not md_dir.exists():
@@ -316,13 +316,13 @@ def get_company_md_files(company_code: str, md_dir: Path) -> List[Path]:
         company_files.sort(key=lambda x: x.stat().st_mtime)
         
     except Exception as e:
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             print(f"   ⚠️ Error getting MD files for {company_code}: {e}")
     
     return company_files
 
 def calculate_quality_score(md_files: List[Path]) -> int:
-    """Calculate quality score 1-4 based on data completeness - Guideline v3.2.0"""
+    """Calculate quality score 1-4 based on data completeness - Guideline v3.2.4"""
     if not md_files:
         return 0
     
@@ -361,7 +361,7 @@ def calculate_quality_score(md_files: List[Path]) -> int:
     return 1
 
 def determine_status_emoji(quality_score: int, file_count: int) -> str:
-    """Determine status emoji based on quality and file count - Guideline v3.2.0"""
+    """Determine status emoji based on quality and file count - Guideline v3.2.4"""
     if quality_score >= 4 and file_count >= 3:
         return "🟢 完整"
     elif quality_score >= 3 and file_count >= 2:
@@ -372,11 +372,11 @@ def determine_status_emoji(quality_score: int, file_count: int) -> str:
         return "🔴 不足"
 
 # ============================================================================
-# ENHANCED FINANCIAL DATA EXTRACTION - GUIDELINE v3.2.0
+# ENHANCED FINANCIAL DATA EXTRACTION - GUIDELINE v3.2.4
 # ============================================================================
 
 def extract_financial_data_from_md_files(md_files: List[Path]) -> Dict[str, Any]:
-    """Extract comprehensive financial data from MD files - Guideline v3.2.0"""
+    """Extract comprehensive financial data from MD files - Guideline v3.2.4"""
     if not md_files:
         return {}
     
@@ -431,7 +431,7 @@ def extract_financial_data_from_md_files(md_files: List[Path]) -> Dict[str, Any]
                             continue
                             
         except Exception as e:
-            if utils.is_debug_mode():
+            if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
                 print(f"   ⚠️ Error extracting data from {md_file}: {e}")
             continue
     
@@ -457,12 +457,12 @@ def extract_financial_data_from_md_files(md_files: List[Path]) -> Dict[str, Any]
     return extracted_data
 
 # ============================================================================
-# PORTFOLIO SUMMARY GENERATION - GUIDELINE v3.2.0
+# PORTFOLIO SUMMARY GENERATION - GUIDELINE v3.2.4
 # ============================================================================
 
 def generate_portfolio_summary(config: Dict, watchlist_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-    """Generate portfolio summary matching Guideline v3.2.0 exact format"""
-    print("📋 Generating Portfolio Summary (Guideline v3.2.0 format)...")
+    """Generate portfolio summary matching Guideline v3.2.4 exact format"""
+    print("📋 Generating Portfolio Summary (Guideline v3.2.4 format)...")
     
     md_dir = Path(config['output']['md_dir'])
     if not md_dir.exists():
@@ -560,7 +560,7 @@ def generate_portfolio_summary(config: Dict, watchlist_df: Optional[pd.DataFrame
         
         summary_data.append(summary_row)
         
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             print(f"   ✅ {company_name} ({company_code}): {len(company_md_files)} files, quality={quality_score}")
     
     # Create DataFrame
@@ -581,7 +581,7 @@ def generate_portfolio_summary(config: Dict, watchlist_df: Optional[pd.DataFrame
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         summary_df.to_csv(output_file, index=False, encoding='utf-8')
         print(f"✅ Portfolio Summary saved: {output_file}")
-        print(f"📊 Format: {len(summary_df)} companies in Guideline v3.2.0 format")
+        print(f"📊 Format: {len(summary_df)} companies in Guideline v3.2.4 format")
         
         # Quality statistics
         companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
@@ -592,18 +592,18 @@ def generate_portfolio_summary(config: Dict, watchlist_df: Optional[pd.DataFrame
         
     except Exception as e:
         print(f"❌ Error saving portfolio summary: {e}")
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             traceback.print_exc()
     
     return summary_df
 
 # ============================================================================
-# DETAILED DATA GENERATION - GUIDELINE v3.2.0
+# DETAILED DATA GENERATION - GUIDELINE v3.2.4
 # ============================================================================
 
 def generate_detailed_data(config: Dict, watchlist_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-    """Generate detailed data matching Guideline v3.2.0 format"""
-    print("📋 Generating Detailed Data (Guideline v3.2.0 format)...")
+    """Generate detailed data matching Guideline v3.2.4 format"""
+    print("📋 Generating Detailed Data (Guideline v3.2.4 format)...")
     
     md_dir = Path(config['output']['md_dir'])
     if not md_dir.exists():
@@ -704,14 +704,14 @@ def generate_detailed_data(config: Dict, watchlist_df: Optional[pd.DataFrame] = 
     return detailed_df
 
 # ============================================================================
-# STATISTICS AND VALIDATION - GUIDELINE v3.2.0
+# STATISTICS AND VALIDATION - GUIDELINE v3.2.4
 # ============================================================================
 
 def generate_statistics(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, config: Dict) -> Dict:
-    """Generate comprehensive statistics - Guideline v3.2.0"""
+    """Generate comprehensive statistics - Guideline v3.2.4"""
     stats = {
         'generated_at': datetime.now().isoformat(),
-        'guideline_version': '3.2.0',
+        'guideline_version': '3.2.4',
         'total_companies': len(summary_df),
         'companies_with_data': len(summary_df[summary_df['MD資料筆數'] > 0]),
         'data_quality': {},
@@ -778,7 +778,7 @@ def generate_statistics(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, con
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(stats, f, indent=2, ensure_ascii=False, default=str)
         print(f"✅ Statistics saved: {output_file}")
-        print(f"📊 Guideline v3.2.0 compliant statistics generated")
+        print(f"📊 Guideline v3.2.4 compliant statistics generated")
         
     except Exception as e:
         print(f"❌ Error saving statistics: {e}")
@@ -786,12 +786,12 @@ def generate_statistics(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, con
     return stats
 
 # ============================================================================
-# MAIN PROCESSING PIPELINE - GUIDELINE v3.2.0
+# MAIN PROCESSING PIPELINE - GUIDELINE v3.2.4
 # ============================================================================
 
 def process_all_data(config_file: Optional[str] = None, force: bool = False, 
                     parse_md: bool = True) -> bool:
-    """Process all data through the complete pipeline - Guideline v3.2.0"""
+    """Process all data through the complete pipeline - Guideline v3.2.4"""
     print(f"🔧 Starting data processing (Guideline v{__version__})...")
     
     # Load configuration
@@ -813,7 +813,7 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
     total_steps = 3
     
     try:
-        # Step 1: Generate Portfolio Summary (Guideline v3.2.0 format)
+        # Step 1: Generate Portfolio Summary (Guideline v3.2.4 format)
         print("\n📋 Generating Portfolio Summary...")
         summary_df = generate_portfolio_summary(config, watchlist_df)
         
@@ -822,7 +822,7 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
             return False
         
         success_count += 1
-        print("✅ Portfolio Summary completed (Guideline v3.2.0 format)")
+        print("✅ Portfolio Summary completed (Guideline v3.2.4 format)")
         
         # Step 2: Generate Detailed Data (Enhanced EPS breakdown)
         print("\n📊 Generating Detailed Data...")
@@ -843,7 +843,7 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
         
         # Final summary
         print(f"\n{'='*60}")
-        print("📊 DATA PROCESSING SUMMARY (Guideline v3.2.0)")
+        print("📊 DATA PROCESSING SUMMARY (Guideline v3.2.4)")
         print("="*60)
         print(f"✅ Processing complete: {success_count}/{total_steps} steps successful")
         print(f"🎯 Companies processed: {len(summary_df)}")
@@ -863,7 +863,7 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
         
     except Exception as e:
         print(f"❌ Data processing failed: {e}")
-        if utils.is_debug_mode():
+        if hasattr(utils, 'is_debug_mode') and utils.is_debug_mode():
             traceback.print_exc()
         return False
 
@@ -872,13 +872,13 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
 # ============================================================================
 
 def main():
-    """Main entry point for Guideline v3.2.0 compliance testing"""
-    print(f"📊 Data Processor v{__version__} (Guideline v3.2.0 Compliant)")
+    """Main entry point for Guideline v3.2.4 compliance testing"""
+    print(f"📊 Data Processor v{__version__} (Guideline v3.2.4 Compliant)")
     
     success = process_all_data(force=True, parse_md=True)
     
     if success:
-        print("✅ Data processing completed successfully (Guideline v3.2.0)")
+        print("✅ Data processing completed successfully (Guideline v3.2.4)")
         print("📋 Generated files:")
         print("   - portfolio_summary.csv (Exact guideline format)")
         print("   - detailed_data.csv (Enhanced EPS breakdown)")

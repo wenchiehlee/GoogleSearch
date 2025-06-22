@@ -1,17 +1,18 @@
 """
 factset_search.py - Enhanced Google Search Module with URL Parsing and Rate Limiting Protection
 
-Version: 3.2.0-ENHANCED
+Version: 3.2.4-ENHANCED
 Date: 2025-06-22
 Author: Google Search FactSet Pipeline - Enhanced Architecture
 
-MAJOR ENHANCEMENTS:
+GUIDELINE v3.2.4 COMPLIANCE:
 - ✅ Robust URL parsing and validation with error recovery
 - ✅ Enhanced SSL error handling and fallback strategies
 - ✅ Immediate rate limiting detection and response
 - ✅ Comprehensive error recovery for malformed URLs
 - ✅ Enhanced retry logic with exponential backoff
 - ✅ Better handling of Google redirect URLs
+- ✅ run_enhanced_search_suite() function as required by guideline
 
 Description:
     Enhanced Google search module for finding FactSet financial data:
@@ -78,7 +79,7 @@ except ImportError as e:
     print(f"⚠️ Could not import local modules: {e}")
 
 # Version Information
-__version__ = "3.2.0-ENHANCED"
+__version__ = "3.2.4-ENHANCED"
 __date__ = "2025-06-22"
 __author__ = "Google Search FactSet Pipeline - Enhanced URL Handling"
 
@@ -616,9 +617,6 @@ def download_webpage_content(url: str, timeout: int = 30) -> Tuple[Optional[str]
 # ============================================================================
 # ENHANCED SEARCH EXECUTION
 # ============================================================================
-
-# Quick fix for the type error in factset_search.py
-# Replace the search_company_factset_data function with this corrected version:
 
 def search_company_factset_data(company_name: str, stock_code: str, 
                                search_type: str = 'factset', 
