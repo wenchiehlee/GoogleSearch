@@ -1,125 +1,27 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.27元，預估目標價為48元 
 
-  
 
 Oops, something went wrong
 
-              [![鉅亨網](https://s.yimg.com/ny/api/res/1.2/UM5hrThmhlnSiBO4o4qlLg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")   
-# 鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.27元，預估目標價為48元
-
-   ![](data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==) 
-
  
 
-     鉅亨網新聞中心   2025年6月6日週五 上午6:11             
+[![鉅亨網](https://s.yimg.com/ny/api/res/1.2/UM5hrThmhlnSiBO4o4qlLg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")
+
+# 鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.27元，預估目標價為48元
+
+![](data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==)
+
+鉅亨網新聞中心
+
+2025年6月6日週五 上午3:11
 
 根據FactSet最新調查，共23位分析師，對聯電(2303-TW)做出2025年EPS預估：中位數由3.31元下修至3.27元，其中最高估值4.72元，最低估值2.85元，預估目標價為48元。
 
 *市場預估EPS*
 
-| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
 | 最高值 | 4.72(4.72) | 5.45 | 5.77 |
 | 最低值 | 2.85(2.85) | 2.7 | 2.63 |
 | 平均值 | 3.35(3.37) | 3.91 | 4.32 |
@@ -127,8 +29,9 @@ Oops, something went wrong
 
 *市場預估營收*
 
-| 預估值(單位：新台幣千元) | *2025年* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 (單位：新台幣千元) | *2025年* | *2026年* | *2027年* |
 | 最高值 | 286,879,000 | 301,684,000 | 324,060,000 |
 | 最低值 | 228,160,680 | 231,361,250 | 236,618,830 |
 | 平均值 | 247,259,810 | 263,536,860 | 282,993,710 |
@@ -136,10 +39,11 @@ Oops, something went wrong
 
 *歷史獲利表現*
 
-| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+|  |  |  |  |  |
 | --- | --- | --- | --- | --- |
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
 | EPS | 3.8 | 4.93 | 7.09 | 4.57 |
-| 營業收入(單位：新台幣千元) | 232,302,584 | 222,533,000 | 278,705,264 | 213,011,018 |
+| 營業收入 (單位：新台幣千元) | 232,302,584 | 222,533,000 | 278,705,264 | 213,011,018 |
 
 詳細資訊請看台股內頁：  
 <https://www.cnyes.com/twstock/2303/financials/ratios>
@@ -150,7 +54,6 @@ Oops, something went wrong
 •[〈台股開盤〉美股收黑 台積電千元關情怯 量縮震盪守穩月線](https://news.cnyes.com/news/id/6009591?utm_source=yahoo&utm_medium=RSS&utm_campaign=relate)  
 •[外資近5日賣超個股](https://news.cnyes.com/news/id/6009445?utm_source=yahoo&utm_medium=RSS&utm_campaign=relate)
 
-  [Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)  [你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)                  
+[Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
 
-
-
+[私隱資訊主頁](https://guce.yahoo.com/privacy-dashboard?locale=zh-Hant-HK)

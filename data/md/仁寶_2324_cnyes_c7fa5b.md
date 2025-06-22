@@ -1,19 +1,28 @@
+鉅亨速報 - Factset 最新調查：仁寶(2324-TW)EPS預估下修至2.63元，預估目標價為36.97元 | 鉅亨網 - 台股預估
 
-鉅亨速報 - Factset 最新調查：仁寶(2324-TW)EPS預估下修至2.63元，預估目標價為36.97元 | 鉅亨網 - 台股預估‌  
-‌  
-![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast) 鉅亨速報
+‌
+
+‌
+
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
+
+[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast)
+
+鉅亨速報
+
 # 鉅亨速報 - Factset 最新調查：仁寶(2324-TW)EPS預估下修至2.63元，預估目標價為36.97元
 
 鉅亨網新聞中心 2025-05-15 08:10
 
-‌  
+‌
 
 根據FactSet最新調查，共9位分析師，對仁寶([2324-TW](https://www.cnyes.com/twstock/2324))做出2025年EPS預估：中位數由2.68元下修至2.63元，其中最高估值3.06元，最低估值2.23元，預估目標價為36.97元。
 
 *市場預估EPS*
 
-| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
 | 最高值 | 3.06(3.06) | 3 | 3.54 |
 | 最低值 | 2.23(2.23) | 2.27 | 3.34 |
 | 平均值 | 2.62(2.65) | 2.72 | 3.44 |
@@ -21,10 +30,11 @@
 
 *市場預估營收*
 
-‌  
+‌
 
-| 預估值(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
 | 最高值 | 1,037,727,000 | 1,032,301,000 | 1,038,106,000 |
 | 最低值 | 910,253,000 | 927,513,000 | 982,683,530 |
 | 平均值 | 952,863,600 | 983,023,520 | 1,010,394,760 |
@@ -32,10 +42,11 @@
 
 *歷史獲利表現*
 
-| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+|  |  |  |  |  |
 | --- | --- | --- | --- | --- |
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
 | EPS | 2.3 | 1.76 | 1.67 | 2.9 |
-| 營業收入(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 910,253,024 | 946,714,800 | 1,073,245,915 | 1,235,682,015 |
+| 營業收入 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 910,253,024 | 946,714,800 | 1,073,245,915 | 1,235,682,015 |
 
 詳細資訊請看台股內頁：  
 <https://www.cnyes.com/twstock/2324/financials/ratios>
@@ -48,9 +59,13 @@
 ### 文章標籤
 
 [台股](https://news.cnyes.com/tag/台股 "台股")[市場預估](https://news.cnyes.com/tag/市場預估 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 相關行情
 
-[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)[仁寶27.4-1.97%](https://www.cnyes.com/twstock/2324)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
+
+[仁寶27.4-1.97%](https://www.cnyes.com/twstock/2324)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 鉅亨贏指標
 
 [了解更多](https://events.cnyes.com/anuewin-25942)
@@ -58,6 +73,7 @@
 #指標剛跌破
 
 [![偏弱](/assets/icons/win-indicator/short.svg)
+
 ###### 仁寶
 
 55.56%
@@ -67,6 +83,7 @@
 #空頭均線下殺
 
 [![偏弱](/assets/icons/win-indicator/short.svg)
+
 ###### 仁寶
 
 55.56%
@@ -76,6 +93,7 @@
 #帶量跌破均線糾結
 
 [![偏弱](/assets/icons/win-indicator/short.svg)
+
 ###### 仁寶
 
 55.56%
@@ -85,11 +103,13 @@
 #動能指標下跌股
 
 [![偏弱](/assets/icons/win-indicator/short.svg)
+
 ###### 仁寶
 
 55.56%
 
 勝率](https://events.cnyes.com/anuewin-25942)
+
 ### 延伸閱讀
 
 * [Q1業外進補 稅後純益21.91億元年增逾1成 EPS 0.5元](/news/id/5979876)
@@ -97,13 +117,17 @@
 * [因應對等關稅 仁寶陳瑞聰：應該會在美國德州設立據點](/news/id/5970829)
 * [〈台股盤後〉整場白漲了逾百點 敵不過台積電尾盤豬羊變色 小跌3點作收](/news/id/5967068)
 
-‌  
+‌
 
 * 上一篇
-  
+
   [鉅亨速報 - Factset 最新調查：華航(2610-TW)EPS預估上修至2.13元，預估目標價為24元](/news/id/5980578)
 * 下一篇
-  
+
   [鉅亨速報 - Factset 最新調查：華航(2610-TW)EPS預估上修至2.08元，預估目標價為23.5元](/news/id/5980065)
-‌  
-![Empty](/assets/icons/skeleton/empty-image.svg)‌  
+
+‌
+
+![Empty](/assets/icons/skeleton/empty-image.svg)
+
+‌

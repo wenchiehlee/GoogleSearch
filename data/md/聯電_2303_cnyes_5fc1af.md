@@ -1,19 +1,28 @@
+鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.31元，預估目標價為48元 | 鉅亨網 - 台股預估
 
-鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.31元，預估目標價為48元 | 鉅亨網 - 台股預估‌  
-‌  
-![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast) 鉅亨速報
+‌
+
+‌
+
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
+
+[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast)
+
+鉅亨速報
+
 # 鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.31元，預估目標價為48元
 
 鉅亨網新聞中心 2025-04-24 14:10
 
-‌  
+‌
 
 根據FactSet最新調查，共21位分析師，對聯電([2303-TW](https://www.cnyes.com/twstock/2303))做出2025年EPS預估：中位數由3.34元下修至3.31元，其中最高估值3.97元，最低估值2.95元，預估目標價為48元。
 
 *市場預估EPS*
 
-| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
 | 最高值 | 3.97(3.97) | 5.29 | 4.87 |
 | 最低值 | 2.95(2.81) | 2.91 | 3.52 |
 | 平均值 | 3.35(3.38) | 3.86 | 4.27 |
@@ -21,10 +30,11 @@
 
 *市場預估營收*
 
-‌  
+‌
 
-| 預估值(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
 | 最高值 | 257,624,000 | 292,091,000 | 307,933,000 |
 | 最低值 | 238,634,000 | 237,722,000 | 253,924,000 |
 | 平均值 | 246,802,810 | 263,889,370 | 279,752,070 |
@@ -32,10 +42,11 @@
 
 *歷史獲利表現*
 
-| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+|  |  |  |  |  |
 | --- | --- | --- | --- | --- |
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
 | EPS | 3.8 | 4.93 | 7.09 | 4.57 |
-| 營業收入(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 232,302,584 | 222,533,000 | 278,705,264 | 213,011,018 |
+| 營業收入 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 232,302,584 | 222,533,000 | 278,705,264 | 213,011,018 |
 
 詳細資訊請看台股內頁：  
 <https://www.cnyes.com/twstock/2303/financials/ratios>
@@ -48,9 +59,13 @@
 ### 文章標籤
 
 [台股](https://news.cnyes.com/tag/台股 "台股")[市場預估](https://news.cnyes.com/tag/市場預估 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 相關行情
 
-[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)[聯電47.65-0.21%](https://www.cnyes.com/twstock/2303)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
+
+[聯電47.65-0.21%](https://www.cnyes.com/twstock/2303)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 鉅亨贏指標
 
 [了解更多](https://events.cnyes.com/anuewin-25942)
@@ -58,11 +73,13 @@
 #波段上揚股
 
 [![偏強](/assets/icons/win-indicator/long.svg)
+
 ###### 聯電
 
 40%
 
 勝率](https://events.cnyes.com/anuewin-25942)
+
 ### 延伸閱讀
 
 * [〈台股盤前要聞〉外資掃貨台積電、聯電Q1毛利率跌破30%、北富銀擬再增資LINE Bank](/news/id/5948604)
@@ -70,13 +87,17 @@
 * [傳與格芯合併 財務長重申：無併購計畫](/news/id/5948338)
 * [需求全面溫和回升 Q2營收、毛利率同步走強](/news/id/5948335)
 
-‌  
+‌
 
 * 上一篇
-  
+
   [鉅亨速報 - Factset 最新調查：欣興(3037-TW)EPS預估下修至6.06元，預估目標價為126.5元](/news/id/5950136)
 * 下一篇
-  
+
   [鉅亨速報 - Factset 最新調查：譜瑞-KY(4966-TW)目標價調降至665元，幅度約11.86%](/news/id/5949235)
-‌  
-![Empty](/assets/icons/skeleton/empty-image.svg)‌  
+
+‌
+
+![Empty](/assets/icons/skeleton/empty-image.svg)
+
+‌

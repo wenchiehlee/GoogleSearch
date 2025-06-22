@@ -1,26 +1,29 @@
-
 鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元 | anue鉅亨網 | LINE TODAY
+
 
 ### 請更新您的瀏覽器
 
 您使用的瀏覽器版本較舊，已不再受支援。建議您更新瀏覽器版本，以獲得最佳使用體驗。
 
-  
 ### 啟用Javascript
 
 請在瀏覽器上啟用JavaScript來瀏覽頁面中的所有內容。
 
-       
+ 
+
 ## 理財
 
- 登入   
+登入
+
 # 鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元
 
- 
 #### [anue鉅亨網](/tw/v3/publisher/100140)
 
 更新於 04月07日00:11 • 發布於 04月07日00:11
-  已追蹤  ![鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元](https://today-obs.line-scdn.net/0hY1QhAaaXBh5sEReKeGh5SVRHCm9fdxwXTn9OLEgVCChGPUgaVSRVfRsZWjJIc0gaTHQccUAUXn5BJBVJAw/w644)
+
+已追蹤
+
+![鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元](https://today-obs.line-scdn.net/0hY1QhAaaXBh5sEReKeGh5SVRHCm9fdxwXTn9OLEgVCChGPUgaVSRVfRsZWjJIc0gaTHQccUAUXn5BJBVJAw/w644)
 
 圖：Pixabay/Unsplash/Pexel
 
@@ -51,20 +54,27 @@
 
 **[點我加鉅亨網LINE好友🔥財經大事不漏接](https://bit.ly/3aIkfkf)**
 
- [查看原始文章](https://news.cnyes.com/news/id/5923034?utm_source=line&utm_medium=RSS&utm_campaign=content)   [#eps](/tw/v2/tag/g7Pl59?tag=eps)  [#中位數](/tw/v2/tag/vVyra2?tag=%E4%B8%AD%E4%BD%8D%E6%95%B8)  [#set](/tw/v2/tag/Pz7L5G?tag=set)  [#fact](/tw/v2/tag/GK5DmE?tag=fact)  [#營收](/tw/v2/tag/k7rL2D?tag=%E7%87%9F%E6%94%B6)  [理財](/tw/v3/page/finance)      
-0
-   [0](/tw/v2/comment/article/1D7yBYM)   ![reaction icon]() 
-0
-![reaction icon]() 
-0
-![reaction icon]() 
-0
-![reaction icon]() 
-0
-![reaction icon]() 
-0
-![reaction icon]() 
-0
-  
+[查看原始文章](https://news.cnyes.com/news/id/5923034?utm_source=line&utm_medium=RSS&utm_campaign=content)
 
+[#eps](/tw/v2/tag/g7Pl59?tag=eps)  [#中位數](/tw/v2/tag/vVyra2?tag=%E4%B8%AD%E4%BD%8D%E6%95%B8)  [#set](/tw/v2/tag/Pz7L5G?tag=set)  [#fact](/tw/v2/tag/GK5DmE?tag=fact)  [#營收](/tw/v2/tag/k7rL2D?tag=%E7%87%9F%E6%94%B6)  [理財](/tw/v3/page/finance)
 
+0
+   [0](/tw/v2/comment/article/1D7yBYM)
+
+![reaction icon]() 
+0
+
+![reaction icon]() 
+0
+
+![reaction icon]() 
+0
+
+![reaction icon]() 
+0
+
+![reaction icon]() 
+0
+
+![reaction icon]() 
+0

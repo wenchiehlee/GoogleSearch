@@ -1,19 +1,28 @@
+鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.7元，預估目標價為480元 | 鉅亨網 - 台股預估
 
-鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.7元，預估目標價為480元 | 鉅亨網 - 台股預估‌  
-‌  
-![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast) 鉅亨速報
+‌
+
+‌
+
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
+
+[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast)
+
+鉅亨速報
+
 # 鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.7元，預估目標價為480元
 
 鉅亨網新聞中心 2025-05-02 08:10
 
-‌  
+‌
 
 根據FactSet最新調查，共21位分析師，對台達電([2308-TW](https://www.cnyes.com/twstock/2308))做出2025年EPS預估：中位數由17.96元下修至17.7元，其中最高估值20.33元，最低估值13.17元，預估目標價為480元。
 
 *市場預估EPS*
 
-| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
 | 最高值 | 20.33(20.33) | 29.54 | 39.96 |
 | 最低值 | 13.17(13.17) | 17.86 | 19 |
 | 平均值 | 17.67(17.71) | 21.13 | 25.25 |
@@ -21,10 +30,11 @@
 
 *市場預估營收*
 
-‌  
+‌
 
-| 預估值(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
+|  |  |  |  |
 | --- | --- | --- | --- |
+| 預估值 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
 | 最高值 | 521,404,990 | 592,139,220 | 681,335,000 |
 | 最低值 | 443,857,000 | 516,430,000 | 573,213,280 |
 | 平均值 | 492,216,590 | 551,705,700 | 624,199,020 |
@@ -32,10 +42,11 @@
 
 *歷史獲利表現*
 
-| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+|  |  |  |  |  |
 | --- | --- | --- | --- | --- |
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
 | EPS | 13.56 | 12.86 | 12.58 | 10.32 |
-| 營業收入(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 421,147,557 | 401,226,501 | 384,443,308 | 314,670,796 |
+| 營業收入 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 421,147,557 | 401,226,501 | 384,443,308 | 314,670,796 |
 
 詳細資訊請看台股內頁：  
 <https://www.cnyes.com/twstock/2308/financials/ratios>
@@ -48,9 +59,13 @@
 ### 文章標籤
 
 [台股](https://news.cnyes.com/tag/台股 "台股")[市場預估](https://news.cnyes.com/tag/市場預估 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 相關行情
 
-[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)[台達電400-0.99%](https://www.cnyes.com/twstock/2308)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
+
+[台達電400-0.99%](https://www.cnyes.com/twstock/2308)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
 ### 鉅亨贏指標
 
 [了解更多](https://events.cnyes.com/anuewin-25942)
@@ -58,6 +73,7 @@
 #當沖高手\_弱
 
 [![偏強](/assets/icons/win-indicator/long.svg)
+
 ###### 台達電
 
 50%
@@ -67,6 +83,7 @@
 #動能指標下跌股
 
 [![偏強](/assets/icons/win-indicator/long.svg)
+
 ###### 台達電
 
 50%
@@ -76,11 +93,13 @@
 #營收創高股
 
 [![偏強](/assets/icons/win-indicator/long.svg)
+
 ###### 台達電
 
 50%
 
 勝率](https://events.cnyes.com/anuewin-25942)
+
 ### 延伸閱讀
 
 * [鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估上修至18元，預估目標價為485元](/news/id/5957441)
@@ -88,13 +107,17 @@
 * [台達電Q1純益季增4成EPS 3.94元創同期高 下午法說釋展望](/news/id/5955776)
 * [〈台股開盤〉台積電苦撐9字頭 金融、機器人強出頭 領軍大盤翻紅](/news/id/5955619)
 
-‌  
+‌
 
 * 上一篇
-  
+
   [鉅亨速報 - Factset 最新調查：研華(2395-TW)EPS預估下修至12.62元，預估目標價為435元](/news/id/5958474)
 * 下一篇
-  
+
   [鉅亨速報 - Factset 最新調查：百和(9938-TW)目標價調升至85元，幅度約4.94%](/news/id/5957505)
-‌  
-![Empty](/assets/icons/skeleton/empty-image.svg)‌  
+
+‌
+
+![Empty](/assets/icons/skeleton/empty-image.svg)
+
+‌
