@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-06-22T17:17:01.724845",
+  "generated_at": "2025-06-22T19:23:15.915168",
   "guideline_version": "3.2.4",
   "total_companies": 116,
   "companies_with_data": 9,
@@ -7,7 +7,7 @@
     "companies_with_md_files": 9,
     "companies_with_target_price": 1,
     "companies_with_analyst_count": 9,
-    "average_md_files_per_company": 13.88888888888889,
+    "average_md_files_per_company": 15.11111111111111,
     "average_quality_score": 3.3333333333333335
   },
   "financial_coverage": {},

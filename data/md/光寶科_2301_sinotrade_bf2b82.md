@@ -1,5 +1,13 @@
 鉅亨速報 - Factset 最新調查：光寶科(2301-TW)EPS預估上修至6.51元，預估目標價為114元｜新聞快訊｜豐雲學堂
 
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：光寶科(2301-TW)EPS預估上修至6.51元，預估目標價為114元
+
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：光寶科(2301-TW)EPS預估上修至6.51元，預估目標價為114元
+
 新聞快訊
 
 # 鉅亨速報 - Factset 最新調查：光寶科(2301-TW)EPS預估上修至6.51元，預估目標價為114元
