@@ -1,0 +1,70 @@
+
+鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元 | 鉅亨網 - 台股預估‌  
+‌  
+![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast) 鉅亨速報
+# 鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元，預估目標價為225元
+
+鉅亨網新聞中心 2025-04-07 08:11
+
+‌  
+
+根據FactSet最新調查，共21位分析師，對鴻海([2317-TW](https://www.cnyes.com/twstock/2317))做出2025年EPS預估：中位數由14.25元下修至14.14元，其中最高估值15.28元，最低估值12.55元，預估目標價為225元。
+
+*市場預估EPS*
+
+| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
+| --- | --- | --- | --- |
+| 最高值 | 15.28(15.28) | 18.56 | 19.3 |
+| 最低值 | 12.55(12.55) | 14.36 | 17.07 |
+| 平均值 | 14.17(14.22) | 16.22 | 18.18 |
+| 中位數 | 14.14(14.25) | 16.08 | 18.18 |
+
+*市場預估營收*
+
+‌  
+
+| 預估值(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
+| --- | --- | --- | --- |
+| 最高值 | 8,804,160,490 | 10,500,211,000 | 10,255,969,770 |
+| 最低值 | 7,803,506,000 | 8,417,701,000 | 10,045,117,790 |
+| 平均值 | 8,296,190,520 | 9,543,624,310 | 10,150,543,780 |
+| 中位數 | 8,332,032,450 | 9,625,115,030 | 10,150,543,780 |
+
+*歷史獲利表現*
+
+| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
+| --- | --- | --- | --- | --- |
+| EPS | 11.01 | 10.25 | 10.21 | 10.05 |
+| 營業收入(單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 6,859,615,493 | 6,162,221,359 | 6,626,996,750 | 5,994,173,882 |
+
+詳細資訊請看台股內頁：  
+<https://www.cnyes.com/twstock/2317/financials/ratios>
+
+資料來源：Factset，數據僅供參考，不作為投資建議。
+
+* [關稅降息夾殺！免費講座教你如何布局](https://www.rsc.com.tw/Cnyes_RSC/SeminarBooking2025InvestmentOutlook.aspx?utm_source=anue&utm_medium=usstocks_end)
+* 掌握全球財經資訊[點我下載APP](http://www.cnyes.com/app/?utm_source=mweb&utm_medium=HamMenuBanner&utm_campaign=fixed&utm_content=entr)
+
+### 文章標籤
+
+[台股](https://news.cnyes.com/tag/台股 "台股")[市場預估](https://news.cnyes.com/tag/市場預估 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+### 相關行情
+
+[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)[鴻海155.5+0.97%](https://www.cnyes.com/twstock/2317)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+### 延伸閱讀
+
+* [全面警戒國安基金備戰、【台股四月關鍵火線報告】限量免費索取](/news/id/5922977)
+* [〈台股盤前要聞〉川普「徵關」之亂大空襲、2萬點大關浴血戰、提防多殺多踩踏](/news/id/5922908)
+* [賴清德會見10位ICT大佬商討對策 明見傳產、中小微型企業代表](/news/id/5922831)
+* [鴻華先進Q1營收年增1倍 Q2乘用車、電巴出貨同步升溫](/news/id/5922826)
+
+‌  
+
+* 上一篇
+  
+  [鉅亨速報 - Factset 最新調查：研華(2395-TW)目標價調降至435元，幅度約3.33%](/news/id/5925553)
+* 下一篇
+  
+  [鉅亨速報 - Factset 最新調查：儒鴻(1476-TW)EPS預估下修至26.68元，預估目標價為645元](/news/id/5922781)
+‌  
+![Empty](/assets/icons/skeleton/empty-image.svg)‌  
