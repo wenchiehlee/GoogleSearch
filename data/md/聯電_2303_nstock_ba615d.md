@@ -56,7 +56,7 @@
 
   
 ☞警語：以上媒體報導，非任何形式之投資建議，投資前請獨立思考、審慎評估。nStock網站所有內容僅供APP使用教學參考，並無任何推介買賣之意，投資人應自行承擔交易風險。
-  今日大跌股 [![](/img/recommend_icon/graduate.png) 公司小百科 嘉鋼做什麼？](/嘉鋼做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 浪凡做什麼？](/浪凡做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 群電做什麼？](/群電做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 源大環能做什麼？](/源大環能做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 華通做什麼？](/華通做什麼.html)      熱門排行 上市 上櫃 合併 漲幅 跌幅 成交值 
+  5月營收成長股 [![](/img/recommend_icon/graduate.png) 公司小百科 意騰-KY做什麼？](/意騰-KY做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 向榮生技-創做什麼？](/向榮生技-創做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 藥華藥做什麼？](/藥華藥做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 鎧鉅做什麼？](/鎧鉅做什麼.html)[![](/img/recommend_icon/graduate.png) 公司小百科 大東電做什麼？](/大東電做什麼.html)      熱門排行 上市 上櫃 合併 漲幅 跌幅 成交值 
 
 讀取中....
 

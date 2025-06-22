@@ -1,8 +1,17 @@
 
-鉅亨速報 - Factset 最新調查：聯電(2303-TW)目標價調降至49元，幅度約3.92%｜新聞快訊｜豐雲學堂新聞快訊
-# 鉅亨速報 - Factset 最新調查：聯電(2303-TW)目標價調降至49元，幅度約3.92%
+鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.76元，預估目標價為487.5元｜新聞快訊｜豐雲學堂
 
-鉅亨網｜2025.01.22 08:10字級調整台股市場預估目標價[永豐金證券開戶，手續費一律超優惠](https://dmp.sinotrade.com.tw/t/rfs)[![永豐金證券開戶，手續費一律超優惠](https://richclub.azureedge.net/banner/67b6f0b48ec738281060dfe7/poster.jpg)](https://dmp.sinotrade.com.tw/t/rfs)推薦更多Read More免責聲明Disclaimer
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.76元，預估目標價為487.5元
+
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.76元，預估目標價為487.5元
+新聞快訊
+# 鉅亨速報 - Factset 最新調查：台達電(2308-TW)EPS預估下修至17.76元，預估目標價為487.5元
+
+鉅亨網｜2025.03.04 16:10字級調整台股市場預估eps[永豐金證券開戶，手續費一律超優惠](https://dmp.sinotrade.com.tw/t/rfs)[![永豐金證券開戶，手續費一律超優惠](https://richclub.azureedge.net/banner/67b6f0b48ec738281060dfe7/poster.jpg)](https://dmp.sinotrade.com.tw/t/rfs)推薦更多Read More免責聲明Disclaimer
 ```
 本報告內容僅供參考，客戶應審慎考量本身之需求與投資風險，本公司恕不負任何法律責任，亦不作任何保證。本報告中之內容或有取材於本公司認可之來源，但並不保證其真實性或完整性；報告中所有資訊或預估，變更時本公司將不作預告，若資料內容有未盡完善之處，恕不負責。此外，非經本公司同意，不得將本報告加以複製或轉載。
   
