@@ -455,21 +455,7 @@ jobs:
             "low") quality_emoji="📊" ;;
           esac
           
-          commit_message="${quality_emoji} Validated Pipeline Results: ${execution_mode} mode, ${priority_focus} priority
-          
-📊 Data Quality: ${commit_priority} priority
-📄 Validated content:
-- MD files: ${valid_md_count} (${factset_md_count} with FactSet content)
-- CSV files: ${valid_csv_count}
-- Processed files: ${valid_processed_count}
-- Portfolio summary: ${has_summary}
-- Consolidated data: ${has_consolidated}
-
-🎯 Quality check: ${commit_reason}
-⏰ Execution: $(date)
-🚨 Rate limited: ${{ needs.preflight.outputs.rate_limited }}
-
-[skip ci]"
+          commit_message="--"
           
           # Commit and push with comprehensive error handling
           if git diff --staged --quiet; then
@@ -507,18 +493,7 @@ jobs:
           
           # Commit just the execution log
           git add logs/pipeline_execution.log 2>/dev/null || true
-          git commit -m "📝 Pipeline execution log: data quality insufficient for commit
-
-🔍 Quality check failed: ${commit_reason}
-📊 Files analyzed:
-- MD files: ${md_count} found, ${valid_md_count} valid (${factset_md_count} FactSet)
-- CSV files: ${csv_count} found, ${valid_csv_count} valid  
-- Processed files: ${processed_count} found, ${valid_processed_count} valid
-
-💡 Previous validated data preserved in repository
-⏰ Execution: $(date)
-
-[skip ci]" 2>/dev/null || true
+          git commit -m "--" 2>/dev/null || true
           git push 2>/dev/null || true
           
           echo "📋 Execution logged for debugging purposes"
