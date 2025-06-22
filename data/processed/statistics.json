@@ -1,0 +1,37 @@
+{
+  "generated_at": "2025-06-22T16:26:18.886696",
+  "guideline_version": "3.2.0",
+  "total_companies": 116,
+  "companies_with_data": 9,
+  "data_quality": {
+    "companies_with_md_files": 9,
+    "companies_with_target_price": 1,
+    "companies_with_analyst_count": 9,
+    "average_md_files_per_company": 12.444444444444445,
+    "average_quality_score": 3.4444444444444446
+  },
+  "financial_coverage": {},
+  "quality_distribution": {
+    "excellent_4": 6,
+    "good_3": 1,
+    "fair_2": 2,
+    "poor_1": 0,
+    "no_data_0": 107
+  },
+  "eps_coverage": {
+    "2025_eps_coverage": 0,
+    "2026_eps_coverage": 0,
+    "2027_eps_coverage": 0,
+    "multi_year_coverage": 0
+  },
+  "status_distribution": {
+    "🔴 無資料": 107,
+    "🟢 完整": 6,
+    "🟠 部分": 3
+  },
+  "success_rates": {
+    "data_collection_rate": 7.758620689655173,
+    "financial_data_rate": 0.8620689655172413,
+    "eps_forecast_rate": 0.0
+  }
+}
