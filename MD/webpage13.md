@@ -1,327 +1,92 @@
-* [首頁](https://www.cnyes.com)
-* [新聞](https://news.cnyes.com/news/cat/headline)
-* [台股](https://www.cnyes.com/twstock)
-* [美股](https://www.cnyes.com/usstock)
-* [陸港股](https://www.cnyes.com/hkstock)
-* [基金](https://fund.cnyes.com)
-* [外匯](https://www.cnyes.com/forex)
-* [全球](https://invest.cnyes.com/indices/major)
-* [虛擬幣](https://crypto.cnyes.com)
-* [鉅亨買](https://anuefund.tw/768tv)
-* [鉅亨號](https://hao.cnyes.com?utm_source=cnyes&utm_medium=nav)
-* [訂閱](https://www.cnyes.com/anuestore)
+[![](data:image/svg+xml...)![豐雲學堂](data:image/gif;base64...)![豐雲學堂](/richclub/_next/static/media/logo-dark.e98c06f2.svg)![](data:image/svg+xml...)![by 永豐金證券 SinoPac Securities](data:image/gif;base64...)![by 永豐金證券 SinoPac Securities](/richclub/_next/static/media/logo-down.1502b54a.svg)](/richclub/)
 
-![search icon](/assets/icons/search/icon-search-new.svg)
+* [頻道Channels](/richclub/)
 
-‌
+  + [Features獨家特輯](/richclub/features)
+  + [Programs精彩節目](/richclub/videos)
+  + [Lesson知識講堂](/richclub/lesson)
+  + [Paid Content加值內容](/richclub/paidcontent)
+  + [Gifts股東會紀念品](/richclub/tools/gifts)
 
-‌
-‌
+  Channel頻道專欄
+* [探索Discover](/richclub/search)
+* [新聞News](/richclub/news)
+* [工具Tools](/richclub/tools)
 
-* [頭條](/news/cat/headline)
-* [台股](/news/cat/tw_stock)
-* [美股](/news/cat/wd_stock)
-* [科技](/news/cat/tech)
-* [陸港股](/news/cat/cn_stock)
-* [熱門時事](/poptopic)
-* [速報](/news/cat/anue_live)
-* [基金](/news/cat/fund)
-* [外匯](/news/cat/forex)
-* [期貨](/news/cat/future)
-* [區塊鏈](/news/cat/bc)
-* [房產](/news/cat/cnyeshouse)
-* [理財](/news/cat/tw_money)
-* [新視界](/news/cat/celebrity_area)
-* [專題](https://news.cnyes.com/projects)
-* [雜誌](/news/cat/mag)
-* [我的新聞](/member/mytag/all)
-* [自選股](https://www.cnyes.com/member/portfolios)
+[享受豐學PRIME 2.0](https://richclub.pse.is/7l84fa)
 
-![menu-icon](/assets/icons/menu/menu.svg)
+查看全部
 
-[![anue logo](/assets/icons/logo/anue-logo-colorful.svg)](/news/cat/headline)
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：胡連(6279-TW)目標價調降至190元，幅度約6.86%
 
-[![熱門時事](/assets/icons/icon-poptopic.svg "/poptopic")](/poptopic)[![鉅亨號](/assets/icons/header/hao.png "https://hao.cnyes.com")](https://hao.cnyes.com/)[![鉅亨買幣](/assets/icons/header/crypto.png "https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header")](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header)
+1. [豐雲學堂](https://www.sinotrade.com.tw/richclub)
+2. 新聞快訊
+3. 鉅亨速報 - Factset 最新調查：胡連(6279-TW)目標價調降至190元，幅度約6.86%
 
-![search icon](/assets/icons/search/search.svg)
+新聞快訊
 
-‌
+# 鉅亨速報 - Factset 最新調查：胡連(6279-TW)目標價調降至190元，幅度約6.86%
 
-‌
+鉅亨網｜2025.05.24 08:12
 
-![home-icon](/assets/icons/breadCrumb/symbol-icon-home.svg)
+字級調整
 
-[鉅亨速報](/news/cat/anue_live)[台股預估](/news/cat/tw_forecast)
+台股市場預估目標價
 
-鉅亨速報
+[永豐金證券開戶，手續費一律超優惠](https://dmp.sinotrade.com.tw/t/rfs)[![永豐金證券開戶，手續費一律超優惠](https://richclub.azureedge.net/banner/67b6f0b48ec738281060dfe7/poster.jpg)](https://dmp.sinotrade.com.tw/t/rfs)
 
-# 鉅亨速報 - Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.3元，預估目標價為230元
+推薦更多Read More
 
-鉅亨網新聞中心 2025-03-18 08:10
+免責聲明Disclaimer
 
-‌
+```
+本報告內容僅供參考，客戶應審慎考量本身之需求與投資風險，本公司恕不負任何法律責任，亦不作任何保證。本報告中之內容或有取材於本公司認可之來源，但並不保證其真實性或完整性；報告中所有資訊或預估，變更時本公司將不作預告，若資料內容有未盡完善之處，恕不負責。此外，非經本公司同意，不得將本報告加以複製或轉載。
 
-根據FactSet最新調查，共21位分析師，對鴻海([2317-TW](https://www.cnyes.com/twstock/2317))做出2025年EPS預估：中位數由14.46元下修至14.3元，其中最高估值15.39元，最低估值12.55元，預估目標價為230元。
+投資不表示絕無風險，ETF等投資產品以往之績效，不保證該基金之最低投資收益；本文提及之數據及預測，不必然代表 投資之績效。文中所述之資料、建議或預測係本公司依可靠之消息來源而為合理預測，然本公司不保證其準確及完整性。以上資料、建議或預測可能因市場變化而隨時改變，本公司不負更新之責。本公司亦不保證本文之預測將可實現。投資產品之投資風險詳細資料請參閱產品公開說明書。
 
-*市場預估EPS*
+期權交易財務槓桿高，投資人應依個人財務狀況審慎評估所能承擔之風險。文中所提及之全球資訊為主管機關核准之所有國外期貨市場之商品。課程與文宣內容資料均採用特定軟體，以歷史數據進行繪製及統計，過去之績效及表現不可作為日後獲利之保證。下單系統及輔助工具僅供參考，投資人仍需自行判斷，任何系統參數均需由投資人自行設定，假使資料內容錯誤、延誤或中斷傳輸，而導致交易損失，投資人應自行負責，本公司不負任何法律責任。
+```
 
-|  |  |  |  |
-| --- | --- | --- | --- |
-| 預估值 | *2025年(前值)* | *2026年* | *2027年* |
-| 最高值 | 15.39(15.39) | 18.56 | 20.52 |
-| 最低值 | 12.55(12.55) | 14.36 | 17.07 |
-| 平均值 | 14.36(14.39) | 16.52 | 18.79 |
-| 中位數 | 14.3(14.46) | 16.84 | 18.79 |
+歡迎加入 FB：獲取永豐金證券[「豐雲學堂-每日精選專欄」](https://www.facebook.com/SinoPacSecurities/)
 
-*市場預估營收*
+* 獨家內容
+  + [Features獨家特輯](/richclub/features)
+  + [Programs精彩節目](/richclub/videos)
+  + [Discover內容探索](/richclub/search)
+  + [Lesson知識講堂](/richclub/lesson)
+  + [Paid Content加值內容](/richclub/paidcontent)
+  + [Gifts股東會紀念品](/richclub/tools/gifts)
+* 投資工具
+  + [大戶投 APP](https://sinourl.tw/VFI4sj)
+  + [大戶豐 APP](https://sinourl.tw/OZeS4x)
+  + [永豐金理財網](https://sinourl.tw/fTI93E)
+  + [豐存股](https://aiinvest.sinotrade.com.tw/)
+  + [交易平台總覽](https://www.sinotrade.com.tw/newweb/trading-platform/)
+* 關注我們
+  + 關於永豐金證券
+  + 永豐集團網站
+  + [LINE](https://line.me/R/ti/p/%40dhq6620j)
+  + [Facebook](https://www.facebook.com/SinoPacSecurities/)
+  + [YouTube](https://www.youtube.com/user/SinoEC)
 
-‌
+下載大戶投 APP
 
-|  |  |  |  |
-| --- | --- | --- | --- |
-| 預估值 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | *2025年* | *2026年* | *2027年* |
-| 最高值 | 8,846,119,430 | 10,500,211,000 | 10,443,819,120 |
-| 最低值 | 7,803,506,000 | 8,417,701,000 | 10,255,969,770 |
-| 平均值 | 8,349,955,810 | 9,489,833,430 | 10,349,894,440 |
-| 中位數 | 8,332,032,450 | 9,520,563,020 | 10,349,894,440 |
+![下載大戶投APP](https://richclub.azureedge.net/images/img_default.png)
 
-*歷史獲利表現*
+下載大戶豐 APP
 
-|  |  |  |  |  |
-| --- | --- | --- | --- | --- |
-| 項目 | *2024年* | *2023年* | *2022年* | *2021年* |
-| EPS | 11.01 | 10.25 | 10.21 | 10.05 |
-| 營業收入 (單位：[新台幣](https://invest.cnyes.com/forex/detail/usdtwd)千元) | 6,859,615,493 | 6,162,221,359 | 6,626,996,750 | 5,994,173,882 |
+![下載大戶豐APP](https://richclub.azureedge.net/images/img_default.png)
 
-詳細資訊請看台股內頁：
-<https://www.cnyes.com/twstock/2317/financials/ratios>
+永豐金證券股份有限公司台北市重慶南路一段二號 7、18、20 樓
 
-資料來源：Factset，數據僅供參考，不作為投資建議。
+客服暨申訴專線：0800-038-123、02-8173-5300反詐騙諮詢專線：02-8173-5345客服時間：台股營業日 AM 08:00～PM 09:00
 
-* [關稅降息夾殺！免費講座教你如何布局](https://www.rsc.com.tw/Cnyes_RSC/SeminarBooking2025InvestmentOutlook.aspx?utm_source=anue&utm_medium=usstocks_end)
-* 掌握全球財經資訊[點我下載APP](http://www.cnyes.com/app/?utm_source=mweb&utm_medium=HamMenuBanner&utm_campaign=fixed&utm_content=entr)
+接單中心專線：02-412-8819服務時間：台股營業日 AM 08:30～PM 04:00
 
-### 文章標籤
+113 年金管證總字第 0044 號（永豐金證券）111 年金管期總字第 007 號（委任期貨商永豐期貨）
 
-[台股](https://news.cnyes.com/tag/%E5%8F%B0%E8%82%A1 "台股")[市場預估](https://news.cnyes.com/tag/%E5%B8%82%E5%A0%B4%E9%A0%90%E4%BC%B0 "市場預估")[eps](https://news.cnyes.com/tag/eps "eps")更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+永豐金證券統一編號：23113343永豐期貨統一編號：84309615
 
-### 相關行情
-
-[台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
-
-[鴻海155.5+0.97%](https://www.cnyes.com/twstock/2317)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
-
-### 延伸閱讀
-
-* [外商「風」湧！今年前2月僑外投資年增8成 渢妙與彰化大西南風場增資256億](/news/id/5903546)
-* [台積電 啟動千點行情關鍵?【立碁 第2】翻倍趕進度](/news/id/5903456)
-* [【量大強漲股整理】GTC大會登場後，三月季底，選股策略大公開?](/news/id/5903484)
-* [〈台股盤後〉GTC概念股發威 台塑四寶、綠能股助攻 漲154點惜敗年線](/news/id/5903096)
-
-‌
-
-* 上一篇
-
-  [鉅亨速報 - Factset 最新調查：視陽(6782-TW)目標價調降至220元，幅度約7.56%](/news/id/5904201)
-* 下一篇
-
-  [鉅亨速報 - Factset 最新調查：技嘉(2376-TW)EPS預估上修至18.03元，預估目標價為324元](/news/id/5903019)
-
-![save](/assets/icons/icon-bookmark.svg)![new tip](/_next/image?url=%2Fassets%2Ficons%2Ficon-new-tip.png&w=64&q=75)
-
-![chat-icon](/assets/icons/topBar/icon-chat.svg)0
-
-‌
-
-![Empty](/assets/icons/skeleton/empty-image.svg)
-
-‌
-
-![section icon](/assets/icons/icon-ai.svg)
-
-### AI讀新聞
-
-* 頭條
-* 台股
-* 美股
-
-# ...
-
-[![read-more](/_next/image?url=%2Fassets%2Ficons%2Ficon-explore-more.png&w=384&q=75)](/news/cat/headline_ai)
-
-![ai-bg](/_next/image?url=%2Fassets%2Fimages%2Fai-bg.png&w=750&q=75)
-
-![section icon](/assets/icons/popularRank.svg)
-
-### 人氣排行
-
-[看更多](https://news.cnyes.com/trending)
-
-* 總覽
-* 台股
-* 美股
-
-[*1.*
-
-〈美股早盤〉Fed理事華勒喊話7月降息、川普暫緩對伊行動 主要指數開高](/news/id/6032328 "〈美股早盤〉Fed理事華勒喊話7月降息、川普暫緩對伊行動 主要指數開高")[*2.*
-
-美銀：做多美元被視為夏季最大的「痛苦交易」](/news/id/6032270 "美銀：做多美元被視為夏季最大的「痛苦交易」")[*3.*
-
-〈財報〉雜貨需求具韌性 克羅格調升全年銷售目標](/news/id/6032416 "〈財報〉雜貨需求具韌性 克羅格調升全年銷售目標")[*4.*
-
-〈航運指數〉SCFI連2跌 美西線運價暴挫逾3成 恐續修正](/news/id/6032049 "〈航運指數〉SCFI連2跌 美西線運價暴挫逾3成 恐續修正")[*5.*
-
-彭博：xAI被迫開甜頭 債券殖利率升至12.5%拚完成融資](/news/id/6032388 "彭博：xAI被迫開甜頭 債券殖利率升至12.5%拚完成融資")
-
-‌
-
-![section icon](/assets/icons/editorChoose.svg)
-
-### 主編精選
-
-[看更多](/news/cat/news24h)
-
-‌
-
-![section icon](/assets/icons/pop-topic.svg)
-
-### 熱門時事
-
-[看更多](/poptopic)
-
-‌
-
-‌
-
-‌
-
-‌
-
-### ‌
-
-‌
-
-‌
-
-### ‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-### ‌
-
-‌
-
-‌
-
-### ‌
-
-‌
-
-![section icon](/assets/icons/section-fund.svg)
-
-### 鉅亨熱基金
-
-[看更多](https://fund.cnyes.com)
-
-* 基金亮點
-* 主題熱議
-
-* 近期亮點
-* 熱門自選
-
-月更多
-
-‌
-
-‌
-
-‌
-
-‌
-
---
-
-‌
-
-‌
-
-‌
-
-‌
-
-![section icon](/assets/icons/symbol-card-side-icon.svg)
-
-### 熱門排行
-
-[看更多](/member/rankinglist)
-
-* 熱門追蹤
-* 熱門收藏
-
-* 標籤
-* 時事
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-![section icon](/assets/icons/twStockExpert.svg)
-
-### 台股專家觀點
-
-[看更多](/news/cat/stock_report)
-
-![left arrow](/assets/icons/carousel/icon-slider-arrow-left-with-round.svg)
-
-![right arrow](/assets/icons/carousel/icon-slider-arrow-right-with-round.svg)
-
-![section icon](/assets/icons/issueNews.svg)
-
-### 議題新聞
-
-[看更多](/news/cat/topTopics)
-
-![section icon](/assets/icons/anue-lecture.svg)
-
-### 鉅亨講座
-
-[看更多](https://www.cnyes.com/events)
-
-* 講座
-* 公告
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
-
-‌
+[客戶資料保密措施](http://www.sinopac.com/footer/2018110216150226800000000000011.html)｜[隱私權保護聲明](https://www.sinotrade.com.tw/newweb/index_privacy)｜[共同行銷商品契約](https://securities.sinopac.com/footer/list15d1c4072970000085d381a2b549a2dc.html)｜[網站免責聲明](https://www.sinotrade.com.tw/newweb/index_disclaimer)

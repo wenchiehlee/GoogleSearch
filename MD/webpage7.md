@@ -1,381 +1,282 @@
-* [首頁](https://www.cnyes.com)
-* [新聞](https://news.cnyes.com/news/cat/headline)
-
-  + [頭條](https://news.cnyes.com/news/cat/headline)
-  + [熱門時事](https://news.cnyes.com/poptopic)
-  + [主編精選](https://news.cnyes.com/news/cat/news24h)
-  + [議題](https://news.cnyes.com/news/cat/topTopics)
-  + [宏觀](https://news.cnyes.com/news/cat/newsMarco)
-  + [人氣](https://news.cnyes.com/trending)
-  + [專題](https://news.cnyes.com/projects/cat/all)
-  + [新視界](https://news.cnyes.com/news/cat/celebrity_area)
-  + [我的新聞](https://news.cnyes.com/member/mytag/all)
-  + [總覽](https://news.cnyes.com/news/cat/all)
-  + [台股](https://news.cnyes.com/news/cat/tw_stock)
-    - [台股新聞](https://news.cnyes.com/news/cat/tw_stock_news)
-    - [台灣政經](https://news.cnyes.com/news/cat/tw_macro)
-    - [台股盤勢](https://news.cnyes.com/news/cat/tw_quo)
-    - [專家觀點](https://news.cnyes.com/news/cat/stock_report)
-    - [投資工具](https://news.cnyes.com/news/cat/stock_tutorial)
-    - [台股公告](https://news.cnyes.com/news/cat/tw_bull)
-    - [興櫃公告](https://news.cnyes.com/news/cat/eme_bull)
-    - [台股表格](https://news.cnyes.com/news/cat/tw_calc)
-    - [ETF](https://news.cnyes.com/news/cat/etf)
-  + [美股](https://news.cnyes.com/news/cat/wd_stock)
-    - [美股雷達](https://news.cnyes.com/news/cat/us_stock)
-    - [國際政經](https://news.cnyes.com/news/cat/wd_macro)
-    - [歐亞股](https://news.cnyes.com/news/cat/eu_asia_stock)
-  + [科技](https://news.cnyes.com/news/cat/tech)
-  + [雜誌](https://news.cnyes.com/news/cat/mag)
-  + [陸港股](https://news.cnyes.com/news/cat/cn_stock)
-    - [港股](https://news.cnyes.com/news/cat/hk_stock)
-    - [A股](https://news.cnyes.com/news/cat/sh_stock)
-    - [大行報告](https://news.cnyes.com/news/cat/hk_report)
-    - [新股上市](https://news.cnyes.com/news/cat/hk_ipo)
-    - [權證](https://news.cnyes.com/news/cat/hk_warrant)
-    - [香港政經](https://news.cnyes.com/news/cat/hk_macro)
-    - [大陸政經](https://news.cnyes.com/news/cat/cn_macro)
-  + [鉅亨速報](https://news.cnyes.com/news/cat/anue_live)
-    - [台股盤前](https://news.cnyes.com/news/cat/tw_premarket)
-    - [台股盤中](https://news.cnyes.com/news/cat/tw_live)
-    - [台股盤後](https://news.cnyes.com/news/cat/tw_afterhours)
-    - [台股預估](https://news.cnyes.com/news/cat/tw_forecast)
-    - [美股盤中](https://news.cnyes.com/news/cat/us_live)
-    - [美股預估](https://news.cnyes.com/news/cat/us_forecast)
-    - [虛擬貨幣](https://news.cnyes.com/news/cat/crypto_live)
-    - [外匯盤中](https://news.cnyes.com/news/cat/forex_live)
-    - [營收速報](https://news.cnyes.com/news/cat/tw_revenue)
-  + [基金](https://news.cnyes.com/news/cat/fund)
-  + [理財](https://news.cnyes.com/news/cat/tw_money)
-    - [銀行](https://news.cnyes.com/news/cat/bank)
-    - [保險](https://news.cnyes.com/news/cat/tw_insurance)
-    - [消費](https://news.cnyes.com/news/cat/spending)
-    - [其他](https://news.cnyes.com/news/cat/financial)
-  + [傳承](https://supr.link/0ulT4)
-  + [外匯](https://news.cnyes.com/news/cat/forex)
-  + [期貨](https://news.cnyes.com/news/cat/future)
-    - [指數](https://news.cnyes.com/news/cat/index_futures)
-    - [股票](https://news.cnyes.com/news/cat/stock_futures)
-    - [能源](https://news.cnyes.com/news/cat/energy)
-    - [債券](https://news.cnyes.com/news/cat/futu_bond)
-    - [農作](https://news.cnyes.com/news/cat/futu_produce)
-    - [黃金](https://news.cnyes.com/news/cat/precious_metals)
-  + [區塊鏈](https://news.cnyes.com/news/cat/bc)
-    - [幣圈](https://news.cnyes.com/news/cat/bc_crypto)
-    - [鏈文](https://news.cnyes.com/news/cat/bc_news)
-    - [新手村](https://news.cnyes.com/news/cat/bc_tutorial)
-    - [快訊](https://news.cnyes.com/news/cat/bc_live)
-  + [房產](https://news.cnyes.com/news/cat/cnyeshouse)
-    - [大陸房市](https://news.cnyes.com/news/cat/cn_housenews)
-    - [香港房市](https://news.cnyes.com/news/cat/hk_housenews)
-    - [台灣房市](https://news.cnyes.com/news/cat/tw_housenews)
-    - [海外房市](https://news.cnyes.com/news/cat/wd_housenews)
-* [台股](https://www.cnyes.com/twstock)
-
-  + [台股](https://www.cnyes.com/twstock)
-    - [追蹤](https://www.cnyes.com/member/mytag/all)
-    - [新聞](http://news.cnyes.com/news/cat/tw_stock_news)
-    - [大盤](https://stock.cnyes.com)
-    - [類股](https://www.cnyes.com/twstock/Index2Real_idx.htm)
-    - [盤後統計](http://www.cnyes.com/twstock/ranking2.aspx)
-    - [研究報告](https://news.cnyes.com/news/cat/tw_report)
-    - [公告](https://news.cnyes.com/news/cat/announcement)
-    - [行事曆](https://www.cnyes.com/twstock/board/board.aspx)
-    - [股市talk](https://stock.cnyes.com)
-    - [ESG企業風雲榜](http://campaign.cnyes.com/topics/ESG/index.html)
-  + [台期指](https://www.cnyes.com/twfutures/index.htm)
-    - [新聞](https://news.cnyes.com/news/cat/tw_quo)
-    - [研究報告](https://news.cnyes.com/news/cat/tw_report)
-    - [全球股市期指](http://www.cnyes.com/twfutures/global_future.aspx)
-  + 興櫃
-    - [興櫃新聞](http://news.cnyes.com/news/cat/tw_stock_news)
-    - [興櫃報價](http://www.cnyes.com/presh/emerging_price.aspx)
-    - [個股](http://www.cnyes.com/twstock/stock_astock.aspx)
-    - [類股產業](https://www.cnyes.com/presh/emerging_stock_list.aspx)
-    - [排行榜](http://www.cnyes.com/presh/ranking/ranking_up.aspx)
-    - [法人進出](http://www.cnyes.com/presh/institutional/institutional.aspx)
-    - [準上櫃上市](http://www.cnyes.com/presh/emerging/emerging_preipo.aspx)
-    - [行事曆](http://www.cnyes.com/presh/steatement/steatement.aspx)
-    - [興櫃教室](http://www.cnyes.com/presh/school/emerging_room.aspx)
-  + [未上市](http://www.cnyes.com/pre/index.htm)
-    - [未上市最新消息](https://www.cnyes.com/pre/hotnews.aspx)
-    - [未上市新聞](https://news.cnyes.com/news/cat/tw_stock_news)
-    - [未上市熱門排行榜](https://www.cnyes.com/pre/rank.aspx)
-    - [個股查詢](http://www.cnyes.com/pre/astock.aspx)
-    - [線上掛單](https://www.berich.com.tw/AG/Cnyes2/ToOrder/PutOrder.asp)
-    - [未上市掛單排行](https://www.cnyes.com/pre/rank2.aspx)
-  + [台股下單](https://stock.cnyes.com/market/TWS%3ATSE01%3AINDEX)
-  + [個股](https://www.cnyes.com/twstock/stock_astock.aspx)
-  + [自選股](https://www.cnyes.com/member/portfolios)
-  + [StockQ](https://www.cnyes.com/stockQ)
-* [美股](https://www.cnyes.com/usstock)
-
-  + [新聞](https://news.cnyes.com/news/cat/us_stock)
-  + [ETFs](https://www.cnyes.com/archive/usastock/ETF/ETFs.htm)
-  + [ADRs](https://www.cnyes.com/archive/usastock/adr/adrindex.aspx)
-  + [類股](https://www.cnyes.com/usastock/sector.aspx)
-  + [個股](https://www.cnyes.com/usastock/usastock_stock.aspx)
-  + [排行榜](https://www.cnyes.com/usastock/Rankings/Screener.aspx)
-  + [研究報告](https://news.cnyes.com/news/cat/global_report)
-  + [行事曆](https://www.cnyes.com/usastock/UsaSchedule/steatement.aspx)
-  + [自選股](https://www.cnyes.com/member/portfolios)
-* [陸港股](https://www.cnyes.com/hkstock)
-
-  + [港股](https://www.cnyes.com/hkstock)
-  + [港股 ETF](https://www.cnyes.com/hkstock/etf)
-  + [港股 IPO](https://www.cnyes.com/hkstock/ipo)
-  + [港股權證](https://www.cnyes.com/hkstock/warrants)
-  + [陸股](https://www.cnyes.com/astock)
-  + [陸港股教室](https://www.cnyes.com/cnstock/classroom)
-  + [陸港新聞](https://news.cnyes.com/news/cat/cn_stock)
-  + [陸港概覽](https://www.cnyes.com/cnstock)
-* [基金](https://fund.cnyes.com)
-
-  + [基金自選](https://invest.cnyes.com/my/fundsList)
-  + [基金搜尋](https://fund.cnyes.com/search/)
-  + [配息專區](https://fund.cnyes.com/dividend/index.htm)
-  + [我的基金](https://fund.cnyes.com/MyFunds.aspx)
-    - [投資組合分析](https://fund.cnyes.com/myInvestment/myInvestment.aspx)
-    - [基金透視鏡](https://fund.cnyes.com/calcmyfundHTML5.aspx)
-  + [基金排行](https://fund.cnyes.com/search/?focusTab=1)
-    - [組別分類排行](https://fund.cnyes.com/sector-ranking/index.htm)
-    - [組別年度績效排行](https://fund.cnyes.com/sector-ranking-yearly/index.htm)
-    - [年度基金大賞](https://supr.link/Uqu9j)
-  + [債券專區](https://fund.cnyes.com/Fixedincome/)
-    - [債券基金排行](http://fund.cnyes.com/Fixedincome/index.aspx)
-    - [債券基金搜尋器](https://fund.cnyes.com/Fixedincome/search.aspx)
-  + [研究報告](https://news.cnyes.com/news/cat/fund_comment)
-    - [基金研報](https://news.cnyes.com/news/cat/fund_comment)
-* [外匯](https://www.cnyes.com/forex)
-
-  + [新聞](https://news.cnyes.com/news/cat/forex)
-  + [路透即時外匯](https://www.cnyes.com/forex/reuters)
-  + [主要匯率](https://www.cnyes.com/archive/forex/major.aspx)
-  + [交叉匯率](https://www.cnyes.com/forex/crosslist)
-  + [新台幣](https://www.cnyes.com/forex/twd)
-  + [人民幣](https://www.cnyes.com/forex/rmb)
-  + [研報](https://news.cnyes.com/news/cat/fx_report)
-  + [銀行換匯](https://forex.cnyes.com/currency/USD/TWD/bank)
-* [全球](https://invest.cnyes.com/indices/major)
-
-  + [StockQ](https://www.cnyes.com/stockQ)
-    - [全球指數](https://www.cnyes.com/stockQ#GlobalIndex)
-    - [ChartQ](https://www.cnyes.com/stockQ/chartQ)
-    - [排行榜](https://www.cnyes.com/stockQ/rank)
-    - [期指指數](https://www.cnyes.com/stockQ#FuturesIndex)
-    - [主要匯率](https://www.cnyes.com/stockQ#MainForex)
-    - [兌台匯率](https://www.cnyes.com/stockQ#TaiForex)
-    - [商品期貨](https://www.cnyes.com/stockQ#Commodity)
-    - [公債市場](https://www.cnyes.com/stockQ#Bonds)
-    - [風險指標](https://www.cnyes.com/stockQ#Risk)
-    - [拆放款](https://www.cnyes.com/stockQ#Loan)
-    - [國際能源](https://www.cnyes.com/stockQ#Energy)
-    - [貴重金屬](https://www.cnyes.com/stockQ#HeavyMetal)
-    - [基本金屬](https://www.cnyes.com/stockQ#BasicMetal)
-    - [農牧產品](https://www.cnyes.com/stockQ#Agriculture)
-  + [國際股](https://invest.cnyes.com/indices/major)
-    - [新聞](https://news.cnyes.com/news/cat/wd_stock)
-    - [主要指數](https://invest.cnyes.com/indices/major)
-    - [全部指數](https://www.cnyes.com/global/IndexImmediateQuotedPrice/002/QuotationPrice.aspx)
-    - [亞洲指數](https://www.cnyes.com/global/IndexImmediateQuotedPrice/003/QuotationPrice.aspx)
-    - [歐洲指數](https://www.cnyes.com/global/IndexImmediateQuotedPrice/004/QuotationPrice.aspx)
-    - [美洲指數](https://www.cnyes.com/global/IndexImmediateQuotedPrice/005/QuotationPrice.aspx)
-    - [全球科技龍頭股](https://www.cnyes.com/usastock/usatechstock.aspx)
-    - [全球傳產龍頭股](https://www.cnyes.com/usastock/usainduststock.aspx)
-    - [股市交易時間](https://www.cnyes.com/economy/indicator/GlobalTime/GlobalTime_Major.aspx)
-    - [股市Talk](https://global-stock.cnyes.com)
-  + [ETF](https://www.cnyes.com/etf)
-  + [國際期貨](https://www.cnyes.com/futures/index.htm)
-    - [商品新聞](https://news.cnyes.com/news/cat/future)
-    - [指數期貨](http://www.cnyes.com/futures/indexftr.aspx)
-    - [商品期貨](http://www.cnyes.com/futures/price.aspx)
-    - [商品績效排行](http://www.cnyes.com/futures/rank1.aspx)
-    - [能源](http://www.cnyes.com/futures/energy.aspx)
-    - [貴重金屬](http://www.cnyes.com/futures/heavymetal.aspx)
-    - [基本金屬](http://www.cnyes.com/futures/basicmetal.aspx)
-    - [農產品](http://www.cnyes.com/futures/agricultural.aspx)
-    - [外匯](https://www.cnyes.com/archive/forex/closePrice.aspx)
-    - [原物料](http://www.cnyes.com/futures/material.aspx)
-    - [商品合約規格](http://www.cnyes.com/futures/contract.aspx)
-  + [日股](http://www.cnyes.com/JP/index.htm)
-    - [日股指數](http://www.cnyes.com/JP/maindex1.aspx)
-    - [知名企業](http://www.cnyes.com/JP/famous.aspx)
-    - [日本基金](https://fund.cnyes.com/search/?investmentArea=A9)
-    - [日圓](https://www.cnyes.com/forex/jpy)
-  + [陸港股](https://www.cnyes.com/cnstock)
-  + [債券](https://www.cnyes.com/bond/index.htm)
-    - [債券新聞](https://news.cnyes.com/news/cat/futu_bond)
-    - [台灣債券](https://www.cnyes.com/bond/twBondMarket1.aspx)
-    - [國際債券](http://www.cnyes.com/bond/intBondMarket1.aspx)
-    - [國際拆放款](http://www.cnyes.com/bond/intLoan1.aspx)
-    - [債券試算](http://www.cnyes.com/bond/bondCalculationJS.aspx)
-    - [債券教室](http://www.cnyes.com/bond/bondClass1.aspx)
-  + [黃金](http://www.cnyes.com/gold/index.htm)
-    - [黃金新聞](https://news.cnyes.com/news/cat/precious_metals)
-    - [ETFs/基金](http://www.cnyes.com/gold/GoldFund.aspx)
-    - [相關個股](http://www.cnyes.com/gold/GoldStock.aspx)
-    - [黃金教室](http://www.cnyes.com/gold/ClassRoom.aspx)
-    - [黃金合約](http://www.cnyes.com/gold/Taifex.aspx)
-  + [全球央行](http://www.cnyes.com/CentralBank/index.htm)
-    - [基準利率](https://www.cnyes.com/CentralBank/interest1.htm)
-    - [拆款利率](http://www.cnyes.com/CentralBank/intLoan.htm)
-    - [主權評級](http://www.cnyes.com/CentralBank/SovRatingAll.htm)
-    - [貨幣商品](http://www.cnyes.com/CentralBank/curCodity.htm)
-    - [各國央行](http://www.cnyes.com/CentralBank/cenBanks.htm)
-  + [經濟指標](https://www.cnyes.com/economy/indicator/Page/schedule.aspx)
-    - [金融行事曆](http://www.cnyes.com/economy/indicator/EconomicsCalendar/Calendar.aspx)
-  + [銀行服務](https://www.cnyes.com/money/BankService.aspx)
-    - [試算工具](http://www.cnyes.com/money/BankCalculation.aspx)
-    - [牌告利率](http://www.cnyes.com/money/PublicRate.htm)
-    - [外幣存款利率](http://www.cnyes.com/money/ValutaDepositRate.htm)
-    - [存款利率](http://www.cnyes.com/money/DepositRate.htm)
-    - [放款利率](http://www.cnyes.com/money/UsuryRate.htm)
-    - [銀行換匯](http://forex.cnyes.com/currency/USD/TWD/bank)
-    - [銀行換匯比較表](https://forex.cnyes.com/currency/USD/TWD/bank)
-  + [固定收益](https://www.cnyes.com/fixedincome/index.htm)
-    - [股票殖利率](http://www.cnyes.com/fixedincome/Page/securitiesYield_currentYield.aspx)
-    - [固定收益 ETF](http://www.cnyes.com/fixedincome/Page/Etf_Screener.htm)
-    - [債券](http://www.cnyes.com/fixedincome/Page/Bond.htm)
-    - [相關稅務](http://www.cnyes.com/fixedincome/Page/tax.htm)
-    - [商品比較](http://www.cnyes.com/fixedincome/Page/AllCompare.htm)
-* [虛擬幣](https://crypto.cnyes.com)
-* [鉅亨買](https://anuefund.tw/768tv)
-
-  + [鉅亨買股票](https://campaign.cnyes.com/topics/sinopacsec202107/?utm_source=cnyesweb&utm_medium=header)
-    - [*德信證券* - 獲得新世界](https://supr.link/I8mGb)
-  + 買房產
-    - [馬來西亞房產](https://supr.link/VIYTx)
-    - [澳洲房產](https://supr.link/rNNAa)
-  + 買基金
-    - [鉅亨買基金Anuefund](https://anuefund.tw/768tv)
-    - [摩根DIRECT](https://www.jpmorganfunds.com.tw/accountOpening/#/eForm-v2/home?utm_source=jpmam-cnyes&utm_medium=notarg&utm_campaign=tw-tzh-mediacoop&utm_content=tex-na&event_code=ANUE1)
-  + [買虛擬貨幣](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=cnyes&utm_medium=header)
-    - [*幣託* － 新台幣出入金](https://supr.link/sgSFe)
-    - [*派網* － 免盯盤、機器人量化交易](https://supr.link/muVDP)
-* [鉅亨號](https://hao.cnyes.com?utm_source=cnyes&utm_medium=nav)
-* [訂閱](https://www.cnyes.com/anuestore)
-
-  + [影音](https://www.cnyes.com/video)
-    - [投資駕訓班](https://www.cnyes.com/video/course/all)
-    - [直播節目](https://www.cnyes.com/video/program/cnyes_see_the_world)
-    - [免費看片](https://www.cnyes.com/video/litv)
-  + [鉅亨商城](https://www.cnyes.com/anuestore)
-    - [鉅樂部](https://events.cnyes.com/YesClub-24748)
-    - [鉅亨贏指標](https://events.cnyes.com/anuewin-25942)
-  + [金融資訊](http://campaign.cnyes.com/topics/anuedatabase/)
-    - [鉅亨大數據](http://campaign.cnyes.com/topics/anuedatabase/#data)
-    - [即時財經新聞](http://campaign.cnyes.com/topics/anuedatabase/#news)
-    - [金融資訊元件](http://campaign.cnyes.com/topics/anuedatabase/#component)
-
-熱搜
-
-熱搜：
-
-熱門行情
-
-最近搜尋
-
-全部刪除
-
-![Anue 會員中心](https://sfiles.cnyes.cool/fe-common/e38301ed/76bfdbe59e3e432ffe6d5d203a37e64d.svg)會員中心
-
-![登入會員](https://sfiles.cnyes.cool/fe-common/e38301ed/5fbdce716ea9936da801688b9979630e.svg)
-
-Hello, 鉅亨會員
-
-登入
-
-[我的購買![前往我的購買](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/member/purchase)[我的新聞![前往我的新聞](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://news.cnyes.com/member/mytag/all)[行情自選![前往行情自選](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/member/portfolios)[鉅樂部![前往鉅樂部](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://events.cnyes.com/YesClub-24748)[鉅亨商城![前往鉅亨商城](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/anuestore)
-
-[鉅亨](https://m.cnyes.com/news)
-
-[![澳洲房產](/static/img/mobile-header/symbol_Icon_estate.png)](https://supr.link/Lquuv)[![鉅亨號](/static/img/mobile-header/hao@3.png)](https://hao.cnyes.com)[![鉅亨號](/static/img/mobile-header/crypto@3.png)](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=header)
-
-![登入](https://sfiles.cnyes.cool/fe-common/e38301ed/5fbdce716ea9936da801688b9979630e.svg)
-
-熱搜：
-
-熱門行情
-
-最近搜尋
-
-全部刪除
-
-![Anue 會員中心](https://sfiles.cnyes.cool/fe-common/e38301ed/76bfdbe59e3e432ffe6d5d203a37e64d.svg)會員中心
-
-![登入會員](https://sfiles.cnyes.cool/fe-common/e38301ed/5fbdce716ea9936da801688b9979630e.svg)
-
-Hello, 鉅亨會員
-
-登入
-
-[我的購買![前往我的購買](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/member/purchase)[我的新聞![前往我的新聞](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://news.cnyes.com/member/mytag/all)[行情自選![前往行情自選](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/member/portfolios)[鉅樂部![前往鉅樂部](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://events.cnyes.com/YesClub-24748)[鉅亨商城![前往鉅亨商城](https://sfiles.cnyes.cool/fe-common/e38301ed/f1cae93a0d0ae20a370d25cd6640f3a3.svg)](https://www.cnyes.com/anuestore)鉅亨[#### 新聞](https://m.cnyes.com/news)[頭條](https://m.cnyes.com/news/cat/headline_all)[台股](https://m.cnyes.com/news/cat/tw_stock)[基金](https://m.cnyes.com/news/cat/fund)[美股](https://m.cnyes.com/news/cat/wd_stock)[速報](https://m.cnyes.com/news/cat/anue_live)[區塊鏈](https://m.cnyes.com/news/cat/bc)[科技](https://news.cnyes.com/news/cat/tech%20)[鉅亨新視界](https://news.cnyes.com/news/cat/celebrity_area%20)[熱門時事](https://news.cnyes.com/poptopic%20)[我的新聞](https://news.cnyes.com/member/mytag/all)[#### 市場](https://m.cnyes.com/market)[StockQ](https://www.cnyes.com/stockQ)[基金](https://invest.cnyes.com/funds/search?institutional=0)[ChartQ](https://www.cnyes.com/stockQ/chartQ)[台股](https://www.cnyes.com/twstock)[排行榜](https://www.cnyes.com/stockQ/rank)[美股](https://www.cnyes.com/usstock)[即時匯率](https://www.cnyes.com/forex/reuters)[ETF](https://www.cnyes.com/etf)[銀行換匯](https://forex.cnyes.com/currency/USD/TWD)[港股](https://www.cnyes.com/hkstock)[虛擬貨幣](https://crypto.cnyes.com)[陸股](https://www.cnyes.com/astock)
-
-#### 鉅亨買
-
-[鉅亨買基金](https://anuefund.tw/768tv)[摩根DIRECT](https://www.jpmorganfunds.com.tw/accountOpening/#/eForm-v2/home?utm_source=jpmam-cnyes&utm_medium=notarg&utm_campaign=tw-tzh-mediacoop&utm_content=tex-na&event_code=ANUE1)[買股票](https://campaign.cnyes.com/topics/sinopacsectwstock)[鉅亨買幣](https://campaign.cnyes.com/topics/anuecrypto/?utm_source=mobile&utm_medium=menu)[財富傳承](https://supr.link/KjrN7)[投資講座](https://www.cnyes.com/events)[ETF 專業戶](https://supr.link/I8mGb)[鉅亨 YT 直播](https://m.youtube.com/channel/UCHzw1et1X2fdz1VsXLO8nlw)[ESG](https://campaign.cnyes.com/topics/ESG/index.html)[年度基金大賞](https://supr.link/Uai7y)[馬來西亞房產](https://supr.link/jeghD)[澳洲房產](https://supr.link/IIcUz)[#### 訂閱服務](https://www.cnyes.com/anuestore)[鉅樂部](https://events.cnyes.com/YesClub-24748)[投資駕訓班](https://www.cnyes.com/video/course)[鉅亨贏指標](https://events.cnyes.com/anuewin-25942)[#### 會員](https://www.cnyes.com/member/)[會員中心](https://www.cnyes.com/member/info)[鉅亨 APP](https://www.cnyes.com/mobile/index_app.htm)[新聞追蹤](https://www.cnyes.com/member/mytag/all)[鉅亨號](https://hao.cnyes.com)[自選股](https://www.cnyes.com/member/portfolios)[Line 社群](https://campaign.cnyes.com/topics/anuesns/#line)[自選基金](https://invest.cnyes.com/my/fundsList)[FB粉絲團](https://campaign.cnyes.com/topics/anuesns/#facebook)[免費電子報](https://www.cnyes.com/newsletter)[公告](https://www.cnyes.com/announcement)[#### 影音](https://www.cnyes.com/video)[影音新聞](https://www.cnyes.com/video/news/video_news)[鉅亨看世界](https://www.cnyes.com/video/program/cnyes_see_the_world)[免費看片](https://www.cnyes.com/video/litv)[港股大講堂](https://www.cnyes.com/video/program/hk_stock_lecture)
-
-[![Home](/static/img/icon-basic-home.svg)美股](https://www.cnyes.com/usstock)![Arrow Icon](/static/img/icon-basic-arrow.svg)Factset Research Systems Inc. (FDS)
-
-# FDS Factset Research Systems Inc. (FDS)
-
-[我要開戶](https://supr.link/8OHaU)
-
-![自選](/static/img/icon-star-empty-white.svg)
-
-自選
-
-Factset Research Systems Inc. (FDS)
-
-![問題回報](/static/icon-mail-30db4b7937401af094278533478bdc8d.svg)問題回報![自選](/static/img/icon-star-empty-white.svg)
-
-自選
-
-市場交易相關權證評等盈餘基本資料財報分析相關新聞
-
-[![技術線圖](/static/icon-open-in-new-3a11ed98d603383dd6c28be3b5ec3a68.svg)技術線圖](https://global-stock.cnyes.com/market/USS%3AFDS%3ASTOCK)[![切換至舊版網頁](/static/icon-go-to-classic-f1dea4108c97505e980836ef969ddc4e.svg)切換至舊版網頁](https://www.cnyes.com/archive/usastock/profile/FDS.html)
-
-[總覽](/usstock/detail/FDS/market/overview#fixed)[個股表現](/usstock/detail/FDS/market/shareinfoperformance#fixed)[股價查詢](/usstock/detail/FDS/market/minipricehistory#fixed)[投資試算](/usstock/detail/FDS/market/investmentcalculator#fixed)
-
-#### 新增到自選清單
-
-取消確認
-
-## 專家專欄
-
-[看更多](https://hao.cnyes.com/ch/361680)
-
-## 相關新聞&重訊公告
-
-[看更多](https://www.cnyes.com/search/news?keyword=FDS)
-
-## ![](/static/icon-joe-wall-street-befcb819cbcf35f68ec52544018da893.svg)專家專欄
-
-[看更多](https://hao.cnyes.com/ch/361680)
-
-本網站各類資訊報價由路孚特 REFINITIV 提供，台股與外匯部分為即時資訊，國際股市及指數資料為延遲15分鐘資訊。
-台股資訊來自台灣證券交易所、證券櫃檯買賣中心、台灣期貨交易所。
-本網站及各資訊源提供者不對資料之正確性與即時性負任何責任。使用本網站資訊服務前，請您詳閱[詳細聲明](http://www.cnyes.com/cnyes_about/cnyes_sos03.html)。
-常年法律顧問：瀛睿律師事務所　簡榮宗律師
-
-[電腦版](/)[著作權](/copyright)意見與回饋[關於我們](http://www.cnyes.com/cnyes_about/cnyes_about.html)[集團簡介](https://www.anuegroup.com.tw/)[廣告服務](http://www.cnyes.com/cnyes_about/cnyes_AD01.html)[金融資訊元件](http://campaign.cnyes.com/topics/anuedatabase/)[聯絡我們](http://www.cnyes.com/cnyes_about/cnyes_ctcUsTpe.html)[徵才](http://www.104.com.tw/jobbank/custjob/index.php?r=cust&j=5e6042253446402330683b1d1d1d1d5f2443a363189j01)[網站地圖](http://www.cnyes.com/cnyes_about/site_map.html)[法律聲明](http://www.cnyes.com/cnyes_about/cnyes_sos01.html)© Copyright 2000-2025 Anue鉅亨網 All rights reserved. 未經授權 不得轉載
-
-粉 絲 團
-
-[粉 絲 團](https://www.facebook.com/anuetw/)
-
-鉅亨 Youtube
-
-[鉅亨 Youtube](https://www.youtube.com/channel/UCHzw1et1X2fdz1VsXLO8nlw)
-
-鉅亨 Line
-
-[鉅亨 Line](https://campaign.cnyes.com/topics/anuesns/)
-
-鉅亨 APP
-
-[鉅亨 APP](https://www.cnyes.com/mobile/index_app.htm?utm_source=cnyes&utm_medium=desktop&utm_campaign=desktop_footer)
-
-溫暖送愛心
-
-[溫暖送愛心](https://campaign.cnyes.com/topics/love/)
+![](/images/Free.gif)
+
+|  |  |
+| --- | --- |
+| [![MoneyDJ理財網](/etf/images/spacer.gif)](/)  [![MoneyDJ理財網](/etf/images/spacer.gif)](/)  [![ETF基智網](/etf/images/spacer.gif)](/etf/) |  |
+
+|  |
+| --- |
+| ![](/etf/images/Free.gif) |
+|  |
+
+|  |  |
+| --- | --- |
+|  | ![](/etf/images/BT_ETF_Search.gif) |
+
+* 首   頁 ![](/etf/images/Arrow_Orange.gif)
+  + [首頁](/etf/)
+  + [發行公司](/etf/ea/et020001.djhtm?a=)
+  + 我的觀察名單
+* ETF介紹 ![](/etf/images/Arrow_Orange.gif)
+  + [盤中報價](/etf/x/Basic/Basic0001.xdjhtm?etfid=SPY)
+  + [技術分析](/etf/x/Basic/Basic0002.xdjhtm?etfid=SPY)
+  + [淨值表格](/etf/x/Basic/Basic0003.xdjhtm?etfid=SPY)
+  + [基本資料](/etf/x/Basic/Basic0004.xdjhtm?etfid=SPY)
+  + [配息記錄](/etf/x/Basic/Basic0005.xdjhtm?etfid=SPY)
+  + [分割合併](/etf/x/Basic/Basic0006.xdjhtm?etfid=SPY)
+  + [持股狀況](/etf/x/Basic/Basic0007.xdjhtm?etfid=SPY)
+  + [報酬分析](/etf/x/Basic/Basic0008.xdjhtm?etfid=SPY)
+  + [報酬走勢](/etf/x/Basic/Basic0009.xdjhtm?etfid=SPY)
+  + [報酬比較](/etf/x/Basic/Basic0010.xdjhtm?etfid=SPY)
+  + [風險報酬](/etf/x/Basic/Basic0011.xdjhtm?etfid=SPY)
+  + [多空報酬](/etf/x/Basic/Basic0012.xdjhtm?etfid=SPY)
+  + [風險分析](/etf/x/Basic/Basic0013.xdjhtm?etfid=SPY)
+  + [相關分析](/etf/x/Basic/Basic0014.xdjhtm?etfid=SPY)
+  + [資金流向](/etf/x/Basic/Basic0015.xdjhtm?etfid=SPY)
+  + [五力分析](/etf/x/Basic/Basic0016.xdjhtm?etfid=SPY)
+  + [趨勢軌跡](/etf/x/Basic/Basic0017.xdjhtm?etfid=SPY)
+  + [受益人數](/etf/x/Basic/Basic0019.xdjhtm?etfid=SPY)
+* ETF搜尋 ![](/etf/images/Arrow_Orange.gif)
+  + [區域搜尋](/etf/eb/et081003.djhtm)
+  + [類型搜尋](/etf/eb/et305103.djhtm)
+  + [發行公司搜尋](/etf/eb/et303001.djhtm)
+  + [進階搜尋](/etf/eb/et305001.djhtm)
+  + [指數搜尋](/etf/x/Search/Search0001.xdjhtm)
+* ETF排行 ![](/etf/images/Arrow_Orange.gif)
+  + [熱門排行](/etf/x/Rank/Rank0014.xdjhtm?eRank=vol&eOrd=T800100&eMid=TW&eTab=0)
+  + 報酬排行 ![](/etf/images/Arrow_White_Right.gif)
+    - [漲幅排行](/etf/x/Rank/Rank0001.xdjhtm?eRank=up&eOrd=T800500)
+    - [跌幅排行](/etf/x/Rank/Rank0001.xdjhtm?eRank=dn&eOrd=T800500&eSort=2)
+    - [距52週高點排行](/etf/x/Rank/Rank0008.xdjhtm?eRank=52h&eOrd=T800065)
+    - [距52週低點排行](/etf/x/Rank/Rank0009.xdjhtm?eRank=52l&eOrd=T800066)
+    - [連續上漲天數排行](/etf/x/Rank/Rank0010.xdjhtm?eRank=crd&eOrd=T800071)
+    - [連續下跌天數排行](/etf/x/Rank/Rank0010.xdjhtm?eRank=cdd&eOrd=T800071&eSort=2)
+    - [超買排行](/etf/x/Rank/Rank0011.xdjhtm?eRank=ovb&eOrd=T800067)
+    - [超賣排行](/etf/x/Rank/Rank0011.xdjhtm?eRank=ovs&eOrd=T800067&eSort=2)
+    - [成立以來累積報酬排行](/etf/x/Rank/Rank0006.xdjhtm?eRank=arn&eOrd=T800651)
+    - [成立以來年化報酬排行](/etf/x/Rank/Rank0007.xdjhtm?eRank=irr&eOrd=T800652)
+  + 風險排行 ![](/etf/images/Arrow_White_Right.gif)
+    - [折價排行](/etf/x/Rank/Rank0002.xdjhtm?eRank=disc&eOrd=T800090&eSort=2)
+    - [溢價排行](/etf/x/Rank/Rank0002.xdjhtm?eRank=prem&eOrd=T800090&eSort=1)
+    - [週轉率排行](/etf/x/Rank/Rank0002.xdjhtm?eRank=to&eOrd=Turnover)
+    - [追蹤誤差排行](/etf/x/Rank/Rank0002.xdjhtm?eRank=ter&eOrd=T840030)
+    - [年化標準差排行](/etf/x/Rank/Rank0002.xdjhtm?eRank=sd&eOrd=T800840)
+    - [alpha排行](/etf/x/Rank/Rank0003.xdjhtm?eRank=a&eOrd=T800860)
+    - [beta排行](/etf/x/Rank/Rank0003.xdjhtm?eRank=b&eOrd=T800820)
+    - [sharpe排行](/etf/x/Rank/Rank0003.xdjhtm?eRank=shp&eOrd=T800830)
+    - [R-Squared排行](/etf/x/Rank/Rank0003.xdjhtm?eRank=rs&eOrd=T810630)
+  + 交易排行 ![](/etf/images/Arrow_White_Right.gif)
+    - [規模排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=mkt&eOrd=T150032)
+    - [成交量排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=vol&eOrd=T800100)
+    - [成交值排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=amt&eOrd=T800119)
+    - [股數創造排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=creat&eOrd=T800075)
+    - [股數贖回排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=redem&eOrd=T800075&eSort=2)
+    - [換手率排行](/etf/x/Rank/Rank0004.xdjhtm?eRank=exch&eOrd=T150060)
+  + 基本資料排行 ![](/etf/images/Arrow_White_Right.gif)
+    - [成立年齡排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=age&eOrd=T100050&eSort=2)
+    - [最新發行排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=new&eOrd=T100050&eSort=1)
+    - [市價排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=price&eOrd=T800060)
+    - [殖利率排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=yeild&eOrd=T800880)
+    - [管理費排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=mfe&eOrd=T100161&eSort=2)
+    - [總費用率排行](/etf/x/Rank/Rank0005.xdjhtm?eRank=allex&eOrd=T100160&eSort=2)
+  + 社群排行 ![](/etf/images/Arrow_White_Right.gif)
+    - [觀察排行](/etf/x/Rank/Rank0001.xdjhtm?eRank=obs&eOrd=T800890)
+    - [點閱人氣排行](/etf/x/Rank/Rank0013-1.xdjhtm?eRank=click)
+  + [ETF龍虎榜](/etf/ec/et306.djhtm)
+  + [台股ETF受益人數排行](/etf/x/Rank/Rank0016.xdjhtm)
+* 工   具 ![](/etf/images/Arrow_Orange.gif)
+  + [投資藏寶圖](/etf/ed/ET409040.djhtm)
+  + ETF大比武 ![](/etf/images/Arrow_White_Right.gif)
+    - [比報酬率](/etf/ed/et401001.djhtm?iitem=1)
+    - [比風險值](/etf/ed/et401001.djhtm?iitem=2)
+    - [比Sharpe值](/etf/ed/et401001.djhtm?iitem=3)
+    - [比交易成本](/etf/ed/et401001.djhtm?iitem=4)
+    - [ETF大車拼](/etf/ed/etfcompare.djhtm)
+  + 產業投資術 ![](/etf/images/Arrow_White_Right.gif)
+    - [對的趨勢](/etf/ed/etnew0009.djhtm)
+    - [熱門市場](/etf/ed/etnew0010.djhtm?a=1)
+    - [熱門產業](/etf/ed/etnew0010.djhtm?a=2)
+    - [強勢貨幣](/etf/ed/etnew0010.djhtm?a=3)
+  + ETF投資策略 ![](/etf/images/Arrow_White_Right.gif)
+    - [折價套利](/etf/ed/etnew0011.djhtm?a=1)
+    - [以量取價](/etf/ed/etnew0011.djhtm?a=2)
+    - [定期定額](/etf/x/Tool/Tool0001.xdjhtm)
+    - [定期定值](/etf/x/Tool/Tool0002.xdjhtm)
+    - [定期定股](/etf/x/Tool/Tool0003.xdjhtm)
+  + 主題投資 ![](/etf/images/Arrow_White_Right.gif)
+    - [全部商品](/etf/TopicInvest/TopicInvest.djhtm)
+    - [地區](/etf/TopicInvest/TopicInvest01.djhtm?a=EC000010&b=EZ0010)
+    - [產業](/etf/TopicInvest/TopicInvest04.djhtm?a=EX001&b=EP0010)
+    - [匯率](/etf/TopicInvest/TopicInvest07.djhtm?a=AX000010)
+* 財經資訊 ![](/etf/images/Arrow_Orange.gif)
+  + iQuote
+  + [金融走勢圖](/etf/ef/BFRJ00.djhtm)
+  + 全球金融行情 ![](/etf/images/Arrow_White_Right.gif)
+    - [全球股市](/etf/ef/ETBFRE01.djhtm)
+    - [全球匯市](/etf/ef/ETZNN.djhtm)
+    - [全球債市](/etf/ef/ETBFRE03.djhtm)
+    - [原物料](/etf/ef/ETZNM.djhtm)
+  + 國家分析 ![](/etf/images/Arrow_White_Right.gif)
+    - [國家簡介](/etf/ef/ET503060.djhtm)
+    - [股票市場](/etf/ef/ETBFRA01.djhtm)
+    - [債券市場](/etf/ef/ETBFRA02.djhtm)
+    - [外匯市場](/etf/ef/ETBFRA03.djhtm)
+    - [經濟指標](/etf/ef/ETBFRA04.djhtm)
+    - [相關新聞](/etf/ef/ETBFRA06.djhtm)
+    - [相關報告](/etf/ef/ETBFRA07.djhtm)
+    - [相關ETF](/etf/ef/ETNEW0013.djhtm)
+    - [相關基金](/etf/ef/ETNEW0014.djhtm)
+  + 商品分析 ![](/etf/images/Arrow_White_Right.gif)
+    - [相關新聞](/etf/ef/ETBFRA06.djhtm?subkind=2)
+    - [相關報告](/etf/ef/ETBFRA07.djhtm?subkind=2)
+    - [相關ETF](/etf/ef/ETNEW0013.djhtm?subkind=2)
+    - [相關基金](/etf/ef/ETNEW0014.djhtm?subkind=2)
+  + [經濟指標](/etf/ef/ETBFRB00.djhtm)
+  + [全球股市行事曆](/etf/ef/etbfrg00.djhtm)
+* ETF學園 ![](/etf/images/Arrow_Orange.gif)
+  + [ETF快速入門](/etf/eg/ET900000.djhtm)
+  + [ETF基礎班](/etf/eg/ET910000.djhtm)
+  + [ETF進階班](/etf/eg/ET920000.djhtm)
+  + [ETF實務班](/etf/eg/ET930000.djhtm)
+  + [陸股ETF介紹](/etf/eg/ET960001.djhtm)
+* ETF知識庫 ![](/etf/images/Arrow_Orange.gif)
+  + 相關新聞
+  + 研究報告
+  + 財經百科
+
+[首頁](/etf/) / [ETF介紹](/etf/ea/et081001.djhtm) / 淨值表格
+
+![](/etf/images/logo/395.png)
+富邦NYSE FactSet台灣核心半導體指數ETF〈3076.HK〉
+
+[![加入觀察](/ETF/images/Icon-Add-s.png)](#dialog2)
+
+* [盤中報價](/ETF/X/Basic/Basic0001.xdjhtm?etfid=3076.HK)
+* [技術分析](/ETF/X/Basic/Basic0002.xdjhtm?etfid=3076.HK)
+* [淨值表格](/ETF/X/Basic/Basic0003.xdjhtm?etfid=3076.HK)
+* [基本資料](/ETF/X/Basic/Basic0004.xdjhtm?etfid=3076.HK)
+* [配息記錄](/ETF/X/Basic/Basic0005.xdjhtm?etfid=3076.HK)
+* [分割合併](/ETF/X/Basic/Basic0006.xdjhtm?etfid=3076.HK)
+* [持股狀況](/ETF/X/Basic/Basic0007.xdjhtm?etfid=3076.HK)
+* [報酬分析](/ETF/X/Basic/Basic0008.xdjhtm?etfid=3076.HK)
+* [報酬走勢](/ETF/X/Basic/Basic0009.xdjhtm?etfid=3076.HK)
+
+* [報酬比較](/ETF/X/Basic/Basic0010.xdjhtm?etfid=3076.HK)
+* [風險報酬](/ETF/X/Basic/Basic0011.xdjhtm?etfid=3076.HK)
+* [多空報酬](/ETF/X/Basic/Basic0012.xdjhtm?etfid=3076.HK)
+* [風險分析](/ETF/X/Basic/Basic0013.xdjhtm?etfid=3076.HK)
+* [相關分析](/ETF/X/Basic/Basic0014.xdjhtm?etfid=3076.HK)
+* [資金流向](/ETF/X/Basic/Basic0015.xdjhtm?etfid=3076.HK)
+* [五力分析](/ETF/X/Basic/Basic0016.xdjhtm?etfid=3076.HK)
+* [趨勢軌跡](/ETF/X/Basic/Basic0017.xdjhtm?etfid=3076.HK)
+* [受益人數](/ETF/X/Basic/Basic0019.xdjhtm?etfid=3076.HK)
+
+富邦NYSE FactSet台灣核心半導體指數ETF(3076.HK)
+
+| 項目 | 價格 | 漲跌 | 漲跌幅(%) | 最高價格(年) | 最低價格(年) |
+| --- | --- | --- | --- | --- | --- |
+| 市價(2025/06/20) | 7.6350(港幣) | -0.0150 | -0.20 | 7.9450 | 5.3000 |
+| 淨值(2025/06/19) | 7.7233(港幣) | -0.0842 | -1.08 | 8.0118 | 5.2463 |
+
+|  |  |
+| --- | --- |
+| 從  年  月  日 至  年  月  日 ![](/ETF/images/BT_Quaere.gif) | ![](/z/images/BT-L.gif "技術分析進階版")[![說明](/z/images/BT-R.gif)](/e/newage/iQuoteHelp.asp) |
+
+富邦NYSE FactSet台灣核心半導體指數ETF(3076.HK) - 近30日淨值
+
+| 日期 | 淨值 | 市價 |
+| --- | --- | --- |
+| 2025/06/19 | 7.7233 | 7.6500 |
+| 2025/06/18 | 7.8075 | 7.7700 |
+| 2025/06/17 | 7.8267 | 7.7800 |
+| 2025/06/16 | 7.7302 | 7.7500 |
+| 2025/06/13 | 7.6980 | 7.6700 |
+| 2025/06/12 | 7.7155 | 7.7500 |
+| 2025/06/11 | 7.7748 | 7.7000 |
+| 2025/06/10 | 7.6308 | 7.5550 |
+| 2025/06/09 | 7.4173 | 7.3850 |
+| 2025/06/06 | 7.3664 | 7.3150 |
+| 2025/06/05 | 7.3838 | 7.3150 |
+| 2025/06/04 | 7.3451 | 7.2700 |
+| 2025/06/03 | 7.1879 | 7.1400 |
+| 2025/06/02 | 7.1590 | 7.1400 |
+| 2025/05/30 | 7.3383 | 7.2650 |
+
+| 日期 | 淨值 | 市價 |
+| --- | --- | --- |
+| 2025/05/29 | 7.3347 | 7.3550 |
+| 2025/05/28 | 7.2999 | 7.2800 |
+| 2025/05/27 | 7.2586 | 7.2800 |
+| 2025/05/26 | 7.3221 | 7.3100 |
+| 2025/05/23 | 7.3133 | 7.3100 |
+| 2025/05/22 | 7.3643 | 7.3100 |
+| 2025/05/21 | 7.3707 | 7.3500 |
+| 2025/05/20 | 7.2360 | 7.2100 |
+| 2025/05/19 | 7.1803 | 7.1600 |
+| 2025/05/16 | 7.3433 | 7.3300 |
+| 2025/05/15 | 7.3017 | 7.3000 |
+| 2025/05/14 | 7.2770 | 7.2650 |
+| 2025/05/13 | 7.1488 | 7.1100 |
+| 2025/05/12 | 7.1009 | 7.1400 |
+| 2025/05/09 | 6.9667 | 6.9600 |
+
+相關基金
+
+相關ETF
+
+|  |  |
+| --- | --- |
+| 附註： | |
+| 一、 | 績效計算為原幣別報酬，且皆有考慮配息情況。基金配息率不代表基金報酬率，且過去配息率不代表未來配息率。所有基金績效，均為過去績效，不代表未來之績效表現，亦不保證基金之最低投資收益。 |
+| 二、 | 基金淨值可能因市場因素而上下波動，基金淨值僅供參考，實際以基金公司公告之淨值為準；海外市場指數類型基金，以交易日當天收盤價為淨值參考價。 |
+| 三、 | 上述銷售費用僅供參考，實際費率以各銷售機構為主。 |
+| 四、 | 上述資料只供參考用途，嘉實資訊自當盡力提供正確訊息，但如有錯漏或疏忽，本公司或關係企業與其任何董事或任何受僱人，恕不負任何法律責任。 |
+
+\n');
+jQuery(function() {
+if ('undefined' == typeof (BehaviorF)) {
+BehaviorF = new Object();
+}
+//加入觀察名單
+var xxx = "";
+var targetUrl = document.location.href.toUpperCase();
+if (targetUrl.indexOf("ETFCOMPARE") <= 0 && ShowFundWatch() == false) {
+xxx += "
+
+";
+xxx += "
+
+";
+xxx += "";
+xxx += "";
+xxx += "
+
+";
+xxx += "";
+xxx += "
+
+";
+xxx += "";
+$("#ObserveDiv").html(xxx);
+}
+});
+//-->
+
+最近查閱的商品
+
+有興趣此檔ETF的網友也看過下列ETF
+
+![](/funddj/images/close.jpg)
+
+|  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [MoneyDJ理財網](https://www.moneydj.com/) | | [財經知識庫](https://www.moneydj.com/KMDJ/) | [基金頻道](https://www.moneydj.com/funddj/) | | [iQuote](https://www.moneydj.com/iquote/) | [ETF頻道](https://www.moneydj.com/etf/) | [美股頻道](https://www.moneydj.com/us/) |
+| 資訊  [新聞](https://www.moneydj.com/KMDJ/News/NewsHome.aspx)  [多空訊號](https://www.moneydj.com/houseview/)  [財經台](https://tv.moneydj.com/tv/) | 學習  [技術學院](https://www.moneydj.com/z/analyst/analyst_home.htm) [經濟學院](https://www.moneydj.com/FUNDDJ/YA/YP809000.DJHTM) [選股學院](https://www.moneydj.com/z/zk/zk00.htm?a=$^$^K$^KSTUDY]ASP)  會員中心  [加入會員](https://www.moneydj.com/e/newage/exa0100.asp) [查詢密碼](https://www.moneydj.com/e/newage/exa0500.asp) [個人存摺](https://www.moneydj.com/e/newage/eyd0100.asp)  購物  [理財商品](https://www.moneydj.com/e/newage/buyproduct.htm)  [手機版](//m.moneydj.com) [+粉絲團](https://www.moneydj.com/z/AD/facebook/MoneyDJ-FB.html) | 分類  [研究報告](https://www.moneydj.com/KMDJ/Report/ReportHome.aspx) [新聞](https://www.moneydj.com/KMDJ/News/NewsHome.aspx)  [財經百科](https://www.moneydj.com/KMDJ/Wiki/WikiHome.aspx)  股票市場  [市場動態](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X0100000) [個股情報](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X0200000) [產業分析](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X0300000) [國家動態](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X0400000) [熱門產業](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X1900000) [總體經濟](https://www.moneydj.com/KMDJ/Report/ReportSubjectList.aspx?a=X2000000) | 財經  [基金新聞](https://www.moneydj.com/funddj/ya/YP051000.djhtm) [研究報告](https://www.moneydj.com/funddj/yb/YP053000_FB000001.djhtm) [國際金融](https://www.moneydj.com/funddj/yl/BFRE01.djhtm)  資訊  [境內基金](https://www.moneydj.com/funddj/ya/yp082000.djhtm) [境外基金](https://www.moneydj.com/funddj/ya/yp081001.djhtm)  搜尋  [境內](https://www.moneydj.com/funddj/yb/YP301000.djhtm)|[境外](https://www.moneydj.com/funddj/yb/YP301001.djhtm) [進階搜尋](https://www.moneydj.com/funddj/ys/YP305001.djhtm) [區域搜尋](https://www.moneydj.com/funddj/yl/yp081003.djhtm?A=1) [商品搜尋](https://www.moneydj.com/funddj/yl/YP305103.djhtm) [境內外基金搜尋](https://www.moneydj.com/funddjx/fundsearch.xdjhtm) | 排名  [公會排名](https://www.moneydj.com/funddj/ya/YP401002.djhtm) [週轉率排名](https://www.moneydj.com/funddj/ya/YP407000.djhtm) [基金報酬排行](https://www.moneydj.com/funddj/ya/YP401001.djhtm) [基金評等](https://www.moneydj.com/funddj/ya/yp081003.djhtm) [基金龍虎榜](https://www.moneydj.com/funddj/ya/yp306.djhtm) [四四三三](https://www.moneydj.com/funddj/yl/YP081008.djhtm) [趨勢軌跡](https://www.moneydj.com/funddj/yl/YP081009.djhtm)  工具 [投資藏寶圖](https://www.moneydj.com/funddj/ya/YP409040.djhtm) |
+
+ [走勢分析](https://www.moneydj.com/iquote/iquoteidxchart.djhtm) [多空瞭望](https://www.moneydj.com/iquote/iquotehvgscore.djhtm) [銀行匯率](https://www.moneydj.com/iquote/iquoteexchange.djhtm) [市場動態](https://www.moneydj.com/iquote/iQuoteReturn.djhtm) [基金總覽](https://www.moneydj.com/iquote/iQuoteFundCat.djhtm) [市場觀點](https://www.moneydj.com/iquote/iquotenewsmkt.djhtm) | ETF介紹  [ETF發行公司](https://www.moneydj.com/etf/eb/et303001.djhtm) [ETF基本資料](https://www.moneydj.com/etf/x/Basic/Basic0004.xdjhtm?etfid=SPY) [ETF資金流向](https://www.moneydj.com/ETF/X/Basic/Basic0015.xdjhtm?etfid=SPY) [ETF投資策略](https://www.moneydj.com/etf/x/Basic/Basic0018.xdjhtm?etfid=SPY) [ETF相關分析](https://www.moneydj.com/ETF/X/Basic/Basic0014.xdjhtm?etfid=SPY)  ETF搜尋  [區域](https://www.moneydj.com/etf/eb/et081003.djhtm)|[類型](https://www.moneydj.com/etf/eb/et305103.djhtm) [進階](https://www.moneydj.com/etf/eb/et305001.djhtm)|[指數](https://www.moneydj.com/etf/x/Search/Search0001.xdjhtm)  ETF排名  [漲幅](https://www.moneydj.com/etf/x/Rank/Rank0001.xdjhtm?eRank=up&eOrd=T800500)|[跌幅](https://www.moneydj.com/etf/x/Rank/Rank0001.xdjhtm?eRank=dn&eOrd=T800500&eSort=2) [規模](https://www.moneydj.com/etf/x/Rank/Rank0004.xdjhtm?eRank=mkt&eOrd=T150032)|[成交量](https://www.moneydj.com/etf/x/Rank/Rank0004.xdjhtm?eRank=vol&eOrd=T800100) [點閱人氣排行](https://www.moneydj.com/etf/x/Rank/Rank0013-1.xdjhtm?eRank=click)  ETF工具  [ETF大車拼](https://www.moneydj.com/etf/ed/ETFCompare.djhtm) [ETF成本評比](https://www.moneydj.com/etf/ed/et401001.djhtm?iitem=4) [ETF主題投資](https://www.moneydj.com/etf/TopicInvest/TopicInvest.djhtm) | 個股資料  [基本資料](https://www.moneydj.com/us/basic/basic0001/JNJ) [行情報價](https://www.moneydj.com/us/basic/basic0002/JNJ) [基本分析](https://www.moneydj.com/us/basic/basic0004/JNJ)  排行  [漲幅排行](https://www.moneydj.com/us/rank/rank0001) [跌幅排行](https://www.moneydj.com/us/rank/rank0002) [超買排行](https://www.moneydj.com/us/rank/rank0007) [超賣排行](https://www.moneydj.com/us/rank/rank0008) [成交量排行](https://www.moneydj.com/us/rank/rank0009) [點擊排行](https://www.moneydj.com/us/rank/rank0028) [查詢次數排行](https://www.moneydj.com/us/rank/rank0030)  工具  [ADR套利](https://www.moneydj.com/us/tool/tool0001) [選股工具](https://www.moneydj.com/us/tool/tool0003) [行事曆](https://www.moneydj.com/us/tool/tool0011) [各類股績效表現](https://www.moneydj.com/us/tool/tool0012) ||  | |
+
+[關於MoneyDJ](https://www.moneydj.com/z/ABMoneydj/aboutmoneydj1.djhtm) | [網站地圖](https://www.moneydj.com/z/ABMoneydj/MoneydjMap.djhtm) | [刊登廣告](https://www.moneydj.com/funddj/yc/AdPromote.djhtm?a=home) | [新手上路](https://www.moneydj.com/z/help/index.html) | [常見問題](https://www.moneydj.com/e/newage/faq.htm) | [會員中心](https://www.moneydj.com/e/newage/default.htm) | 聯絡我們 | [徵才](https://www.moneydj.com/z/ABMoneydj/aboutmoneydj5.djhtm) | Back To Top
+
+版權所有嘉實資訊股份有限公司，未經合法授權請勿翻載。與本網站有關一切糾紛與法律問題，均依中華民國相關法令解釋及適用之。
+嘉實資訊客服電話：0800-006-098。 嘉實資訊客服信箱：econsult@moneydj.com 。 最佳瀏覽模式：解析度1024\*768以上。
+本站內容僅供參考，本公司不負任何法律責任，投資人若依此以為買賣依據，須自負盈虧之責。
