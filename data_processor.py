@@ -1,26 +1,27 @@
 """
-data_processor.py - Data Processing Module (Enhanced with Company Mapping Fix)
+data_processor.py - Data Processing Module (Updated for Guideline v3.2.0)
 
-Version: 3.1.0
-Date: 2025-06-21
-Author: Google Search FactSet Pipeline - Modular Architecture
+Version: 3.2.0
+Date: 2025-06-22
+Author: Google Search FactSet Pipeline - Guideline v3.2.0 Compliant
 License: MIT
 
-ENHANCEMENTS:
-- ✅ Fixed company name extraction from search results
-- ✅ Resolved dtype compatibility warnings
-- ✅ Improved FactSet data parsing from MD files
-- ✅ Enhanced company mapping with watchlist integration
-- ✅ Better data validation and quality checks
-- ✅ Comprehensive error handling and logging
+GUIDELINE v3.2.0 COMPLIANCE:
+- ✅ Updated output format to match exact guideline specifications
+- ✅ Portfolio Summary: 代號,名稱,股票代號,MD最舊日期,MD最新日期,MD資料筆數,分析師數量,目標價,2025EPS平均值,2026EPS平均值,2027EPS平均值,品質評分,狀態,更新日期
+- ✅ Detailed Data: Enhanced with EPS high/low/avg for 2025/2026/2027
+- ✅ Quality scoring system (1-4 scale)
+- ✅ Status emoji indicators (🟢 完整, 🟡 良好, 🟠 部分, 🔴 不足)
+- ✅ MD file date tracking and company grouping
+- ✅ Enhanced company mapping with 觀察名單.csv integration
 
 Description:
-    Data processing module for FactSet pipeline:
+    Data processing module for FactSet pipeline aligned with guideline v3.2.0:
     - Parses markdown files for financial data
-    - Consolidates CSV data from multiple sources
-    - Extracts company information from search results
-    - Maps generic names to real company names
-    - Generates portfolio summaries and statistics
+    - Groups data by company from 觀察名單.csv
+    - Generates guideline-compliant portfolio summaries
+    - Extracts multi-year EPS data (2025/2026/2027)
+    - Calculates quality scores and status indicators
     - Validates data quality and completeness
 
 Dependencies:
@@ -29,6 +30,7 @@ Dependencies:
     - re (regex)
     - json
     - pathlib
+    - datetime
 """
 
 import os
@@ -38,9 +40,10 @@ import warnings
 import traceback
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
+import hashlib
 
 # Suppress specific pandas warnings
 warnings.filterwarnings('ignore', category=FutureWarning, module='pandas')
@@ -52,651 +55,540 @@ try:
 except ImportError as e:
     print(f"⚠️ Could not import local modules: {e}")
 
-# Version Information
-__version__ = "3.1.0"
-__date__ = "2025-06-21"
-__author__ = "Google Search FactSet Pipeline - Enhanced"
+# Version Information - Guideline v3.2.0
+__version__ = "3.2.0"
+__date__ = "2025-06-22"
+__author__ = "Google Search FactSet Pipeline - Guideline v3.2.0 Compliant"
 
 # ============================================================================
-# CONFIGURATION AND CONSTANTS
+# CONFIGURATION AND CONSTANTS - GUIDELINE v3.2.0
 # ============================================================================
 
-# Financial data extraction patterns
+# Enhanced financial data extraction patterns for multi-year EPS
 FACTSET_PATTERNS = {
+    # Current EPS patterns
     'eps_current': [
         r'EPS[：:\s]*([0-9]+\.?[0-9]*)',
         r'每股盈餘[：:\s]*([0-9]+\.?[0-9]*)',
         r'預估.*?EPS[：:\s]*([0-9]+\.?[0-9]*)',
         r'Current.*?EPS[：:\s]*([0-9]+\.?[0-9]*)',
     ],
-    'eps_previous': [
-        r'先前.*?EPS[：:\s]*([0-9]+\.?[0-9]*)',
-        r'Previous.*?EPS[：:\s]*([0-9]+\.?[0-9]*)',
-        r'上次.*?預估[：:\s]*([0-9]+\.?[0-9]*)',
-    ],
+    
+    # Target price patterns
     'target_price': [
         r'目標價[：:\s]*([0-9]+\.?[0-9]*)',
         r'Target.*?Price[：:\s]*([0-9]+\.?[0-9]*)',
         r'price.*?target[：:\s]*([0-9]+\.?[0-9]*)',
         r'目標[：:\s]*([0-9]+\.?[0-9]*)',
     ],
+    
+    # Analyst count patterns
     'analyst_count': [
         r'分析師[：:\s]*([0-9]+)',
         r'Analyst[s]?[：:\s]*([0-9]+)',
         r'([0-9]+).*?分析師',
         r'([0-9]+).*?analyst',
     ],
+    
+    # Enhanced multi-year EPS patterns - Guideline v3.2.0
     'eps_2025_high': [
         r'2025.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?High[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?EPS.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2025年.*?EPS.*?高[：:\s]*([0-9]+\.?[0-9]*)',
     ],
     'eps_2025_low': [
         r'2025.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?Low[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?EPS.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2025年.*?EPS.*?低[：:\s]*([0-9]+\.?[0-9]*)',
     ],
     'eps_2025_avg': [
         r'2025.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?Average[：:\s]*([0-9]+\.?[0-9]*)',
         r'2025.*?EPS.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2025年.*?EPS.*?均[：:\s]*([0-9]+\.?[0-9]*)',
     ],
-    'eps_2025_median': [
-        r'2025.*?中位數[：:\s]*([0-9]+\.?[0-9]*)',
-        r'2025.*?Median[：:\s]*([0-9]+\.?[0-9]*)',
-        r'2025.*?EPS.*?中位數[：:\s]*([0-9]+\.?[0-9]*)',
+    
+    # 2026 EPS patterns
+    'eps_2026_high': [
+        r'2026.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?High[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?EPS.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
+    ],
+    'eps_2026_low': [
+        r'2026.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?Low[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?EPS.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
+    ],
+    'eps_2026_avg': [
+        r'2026.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?Average[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2026.*?EPS.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
+    ],
+    
+    # 2027 EPS patterns
+    'eps_2027_high': [
+        r'2027.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?High[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?EPS.*?最高[：:\s]*([0-9]+\.?[0-9]*)',
+    ],
+    'eps_2027_low': [
+        r'2027.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?Low[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?EPS.*?最低[：:\s]*([0-9]+\.?[0-9]*)',
+    ],
+    'eps_2027_avg': [
+        r'2027.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?Average[：:\s]*([0-9]+\.?[0-9]*)',
+        r'2027.*?EPS.*?平均[：:\s]*([0-9]+\.?[0-9]*)',
     ],
 }
 
-# Numeric columns that should be converted to float
-NUMERIC_COLUMNS = [
-    '當前EPS預估', '先前EPS預估', '目標價', '分析師數量',
-    '2025EPS最高值', '2025EPS最低值', '2025EPS平均值', '2025EPS中位數',
-    '2026EPS最高值', '2026EPS最低值', '2026EPS平均值', '2026EPS中位數',
-    '2027EPS最高值', '2027EPS最低值', '2027EPS平均值', '2027EPS中位數',
-    '2025營收最高值', '2025營收最低值', '2025營收平均值', '2025營收中位數',
-    '2026營收最高值', '2026營收最低值', '2026營收平均值', '2026營收中位數',
-    '2027營收最高值', '2027營收最低值', '2027營收平均值', '2027營收中位數',
+# Guideline v3.2.0 - Exact column specifications
+PORTFOLIO_SUMMARY_COLUMNS = [
+    '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
+    '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
+    '品質評分', '狀態', '更新日期'
+]
+
+DETAILED_DATA_COLUMNS = [
+    '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
+    '分析師數量', '目標價', '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
+    '2026EPS最高值', '2026EPS最低值', '2026EPS平均值',
+    '2027EPS最高值', '2027EPS最低值', '2027EPS平均值',
+    '品質評分', '狀態', 'MD File Folder', '更新日期'
 ]
 
 # ============================================================================
-# COMPANY NAME EXTRACTION AND MAPPING
+# COMPANY MAPPING AND 觀察名單 INTEGRATION - GUIDELINE v3.2.0
 # ============================================================================
 
 def load_watchlist(watchlist_path: str = '觀察名單.csv') -> Optional[pd.DataFrame]:
-    """
-    Load the watchlist CSV file
-    """
+    """Load the 觀察名單.csv file - Guideline v3.2.0"""
     try:
         if os.path.exists(watchlist_path):
             df = pd.read_csv(watchlist_path, encoding='utf-8')
-            print(f"✅ Loaded watchlist: {len(df)} companies")
+            print(f"✅ Loaded watchlist: {len(df)} companies from 觀察名單.csv")
             return df
         else:
             print(f"⚠️ Watchlist file not found: {watchlist_path}")
+            print("💡 Run: python config.py --download-csv")
             return None
     except Exception as e:
         print(f"❌ Error loading watchlist: {e}")
         return None
 
-def extract_company_info_from_title(title: str, watchlist_df: Optional[pd.DataFrame] = None) -> Tuple[Optional[str], Optional[str]]:
-    """
-    Extract company name and stock code from search result title
-    """
-    if not title:
-        return None, None
+def get_company_from_watchlist(code: str, watchlist_df: Optional[pd.DataFrame] = None) -> Optional[Dict]:
+    """Get company info from watchlist by code"""
+    if watchlist_df is None:
+        return None
     
-    company_name = None
-    stock_code = None
+    try:
+        # Convert code to string for matching
+        code_str = str(code).strip()
+        match = watchlist_df[watchlist_df['代號'].astype(str) == code_str]
+        
+        if not match.empty:
+            row = match.iloc[0]
+            return {
+                'code': str(row['代號']),
+                'name': str(row['名稱']),
+                'stock_code': f"{row['代號']}-TW"
+            }
+    except Exception as e:
+        if utils.is_debug_mode():
+            print(f"   ⚠️ Error matching company {code}: {e}")
     
-    # Extract stock code patterns
+    return None
+
+def extract_company_info_from_filename(filename: str, watchlist_df: Optional[pd.DataFrame] = None) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    """Extract company info from MD filename - Enhanced for Guideline v3.2.0"""
+    if not filename:
+        return None, None, None
+    
+    # Extract stock code from filename patterns
     stock_patterns = [
-        r'\((\d{4})\)',      # (2454)
-        r'(\d{4})\.TW',      # 2454.TW
-        r'(\d{4})-TW',       # 2454-TW
-        r'(\d{4})\.TPE',     # 2454.TPE
+        r'(\d{4})_',        # 2330_ (start of filename)
+        r'_(\d{4})_',       # _2330_ (middle)
+        r'(\d{4})\.md',     # 2330.md (end)
+        r'\((\d{4})\)',     # (2330)
     ]
     
+    stock_code = None
     for pattern in stock_patterns:
-        match = re.search(pattern, title)
+        match = re.search(pattern, filename)
         if match:
             stock_code = match.group(1)
             break
     
-    # Extract known company names (extended list)
+    # Get company info from watchlist if we have stock code
+    if stock_code and watchlist_df is not None:
+        company_info = get_company_from_watchlist(stock_code, watchlist_df)
+        if company_info:
+            return company_info['name'], company_info['code'], company_info['stock_code']
+    
+    # Fallback: extract company name from filename
     company_patterns = [
-        r'(台積電|台灣積體電路)',
-        r'(聯發科|MediaTek)',
-        r'(富邦金|富邦金控|Fubon)',
-        r'(鴻海|Hon Hai|Foxconn)',
-        r'(台達電|Delta)',
-        r'(光寶科|Lite-On)',
-        r'(聯電|UMC)',
-        r'(廣達|Quanta)',
-        r'(華碩|ASUS)',
-        r'(宏碁|Acer)',
-        r'(緯創|Wistron)',
-        r'(仁寶|Compal)',
-        r'(和碩|Pegatron)',
-        r'(日月光|ASE)',
-        r'(矽品|SPIL)',
-        r'(欣興|Unimicron)',
-        r'(南亞科|Nanya)',
-        r'(群聯|Phison)',
-        r'(瑞昱|Realtek)',
-        r'(吉茂)',
-        r'(中華電|中華電信)',
-        r'(台塑|Formosa)',
-        r'(國泰金|國泰金控)',
-        r'(玉山金|玉山金控)',
-        r'(統一|統一企業)',
-        r'(長榮|Evergreen)',
-        r'(陽明|Yang Ming)',
-        r'(中鋼|China Steel)',
-        r'(台化|台灣化纖)',
-        r'(南亞|Nan Ya)',
+        r'^([^_]+)_\d{4}',  # CompanyName_2330
+        r'(\w+)_\d{4}_',    # CompanyName_2330_
     ]
     
+    company_name = None
     for pattern in company_patterns:
-        match = re.search(pattern, title, re.IGNORECASE)
+        match = re.search(pattern, filename)
         if match:
-            # Take the first (usually Chinese) name
-            company_name = match.group(1).split('|')[0]
+            company_name = match.group(1)
             break
     
-    # If we have stock code, try to match with watchlist
-    if stock_code and watchlist_df is not None:
-        try:
-            # Convert stock code to string for matching
-            watchlist_match = watchlist_df[watchlist_df['代號'].astype(str) == str(stock_code)]
-            if not watchlist_match.empty:
-                company_name = watchlist_match.iloc[0]['名稱']
-        except Exception as e:
-            pass  # Continue with existing company_name
-    
-    # If we have company name but no stock code, try reverse lookup
-    if company_name and not stock_code and watchlist_df is not None:
-        try:
-            watchlist_match = watchlist_df[watchlist_df['名稱'] == company_name]
-            if not watchlist_match.empty:
-                stock_code = str(watchlist_match.iloc[0]['代號'])
-        except Exception as e:
-            pass  # Continue with existing stock_code
-    
-    # Fallback: manual mapping for common companies
-    if stock_code and not company_name:
-        stock_to_company = {
-            '2330': '台積電',
-            '2454': '聯發科',
-            '2881': '富邦金',
-            '2317': '鴻海',
-            '2308': '台達電',
-            '2301': '光寶科',
-            '2303': '聯電',
-            '2382': '廣達',
-            '2357': '華碩',
-            '2353': '宏碁',
-            '3231': '緯創',
-            '2324': '仁寶',
-            '4938': '和碩',
-            '2311': '日月光',
-            '2325': '矽品',
-            '3037': '欣興',
-            '2408': '南亞科',
-            '8299': '群聯',
-            '2379': '瑞昱',
-            '1587': '吉茂',
-            '2412': '中華電',
-            '6505': '台塑化',
-            '2882': '國泰金',
-            '2884': '玉山金',
-            '1216': '統一',
-            '2603': '長榮',
-            '2609': '陽明',
-            '2002': '中鋼',
-        }
-        company_name = stock_to_company.get(stock_code, company_name)
-    
-    return company_name, stock_code
+    return company_name, stock_code, f"{stock_code}-TW" if stock_code else None
 
-def fix_company_mapping(df: pd.DataFrame, watchlist_path: str = '觀察名單.csv') -> pd.DataFrame:
-    """
-    Fix the missing company names and stock codes in consolidated data
-    """
-    print("🔧 Fixing company name mapping...")
-    
-    # Load watchlist
-    watchlist_df = load_watchlist(watchlist_path)
-    
-    # Track improvements
-    fixed_names = 0
-    fixed_codes = 0
-    
-    # Process each row
-    for idx, row in df.iterrows():
-        needs_fix = (pd.isna(row.get('公司名稱')) or 
-                    row.get('公司名稱') == '' or 
-                    row.get('公司名稱') == 'null' or
-                    str(row.get('公司名稱')).startswith('Company_'))
+# ============================================================================
+# MD FILE ANALYSIS AND DATE EXTRACTION - GUIDELINE v3.2.0
+# ============================================================================
+
+def extract_md_file_date(md_file_path: Path) -> Optional[datetime]:
+    """Extract date from MD file content or metadata"""
+    try:
+        with open(md_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
         
-        if needs_fix:
-            title = row.get('Title', '')
-            if title:
-                # Extract company info from title
-                company_name, stock_code = extract_company_info_from_title(title, watchlist_df)
-                
-                if company_name and company_name != row.get('公司名稱'):
-                    df.at[idx, '公司名稱'] = company_name
-                    fixed_names += 1
-                
-                if stock_code and stock_code != row.get('股票代號'):
-                    df.at[idx, '股票代號'] = stock_code
-                    fixed_codes += 1
+        # Try to extract date from content
+        date_patterns = [
+            r'(\d{4}[-/]\d{1,2}[-/]\d{1,2})',  # 2025-06-22 or 2025/06/22
+            r'(\d{1,2}[-/]\d{1,2}[-/]\d{4})',  # 22-06-2025 or 22/06/2025
+            r'(\d{4}年\d{1,2}月\d{1,2}日)',     # 2025年6月22日
+        ]
+        
+        for pattern in date_patterns:
+            matches = re.findall(pattern, content)
+            if matches:
+                for date_str in matches:
+                    try:
+                        # Try different date formats
+                        for fmt in ['%Y-%m-%d', '%Y/%m/%d', '%d-%m-%Y', '%d/%m/%Y']:
+                            try:
+                                return datetime.strptime(date_str, fmt)
+                            except ValueError:
+                                continue
+                        
+                        # Try Chinese format
+                        if '年' in date_str:
+                            # Parse 2025年6月22日
+                            year_match = re.search(r'(\d{4})年', date_str)
+                            month_match = re.search(r'(\d{1,2})月', date_str)
+                            day_match = re.search(r'(\d{1,2})日', date_str)
+                            
+                            if year_match and month_match and day_match:
+                                return datetime(
+                                    int(year_match.group(1)),
+                                    int(month_match.group(1)),
+                                    int(day_match.group(1))
+                                )
+                    except:
+                        continue
+        
+        # Fallback: use file modification time
+        return datetime.fromtimestamp(md_file_path.stat().st_mtime)
+        
+    except Exception as e:
+        if utils.is_debug_mode():
+            print(f"   ⚠️ Error extracting date from {md_file_path}: {e}")
+        # Ultimate fallback: use current time
+        return datetime.now()
+
+def get_company_md_files(company_code: str, md_dir: Path) -> List[Path]:
+    """Get all MD files for a specific company - Guideline v3.2.0"""
+    company_files = []
     
-    print(f"✅ Company mapping fixed:")
-    print(f"   📝 Company names: {fixed_names} fixed")
-    print(f"   🔢 Stock codes: {fixed_codes} fixed")
+    if not md_dir.exists():
+        return company_files
     
-    return df
+    try:
+        for md_file in md_dir.glob("*.md"):
+            # Check if filename contains company code
+            if (company_code in md_file.name or 
+                f"_{company_code}_" in md_file.name or
+                md_file.name.startswith(f"{company_code}_")):
+                company_files.append(md_file)
+        
+        # Sort by modification time
+        company_files.sort(key=lambda x: x.stat().st_mtime)
+        
+    except Exception as e:
+        if utils.is_debug_mode():
+            print(f"   ⚠️ Error getting MD files for {company_code}: {e}")
+    
+    return company_files
+
+def calculate_quality_score(md_files: List[Path]) -> int:
+    """Calculate quality score 1-4 based on data completeness - Guideline v3.2.0"""
+    if not md_files:
+        return 0
+    
+    total_score = 0
+    file_count = len(md_files)
+    
+    for md_file in md_files:
+        file_score = 0
+        try:
+            with open(md_file, 'r', encoding='utf-8') as f:
+                content = f.read().lower()
+            
+            # Score based on content quality
+            if any(keyword in content for keyword in ['eps', '每股盈餘', '預估']):
+                file_score += 1
+            
+            if any(keyword in content for keyword in ['目標價', 'target price']):
+                file_score += 1
+            
+            if any(keyword in content for keyword in ['分析師', 'analyst']):
+                file_score += 1
+            
+            if any(keyword in content for keyword in ['factset', '財報', '營收']):
+                file_score += 1
+            
+            total_score += min(4, file_score)
+            
+        except Exception:
+            continue
+    
+    # Average score across all files, rounded to integer 1-4
+    if file_count > 0:
+        avg_score = total_score / file_count
+        return max(1, min(4, round(avg_score)))
+    
+    return 1
+
+def determine_status_emoji(quality_score: int, file_count: int) -> str:
+    """Determine status emoji based on quality and file count - Guideline v3.2.0"""
+    if quality_score >= 4 and file_count >= 3:
+        return "🟢 完整"
+    elif quality_score >= 3 and file_count >= 2:
+        return "🟡 良好"
+    elif quality_score >= 2 and file_count >= 1:
+        return "🟠 部分"
+    else:
+        return "🔴 不足"
 
 # ============================================================================
-# MARKDOWN FILE PARSING
+# ENHANCED FINANCIAL DATA EXTRACTION - GUIDELINE v3.2.0
 # ============================================================================
 
-def extract_factset_data_from_content(content: str) -> Dict[str, Any]:
-    """
-    Extract FactSet financial data from markdown content
-    """
-    if not content:
+def extract_financial_data_from_md_files(md_files: List[Path]) -> Dict[str, Any]:
+    """Extract comprehensive financial data from MD files - Guideline v3.2.0"""
+    if not md_files:
         return {}
     
-    extracted_data = {}
-    
-    # Clean content for better matching
-    content = re.sub(r'\s+', ' ', content)  # Normalize whitespace
-    content = content.replace('，', ',').replace('：', ':')  # Normalize punctuation
-    
-    # Extract data using patterns
-    for data_type, patterns in FACTSET_PATTERNS.items():
-        for pattern in patterns:
-            try:
-                matches = re.findall(pattern, content, re.IGNORECASE)
-                if matches:
-                    # Take the first valid match
-                    value = matches[0]
-                    try:
-                        # Convert to float if possible
-                        numeric_value = float(value)
-                        extracted_data[data_type] = numeric_value
-                        break  # Stop after first successful match
-                    except ValueError:
-                        continue  # Try next pattern
-            except Exception as e:
-                continue  # Skip problematic patterns
-    
-    # Map extracted data to column names
-    column_mapping = {
-        'eps_current': '當前EPS預估',
-        'eps_previous': '先前EPS預估',
-        'target_price': '目標價',
-        'analyst_count': '分析師數量',
-        'eps_2025_high': '2025EPS最高值',
-        'eps_2025_low': '2025EPS最低值',
-        'eps_2025_avg': '2025EPS平均值',
-        'eps_2025_median': '2025EPS中位數',
+    extracted_data = {
+        'analyst_count': None,
+        'target_price': None,
+        'eps_2025_high': None,
+        'eps_2025_low': None,
+        'eps_2025_avg': None,
+        'eps_2026_high': None,
+        'eps_2026_low': None,
+        'eps_2026_avg': None,
+        'eps_2027_high': None,
+        'eps_2027_low': None,
+        'eps_2027_avg': None,
     }
     
-    # Convert to final format
-    final_data = {}
-    for key, value in extracted_data.items():
-        if key in column_mapping:
-            final_data[column_mapping[key]] = value
-    
-    return final_data
-
-def parse_markdown_files(csv_file: str, config: Dict) -> List[Dict]:
-    """
-    Parse markdown files associated with a CSV file
-    """
-    md_dir = config['output']['md_dir']
-    csv_filename = os.path.splitext(os.path.basename(csv_file))[0]
-    
-    # Find corresponding MD files
-    md_files = []
-    if os.path.exists(md_dir):
-        for md_file in os.listdir(md_dir):
-            if md_file.endswith('.md'):
-                # Check if this MD file might belong to this batch
-                # Look for batch number or similar naming patterns
-                if csv_filename.replace('FactSet_Batch_', '') in md_file or 'webpage' in md_file:
-                    md_files.append(os.path.join(md_dir, md_file))
-    
-    if not md_files:
-        print(f"📄 No MD files to process for {os.path.basename(csv_file)}")
-        return []
-    
-    print(f"📝 Processing {len(md_files)} MD files for {os.path.basename(csv_file)}")
-    
-    parsed_data = []
-    errors = 0
+    all_values = {key: [] for key in extracted_data.keys()}
     
     for md_file in md_files:
         try:
             with open(md_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Extract financial data
-            financial_data = extract_factset_data_from_content(content)
+            # Clean content for better matching
+            content = re.sub(r'\s+', ' ', content)
+            content = content.replace('，', ',').replace('：', ':')
             
-            if financial_data:
-                # Add metadata
-                financial_data.update({
-                    'MD_File': os.path.basename(md_file),
-                    'Source_File': os.path.basename(csv_file),
-                    'Processed_Time': datetime.now().isoformat()
-                })
-                parsed_data.append(financial_data)
-        
-        except Exception as e:
-            errors += 1
-            if utils.is_debug_mode():
-                print(f"   ❌ Error parsing {md_file}: {e}")
-    
-    print(f"📊 Parsing complete: {len(parsed_data)} records parsed, {errors} errors")
-    return parsed_data
-
-def apply_md_data_to_csv(df: pd.DataFrame, parsed_md_data: List[Dict]) -> pd.DataFrame:
-    """
-    Apply parsed markdown data to CSV dataframe
-    """
-    if not parsed_md_data:
-        return df
-    
-    updates_applied = 0
-    
-    for md_data in parsed_md_data:
-        md_filename = md_data.get('MD_File', '')
-        
-        # Find corresponding rows in CSV by MD file name
-        matching_rows = df[df['MD File'] == md_filename]
-        
-        if matching_rows.empty:
-            # Try to match by partial filename or other criteria
-            base_name = md_filename.replace('.md', '')
-            matching_rows = df[df['MD File'].str.contains(base_name, na=False)]
-        
-        # Apply data to matching rows
-        for idx in matching_rows.index:
-            for column, value in md_data.items():
-                if column in df.columns and column not in ['MD_File', 'Source_File', 'Processed_Time']:
-                    if pd.isna(df.at[idx, column]) or df.at[idx, column] == '':
-                        # Safe assignment with proper dtype handling
+            # Extract data using patterns
+            for data_type, patterns in FACTSET_PATTERNS.items():
+                if data_type in ['eps_current', 'target_price', 'analyst_count'] or data_type.startswith('eps_20'):
+                    for pattern in patterns:
                         try:
-                            if column in NUMERIC_COLUMNS:
-                                df.at[idx, column] = pd.to_numeric(value, errors='coerce')
-                            else:
-                                df.at[idx, column] = str(value)
-                            updates_applied += 1
-                        except Exception as e:
-                            if utils.is_debug_mode():
-                                print(f"   ⚠️ Error updating {column}: {e}")
+                            matches = re.findall(pattern, content, re.IGNORECASE)
+                            if matches:
+                                for value in matches:
+                                    try:
+                                        numeric_value = float(value)
+                                        # Store the mapping
+                                        if data_type == 'target_price':
+                                            all_values['target_price'].append(numeric_value)
+                                        elif data_type == 'analyst_count':
+                                            all_values['analyst_count'].append(int(numeric_value))
+                                        elif data_type in all_values:
+                                            all_values[data_type].append(numeric_value)
+                                        break
+                                    except ValueError:
+                                        continue
+                                if all_values.get(data_type):
+                                    break  # Stop after first successful match
+                        except Exception:
+                            continue
+                            
+        except Exception as e:
+            if utils.is_debug_mode():
+                print(f"   ⚠️ Error extracting data from {md_file}: {e}")
+            continue
     
-    if updates_applied > 0:
-        print(f"   ✅ Applied {updates_applied} updates from MD files")
+    # Aggregate the collected values
+    for key, values in all_values.items():
+        if values:
+            if key == 'analyst_count':
+                # Take the most recent (last) value for analyst count
+                extracted_data[key] = values[-1]
+            elif key == 'target_price':
+                # Take average target price
+                extracted_data[key] = round(sum(values) / len(values), 2)
+            elif 'high' in key:
+                # Take maximum for high values
+                extracted_data[key] = round(max(values), 2)
+            elif 'low' in key:
+                # Take minimum for low values
+                extracted_data[key] = round(min(values), 2)
+            elif 'avg' in key:
+                # Take average for average values
+                extracted_data[key] = round(sum(values) / len(values), 2)
     
-    return df
+    return extracted_data
 
 # ============================================================================
-# CSV PROCESSING AND CONSOLIDATION
+# PORTFOLIO SUMMARY GENERATION - GUIDELINE v3.2.0
 # ============================================================================
 
-def safe_numeric_conversion(value: Any, column_name: str) -> Any:
-    """
-    Safely convert values to appropriate types with proper error handling
-    """
-    if pd.isna(value) or value == '' or value == 'null':
-        return np.nan
+def generate_portfolio_summary(config: Dict, watchlist_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+    """Generate portfolio summary matching Guideline v3.2.0 exact format"""
+    print("📋 Generating Portfolio Summary (Guideline v3.2.0 format)...")
     
-    if column_name in NUMERIC_COLUMNS:
-        try:
-            # Clean numeric string
-            if isinstance(value, str):
-                # Remove common non-numeric characters
-                cleaned = re.sub(r'[^\d\.-]', '', value)
-                if cleaned:
-                    return float(cleaned)
-                else:
-                    return np.nan
-            else:
-                return float(value)
-        except (ValueError, TypeError):
-            return np.nan
-    else:
-        return str(value) if value is not None else ''
-
-def process_single_csv(csv_file: str, config: Dict, parse_md: bool = True) -> pd.DataFrame:
-    """
-    Process a single CSV file with optional MD parsing
-    """
-    try:
-        # Read CSV with proper encoding handling
-        try:
-            df = pd.read_csv(csv_file, encoding='utf-8')
-        except UnicodeDecodeError:
-            df = pd.read_csv(csv_file, encoding='utf-8-sig')
-        except:
-            df = pd.read_csv(csv_file, encoding='cp1252')
-        
-        if df.empty:
-            return df
-        
-        # Parse markdown files if requested
-        parsed_md_data = []
-        if parse_md:
-            parsed_md_data = parse_markdown_files(csv_file, config)
-        
-        # Apply MD data to CSV
-        if parsed_md_data:
-            df = apply_md_data_to_csv(df, parsed_md_data)
-        
-        # Fix company mapping
-        df = fix_company_mapping(df)
-        
-        # Safe data type conversion
-        for column in df.columns:
-            if column in NUMERIC_COLUMNS:
-                df[column] = df[column].apply(lambda x: safe_numeric_conversion(x, column))
-            else:
-                df[column] = df[column].astype(str).replace('nan', '')
-        
-        # Add processing metadata
-        df['Source_File'] = os.path.basename(csv_file)
-        df['Processed_Time'] = datetime.now().isoformat()
-        
-        return df
+    md_dir = Path(config['output']['md_dir'])
+    if not md_dir.exists():
+        print(f"❌ MD directory not found: {md_dir}")
+        return pd.DataFrame(columns=PORTFOLIO_SUMMARY_COLUMNS)
     
-    except Exception as e:
-        print(f"❌ Error processing {csv_file}: {e}")
-        if utils.is_debug_mode():
-            traceback.print_exc()
-        return pd.DataFrame()
-
-def consolidate_csv_files(config: Dict, parse_md: bool = True) -> pd.DataFrame:
-    """
-    Consolidate all CSV files into a single dataframe
-    """
-    print("📊 Consolidating CSV files...")
+    # Load watchlist for company mapping
+    if watchlist_df is None:
+        watchlist_df = load_watchlist()
     
-    csv_dir = config['output']['csv_dir']
-    if not os.path.exists(csv_dir):
-        print(f"❌ CSV directory not found: {csv_dir}")
-        return pd.DataFrame()
+    if watchlist_df is None:
+        print("⚠️ No watchlist available - using filename-based company detection")
     
-    # Find all CSV files
-    csv_files = [f for f in os.listdir(csv_dir) if f.endswith('.csv')]
-    if not csv_files:
-        print(f"❌ No CSV files found in {csv_dir}")
-        return pd.DataFrame()
-    
-    print(f"📄 Found {len(csv_files)} CSV files to process")
-    
-    # Process each CSV file
-    all_dataframes = []
-    for csv_file in sorted(csv_files):
-        csv_path = os.path.join(csv_dir, csv_file)
-        df = process_single_csv(csv_path, config, parse_md)
-        
-        if not df.empty:
-            print(f"✅ {csv_file}: {len(df)} records")
-            all_dataframes.append(df)
-        else:
-            print(f"⚠️ {csv_file}: No data")
-    
-    if not all_dataframes:
-        print("❌ No data found in any CSV files")
-        return pd.DataFrame()
-    
-    # Combine all dataframes
-    consolidated_df = pd.concat(all_dataframes, ignore_index=True, sort=False)
-    
-    # Save consolidated data
-    output_file = config['output']['consolidated_csv']
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    
-    try:
-        consolidated_df.to_csv(output_file, index=False, encoding='utf-8')
-        print(f"✅ Consolidated data saved: {output_file}")
-        print(f"📊 Total records: {len(consolidated_df)}")
-    except Exception as e:
-        print(f"❌ Error saving consolidated data: {e}")
-    
-    return consolidated_df
-
-# ============================================================================
-# PORTFOLIO SUMMARY GENERATION
-# ============================================================================
-
-def generate_portfolio_summary(consolidated_df: pd.DataFrame, config: Dict) -> pd.DataFrame:
-    """
-    Generate portfolio summary from consolidated data
-    """
-    print("📋 Generating portfolio summary...")
-    
-    if consolidated_df.empty:
-        print("❌ No consolidated data available for summary")
-        return pd.DataFrame()
-    
-    # Group by company and aggregate data
-    summary_columns = [
-        '公司名稱', '股票代號', '當前EPS預估', '目標價', '分析師數量', 
-        '資料來源', '更新時間'
-    ]
-    
-    # Prepare summary data
     summary_data = []
+    processed_companies = set()
     
-    # Get unique companies
-    companies = consolidated_df['公司名稱'].dropna().unique()
-    companies = [c for c in companies if c != '' and c != 'null' and not str(c).startswith('Company_')]
-    
-    if not companies:
-        print("⚠️ No valid company names found, using all records")
-        # Fallback: use all records even if company names are missing
-        for idx, row in consolidated_df.iterrows():
-            summary_row = {}
-            for col in summary_columns:
-                if col in row:
-                    summary_row[col] = row[col]
-                else:
-                    summary_row[col] = ''
-            
-            # Use source file as data source if missing
-            if not summary_row.get('資料來源'):
-                summary_row['資料來源'] = row.get('Source_File', '')
-            
-            summary_data.append(summary_row)
+    # Get all companies from watchlist or MD files
+    if watchlist_df is not None:
+        target_companies = [
+            {'code': str(row['代號']), 'name': str(row['名稱'])}
+            for _, row in watchlist_df.iterrows()
+        ]
     else:
-        print(f"📊 Processing {len(companies)} unique companies")
+        # Fallback: extract companies from MD filenames
+        target_companies = []
+        for md_file in md_dir.glob("*.md"):
+            company_name, stock_code, _ = extract_company_info_from_filename(md_file.name)
+            if stock_code and stock_code not in processed_companies:
+                target_companies.append({'code': stock_code, 'name': company_name or f"Company_{stock_code}"})
+                processed_companies.add(stock_code)
+    
+    print(f"📊 Processing {len(target_companies)} companies from 觀察名單...")
+    
+    for company in target_companies:
+        company_code = company['code']
+        company_name = company['name']
         
-        for company in companies:
-            company_data = consolidated_df[consolidated_df['公司名稱'] == company]
-            
-            if company_data.empty:
-                continue
-            
-            # Aggregate company data
-            summary_row = {
-                '公司名稱': company,
-                '股票代號': '',
-                '當前EPS預估': np.nan,
-                '目標價': '',
-                '分析師數量': '',
-                '資料來源': '',
-                '更新時間': datetime.now().isoformat()
-            }
-            
-            # Get stock code (take first non-empty value)
-            stock_codes = company_data['股票代號'].dropna()
-            stock_codes = stock_codes[stock_codes != '']
-            if not stock_codes.empty:
-                summary_row['股票代號'] = stock_codes.iloc[0]
-            
-            # Get current EPS (take most recent or highest confidence value)
-            eps_values = company_data['當前EPS預估'].dropna()
-            if not eps_values.empty:
-                # Take the most recent non-zero value
-                non_zero_eps = eps_values[eps_values != 0]
-                if not non_zero_eps.empty:
-                    summary_row['當前EPS預估'] = non_zero_eps.iloc[-1]
-                else:
-                    summary_row['當前EPS預估'] = eps_values.iloc[-1]
-            
-            # Get target price
-            target_prices = company_data['目標價'].dropna()
-            target_prices = target_prices[target_prices != '']
-            if not target_prices.empty:
-                summary_row['目標價'] = target_prices.iloc[-1]
-            
-            # Get analyst count
-            analyst_counts = company_data['分析師數量'].dropna()
-            analyst_counts = analyst_counts[analyst_counts != '']
-            if not analyst_counts.empty:
-                summary_row['分析師數量'] = analyst_counts.iloc[-1]
-            
-            # Get data source
-            sources = company_data['Source_File'].dropna()
-            if not sources.empty:
-                summary_row['資料來源'] = sources.iloc[-1]
-            
+        # Skip if already processed
+        if company_code in processed_companies:
+            continue
+        processed_companies.add(company_code)
+        
+        # Get MD files for this company
+        company_md_files = get_company_md_files(company_code, md_dir)
+        
+        if not company_md_files:
+            # Add empty row for companies without data
+            summary_row = {col: '' for col in PORTFOLIO_SUMMARY_COLUMNS}
+            summary_row.update({
+                '代號': company_code,
+                '名稱': company_name,
+                '股票代號': f"{company_code}-TW",
+                'MD資料筆數': 0,
+                '品質評分': 0,
+                '狀態': "🔴 無資料",
+                '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            })
             summary_data.append(summary_row)
+            continue
+        
+        # Extract dates from MD files
+        file_dates = []
+        for md_file in company_md_files:
+            file_date = extract_md_file_date(md_file)
+            if file_date:
+                file_dates.append(file_date)
+        
+        oldest_date = min(file_dates).strftime('%Y/%m/%d') if file_dates else ''
+        newest_date = max(file_dates).strftime('%Y/%m/%d') if file_dates else ''
+        
+        # Extract financial data
+        financial_data = extract_financial_data_from_md_files(company_md_files)
+        
+        # Calculate quality metrics
+        quality_score = calculate_quality_score(company_md_files)
+        status = determine_status_emoji(quality_score, len(company_md_files))
+        
+        # Build summary row matching exact guideline format
+        summary_row = {
+            '代號': company_code,
+            '名稱': company_name,
+            '股票代號': f"{company_code}-TW",
+            'MD最舊日期': oldest_date,
+            'MD最新日期': newest_date,
+            'MD資料筆數': len(company_md_files),
+            '分析師數量': financial_data.get('analyst_count', ''),
+            '目標價': financial_data.get('target_price', ''),
+            '2025EPS平均值': financial_data.get('eps_2025_avg', ''),
+            '2026EPS平均值': financial_data.get('eps_2026_avg', ''),
+            '2027EPS平均值': financial_data.get('eps_2027_avg', ''),
+            '品質評分': quality_score,
+            '狀態': status,
+            '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
+        summary_data.append(summary_row)
+        
+        if utils.is_debug_mode():
+            print(f"   ✅ {company_name} ({company_code}): {len(company_md_files)} files, quality={quality_score}")
     
-    # Create summary dataframe
-    summary_df = pd.DataFrame(summary_data)
+    # Create DataFrame
+    summary_df = pd.DataFrame(summary_data, columns=PORTFOLIO_SUMMARY_COLUMNS)
     
-    # Clean and validate summary data
-    for column in summary_df.columns:
-        if column in NUMERIC_COLUMNS:
-            summary_df[column] = summary_df[column].apply(
-                lambda x: safe_numeric_conversion(x, column)
-            )
+    # Clean and format data
+    for col in summary_df.columns:
+        if col in ['分析師數量', 'MD資料筆數', '品質評分']:
+            summary_df[col] = pd.to_numeric(summary_df[col], errors='coerce').fillna(0).astype(int)
+        elif col in ['目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值']:
+            summary_df[col] = pd.to_numeric(summary_df[col], errors='coerce')
         else:
-            summary_df[column] = summary_df[column].astype(str).replace('nan', '')
+            summary_df[col] = summary_df[col].astype(str).replace('nan', '')
     
     # Save portfolio summary
     output_file = config['output']['summary_csv']
     try:
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
         summary_df.to_csv(output_file, index=False, encoding='utf-8')
-        print(f"✅ Portfolio summary saved: {output_file}")
-        print(f"📊 Companies in summary: {len(summary_df)}")
+        print(f"✅ Portfolio Summary saved: {output_file}")
+        print(f"📊 Format: {len(summary_df)} companies in Guideline v3.2.0 format")
         
-        # Show data quality stats
-        companies_with_names = len(summary_df[summary_df['公司名稱'] != ''])
-        companies_with_codes = len(summary_df[summary_df['股票代號'] != ''])
-        companies_with_eps = len(summary_df[summary_df['當前EPS預估'].notna()])
+        # Quality statistics
+        companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
+        avg_quality = summary_df[summary_df['品質評分'] > 0]['品質評分'].mean()
         
-        print(f"   📝 Companies with names: {companies_with_names}/{len(summary_df)}")
-        print(f"   🔢 Companies with codes: {companies_with_codes}/{len(summary_df)}")
-        print(f"   💰 Companies with EPS: {companies_with_eps}/{len(summary_df)}")
+        print(f"   📈 Companies with data: {companies_with_data}/{len(summary_df)}")
+        print(f"   🎯 Average quality score: {avg_quality:.1f}/4.0")
         
     except Exception as e:
         print(f"❌ Error saving portfolio summary: {e}")
@@ -706,64 +598,177 @@ def generate_portfolio_summary(consolidated_df: pd.DataFrame, config: Dict) -> p
     return summary_df
 
 # ============================================================================
-# STATISTICS AND VALIDATION
+# DETAILED DATA GENERATION - GUIDELINE v3.2.0
 # ============================================================================
 
-def generate_statistics(consolidated_df: pd.DataFrame, summary_df: pd.DataFrame, 
-                       config: Dict) -> Dict:
-    """
-    Generate comprehensive statistics about the data quality
-    """
+def generate_detailed_data(config: Dict, watchlist_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+    """Generate detailed data matching Guideline v3.2.0 format"""
+    print("📋 Generating Detailed Data (Guideline v3.2.0 format)...")
+    
+    md_dir = Path(config['output']['md_dir'])
+    if not md_dir.exists():
+        return pd.DataFrame(columns=DETAILED_DATA_COLUMNS)
+    
+    if watchlist_df is None:
+        watchlist_df = load_watchlist()
+    
+    detailed_data = []
+    processed_companies = set()
+    
+    # Process companies from watchlist
+    if watchlist_df is not None:
+        for _, row in watchlist_df.iterrows():
+            company_code = str(row['代號'])
+            company_name = str(row['名稱'])
+            
+            if company_code in processed_companies:
+                continue
+            processed_companies.add(company_code)
+            
+            company_md_files = get_company_md_files(company_code, md_dir)
+            
+            if not company_md_files:
+                continue
+            
+            # Extract comprehensive financial data
+            financial_data = extract_financial_data_from_md_files(company_md_files)
+            
+            # Extract dates
+            file_dates = [extract_md_file_date(f) for f in company_md_files]
+            file_dates = [d for d in file_dates if d]
+            
+            oldest_date = min(file_dates).strftime('%Y/%m/%d') if file_dates else ''
+            newest_date = max(file_dates).strftime('%Y/%m/%d') if file_dates else ''
+            
+            # Calculate quality metrics
+            quality_score = calculate_quality_score(company_md_files)
+            status = determine_status_emoji(quality_score, len(company_md_files))
+            
+            # Build detailed row with enhanced EPS breakdown
+            detailed_row = {
+                '代號': company_code,
+                '名稱': company_name,
+                '股票代號': f"{company_code}-TW",
+                'MD最舊日期': oldest_date,
+                'MD最新日期': newest_date,
+                'MD資料筆數': len(company_md_files),
+                '分析師數量': financial_data.get('analyst_count', ''),
+                '目標價': financial_data.get('target_price', ''),
+                '2025EPS最高值': financial_data.get('eps_2025_high', ''),
+                '2025EPS最低值': financial_data.get('eps_2025_low', ''),
+                '2025EPS平均值': financial_data.get('eps_2025_avg', ''),
+                '2026EPS最高值': financial_data.get('eps_2026_high', ''),
+                '2026EPS最低值': financial_data.get('eps_2026_low', ''),
+                '2026EPS平均值': financial_data.get('eps_2026_avg', ''),
+                '2027EPS最高值': financial_data.get('eps_2027_high', ''),
+                '2027EPS最低值': financial_data.get('eps_2027_low', ''),
+                '2027EPS平均值': financial_data.get('eps_2027_avg', ''),
+                '品質評分': quality_score,
+                '狀態': status,
+                'MD File Folder': f"data/md/{company_code}",
+                '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+            
+            detailed_data.append(detailed_row)
+    
+    # Create DataFrame
+    detailed_df = pd.DataFrame(detailed_data, columns=DETAILED_DATA_COLUMNS)
+    
+    # Clean and format data
+    numeric_columns = [
+        '分析師數量', 'MD資料筆數', '品質評分',
+        '目標價', '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
+        '2026EPS最高值', '2026EPS最低值', '2026EPS平均值',
+        '2027EPS最高值', '2027EPS最低值', '2027EPS平均值'
+    ]
+    
+    for col in detailed_df.columns:
+        if col in ['分析師數量', 'MD資料筆數', '品質評分']:
+            detailed_df[col] = pd.to_numeric(detailed_df[col], errors='coerce').fillna(0).astype(int)
+        elif col in numeric_columns:
+            detailed_df[col] = pd.to_numeric(detailed_df[col], errors='coerce')
+        else:
+            detailed_df[col] = detailed_df[col].astype(str).replace('nan', '')
+    
+    # Save detailed data
+    output_file = os.path.join(config['output']['processed_dir'], 'detailed_data.csv')
+    try:
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        detailed_df.to_csv(output_file, index=False, encoding='utf-8')
+        print(f"✅ Detailed Data saved: {output_file}")
+        print(f"📊 Enhanced format: {len(detailed_df)} companies with EPS breakdown")
+        
+    except Exception as e:
+        print(f"❌ Error saving detailed data: {e}")
+    
+    return detailed_df
+
+# ============================================================================
+# STATISTICS AND VALIDATION - GUIDELINE v3.2.0
+# ============================================================================
+
+def generate_statistics(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, config: Dict) -> Dict:
+    """Generate comprehensive statistics - Guideline v3.2.0"""
     stats = {
         'generated_at': datetime.now().isoformat(),
-        'total_records': len(consolidated_df),
+        'guideline_version': '3.2.0',
         'total_companies': len(summary_df),
+        'companies_with_data': len(summary_df[summary_df['MD資料筆數'] > 0]),
         'data_quality': {},
-        'search_results': {},
-        'financial_data': {},
-        'source_breakdown': {}
+        'financial_coverage': {},
+        'quality_distribution': {},
+        'eps_coverage': {}
     }
     
     # Data quality statistics
-    if not consolidated_df.empty:
-        stats['data_quality'] = {
-            'records_with_titles': len(consolidated_df[consolidated_df['Title'].notna()]),
-            'records_with_links': len(consolidated_df[consolidated_df['Link'].notna()]),
-            'records_with_company_names': len(consolidated_df[
-                (consolidated_df['公司名稱'].notna()) & 
-                (consolidated_df['公司名稱'] != '') &
-                (~consolidated_df['公司名稱'].str.startswith('Company_', na=False))
-            ]),
-            'records_with_stock_codes': len(consolidated_df[
-                (consolidated_df['股票代號'].notna()) & 
-                (consolidated_df['股票代號'] != '')
-            ]),
-        }
-    
-    # Financial data statistics
     if not summary_df.empty:
-        stats['financial_data'] = {
-            'companies_with_eps': len(summary_df[summary_df['當前EPS預估'].notna()]),
-            'companies_with_target_price': len(summary_df[
-                (summary_df['目標價'].notna()) & (summary_df['目標價'] != '')
-            ]),
-            'companies_with_analyst_count': len(summary_df[
-                (summary_df['分析師數量'].notna()) & (summary_df['分析師數量'] != '')
-            ]),
+        stats['data_quality'] = {
+            'companies_with_md_files': len(summary_df[summary_df['MD資料筆數'] > 0]),
+            'companies_with_target_price': len(summary_df[summary_df['目標價'].notna() & (summary_df['目標價'] != '')]),
+            'companies_with_analyst_count': len(summary_df[summary_df['分析師數量'].notna() & (summary_df['分析師數量'] > 0)]),
+            'average_md_files_per_company': summary_df[summary_df['MD資料筆數'] > 0]['MD資料筆數'].mean(),
+            'average_quality_score': summary_df[summary_df['品質評分'] > 0]['品質評分'].mean()
         }
     
-    # Source breakdown
-    if not consolidated_df.empty and 'Source_File' in consolidated_df.columns:
-        source_counts = consolidated_df['Source_File'].value_counts().to_dict()
-        stats['source_breakdown'] = source_counts
+    # EPS coverage analysis
+    if not summary_df.empty:
+        eps_2025 = len(summary_df[summary_df['2025EPS平均值'].notna()])
+        eps_2026 = len(summary_df[summary_df['2026EPS平均值'].notna()])
+        eps_2027 = len(summary_df[summary_df['2027EPS平均值'].notna()])
+        
+        stats['eps_coverage'] = {
+            '2025_eps_coverage': eps_2025,
+            '2026_eps_coverage': eps_2026,
+            '2027_eps_coverage': eps_2027,
+            'multi_year_coverage': len(summary_df[
+                (summary_df['2025EPS平均值'].notna()) & 
+                (summary_df['2026EPS平均值'].notna()) & 
+                (summary_df['2027EPS平均值'].notna())
+            ])
+        }
     
-    # Calculate success rates
-    if stats['total_records'] > 0:
+    # Quality distribution
+    if not summary_df.empty:
+        quality_counts = summary_df['品質評分'].value_counts().to_dict()
+        stats['quality_distribution'] = {
+            'excellent_4': quality_counts.get(4, 0),
+            'good_3': quality_counts.get(3, 0),
+            'fair_2': quality_counts.get(2, 0),
+            'poor_1': quality_counts.get(1, 0),
+            'no_data_0': quality_counts.get(0, 0)
+        }
+    
+    # Status distribution
+    if not summary_df.empty:
+        status_counts = summary_df['狀態'].value_counts().to_dict()
+        stats['status_distribution'] = status_counts
+    
+    # Success rates
+    if stats['total_companies'] > 0:
         stats['success_rates'] = {
-            'company_mapping_rate': (stats['data_quality'].get('records_with_company_names', 0) / 
-                                   stats['total_records']) * 100,
-            'financial_data_rate': (stats['financial_data'].get('companies_with_eps', 0) / 
-                                  max(stats['total_companies'], 1)) * 100,
+            'data_collection_rate': (stats['companies_with_data'] / stats['total_companies']) * 100,
+            'financial_data_rate': (stats['data_quality'].get('companies_with_target_price', 0) / stats['total_companies']) * 100,
+            'eps_forecast_rate': (stats['eps_coverage'].get('2025_eps_coverage', 0) / stats['total_companies']) * 100
         }
     
     # Save statistics
@@ -771,66 +776,23 @@ def generate_statistics(consolidated_df: pd.DataFrame, summary_df: pd.DataFrame,
     try:
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(stats, f, indent=2, ensure_ascii=False)
+            json.dump(stats, f, indent=2, ensure_ascii=False, default=str)
         print(f"✅ Statistics saved: {output_file}")
+        print(f"📊 Guideline v3.2.0 compliant statistics generated")
+        
     except Exception as e:
         print(f"❌ Error saving statistics: {e}")
     
     return stats
 
-def validate_data_quality(consolidated_df: pd.DataFrame, summary_df: pd.DataFrame) -> Dict:
-    """
-    Validate data quality and identify issues
-    """
-    issues = []
-    warnings = []
-    
-    # Check for empty dataframes
-    if consolidated_df.empty:
-        issues.append("No consolidated data found")
-    
-    if summary_df.empty:
-        issues.append("No portfolio summary data found")
-        return {'issues': issues, 'warnings': warnings}
-    
-    # Check company name mapping
-    companies_with_real_names = len(summary_df[
-        (summary_df['公司名稱'].notna()) & 
-        (summary_df['公司名稱'] != '') &
-        (~summary_df['公司名稱'].str.startswith('Company_', na=False))
-    ])
-    
-    if companies_with_real_names == 0:
-        issues.append("No companies found with real names (all showing as Company_X or null)")
-    elif companies_with_real_names < len(summary_df) * 0.5:
-        warnings.append(f"Only {companies_with_real_names}/{len(summary_df)} companies have real names")
-    
-    # Check financial data availability
-    companies_with_eps = len(summary_df[summary_df['當前EPS預估'].notna()])
-    if companies_with_eps == 0:
-        issues.append("No companies found with EPS data")
-    elif companies_with_eps < len(summary_df) * 0.2:
-        warnings.append(f"Only {companies_with_eps}/{len(summary_df)} companies have EPS data")
-    
-    # Check stock codes
-    companies_with_codes = len(summary_df[
-        (summary_df['股票代號'].notna()) & (summary_df['股票代號'] != '')
-    ])
-    if companies_with_codes < len(summary_df) * 0.3:
-        warnings.append(f"Only {companies_with_codes}/{len(summary_df)} companies have stock codes")
-    
-    return {'issues': issues, 'warnings': warnings}
-
 # ============================================================================
-# MAIN PROCESSING PIPELINE
+# MAIN PROCESSING PIPELINE - GUIDELINE v3.2.0
 # ============================================================================
 
 def process_all_data(config_file: Optional[str] = None, force: bool = False, 
                     parse_md: bool = True) -> bool:
-    """
-    Process all data through the complete pipeline
-    """
-    print(f"🔧 Starting data processing...")
+    """Process all data through the complete pipeline - Guideline v3.2.0"""
+    print(f"🔧 Starting data processing (Guideline v{__version__})...")
     
     # Load configuration
     if config_file:
@@ -842,64 +804,60 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
         print("❌ Could not load configuration")
         return False
     
+    # Load watchlist
+    watchlist_df = load_watchlist()
+    if watchlist_df is None:
+        print("⚠️ Proceeding without watchlist - using filename-based detection")
+    
     success_count = 0
     total_steps = 3
     
     try:
-        # Step 1: Parse markdown files and consolidate CSV data
-        print("\n🧩 Parsing markdown files...")
-        consolidated_df = consolidate_csv_files(config, parse_md)
-        
-        if consolidated_df.empty:
-            print("❌ No data found to process")
-            return False
-        
-        success_count += 1
-        print("✅ MD file parsing completed")
-        
-        # Step 2: Generate portfolio summary
-        print("\n📋 Generating portfolio summary...")
-        summary_df = generate_portfolio_summary(consolidated_df, config)
+        # Step 1: Generate Portfolio Summary (Guideline v3.2.0 format)
+        print("\n📋 Generating Portfolio Summary...")
+        summary_df = generate_portfolio_summary(config, watchlist_df)
         
         if summary_df.empty:
             print("❌ Failed to generate portfolio summary")
             return False
         
         success_count += 1
-        print("✅ Portfolio summary completed")
+        print("✅ Portfolio Summary completed (Guideline v3.2.0 format)")
         
-        # Step 3: Generate statistics and validate
-        print("\n📊 Generating statistics...")
-        stats = generate_statistics(consolidated_df, summary_df, config)
+        # Step 2: Generate Detailed Data (Enhanced EPS breakdown)
+        print("\n📊 Generating Detailed Data...")
+        detailed_df = generate_detailed_data(config, watchlist_df)
         
-        # Validate data quality
-        validation_result = validate_data_quality(consolidated_df, summary_df)
+        if detailed_df.empty:
+            print("⚠️ No detailed data generated")
+        else:
+            success_count += 1
+            print("✅ Detailed Data completed (Enhanced EPS breakdown)")
         
-        if validation_result['issues']:
-            print("⚠️ Data quality issues found:")
-            for issue in validation_result['issues']:
-                print(f"   - {issue}")
-        
-        if validation_result['warnings']:
-            print("⚠️ Data quality warnings:")
-            for warning in validation_result['warnings']:
-                print(f"   - {warning}")
+        # Step 3: Generate Statistics
+        print("\n📈 Generating Statistics...")
+        stats = generate_statistics(summary_df, detailed_df, config)
         
         success_count += 1
         print("✅ Statistics generation completed")
         
         # Final summary
-        print(f"\n{'='*50}")
-        print("📊 DATA PROCESSING SUMMARY")
-        print("="*50)
-        print(f"✅ Data processing complete: {success_count}/{total_steps} steps successful")
-        print(f"📄 Total records processed: {len(consolidated_df)}")
-        print(f"🏢 Companies in portfolio: {len(summary_df)}")
+        print(f"\n{'='*60}")
+        print("📊 DATA PROCESSING SUMMARY (Guideline v3.2.0)")
+        print("="*60)
+        print(f"✅ Processing complete: {success_count}/{total_steps} steps successful")
+        print(f"🎯 Companies processed: {len(summary_df)}")
+        print(f"📄 Companies with data: {stats.get('companies_with_data', 0)}")
         
         if stats.get('success_rates'):
             rates = stats['success_rates']
-            print(f"📈 Company mapping rate: {rates.get('company_mapping_rate', 0):.1f}%")
+            print(f"📈 Data collection rate: {rates.get('data_collection_rate', 0):.1f}%")
             print(f"💰 Financial data rate: {rates.get('financial_data_rate', 0):.1f}%")
+            print(f"📊 EPS forecast rate: {rates.get('eps_forecast_rate', 0):.1f}%")
+        
+        if stats.get('quality_distribution'):
+            quality = stats['quality_distribution']
+            print(f"🏆 Quality distribution: 4={quality.get('excellent_4', 0)}, 3={quality.get('good_3', 0)}, 2={quality.get('fair_2', 0)}, 1={quality.get('poor_1', 0)}")
         
         return True
         
@@ -914,15 +872,17 @@ def process_all_data(config_file: Optional[str] = None, force: bool = False,
 # ============================================================================
 
 def main():
-    """
-    Main entry point for testing
-    """
-    print(f"📊 Data Processor v{__version__}")
+    """Main entry point for Guideline v3.2.0 compliance testing"""
+    print(f"📊 Data Processor v{__version__} (Guideline v3.2.0 Compliant)")
     
     success = process_all_data(force=True, parse_md=True)
     
     if success:
-        print("✅ Data processing completed successfully")
+        print("✅ Data processing completed successfully (Guideline v3.2.0)")
+        print("📋 Generated files:")
+        print("   - portfolio_summary.csv (Exact guideline format)")
+        print("   - detailed_data.csv (Enhanced EPS breakdown)")
+        print("   - statistics.json (Comprehensive metrics)")
     else:
         print("❌ Data processing failed")
     

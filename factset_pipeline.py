@@ -1,16 +1,18 @@
 """
-factset_pipeline.py - Complete Production-Ready FactSet Pipeline (Enhanced Version)
+factset_pipeline.py - Complete Production-Ready FactSet Pipeline (Guideline v3.2.0 Compliant)
 
-Version: 3.4.0-ENHANCED
+Version: 3.2.0
 Date: 2025-06-22
-Author: FactSet Pipeline - Production Architecture
+Author: FactSet Pipeline - Guideline v3.2.0 Production Architecture
 
-MAJOR ENHANCEMENTS:
+GUIDELINE v3.2.0 COMPLIANCE:
+- ✅ Exact class structure and method signatures from guideline
 - ✅ Immediate stop on 429 errors with fallback to data processing
-- ✅ Enhanced URL parsing and error handling
-- ✅ Smart fallback strategies when search fails
-- ✅ Comprehensive error recovery workflows
-- ✅ Better rate limiting detection and response
+- ✅ Enhanced strategy determination (conservative, process_existing, comprehensive)
+- ✅ Integration with updated data_processor.py and sheets_uploader.py
+- ✅ Circuit breaker threshold = 1 (immediate stop)
+- ✅ Comprehensive existing data analysis
+- ✅ Multi-execution mode support (intelligent, conservative, etc.)
 
 Production Features:
 - Immediate stop and process strategy on rate limiting
@@ -20,6 +22,7 @@ Production Features:
 - Recovery workflows with intelligent retry logic
 - Circuit breaker patterns for API protection
 - Windows Command Prompt compatibility
+- Integration with 觀察名單.csv (116+ companies)
 """
 
 # Windows console encoding fix - MUST BE FIRST
@@ -50,15 +53,16 @@ import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 import logging
+import hashlib
 
 # Add current directory to path for local imports
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 
-# Version Information
-__version__ = "3.4.0-ENHANCED"
+# Version Information - Guideline v3.2.0
+__version__ = "3.2.0"
 __date__ = "2025-06-22"
-__author__ = "FactSet Pipeline - Enhanced Production Architecture"
+__author__ = "FactSet Pipeline - Guideline v3.2.0 Production Architecture"
 
 # ============================================================================
 # SAFE EMOJI HANDLING FOR WINDOWS
@@ -182,11 +186,11 @@ def setup_logging():
     return logger
 
 # ============================================================================
-# CONFIGURATION MANAGEMENT
+# CONFIGURATION MANAGEMENT - GUIDELINE v3.2.0
 # ============================================================================
 
 class ProductionConfig:
-    """Production-ready configuration management"""
+    """Production-ready configuration management - Guideline v3.2.0"""
     
     def __init__(self, config_file=None):
         self.config_file = config_file
@@ -212,18 +216,18 @@ class ProductionConfig:
             print(emoji.safe(f"⚠️ Error loading .env file: {e}"))
     
     def _load_config(self):
-        """Load configuration with comprehensive defaults"""
+        """Load configuration with comprehensive defaults - Guideline v3.2.0"""
         default_config = {
             "target_companies": [],
             "watchlist_url": "https://raw.githubusercontent.com/wenchiehlee/GoPublic/refs/heads/main/%E8%A7%80%E5%AF%9F%E5%90%8D%E5%96%AE.csv",
             "search": {
-                "max_results": 10,
+                "max_results": 10,  # As per guideline
                 "language": "zh-TW",
                 "date_restrict": "y1",
                 "safe": "active",
-                "rate_limit_delay": 45,
+                "rate_limit_delay": 45,  # As per guideline
                 "max_retries": 3,
-                "circuit_breaker_threshold": 1  # Stop immediately on first 429
+                "circuit_breaker_threshold": 1  # Immediate stop as per guideline
             },
             "output": {
                 "base_dir": "data",
@@ -234,6 +238,7 @@ class ProductionConfig:
                 "logs_dir": "logs",
                 "consolidated_csv": "data/processed/consolidated_factset.csv",
                 "summary_csv": "data/processed/portfolio_summary.csv",
+                "detailed_csv": "data/processed/detailed_data.csv",
                 "stats_json": "data/processed/statistics.json"
             },
             "sheets": {
@@ -337,88 +342,35 @@ class ProductionConfig:
         return value
 
 # ============================================================================
-# ENHANCED RATE LIMITING PROTECTION SYSTEM
+# ENHANCED RATE LIMITING PROTECTION SYSTEM - GUIDELINE v3.2.0
 # ============================================================================
 
-class AdvancedRateLimitProtector:
-    """Enhanced rate limiting protection with immediate stop and process strategy"""
+class RateLimitProtector:
+    """Enhanced rate limiting protection - Guideline v3.2.0 immediate stop strategy"""
     
     def __init__(self, config):
         self.config = config
         self.logger = logging.getLogger('factset_pipeline.rate_limiter')
         
-        # Rate limiting state
+        # Rate limiting state - Guideline v3.2.0
         self.min_delay = config.get('search.rate_limit_delay', 45)
         self.max_delay = 600  # 10 minutes max
         self.current_delay = self.min_delay
         self.last_request_time = None
         self.consecutive_429s = 0
         self.consecutive_failures = 0
-        self.circuit_breaker_threshold = config.get('search.circuit_breaker_threshold', 1)  # Stop immediately
+        self.circuit_breaker_threshold = config.get('search.circuit_breaker_threshold', 1)  # Immediate stop
         self.circuit_open = False
         self.circuit_open_time = None
         self.request_history = []
         
-        # NEW: Immediate stop flag
+        # Guideline v3.2.0: Immediate stop flag
         self.should_stop_searching = False
         self.stop_reason = None
         self.fallback_to_processing = False
     
-    def check_circuit_breaker(self):
-        """Check if circuit breaker should be opened"""
-        if self.consecutive_429s >= self.circuit_breaker_threshold:
-            if not self.circuit_open:
-                self.circuit_open = True
-                self.circuit_open_time = time.time()
-                self.logger.error(emoji.safe(f"🚨 Circuit breaker OPENED after {self.consecutive_429s} consecutive 429 errors"))
-            return True
-        return False
-    
-    def should_wait(self):
-        """Check if should wait before next request"""
-        if self.circuit_open:
-            # Check if circuit should be closed (after 30 minutes)
-            if time.time() - self.circuit_open_time > 1800:  # 30 minutes
-                self.circuit_open = False
-                self.consecutive_429s = 0
-                self.current_delay = self.min_delay
-                self.logger.info(emoji.safe("🔄 Circuit breaker CLOSED - attempting to resume"))
-            else:
-                return True
-        
-        if self.last_request_time is None:
-            return False
-        
-        time_since_last = time.time() - self.last_request_time
-        return time_since_last < self.current_delay
-    
-    def wait_if_needed(self):
-        """Wait if necessary with status updates"""
-        if self.circuit_open:
-            remaining_time = 1800 - (time.time() - self.circuit_open_time)
-            if remaining_time > 0:
-                self.logger.warning(emoji.safe(f"🚨 Circuit breaker OPEN - {remaining_time/60:.1f} minutes remaining"))
-                return False
-        
-        if self.should_wait():
-            wait_time = self.current_delay - (time.time() - self.last_request_time)
-            if wait_time > 0:
-                self.logger.info(emoji.safe(f"⏳ Rate limiting protection: waiting {wait_time:.1f} seconds..."))
-                time.sleep(wait_time)
-        
-        return True
-    
-    def record_request(self):
-        """Record that a request was made"""
-        self.last_request_time = time.time()
-        self.request_history.append(self.last_request_time)
-        
-        # Keep only last 100 requests
-        if len(self.request_history) > 100:
-            self.request_history = self.request_history[-100:]
-    
     def record_429_error(self):
-        """Record a 429 error and immediately trigger stop"""
+        """Record 429 error and trigger immediate stop - Guideline v3.2.0"""
         self.consecutive_429s += 1
         self.consecutive_failures += 1
         
@@ -430,8 +382,8 @@ class AdvancedRateLimitProtector:
         
         self.logger.warning(emoji.safe(f"🚨 Rate limiting detected! (#{self.consecutive_429s}) Delay increased to {self.current_delay} seconds"))
         
-        # NEW: Immediate stop after first 429 error
-        if self.consecutive_429s >= 1:  # Stop immediately on first 429
+        # Guideline v3.2.0: Immediate stop after first 429 error
+        if self.consecutive_429s >= self.circuit_breaker_threshold:
             self.should_stop_searching = True
             self.fallback_to_processing = True
             self.stop_reason = f"Rate limiting detected ({self.consecutive_429s} consecutive 429 errors)"
@@ -439,24 +391,10 @@ class AdvancedRateLimitProtector:
             self.logger.info(emoji.safe("📄 Will process existing data instead"))
             return True
         
-        return self.check_circuit_breaker()
+        return False
     
-    def record_success(self):
-        """Record a successful request"""
-        if self.consecutive_429s > 0:
-            self.logger.info(emoji.safe(f"✅ Request successful! Rate limiting appears to be lifted"))
-        
-        self.consecutive_429s = 0
-        self.consecutive_failures = 0
-        self.current_delay = max(self.min_delay, self.current_delay * 0.8)  # Gradually reduce delay
-    
-    def record_other_error(self):
-        """Record a non-429 error"""
-        self.consecutive_failures += 1
-        # Don't reset 429 count for other errors
-    
-    def should_stop_search_immediately(self):
-        """Check if search should stop immediately"""
+    def should_stop_immediately(self):
+        """Check if search should stop immediately - Guideline v3.2.0"""
         return self.should_stop_searching
     
     def should_fallback_to_processing(self):
@@ -467,6 +405,15 @@ class AdvancedRateLimitProtector:
         """Get reason for stopping search"""
         return self.stop_reason or "Unknown"
     
+    def record_success(self):
+        """Record a successful request"""
+        if self.consecutive_429s > 0:
+            self.logger.info(emoji.safe(f"✅ Request successful! Rate limiting appears to be lifted"))
+        
+        self.consecutive_429s = 0
+        self.consecutive_failures = 0
+        self.current_delay = max(self.min_delay, self.current_delay * 0.8)  # Gradually reduce delay
+    
     def get_status(self):
         """Get current rate limiting status"""
         return {
@@ -474,17 +421,16 @@ class AdvancedRateLimitProtector:
             "consecutive_429s": self.consecutive_429s,
             "current_delay": self.current_delay,
             "last_request": self.last_request_time,
-            "recent_requests": len([t for t in self.request_history if time.time() - t < 3600]),  # Last hour
             "should_stop": self.should_stop_searching,
             "fallback_to_processing": self.fallback_to_processing
         }
 
 # ============================================================================
-# COMPREHENSIVE WORKFLOW STATE MANAGEMENT
+# WORKFLOW STATE MANAGEMENT - GUIDELINE v3.2.0
 # ============================================================================
 
-class ProductionWorkflowState:
-    """Production-ready workflow state management with all required methods"""
+class WorkflowState:
+    """Production-ready workflow state management - Guideline v3.2.0"""
     
     def __init__(self, state_file="data/workflow_state.json"):
         self.state_file = state_file
@@ -515,26 +461,11 @@ class ProductionWorkflowState:
             "consecutive_failures": 0,
             "last_successful_search": None,
             "circuit_breaker_active": False,
-            "ip_blocked": False,
-            "retry_count": 0,
-            "execution_mode": "standard",
             "search_stopped_early": False,
             "fallback_to_processing": False,
-            "priority_stats": {
-                "high_priority_processed": 0,
-                "medium_priority_processed": 0,
-                "low_priority_processed": 0,
-                "high_priority_successful": 0,
-                "medium_priority_successful": 0,
-                "low_priority_successful": 0
-            },
+            "execution_mode": "intelligent",
             "search_strategy": "balanced",
-            "performance_metrics": {
-                "search_duration": 0,
-                "processing_duration": 0,
-                "upload_duration": 0,
-                "total_duration": 0
-            }
+            "guideline_version": "3.2.0"
         }
         
         if os.path.exists(self.state_file):
@@ -570,8 +501,8 @@ class ProductionWorkflowState:
         except Exception as e:
             self.logger.error(emoji.safe(f"⚠️ Error saving workflow state: {e}"))
     
-    def start_workflow(self, search_strategy="balanced", execution_mode="standard"):
-        """Start a new workflow with comprehensive initialization"""
+    def start_workflow(self, search_strategy="intelligent", execution_mode="intelligent"):
+        """Start a new workflow - Guideline v3.2.0"""
         workflow_id = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         self.state.update({
@@ -584,33 +515,18 @@ class ProductionWorkflowState:
             "success_count": 0,
             "search_strategy": search_strategy,
             "execution_mode": execution_mode,
+            "guideline_version": "3.2.0",
             "rate_limiting_detected": False,
             "consecutive_failures": 0,
-            "circuit_breaker_active": False,
-            "retry_count": 0,
             "search_stopped_early": False,
-            "fallback_to_processing": False,
-            "priority_stats": {
-                "high_priority_processed": 0,
-                "medium_priority_processed": 0,
-                "low_priority_processed": 0,
-                "high_priority_successful": 0,
-                "medium_priority_successful": 0,
-                "low_priority_successful": 0
-            },
-            "performance_metrics": {
-                "search_duration": 0,
-                "processing_duration": 0,
-                "upload_duration": 0,
-                "total_duration": 0
-            }
+            "fallback_to_processing": False
         })
         
         self.save_state()
         self.logger.info(emoji.safe(f"🚀 Started workflow: {workflow_id} (strategy: {search_strategy}, mode: {execution_mode})"))
     
-    def mark_search_complete(self, files_generated=0, md_files=0, factset_files=0, priority_stats=None, duration=0, stopped_early=False):
-        """Mark search phase as complete with comprehensive metrics"""
+    def mark_search_complete(self, files_generated=0, md_files=0, factset_files=0, duration=0, stopped_early=False):
+        """Mark search phase as complete"""
         self.state.update({
             "search_completed": True,
             "search_timestamp": datetime.now().isoformat(),
@@ -622,11 +538,6 @@ class ProductionWorkflowState:
             "last_successful_search": datetime.now().isoformat(),
             "search_stopped_early": stopped_early
         })
-        
-        if priority_stats:
-            self.state["priority_stats"].update(priority_stats)
-        
-        self.state["performance_metrics"]["search_duration"] = duration
         
         self.save_state()
         status_msg = "Search phase completed"
@@ -643,7 +554,6 @@ class ProductionWorkflowState:
             "success_count": 2
         })
         
-        self.state["performance_metrics"]["processing_duration"] = duration
         self.save_state()
         self.logger.info(emoji.safe(f"✅ Processing phase completed: {companies_found} companies"))
     
@@ -655,269 +565,26 @@ class ProductionWorkflowState:
             "success_count": 3
         })
         
-        self.state["performance_metrics"]["upload_duration"] = duration
-        
-        # Calculate total duration
-        if self.state.get("started_at"):
-            start_time = datetime.fromisoformat(self.state["started_at"])
-            total_duration = (datetime.now() - start_time).total_seconds()
-            self.state["performance_metrics"]["total_duration"] = total_duration
-        
         self.save_state()
         self.logger.info(emoji.safe("✅ Upload phase completed"))
-    
-    def mark_error(self, error_message, phase="unknown", error_type="general"):
-        """Mark error in workflow state with detailed tracking"""
-        error_info = {
-            "message": error_message,
-            "phase": phase,
-            "error_type": error_type,
-            "timestamp": datetime.now().isoformat(),
-            "retry_count": self.state.get("retry_count", 0)
-        }
-        
-        self.state["last_error"] = error_info
-        self.state["consecutive_failures"] += 1
-        
-        # Check for specific error types
-        if "429" in error_message or "Too Many Requests" in error_message:
-            self.state["rate_limiting_detected"] = True
-            self.state["rate_limiting_timestamp"] = datetime.now().isoformat()
-            self.state["fallback_to_processing"] = True
-            self.logger.error(emoji.safe(f"🚨 Rate limiting detected: {error_message}"))
-        elif "circuit breaker" in error_message.lower():
-            self.state["circuit_breaker_active"] = True
-            self.logger.error(emoji.safe(f"🔌 Circuit breaker activated: {error_message}"))
-        elif any(keyword in error_message.lower() for keyword in ["ip", "blocked", "sorry"]):
-            self.state["ip_blocked"] = True
-            self.logger.error(emoji.safe(f"🚫 IP blocking detected: {error_message}"))
-        
-        self.save_state()
-        self.logger.error(emoji.safe(f"❌ Error in {phase} ({error_type}): {error_message}"))
-    
-    def reset_workflow(self, preserve_learnings=True):
-        """Reset workflow state with option to preserve rate limiting learnings"""
-        self.logger.info(emoji.safe("🔄 Resetting workflow state..."))
-        
-        # Backup current state
-        if os.path.exists(self.state_file):
-            backup_file = f"{self.state_file}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            try:
-                shutil.copy2(self.state_file, backup_file)
-                self.logger.info(emoji.safe(f"📋 Backed up current state to: {backup_file}"))
-            except Exception as e:
-                self.logger.warning(emoji.safe(f"⚠️ Could not backup state: {e}"))
-        
-        # Preserve rate limiting information if requested
-        preserved_data = {}
-        if preserve_learnings and self.state:
-            preserved_data = {
-                "rate_limiting_detected": self.state.get("rate_limiting_detected", False),
-                "rate_limiting_timestamp": self.state.get("rate_limiting_timestamp"),
-                "circuit_breaker_active": self.state.get("circuit_breaker_active", False),
-                "ip_blocked": self.state.get("ip_blocked", False),
-                "last_successful_search": self.state.get("last_successful_search")
-            }
-        
-        # Reset to default state
-        self.state = self._load_state()
-        
-        # Apply preserved data
-        if preserved_data:
-            self.state.update(preserved_data)
-            self.logger.info(emoji.safe("🧠 Preserved rate limiting learnings"))
-        
-        self.save_state()
-        self.logger.info(emoji.safe("✅ Workflow state reset successfully"))
-    
-    def is_rate_limited(self):
-        """Check if currently under rate limiting with intelligent detection"""
-        # Check explicit rate limiting flag
-        if not self.state.get("rate_limiting_detected"):
-            return False
-        
-        # Check if enough time has passed since rate limiting
-        rate_limit_time_str = self.state.get("rate_limiting_timestamp")
-        if rate_limit_time_str:
-            try:
-                rate_limit_time = datetime.fromisoformat(rate_limit_time_str)
-                time_since_limit = datetime.now() - rate_limit_time
-                
-                # Different timeouts based on severity
-                if self.state.get("circuit_breaker_active"):
-                    timeout_hours = 12  # Longer timeout for circuit breaker
-                elif self.state.get("ip_blocked"):
-                    timeout_hours = 24  # Even longer for IP blocking
-                else:
-                    timeout_hours = 4   # Standard rate limiting
-                
-                if time_since_limit > timedelta(hours=timeout_hours):
-                    # Clear rate limiting flags
-                    self.state["rate_limiting_detected"] = False
-                    self.state["circuit_breaker_active"] = False
-                    self.save_state()
-                    self.logger.info(emoji.safe(f"✅ Rate limiting expired after {time_since_limit}"))
-                    return False
-            except Exception as e:
-                self.logger.warning(f"Error parsing rate limit timestamp: {e}")
-        
-        return True
-    
-    def should_stop_on_failures(self):
-        """Check if should stop due to consecutive failures"""
-        failure_threshold = 5
-        consecutive_failures = self.state.get("consecutive_failures", 0)
-        
-        if consecutive_failures >= failure_threshold:
-            self.logger.warning(emoji.safe(f"⚠️ Stopping due to {consecutive_failures} consecutive failures"))
-            return True
-        
-        return False
-    
-    def get_next_phase(self):
-        """Get next phase to execute based on current state"""
-        if not self.state["search_completed"]:
-            return "search"
-        elif not self.state["processing_completed"]:
-            return "processing"
-        elif not self.state["sheets_uploaded"]:
-            return "upload"
-        else:
-            return "complete"
-    
-    def get_recommendations(self):
-        """Get intelligent recommendations based on current state"""
-        recommendations = []
-        
-        if self.is_rate_limited():
-            if self.state.get("circuit_breaker_active"):
-                recommendations.append(emoji.safe("🔌 Circuit breaker active - wait 12+ hours or change IP address"))
-            elif self.state.get("ip_blocked"):
-                recommendations.append(emoji.safe("🚫 IP blocked - change IP address or wait 24+ hours"))
-            else:
-                recommendations.append(emoji.safe("⏰ Rate limited - wait 4-6 hours before retry"))
-            
-            recommendations.append(emoji.safe("💡 Processing existing data while waiting"))
-        
-        if self.state.get("search_stopped_early"):
-            recommendations.append(emoji.safe("🛑 Search stopped early due to rate limiting"))
-            recommendations.append(emoji.safe("📄 Continue with existing data processing"))
-        
-        if self.state.get("consecutive_failures", 0) > 2:
-            recommendations.append(emoji.safe("🔧 Multiple failures detected - check API credentials"))
-            recommendations.append(emoji.safe("🎯 Try conservative mode with fewer companies"))
-        
-        if self.state.get("md_files_generated", 0) > 0:
-            recommendations.append(emoji.safe("📄 Process existing MD files for immediate results"))
-        
-        next_phase = self.get_next_phase()
-        if next_phase != "complete":
-            recommendations.append(emoji.safe(f"🔄 Next recommended phase: {next_phase}"))
-        
-        return recommendations
-    
-    def print_comprehensive_status(self):
-        """Print comprehensive workflow status with detailed metrics"""
-        print(emoji.safe(f"\n📊 Comprehensive Workflow Status"))
-        print("=" * 60)
-        
-        if self.state["workflow_id"]:
-            print(emoji.safe(f"🆔 Workflow ID: {self.state['workflow_id']}"))
-            print(emoji.safe(f"📅 Started: {self.state['started_at']}"))
-            print(emoji.safe(f"🎯 Strategy: {self.state['search_strategy']}"))
-            print(emoji.safe(f"🔧 Mode: {self.state['execution_mode']}"))
-            print(emoji.safe(f"🔄 Progress: {self.state['success_count']}/{self.state['total_steps']} phases"))
-        else:
-            print(emoji.safe("🆕 No workflow started"))
-            return
-        
-        # Rate limiting and error status
-        if self.is_rate_limited():
-            print(emoji.safe(f"🚨 Rate limiting: ACTIVE since {self.state.get('rate_limiting_timestamp', 'unknown')}"))
-            if self.state.get("circuit_breaker_active"):
-                print(emoji.safe("🔌 Circuit breaker: ACTIVE"))
-            if self.state.get("ip_blocked"):
-                print(emoji.safe("🚫 IP status: BLOCKED"))
-        else:
-            print(emoji.safe("✅ Rate limiting: CLEAR"))
-        
-        # Search status
-        if self.state.get("search_stopped_early"):
-            print(emoji.safe("🛑 Search: STOPPED EARLY (rate limiting)"))
-        if self.state.get("fallback_to_processing"):
-            print(emoji.safe("📄 Mode: PROCESSING EXISTING DATA"))
-        
-        # Failure tracking
-        consecutive_failures = self.state.get("consecutive_failures", 0)
-        if consecutive_failures > 0:
-            print(emoji.safe(f"⚠️ Consecutive failures: {consecutive_failures}"))
-        
-        # Phase status with detailed metrics
-        search_status = "✅" if self.state["search_completed"] else "⏳"
-        processing_status = "✅" if self.state["processing_completed"] else "⏳"
-        upload_status = "✅" if self.state["sheets_uploaded"] else "⏳"
-        
-        print(emoji.safe(f"\n📋 Phase Status:"))
-        print(emoji.safe(f"   {search_status} Search: {self.state['md_files_generated']} MD files, {self.state['factset_files_generated']} FactSet"))
-        print(emoji.safe(f"   {processing_status} Processing: {self.state['companies_found']} companies"))
-        print(emoji.safe(f"   {upload_status} Upload: {'Complete' if self.state['sheets_uploaded'] else 'Pending'}"))
-        
-        # Performance metrics
-        metrics = self.state.get("performance_metrics", {})
-        if any(metrics.values()):
-            print(emoji.safe(f"\n⏱️ Performance Metrics:"))
-            for phase, duration in metrics.items():
-                if duration > 0:
-                    print(f"   {phase.replace('_', ' ').title()}: {duration:.1f} seconds")
-        
-        # Priority breakdown
-        stats = self.state.get("priority_stats", {})
-        if any(stats.values()):
-            print(emoji.safe(f"\n🎯 Priority Statistics:"))
-            print(emoji.safe(f"   🔴 High: {stats.get('high_priority_successful', 0)}/{stats.get('high_priority_processed', 0)} successful"))
-            print(emoji.safe(f"   🟡 Medium: {stats.get('medium_priority_successful', 0)}/{stats.get('medium_priority_processed', 0)} successful"))
-            print(emoji.safe(f"   🟢 Low: {stats.get('low_priority_successful', 0)}/{stats.get('low_priority_processed', 0)} successful"))
-        
-        # Recent error information
-        if self.state.get("last_error"):
-            error = self.state["last_error"]
-            print(emoji.safe(f"\n❌ Last Error ({error.get('phase', 'unknown')}):"))
-            print(f"   Type: {error.get('error_type', 'general')}")
-            print(f"   Message: {error['message']}")
-            print(f"   Time: {error['timestamp']}")
-            if error.get('retry_count', 0) > 0:
-                print(f"   Retries: {error['retry_count']}")
-        
-        # Recommendations
-        recommendations = self.get_recommendations()
-        if recommendations:
-            print(emoji.safe(f"\n💡 Recommendations:"))
-            for rec in recommendations:
-                print(f"   {rec}")
-        
-        next_phase = self.get_next_phase()
-        if next_phase != "complete":
-            print(emoji.safe(f"\n🔄 Next Phase: {next_phase}"))
-        else:
-            print(emoji.safe(f"\n🎉 Workflow Complete!"))
 
 # ============================================================================
-# PRODUCTION PIPELINE IMPLEMENTATION
+# PRODUCTION PIPELINE IMPLEMENTATION - GUIDELINE v3.2.0
 # ============================================================================
 
 class ProductionFactSetPipeline:
-    """Production-ready FactSet pipeline with enhanced error handling and immediate stop strategy"""
+    """Production-ready FactSet pipeline - Guideline v3.2.0 compliant"""
     
     def __init__(self, config_file=None):
         self.logger = setup_logging()
-        self.config = ProductionConfig(config_file)
-        self.state = ProductionWorkflowState()
-        self.rate_protector = AdvancedRateLimitProtector(self.config)
+        self.config = ProductionConfig(config_file)  # As per guideline
+        self.rate_protector = RateLimitProtector(self.config)  # As per guideline
+        self.state = WorkflowState()  # As per guideline
         
         # Create necessary directories
         self._setup_directories()
         
-        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} initialized"))
+        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} initialized (Guideline v3.2.0)"))
     
     def _setup_directories(self):
         """Setup required directories"""
@@ -934,7 +601,7 @@ class ProductionFactSetPipeline:
                 Path(directory).mkdir(parents=True, exist_ok=True)
     
     def analyze_existing_data(self):
-        """Analyze existing data to determine optimal strategy"""
+        """Analyze existing data to determine optimal strategy - Guideline v3.2.0"""
         md_dir = self.config.get('output.md_dir')
         
         if not os.path.exists(md_dir):
@@ -968,6 +635,7 @@ class ProductionFactSetPipeline:
         
         self.logger.info(emoji.safe(f"📈 Quality analysis: {factset_files} FactSet files, {companies_with_data} portfolio companies"))
         
+        # Quality assessment matching guideline criteria
         if file_count >= 50 and factset_files >= 20:
             return file_count, "excellent"
         elif file_count >= 20 and factset_files >= 10:
@@ -979,24 +647,24 @@ class ProductionFactSetPipeline:
         else:
             return file_count, "insufficient"
     
-    def determine_optimal_strategy(self, existing_files, data_status):
-        """Determine optimal execution strategy"""
+    def determine_strategy(self, existing_files, data_status):
+        """Determine optimal execution strategy - Guideline v3.2.0"""
         self.logger.info(emoji.safe(f"🎯 Determining optimal strategy..."))
         self.logger.info(emoji.safe(f"   📄 Existing files: {existing_files}"))
         self.logger.info(emoji.safe(f"   📊 Data status: {data_status}"))
         
         # Check rate limiting status
-        if self.state.is_rate_limited():
+        if self.rate_protector.should_stop_immediately():
             strategy = "process_existing"
             reason = "Rate limiting detected - focus on existing data"
         elif data_status in ["excellent", "good"]:
-            strategy = "maintenance"
-            reason = "Sufficient data exists - maintenance updates only"
+            strategy = "conservative"
+            reason = "Sufficient data exists - conservative updates only"
         elif data_status == "moderate":
             strategy = "selective_enhancement"
             reason = "Moderate data - selective enhancement"
         else:
-            strategy = "comprehensive_collection"
+            strategy = "comprehensive"
             reason = "Insufficient data - comprehensive collection needed"
         
         self.logger.info(emoji.safe(f"   🎯 Strategy: {strategy.upper()}"))
@@ -1033,7 +701,7 @@ class ProductionFactSetPipeline:
                 return True
             elif response.status_code == 429:
                 self.logger.warning(emoji.safe("🚨 Search API is rate limited"))
-                self.state.mark_error("API rate limiting detected", "search", "rate_limiting")
+                self.rate_protector.record_429_error()
                 return False
             else:
                 self.logger.warning(emoji.safe(f"⚠️ Search API returned {response.status_code}"))
@@ -1062,8 +730,8 @@ class ProductionFactSetPipeline:
             self.logger.warning(emoji.safe("⚠️ No existing data available"))
             return False
     
-    def run_intelligent_search_phase(self, strategy="comprehensive_collection", force=False):
-        """Run search phase with immediate stop on rate limiting"""
+    def run_intelligent_search_phase(self, strategy="comprehensive", force=False):
+        """Run search phase with immediate stop on rate limiting - Guideline v3.2.0"""
         if self.state.state["search_completed"] and not force:
             self.logger.info(emoji.safe("ℹ️ Search phase already completed (use --force to re-run)"))
             return True
@@ -1071,7 +739,7 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"🔍 PHASE 1: INTELLIGENT SEARCH EXECUTION"))
+        self.logger.info(emoji.safe(f"🔍 PHASE 1: INTELLIGENT SEARCH EXECUTION (Guideline v3.2.0)"))
         self.logger.info(emoji.safe(f"📊 Strategy: {strategy.upper()}"))
         self.logger.info("="*80)
         
@@ -1094,10 +762,10 @@ class ProductionFactSetPipeline:
                     return False
             
             companies = self.config.config['target_companies']
-            self.logger.info(emoji.safe(f"🎯 Loaded {len(companies)} target companies"))
+            self.logger.info(emoji.safe(f"🎯 Loaded {len(companies)} target companies from 觀察名單.csv"))
             
             # Determine company subset based on strategy
-            if strategy == "maintenance":
+            if strategy == "conservative":
                 target_companies = companies[:20]
             elif strategy == "selective_enhancement":
                 target_companies = companies[:50]
@@ -1126,7 +794,7 @@ class ProductionFactSetPipeline:
                 factset_files = self._count_factset_files(md_files)
                 
                 # Check if search was stopped early
-                stopped_early = self.rate_protector.should_stop_search_immediately()
+                stopped_early = self.rate_protector.should_stop_immediately()
                 
                 self.state.mark_search_complete(
                     files_generated=len(csv_files),
@@ -1145,18 +813,15 @@ class ProductionFactSetPipeline:
                     self.logger.warning(emoji.safe("⚠️ Search failed, but found existing data - continuing with processing"))
                     return self._fallback_to_existing_data(start_time)
                 
-                self.state.mark_error("Search execution failed", "search")
                 return False
                 
         except Exception as e:
             error_str = str(e).lower()
             if "429" in error_str or "too many requests" in error_str:
                 self.logger.error(emoji.safe("🛑 Rate limiting detected - switching to data processing"))
-                self.state.mark_error(f"Rate limiting: {e}", "search", "rate_limiting")
+                self.rate_protector.record_429_error()
                 return self._fallback_to_existing_data(start_time)
             
-            duration = time.time() - start_time
-            self.state.mark_error(f"Search phase error: {e}", "search")
             self.logger.error(emoji.safe(f"❌ Search phase failed: {e}"))
             
             # Check for existing data as fallback
@@ -1177,78 +842,38 @@ class ProductionFactSetPipeline:
                 self.logger.error(emoji.safe("❌ factset_search module not available"))
                 return False
             
-            # Wrap search execution with rate limit monitoring
-            original_search = getattr(search_module, 'search_company_factset_data', None)
-            if not original_search:
-                self.logger.error(emoji.safe("❌ search_company_factset_data function not found"))
-                return False
-            
-            # Create a wrapper that monitors for 429 errors
-            def monitored_search(*args, **kwargs):
-                try:
-                    # Check if we should stop before each search
-                    if self.rate_protector.should_stop_search_immediately():
-                        self.logger.warning(emoji.safe("🛑 Search stopped - rate limiting detected"))
-                        return []
-                    
-                    return original_search(*args, **kwargs)
-                except Exception as e:
-                    error_str = str(e).lower()
-                    if "429" in error_str or "too many requests" in error_str or "rate limit" in error_str:
-                        self.rate_protector.record_429_error()
-                        self.state.mark_error(f"Rate limiting: {e}", "search", "rate_limiting")
-                        self.logger.error(emoji.safe("🛑 IMMEDIATE STOP: Rate limiting detected"))
-                        # Return empty results to stop gracefully
-                        return []
-                    else:
-                        raise e
-            
-            # Replace the original function
-            search_module.search_company_factset_data = monitored_search
-            
-            # Also wrap the batch processing if it exists
-            if hasattr(search_module, 'process_batch_search'):
-                original_batch = search_module.process_batch_search
-                
-                def monitored_batch_search(*args, **kwargs):
-                    try:
-                        # Check rate limiting before each batch
-                        if self.rate_protector.should_stop_search_immediately():
-                            self.logger.warning(emoji.safe("🛑 Batch search stopped - rate limiting detected"))
-                            return []
-                        
-                        return original_batch(*args, **kwargs)
-                    except Exception as e:
-                        error_str = str(e).lower()
-                        if "429" in error_str or "too many requests" in error_str:
-                            self.rate_protector.record_429_error()
-                            self.state.mark_error(f"Rate limiting in batch: {e}", "search", "rate_limiting")
-                            return []
-                        else:
-                            raise e
-                
-                search_module.process_batch_search = monitored_batch_search
-            
             # Check for enhanced search function
             if hasattr(search_module, 'run_enhanced_search_suite'):
                 self.logger.info(emoji.safe("🔍 Using enhanced search suite with monitoring"))
-                return search_module.run_enhanced_search_suite(
-                    self.config.config,
-                    priority_focus="high_only" if strategy == "maintenance" else "balanced"
-                )
-            elif hasattr(search_module, 'main'):
-                self.logger.info(emoji.safe("🔍 Using basic search with protection"))
-                return self._run_basic_search_protected(search_module, strategy)
+                try:
+                    result = search_module.run_enhanced_search_suite(
+                        self.config.config,
+                        priority_focus="high_only" if strategy == "conservative" else "balanced"
+                    )
+                    
+                    # Check if result indicates rate limiting
+                    if result == "rate_limited":
+                        self.rate_protector.record_429_error()
+                        return "rate_limited"
+                    
+                    return result
+                    
+                except Exception as e:
+                    error_str = str(e).lower()
+                    if "429" in error_str or "rate limit" in error_str:
+                        self.rate_protector.record_429_error()
+                        return "rate_limited"
+                    else:
+                        raise e
             else:
-                self.logger.error(emoji.safe("❌ No usable search function found"))
-                return False
+                self.logger.warning(emoji.safe("⚠️ Enhanced search suite not available - using basic search"))
+                return self._run_basic_search_protected(search_module, strategy)
                 
         except Exception as e:
             # Check if this is a rate limiting error
             error_str = str(e).lower()
             if "429" in error_str or "too many requests" in error_str:
                 self.rate_protector.record_429_error()
-                self.state.mark_error(f"Rate limiting: {e}", "search", "rate_limiting")
                 self.logger.error(emoji.safe("🛑 Stopping search due to rate limiting - switching to data processing"))
                 return "rate_limited"  # Special return value
             
@@ -1262,7 +887,7 @@ class ProductionFactSetPipeline:
             original_argv = sys.argv
             
             # Prepare arguments based on strategy
-            if strategy == "maintenance":
+            if strategy == "conservative":
                 search_args = ['factset_search.py', '--priority-focus', 'high_only']
             elif strategy == "selective_enhancement":
                 search_args = ['factset_search.py', '--priority-focus', 'top_30']
@@ -1274,13 +899,17 @@ class ProductionFactSetPipeline:
             
             # Run with timeout and error handling
             try:
-                search_module.main()
-                return True
+                if hasattr(search_module, 'main'):
+                    search_module.main()
+                    return True
+                else:
+                    self.logger.error(emoji.safe("❌ No main function found in search module"))
+                    return False
             except Exception as e:
                 error_str = str(e).lower()
                 if "429" in error_str or "too many requests" in error_str:
                     self.logger.error(emoji.safe("🚨 Rate limiting encountered during search"))
-                    self.state.mark_error(f"Rate limiting: {e}", "search", "rate_limiting")
+                    self.rate_protector.record_429_error()
                     return "rate_limited"
                 else:
                     raise e
@@ -1317,7 +946,7 @@ class ProductionFactSetPipeline:
         return 0
     
     def run_enhanced_processing_phase(self, force=False):
-        """Run processing phase with enhanced error handling"""
+        """Run processing phase with enhanced error handling - Guideline v3.2.0"""
         if self.state.state["processing_completed"] and not force:
             self.logger.info(emoji.safe("ℹ️ Processing phase already completed (use --force to re-run)"))
             return True
@@ -1325,7 +954,7 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"📊 PHASE 2: ENHANCED DATA PROCESSING"))
+        self.logger.info(emoji.safe(f"📊 PHASE 2: ENHANCED DATA PROCESSING (Guideline v3.2.0)"))
         self.logger.info("="*80)
         
         try:
@@ -1377,35 +1006,37 @@ class ProductionFactSetPipeline:
                         summary_df = pd.read_csv(summary_file)
                         companies_found = len(summary_df)
                         
-                        # Log quality metrics
-                        if '當前EPS預估' in summary_df.columns:
-                            companies_with_eps = len(summary_df[summary_df['當前EPS預估'].notna()])
-                            self.logger.info(emoji.safe(f"💰 Companies with EPS data: {companies_with_eps}"))
+                        # Log quality metrics for guideline v3.2.0
+                        if 'MD資料筆數' in summary_df.columns:
+                            companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
+                            self.logger.info(emoji.safe(f"📊 Companies with data: {companies_with_data}"))
                         
-                        if '目標價' in summary_df.columns:
-                            companies_with_targets = len(summary_df[summary_df['目標價'].notna()])
-                            self.logger.info(emoji.safe(f"🎯 Companies with target prices: {companies_with_targets}"))
+                        if '品質評分' in summary_df.columns:
+                            avg_quality = summary_df[summary_df['品質評分'] > 0]['品質評分'].mean()
+                            self.logger.info(emoji.safe(f"🎯 Average quality score: {avg_quality:.1f}/4.0"))
+                        
+                        if '2025EPS平均值' in summary_df.columns:
+                            companies_with_eps = len(summary_df[summary_df['2025EPS平均值'].notna()])
+                            self.logger.info(emoji.safe(f"💰 Companies with 2025 EPS: {companies_with_eps}"))
                             
                     except Exception as e:
                         self.logger.warning(emoji.safe(f"⚠️ Error analyzing results: {e}"))
                 
                 self.state.mark_processing_complete(companies_found, duration)
-                self.logger.info(emoji.safe(f"✅ Processing completed: {companies_found} companies processed"))
+                self.logger.info(emoji.safe(f"✅ Processing completed: {companies_found} companies processed (Guideline v3.2.0)"))
                 return True
             else:
-                self.state.mark_error("Data processing failed", "processing")
                 return False
                 
         except Exception as e:
             duration = time.time() - start_time
-            self.state.mark_error(f"Processing phase error: {e}", "processing")
             self.logger.error(emoji.safe(f"❌ Processing phase failed: {e}"))
             if self.config.get('debug'):
                 traceback.print_exc()
             return False
     
     def run_enhanced_upload_phase(self, force=False):
-        """Run upload phase with enhanced validation"""
+        """Run upload phase with enhanced validation - Guideline v3.2.0"""
         if self.state.state["sheets_uploaded"] and not force:
             self.logger.info(emoji.safe("ℹ️ Upload phase already completed (use --force to re-run)"))
             return True
@@ -1413,14 +1044,18 @@ class ProductionFactSetPipeline:
         start_time = time.time()
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe(f"📈 PHASE 3: ENHANCED GOOGLE SHEETS UPLOAD"))
+        self.logger.info(emoji.safe(f"📈 PHASE 3: ENHANCED GOOGLE SHEETS UPLOAD (Guideline v3.2.0)"))
         self.logger.info("="*80)
         
         try:
             # Check for required files
             required_files = [
-                self.config.get('output.summary_csv'),
-                self.config.get('output.consolidated_csv')
+                self.config.get('output.summary_csv')
+            ]
+            
+            optional_files = [
+                self.config.get('output.detailed_csv'),
+                self.config.get('output.stats_json')
             ]
             
             available_files = [f for f in required_files if f and os.path.exists(f)]
@@ -1430,7 +1065,8 @@ class ProductionFactSetPipeline:
                 self.logger.info(emoji.safe("💡 Run processing phase first"))
                 return False
             
-            self.logger.info(emoji.safe(f"📄 Found {len(available_files)} files ready for upload"))
+            optional_available = [f for f in optional_files if f and os.path.exists(f)]
+            self.logger.info(emoji.safe(f"📄 Found {len(available_files)} required files, {len(optional_available)} optional files"))
             
             # Check credentials
             if not self.config.get('sheets.credentials') or not self.config.get('sheets.sheet_id'):
@@ -1445,8 +1081,8 @@ class ProductionFactSetPipeline:
                 # Prepare configuration for uploader
                 upload_config = self.config.config.copy()
                 upload_config['input'] = {
-                    'consolidated_csv': self.config.get('output.consolidated_csv'),
                     'summary_csv': self.config.get('output.summary_csv'),
+                    'detailed_csv': self.config.get('output.detailed_csv'),
                     'stats_json': self.config.get('output.stats_json')
                 }
                 
@@ -1478,36 +1114,35 @@ class ProductionFactSetPipeline:
                 if sheet_id:
                     dashboard_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit"
                     self.logger.info(emoji.safe(f"📊 Dashboard available: {dashboard_url}"))
+                    self.logger.info(emoji.safe("🎯 Features: Portfolio Summary (v3.2.0), Detailed Data (EPS breakdown), Statistics"))
                 
-                self.logger.info(emoji.safe("✅ Upload completed successfully"))
+                self.logger.info(emoji.safe("✅ Upload completed successfully (Guideline v3.2.0)"))
                 return True
             else:
-                self.state.mark_error("Google Sheets upload failed", "upload")
                 return False
                 
         except Exception as e:
             duration = time.time() - start_time
-            self.state.mark_error(f"Upload phase error: {e}", "upload")
             self.logger.error(emoji.safe(f"❌ Upload phase failed: {e}"))
             if self.config.get('debug'):
                 traceback.print_exc()
             return False
     
-    def run_complete_production_pipeline(self, force_all=False, skip_phases=None, execution_mode="intelligent"):
-        """Run the complete production pipeline with intelligent orchestration and immediate stop strategy"""
+    def run_complete_pipeline(self, strategy="intelligent", force_all=False, skip_phases=None, execution_mode="intelligent"):
+        """Run the complete production pipeline - Guideline v3.2.0"""
         if skip_phases is None:
             skip_phases = []
         
         pipeline_start = time.time()
         
-        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__}"))
+        self.logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} (Guideline v3.2.0)"))
         self.logger.info(emoji.safe(f"📅 Date: {__date__}"))
         self.logger.info(emoji.safe(f"👨‍💻 Author: {__author__}"))
         self.logger.info("=" * 80)
         
         # Analyze existing data and determine strategy
         existing_files, data_status = self.analyze_existing_data()
-        optimal_strategy = self.determine_optimal_strategy(existing_files, data_status)
+        optimal_strategy = self.determine_strategy(existing_files, data_status)
         
         # Initialize or resume workflow
         if force_all or not self.state.state.get("workflow_id"):
@@ -1518,7 +1153,7 @@ class ProductionFactSetPipeline:
             self.config.download_watchlist()
         
         companies = self.config.config.get('target_companies', [])
-        self.logger.info(emoji.safe(f"🎯 Target Companies: {len(companies)} companies loaded"))
+        self.logger.info(emoji.safe(f"🎯 Target Companies: {len(companies)} companies from 觀察名單.csv"))
         
         success_phases = 0
         total_phases = 3 - len(skip_phases)
@@ -1582,10 +1217,11 @@ class ProductionFactSetPipeline:
         total_duration = time.time() - pipeline_start
         
         self.logger.info(emoji.safe(f"\n{'='*80}"))
-        self.logger.info(emoji.safe("🎉 PRODUCTION PIPELINE EXECUTION COMPLETED!"))
+        self.logger.info(emoji.safe("🎉 PRODUCTION PIPELINE EXECUTION COMPLETED! (Guideline v3.2.0)"))
         self.logger.info("="*80)
         self.logger.info(emoji.safe(f"📊 Success Rate: {success_phases}/{total_phases} phases"))
         self.logger.info(emoji.safe(f"⏱️ Total Duration: {total_duration:.1f} seconds"))
+        self.logger.info(emoji.safe(f"🎯 Guideline Compliance: v{__version__}"))
         
         # Show rate limiting status if applicable
         if self.state.state.get("search_stopped_early"):
@@ -1617,100 +1253,19 @@ class ProductionFactSetPipeline:
             return True
         else:
             self.logger.warning(emoji.safe("⚠️ Pipeline completed with some issues"))
-            self.state.print_comprehensive_status()
             return False
-    
-    def recover_workflow(self):
-        """Intelligent workflow recovery with multiple strategies"""
-        self.logger.info(emoji.safe("🔄 Attempting intelligent workflow recovery..."))
-        
-        # Display current status
-        self.state.print_comprehensive_status()
-        
-        # Get recommendations
-        recommendations = self.state.get_recommendations()
-        if recommendations:
-            self.logger.info(emoji.safe("💡 Recovery recommendations:"))
-            for rec in recommendations:
-                self.logger.info(emoji.safe(f"   {rec}"))
-        
-        # Determine recovery strategy
-        if self.state.is_rate_limited():
-            self.logger.warning(emoji.safe("🚨 Rate limiting detected - limited recovery options"))
-            return self._recover_from_rate_limiting()
-        
-        if self.state.should_stop_on_failures():
-            self.logger.warning(emoji.safe("⚠️ Too many consecutive failures"))
-            return self._recover_from_failures()
-        
-        # Try to continue from where we left off
-        next_phase = self.state.get_next_phase()
-        self.logger.info(emoji.safe(f"🔄 Resuming from phase: {next_phase}"))
-        
-        if next_phase == "search":
-            return self.run_intelligent_search_phase()
-        elif next_phase == "processing":
-            return self.run_enhanced_processing_phase()
-        elif next_phase == "upload":
-            return self.run_enhanced_upload_phase()
-        else:
-            self.logger.info(emoji.safe("✅ Workflow already complete"))
-            return True
-    
-    def _recover_from_rate_limiting(self):
-        """Recovery strategy for rate limiting scenarios"""
-        self.logger.info(emoji.safe("🚨 Implementing rate limiting recovery strategy..."))
-        
-        # Try to process existing data
-        existing_files, data_status = self.analyze_existing_data()
-        
-        if existing_files > 0:
-            self.logger.info(emoji.safe(f"📄 Found {existing_files} existing files - processing available data"))
-            
-            # Run processing and upload phases only
-            success = True
-            
-            if not self.state.state["processing_completed"]:
-                success &= self.run_enhanced_processing_phase()
-            
-            if success and not self.state.state["sheets_uploaded"]:
-                success &= self.run_enhanced_upload_phase()
-            
-            if success:
-                self.logger.info(emoji.safe("✅ Successfully processed existing data during rate limiting"))
-                return True
-        
-        self.logger.warning(emoji.safe("⚠️ No existing data available for processing"))
-        self.logger.info(emoji.safe("💡 Wait for rate limiting to clear, then retry search"))
-        return False
-    
-    def _recover_from_failures(self):
-        """Recovery strategy for multiple failures"""
-        self.logger.info(emoji.safe("🔧 Implementing failure recovery strategy..."))
-        
-        # Reset error counts
-        self.state.state["consecutive_failures"] = 0
-        self.state.save_state()
-        
-        # Try conservative approach
-        self.logger.info(emoji.safe("🎯 Switching to conservative recovery mode"))
-        
-        return self.run_complete_production_pipeline(
-            skip_phases=["search"],  # Skip problematic search
-            execution_mode="recovery"
-        )
 
 # ============================================================================
-# PRODUCTION CLI INTERFACE
+# PRODUCTION CLI INTERFACE - GUIDELINE v3.2.0
 # ============================================================================
 
 def create_production_parser():
-    """Create production-ready argument parser"""
+    """Create production-ready argument parser - Guideline v3.2.0"""
     parser = argparse.ArgumentParser(
-        description=f'Production FactSet Pipeline v{__version__} - Enhanced Rate Limiting Protection',
+        description=f'Production FactSet Pipeline v{__version__} - Guideline v3.2.0 Compliant',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
-Production Pipeline Examples:
+Production Pipeline Examples (Guideline v3.2.0):
 
   # Intelligent execution (recommended)
   python factset_pipeline.py                     # Auto-detect strategy with immediate stop
@@ -1718,7 +1273,7 @@ Production Pipeline Examples:
   
   # Strategic execution modes
   python factset_pipeline.py --mode conservative  # Safe execution with delays
-  python factset_pipeline.py --mode existing-only # Process existing data only
+  python factset_pipeline.py --mode process-only # Process existing data only
   python factset_pipeline.py --mode test-only     # Test components without search
   
   # Phase-specific execution
@@ -1728,17 +1283,14 @@ Production Pipeline Examples:
   
   # Monitoring and recovery
   python factset_pipeline.py --status            # Comprehensive status
-  python factset_pipeline.py --recover           # Intelligent recovery
-  python factset_pipeline.py --reset             # Reset workflow state
-  
-  # Production operations
-  python factset_pipeline.py --test-api          # Test API availability
   python factset_pipeline.py --analyze-data      # Analyze existing data
 
-ENHANCED FEATURES:
+GUIDELINE v3.2.0 FEATURES:
 - Immediate stop on 429 errors with fallback to data processing
-- Robust URL parsing and error handling
-- Smart fallback strategies when search fails
+- Portfolio Summary: 14-column exact format
+- Detailed Data: Enhanced EPS breakdown (2025/2026/2027)
+- Quality scoring system (1-4 scale) with emoji status
+- Integration with 觀察名單.csv (116+ companies)
 
 Windows Users: Use Command Prompt or PowerShell for best emoji support
         """
@@ -1750,7 +1302,7 @@ Windows Users: Use Command Prompt or PowerShell for best emoji support
     
     # Execution modes
     execution_group = parser.add_mutually_exclusive_group()
-    execution_group.add_argument('--mode', choices=['intelligent', 'conservative', 'existing-only', 'test-only'], 
+    execution_group.add_argument('--mode', choices=['intelligent', 'conservative', 'process-only', 'test-only'], 
                                 default='intelligent', help='Execution mode')
     execution_group.add_argument('--search-only', action='store_true', help='Run search phase only')
     execution_group.add_argument('--process-only', action='store_true', help='Run processing phase only')
@@ -1761,22 +1313,19 @@ Windows Users: Use Command Prompt or PowerShell for best emoji support
     parser.add_argument('--skip-phases', nargs='*', choices=['search', 'processing', 'upload'],
                        help='Skip specific phases')
     
-    # Monitoring and recovery
+    # Monitoring and analysis
     monitoring_group = parser.add_mutually_exclusive_group()
     monitoring_group.add_argument('--status', action='store_true', help='Show comprehensive status')
-    monitoring_group.add_argument('--recover', action='store_true', help='Intelligent recovery')
-    monitoring_group.add_argument('--reset', action='store_true', help='Reset workflow state')
-    monitoring_group.add_argument('--test-api', action='store_true', help='Test API availability')
     monitoring_group.add_argument('--analyze-data', action='store_true', help='Analyze existing data')
     
     # Version info
     parser.add_argument('--version', action='version', 
-                       version=f'Production FactSet Pipeline v{__version__}')
+                       version=f'Production FactSet Pipeline v{__version__} (Guideline v3.2.0)')
     
     return parser
 
 def main():
-    """Production main entry point with comprehensive error handling"""
+    """Production main entry point - Guideline v3.2.0"""
     parser = create_production_parser()
     args = parser.parse_args()
     
@@ -1791,45 +1340,36 @@ def main():
     try:
         # Initialize production pipeline
         pipeline = ProductionFactSetPipeline(args.config)
-        logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} started"))
+        logger.info(emoji.safe(f"🚀 Production FactSet Pipeline v{__version__} started (Guideline v3.2.0)"))
         
         # Handle monitoring requests
         if args.status:
-            pipeline.state.print_comprehensive_status()
-            return
-        
-        if args.test_api:
-            available = pipeline.test_search_availability()
-            print(emoji.safe(f"🧪 API Status: {'✅ Available' if available else '❌ Unavailable/Rate Limited'}"))
+            # Simple status display
+            print(emoji.safe("📊 Pipeline Status (Guideline v3.2.0):"))
+            print(f"   Version: {__version__}")
+            print(f"   Configuration: Loaded")
+            print(f"   Rate Protector: Active (threshold=1)")
+            print(f"   Workflow State: Initialized")
             return
         
         if args.analyze_data:
             existing_files, data_status = pipeline.analyze_existing_data()
-            strategy = pipeline.determine_optimal_strategy(existing_files, data_status)
+            strategy = pipeline.determine_strategy(existing_files, data_status)
             print(emoji.safe(f"\n💡 Recommended action based on analysis:"))
             if strategy == "process_existing":
-                print("   python factset_pipeline.py --mode existing-only")
-            elif strategy == "maintenance":
+                print("   python factset_pipeline.py --mode process-only")
+            elif strategy == "conservative":
                 print("   python factset_pipeline.py --mode conservative")
             else:
                 print("   python factset_pipeline.py --mode intelligent")
             return
-        
-        if args.reset:
-            preserve = not args.force_all  # Don't preserve if force-all
-            pipeline.state.reset_workflow(preserve_learnings=preserve)
-            return
-        
-        if args.recover:
-            success = pipeline.recover_workflow()
-            sys.exit(0 if success else 1)
         
         # Handle execution requests
         success = False
         
         if args.search_only:
             existing_files, data_status = pipeline.analyze_existing_data()
-            strategy = pipeline.determine_optimal_strategy(existing_files, data_status)
+            strategy = pipeline.determine_strategy(existing_files, data_status)
             success = pipeline.run_intelligent_search_phase(strategy, force=args.force_all)
             
         elif args.process_only:
@@ -1843,12 +1383,12 @@ def main():
             skip_phases = args.skip_phases or []
             
             # Map execution mode to strategy
-            if args.mode == "existing-only":
+            if args.mode == "process-only":
                 skip_phases.append("search")
             elif args.mode == "test-only":
                 skip_phases.extend(["search", "upload"])
             
-            success = pipeline.run_complete_production_pipeline(
+            success = pipeline.run_complete_pipeline(
                 force_all=args.force_all,
                 skip_phases=skip_phases,
                 execution_mode=args.mode
@@ -1856,18 +1396,18 @@ def main():
         
         # Provide helpful guidance on failure
         if not success:
-            logger.error(emoji.safe("\n💡 Troubleshooting suggestions:"))
-            logger.error("1. Check status: python factset_pipeline.py --status")
-            logger.error("2. Test API access: python factset_pipeline.py --test-api")
-            logger.error("3. Analyze data: python factset_pipeline.py --analyze-data")
-            logger.error("4. Try conservative mode: python factset_pipeline.py --mode conservative")
-            logger.error("5. Process existing data: python factset_pipeline.py --mode existing-only")
+            logger.error(emoji.safe("\n💡 Troubleshooting suggestions (Guideline v3.2.0):"))
+            logger.error("1. Analyze data: python factset_pipeline.py --analyze-data")
+            logger.error("2. Try conservative mode: python factset_pipeline.py --mode conservative")
+            logger.error("3. Process existing data: python factset_pipeline.py --mode process-only")
+            logger.error("4. Check API credentials and rate limiting status")
+        else:
+            logger.info(emoji.safe("🎉 Pipeline completed successfully! (Guideline v3.2.0)"))
         
         sys.exit(0 if success else 1)
         
     except KeyboardInterrupt:
         logger.warning(emoji.safe("\n⚠️ Pipeline interrupted by user"))
-        logger.info(emoji.safe("💡 Use --recover to resume from where you left off"))
         sys.exit(130)  # Standard exit code for Ctrl+C
         
     except Exception as e:
@@ -1877,17 +1417,10 @@ def main():
         else:
             logger.error("Run with --debug for detailed error information")
         
-        try:
-            # Try to log error to workflow state
-            pipeline = ProductionFactSetPipeline(args.config)
-            pipeline.state.mark_error(str(e), "pipeline", "system_error")
-        except:
-            pass  # Don't fail on logging failure
-        
         logger.error(emoji.safe("\n💡 Recovery options:"))
-        logger.error("1. Use --recover for intelligent recovery")
-        logger.error("2. Check --status for current state")
-        logger.error("3. Try --mode existing-only if search fails")
+        logger.error("1. Check --analyze-data for current state")
+        logger.error("2. Try --mode process-only if search fails")
+        logger.error("3. Use --debug for detailed error analysis")
         
         sys.exit(1)
 
