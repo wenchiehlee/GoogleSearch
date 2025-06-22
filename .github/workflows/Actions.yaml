@@ -265,6 +265,265 @@ jobs:
         
         echo "✅ Final processing completed"
     
+    - name: 💾 Validate and Commit Results (Safe Version)
+      run: |
+        echo "💾 Validating data before commit..."
+        
+        # Configure git for GitHub Actions bot
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        # Validation checks
+        echo "🔍 Running comprehensive data validation..."
+        
+        # Check 1: Count files with minimum size requirements
+        md_count=$(find data/md -name '*.md' -size +100c 2>/dev/null | wc -l)
+        csv_count=$(find data/csv -name '*.csv' -size +50c 2>/dev/null | wc -l)
+        processed_count=$(find data/processed -name '*' -type f -size +10c 2>/dev/null | wc -l)
+        
+        echo "📊 File counts: ${md_count} MD files (>100 bytes), ${csv_count} CSV files (>50 bytes), ${processed_count} processed files"
+        
+        # Check 2: Validate MD files contain actual financial content (not error pages)
+        valid_md_count=0
+        factset_md_count=0
+        if [ -d "data/md" ]; then
+          for file in data/md/*.md; do
+            [ -f "$file" ] || continue
+            # Check if file contains actual financial content
+            if grep -q -E "(factset|EPS|預估|目標價|分析師|財報|營收)" "$file" 2>/dev/null; then
+              valid_md_count=$((valid_md_count + 1))
+              # Extra check for FactSet specific content
+              if grep -q -i "factset" "$file" 2>/dev/null; then
+                factset_md_count=$((factset_md_count + 1))
+              fi
+            fi
+          done
+        fi
+        
+        # Check 3: Validate CSV files have proper structure
+        valid_csv_count=0
+        if [ -d "data/csv" ]; then
+          for file in data/csv/*.csv; do
+            [ -f "$file" ] || continue
+            # Check if CSV has proper headers and content
+            if head -1 "$file" | grep -q -E "(Title|Link|公司|股票|名稱)" 2>/dev/null; then
+              # Also check if it has data rows (more than just header)
+              if [ "$(wc -l < "$file")" -gt "1" ]; then
+                valid_csv_count=$((valid_csv_count + 1))
+              fi
+            fi
+          done
+        fi
+        
+        # Check 4: Validate processed files
+        valid_processed_count=0
+        has_summary=false
+        has_consolidated=false
+        if [ -f "data/processed/portfolio_summary.csv" ] && [ -s "data/processed/portfolio_summary.csv" ]; then
+          has_summary=true
+          valid_processed_count=$((valid_processed_count + 1))
+        fi
+        if [ -f "data/processed/consolidated_factset.csv" ] && [ -s "data/processed/consolidated_factset.csv" ]; then
+          has_consolidated=true
+          valid_processed_count=$((valid_processed_count + 1))
+        fi
+        
+        echo "✅ Validation results:"
+        echo "   📄 Valid MD files: ${valid_md_count} (${factset_md_count} with FactSet content)"
+        echo "   📊 Valid CSV files: ${valid_csv_count}"
+        echo "   🎯 Valid processed files: ${valid_processed_count}"
+        echo "   💼 Has portfolio summary: ${has_summary}"
+        echo "   📈 Has consolidated data: ${has_consolidated}"
+        
+        # Decision logic: Smart commit strategy
+        should_commit="false"
+        commit_reason=""
+        commit_priority="low"
+        
+        # High priority commit conditions
+        if [ "$valid_md_count" -gt "20" ] && [ "$factset_md_count" -gt "5" ] && [ "$valid_csv_count" -gt "2" ]; then
+          should_commit="true"
+          commit_priority="high"
+          commit_reason="Excellent data: ${valid_md_count} MD (${factset_md_count} FactSet) + ${valid_csv_count} CSV files"
+        
+        # Medium priority commit conditions  
+        elif [ "$valid_md_count" -gt "10" ] && [ "$valid_csv_count" -gt "1" ]; then
+          should_commit="true"
+          commit_priority="medium"
+          commit_reason="Good data: ${valid_md_count} MD + ${valid_csv_count} CSV files"
+        
+        # Low priority commit conditions (but still valuable)
+        elif [ "$valid_md_count" -gt "5" ] || [ "$has_summary" = "true" ] || [ "$has_consolidated" = "true" ]; then
+          should_commit="true"
+          commit_priority="low"
+          commit_reason="Minimal viable data: ${valid_md_count} MD files, summary=${has_summary}, consolidated=${has_consolidated}"
+        
+        # First-time data collection (more lenient)
+        elif [ "${{ needs.preflight.outputs.has_existing_data }}" = "false" ] && [ "$valid_md_count" -gt "0" ]; then
+          should_commit="true"
+          commit_priority="medium"
+          commit_reason="First data collection: ${valid_md_count} MD files"
+        
+        # Skip commit if data quality is poor
+        else
+          should_commit="false"
+          commit_reason="Insufficient valid data (${valid_md_count} MD, ${valid_csv_count} CSV, processed=${valid_processed_count})"
+        fi
+        
+        echo "🎯 Decision: should_commit=${should_commit}, priority=${commit_priority}"
+        echo "📝 Reason: ${commit_reason}"
+        
+        if [ "$should_commit" = "true" ]; then
+          echo "✅ Proceeding with validated commit..."
+          
+          # Create .gitattributes to handle large files properly
+          cat > .gitattributes << 'EOF'
+        # Handle large files with Git LFS
+        *.pdf filter=lfs diff=lfs merge=lfs -text
+        *.zip filter=lfs diff=lfs merge=lfs -text
+        *.gz filter=lfs diff=lfs merge=lfs -text
+        
+        # Ensure proper handling of text files
+        *.md text eol=lf
+        *.csv text eol=lf
+        *.json text eol=lf
+        *.txt text eol=lf
+        EOF
+          
+          # Clean up any problematic files before commit
+          echo "🧹 Cleaning up before commit..."
+          
+          # Remove files larger than 50MB (GitHub limit is 100MB)
+          find data/ -size +50M -delete 2>/dev/null || true
+          
+          # Remove empty files
+          find data/ -empty -delete 2>/dev/null || true
+          
+          # Remove obvious error files
+          find data/ -name "*.md" -exec grep -l "404 Not Found\|403 Forbidden\|500 Internal Server Error" {} \; -delete 2>/dev/null || true
+          
+          # Add files selectively based on validation
+          echo "📁 Adding validated files to git..."
+          
+          # Add valid MD files
+          if [ "$valid_md_count" -gt "0" ]; then
+            find data/md -name '*.md' -size +100c -exec sh -c '
+              if grep -q -E "(factset|EPS|預估|目標價|分析師|財報|營收)" "$1" 2>/dev/null; then
+                git add "$1"
+              fi
+            ' _ {} \;
+            echo "✅ Added ${valid_md_count} validated MD files"
+          fi
+          
+          # Add valid CSV files
+          if [ "$valid_csv_count" -gt "0" ]; then
+            find data/csv -name '*.csv' -size +50c -exec sh -c '
+              if head -1 "$1" | grep -q -E "(Title|Link|公司|股票|名稱)" 2>/dev/null && [ "$(wc -l < "$1")" -gt "1" ]; then
+                git add "$1"
+              fi
+            ' _ {} \;
+            echo "✅ Added ${valid_csv_count} validated CSV files"
+          fi
+          
+          # Add processed data if valid
+          if [ "$valid_processed_count" -gt "0" ]; then
+            if [ "$has_summary" = "true" ]; then
+              git add data/processed/portfolio_summary.csv
+            fi
+            if [ "$has_consolidated" = "true" ]; then
+              git add data/processed/consolidated_factset.csv
+            fi
+            # Add other processed files if they exist and are valid
+            find data/processed -name '*.json' -size +10c -exec git add {} \; 2>/dev/null || true
+            echo "✅ Added ${valid_processed_count} processed data files"
+          fi
+          
+          # Add supporting files
+          git add logs/ 2>/dev/null || true
+          git add "觀察名單.csv" 2>/dev/null || true
+          git add .gitattributes 2>/dev/null || true
+          
+          # Create detailed commit message with quality indicators
+          execution_mode="${{ github.event.inputs.execution_mode || 'conservative' }}"
+          priority_focus="${{ github.event.inputs.priority_focus || 'high_only' }}"
+          
+          # Add quality emoji based on priority
+          quality_emoji="📊"
+          case "$commit_priority" in
+            "high") quality_emoji="🏆" ;;
+            "medium") quality_emoji="✅" ;;
+            "low") quality_emoji="📊" ;;
+          esac
+          
+          commit_message="${quality_emoji} Validated Pipeline Results: ${execution_mode} mode, ${priority_focus} priority
+          
+📊 Data Quality: ${commit_priority} priority
+📄 Validated content:
+- MD files: ${valid_md_count} (${factset_md_count} with FactSet content)
+- CSV files: ${valid_csv_count}
+- Processed files: ${valid_processed_count}
+- Portfolio summary: ${has_summary}
+- Consolidated data: ${has_consolidated}
+
+🎯 Quality check: ${commit_reason}
+⏰ Execution: $(date)
+🚨 Rate limited: ${{ needs.preflight.outputs.rate_limited }}
+
+[skip ci]"
+          
+          # Commit and push with comprehensive error handling
+          if git diff --staged --quiet; then
+            echo "ℹ️ No validated changes to commit (files may have been filtered out)"
+          else
+            echo "✅ Committing validated data..."
+            if git commit -m "$commit_message"; then
+              echo "📤 Pushing to repository..."
+              if git push; then
+                echo "🎉 Validated results committed and pushed successfully!"
+                echo "📈 Quality level: ${commit_priority}"
+                echo "📊 Data summary: ${valid_md_count} MD + ${valid_csv_count} CSV + ${valid_processed_count} processed files"
+              else
+                echo "⚠️ Commit succeeded but push failed - changes are saved locally"
+              fi
+            else
+              echo "⚠️ Commit failed - no changes were made to repository"
+            fi
+          fi
+          
+        else
+          echo "⚠️ Skipping commit due to data quality issues"
+          echo "📝 Reason: ${commit_reason}"
+          echo "💡 Previous good data preserved in repository"
+          
+          # Create an execution log even when skipping commit
+          mkdir -p logs
+          echo "$(date '+%Y-%m-%d %H:%M:%S'): SKIPPED COMMIT - ${commit_reason}" >> logs/pipeline_execution.log
+          echo "  - MD files found: ${md_count} total, ${valid_md_count} valid (${factset_md_count} with FactSet)" >> logs/pipeline_execution.log
+          echo "  - CSV files found: ${csv_count} total, ${valid_csv_count} valid" >> logs/pipeline_execution.log
+          echo "  - Processed files: ${processed_count} total, ${valid_processed_count} valid" >> logs/pipeline_execution.log
+          echo "  - Execution mode: ${{ github.event.inputs.execution_mode || 'conservative' }}" >> logs/pipeline_execution.log
+          echo "  - Priority focus: ${{ github.event.inputs.priority_focus || 'high_only' }}" >> logs/pipeline_execution.log
+          echo "  - Rate limited: ${{ needs.preflight.outputs.rate_limited }}" >> logs/pipeline_execution.log
+          
+          # Commit just the execution log
+          git add logs/pipeline_execution.log 2>/dev/null || true
+          git commit -m "📝 Pipeline execution log: data quality insufficient for commit
+
+🔍 Quality check failed: ${commit_reason}
+📊 Files analyzed:
+- MD files: ${md_count} found, ${valid_md_count} valid (${factset_md_count} FactSet)
+- CSV files: ${csv_count} found, ${valid_csv_count} valid  
+- Processed files: ${processed_count} found, ${valid_processed_count} valid
+
+💡 Previous validated data preserved in repository
+⏰ Execution: $(date)
+
+[skip ci]" 2>/dev/null || true
+          git push 2>/dev/null || true
+          
+          echo "📋 Execution logged for debugging purposes"
+        fi
+    
     - name: 📈 Upload to Google Sheets
       if: env.GOOGLE_SHEET_ID != ''
       env:
