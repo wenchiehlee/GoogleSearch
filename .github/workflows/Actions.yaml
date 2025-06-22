@@ -343,7 +343,7 @@ jobs:
     
     - name: 📦 Upload Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: factset-pipeline-${{ github.run_number }}-${{ github.event.inputs.execution_mode || 'conservative' }}
         path: pipeline_artifacts/
