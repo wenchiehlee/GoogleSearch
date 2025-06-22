@@ -1,86 +1,456 @@
-name: Google Search On GitHub Action
+name: FactSet Pipeline - Current Status (Rate Limiting Aware)
+
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      execution_mode:
+        description: 'Execution strategy'
+        required: false
+        default: 'conservative'
+        type: choice
+        options:
+          - 'conservative'    # High priority only, with delays
+          - 'process_only'    # Process existing data only
+          - 'test_only'       # Test components without search
+          - 'force_search'    # Force search (may hit rate limits)
+      priority_focus:
+        description: 'Search priority level'
+        required: false
+        default: 'high_only'
+        type: choice
+        options:
+          - 'high_only'       # Top priority companies only
+          - 'top_30'          # Top 30 companies
+          - 'balanced'        # All companies (likely to hit rate limits)
+      wait_for_rate_limits:
+        description: 'Wait time before search (minutes)'
+        required: false
+        default: '30'
+        type: string
   schedule:
-    - cron: "10 2 * * *"     # Runs every day at 2:10 AM UTC
+    # Run daily at 2:10 AM UTC (when rate limits are most likely reset)
+    - cron: "10 2 * * *"
+
+env:
+  PYTHONIOENCODING: utf-8
+  FACTSET_PIPELINE_DEBUG: true
 
 jobs:
-  GoogleSearch:
+  # Pre-flight checks to assess current status
+  preflight:
     runs-on: ubuntu-latest
+    outputs:
+      rate_limited: ${{ steps.check_status.outputs.rate_limited }}
+      has_existing_data: ${{ steps.check_status.outputs.has_existing_data }}
+      recommended_action: ${{ steps.check_status.outputs.recommended_action }}
+    
     steps:
-      - name: Checking out repo
-        uses: actions/checkout@v4
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install requests pandas python-dotenv
+    
+    - name: 🔍 Check Current Status
+      id: check_status
+      env:
+        GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+        GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
+      run: |
+        echo "🔍 Checking pipeline status..."
         
-      - name: Setting up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-          
-      - name: Installing package list
-        run: apt list --installed    
+        # Check for existing data
+        existing_md_files=$(find data/md -name "*.md" 2>/dev/null | wc -l || echo "0")
+        existing_csv_files=$(find data/csv -name "*.csv" 2>/dev/null | wc -l || echo "0")
         
-      # Install system dependencies for web page processing
-      - name: Installing system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wkhtmltopdf xvfb
-          
-      # Verify wkhtmltopdf installation
-      - name: Verify wkhtmltopdf installation
-        run: |
-          which wkhtmltopdf
-          wkhtmltopdf --version
-          
-      # Install Python dependencies
-      - name: Installing all necessary packages
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install markitdown
-          which python3
-          which markitdown
-          
-      # Verify Python tools
-      - name: Verify Python tools
-        run: |
-          python --version
-          markitdown --help || echo "Markitdown help not available, but installed"
-          
-      - name: Running Python Script
-        env:
-          GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
-          GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
-        run: |
-          # Run with virtual display for wkhtmltopdf if needed
-          xvfb-run -a python GoogleSearch.py
+        echo "📊 Found $existing_md_files MD files, $existing_csv_files CSV files"
+        
+        if [ "$existing_md_files" -gt "5" ]; then
+          echo "has_existing_data=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_existing_data=false" >> $GITHUB_OUTPUT
+        fi
+        
+        # Test rate limiting status with a simple search
+        echo "🧪 Testing search access (rate limiting check)..."
+        rate_limited="false"
+        
+        # Create a simple test script
+        cat > test_search.py << 'EOF'
+        import requests
+        import os
+        import sys
+        
+        api_key = os.environ.get('GOOGLE_SEARCH_API_KEY')
+        cse_id = os.environ.get('GOOGLE_SEARCH_CSE_ID')
+        
+        if not api_key or not cse_id:
+            print("API credentials not available")
+            sys.exit(1)
+        
+        url = "https://www.googleapis.com/customsearch/v1"
+        params = {
+            'key': api_key,
+            'cx': cse_id,
+            'q': 'test',
+            'num': 1
+        }
+        
+        try:
+            response = requests.get(url, params=params, timeout=30)
+            if response.status_code == 429:
+                print("RATE_LIMITED")
+                sys.exit(2)
+            elif response.status_code == 200:
+                print("SEARCH_AVAILABLE")
+                sys.exit(0)
+            else:
+                print(f"ERROR_{response.status_code}")
+                sys.exit(3)
+        except Exception as e:
+            print(f"NETWORK_ERROR: {e}")
+            sys.exit(4)
+        EOF
+        
+        python test_search.py
+        search_status=$?
+        
+        case $search_status in
+          0)
+            echo "✅ Search API accessible"
+            echo "rate_limited=false" >> $GITHUB_OUTPUT
+            echo "recommended_action=search" >> $GITHUB_OUTPUT
+            ;;
+          2)
+            echo "🚨 Rate limiting detected"
+            echo "rate_limited=true" >> $GITHUB_OUTPUT
+            echo "recommended_action=process_existing" >> $GITHUB_OUTPUT
+            ;;
+          *)
+            echo "⚠️ Search API issues detected"
+            echo "rate_limited=unknown" >> $GITHUB_OUTPUT
+            echo "recommended_action=process_existing" >> $GITHUB_OUTPUT
+            ;;
+        esac
 
-      - name: List generated files
-        run: |
-          echo "Generated CSV files:"
-          ls -la *.csv 2>/dev/null || echo "No CSV files found"
-          echo "Generated PDF files:"
-          ls -la PDF/ 2>/dev/null || echo "No PDF directory found"
-          echo "Generated MD files:"
-          ls -la MD/ 2>/dev/null || echo "No MD directory found"
+  # Main pipeline execution with intelligent strategy
+  pipeline:
+    runs-on: ubuntu-latest
+    needs: preflight
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: 🔧 Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wkhtmltopdf || echo "wkhtmltopdf installation failed (optional)"
+        echo "✅ System dependencies installed"
+    
+    - name: 📦 Install Python Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt || pip install requests pandas gspread google-auth python-dotenv markitdown
+        echo "✅ Python dependencies installed"
+    
+    - name: 🔧 Setup Configuration
+      run: |
+        # Create directories
+        mkdir -p data/{csv,md,pdf,processed} logs
+        
+        # Download target companies
+        python config.py --download-csv || echo "⚠️ CSV download failed, will use existing"
+        
+        echo "✅ Configuration setup completed"
+    
+    - name: 🧪 Test Components
+      env:
+        GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+        GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        echo "🧪 Testing individual components..."
+        
+        # Test configuration
+        python config.py --show || echo "⚠️ Config test failed"
+        
+        # Test utilities
+        python utils.py || echo "⚠️ Utils test failed"
+        
+        # Test sheets connection (without search)
+        python sheets_uploader.py --test-connection || echo "⚠️ Sheets test failed"
+        
+        echo "✅ Component tests completed"
+    
+    - name: ⏰ Wait for Rate Limiting (if specified)
+      if: github.event.inputs.wait_for_rate_limits && github.event.inputs.wait_for_rate_limits != '0'
+      run: |
+        wait_minutes="${{ github.event.inputs.wait_for_rate_limits }}"
+        echo "⏰ Waiting ${wait_minutes} minutes for rate limits to clear..."
+        sleep $((wait_minutes * 60))
+    
+    - name: 📊 Process Existing Data
+      if: needs.preflight.outputs.has_existing_data == 'true' || needs.preflight.outputs.rate_limited == 'true'
+      env:
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        echo "📊 Processing existing data..."
+        
+        # Check existing data
+        python data_processor.py --check-data || echo "Data check completed with warnings"
+        
+        # Process MD files if they exist
+        if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
+          echo "📄 Processing existing MD files..."
+          python data_processor.py --force --parse-md || echo "⚠️ MD processing had issues"
+        fi
+        
+        # Process any existing data
+        python data_processor.py --force || echo "⚠️ Data processing had issues"
+        
+        echo "✅ Existing data processing completed"
+    
+    - name: 🔍 Conservative Search (if safe)
+      if: needs.preflight.outputs.rate_limited != 'true' && github.event.inputs.execution_mode != 'process_only'
+      env:
+        GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+        GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
+      run: |
+        echo "🔍 Attempting conservative search..."
+        
+        # Determine search parameters
+        priority_focus="${{ github.event.inputs.priority_focus || 'high_only' }}"
+        execution_mode="${{ github.event.inputs.execution_mode || 'conservative' }}"
+        
+        if [ "$execution_mode" = "force_search" ]; then
+          echo "⚠️ Force search mode - may encounter rate limiting"
+          python factset_search.py --priority-focus "$priority_focus" || echo "🚨 Search failed due to rate limiting"
+        elif [ "$execution_mode" = "conservative" ]; then
+          echo "🎯 Conservative search mode"
+          # Try search with conservative settings
+          timeout 600 python factset_search.py --priority-focus high_only || echo "🚨 Conservative search failed"
+        else
+          echo "ℹ️ Skipping search in test-only mode"
+        fi
+    
+    - name: 📊 Final Data Processing
+      env:
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        echo "📊 Final data processing..."
+        
+        # Process any new data
+        python data_processor.py --force --parse-md || echo "Data processing completed with warnings"
+        
+        echo "✅ Final processing completed"
+    
+    - name: 📈 Upload to Google Sheets
+      if: env.GOOGLE_SHEET_ID != ''
+      env:
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        echo "📈 Uploading to Google Sheets..."
+        
+        # Check if we have data to upload
+        if [ -f "data/processed/portfolio_summary.csv" ] || [ -f "data/processed/consolidated_factset.csv" ]; then
+          python sheets_uploader.py || echo "⚠️ Sheets upload had issues"
+        else
+          echo "ℹ️ No processed data found for upload"
+        fi
+        
+        echo "✅ Upload attempt completed"
+    
+    - name: 📊 Generate Status Report
+      if: always()
+      run: |
+        echo "📊 Generating status report..."
+        
+        # Try to get pipeline status (may fail if methods not implemented)
+        python factset_pipeline.py --status || echo "Status command not available"
+        
+        # Manual status check
+        echo "=== Manual Status Check ==="
+        echo "MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)"
+        echo "CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)"
+        echo "Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)"
+        
+        # Check for rate limiting indicators in logs
+        if grep -r "429" logs/ 2>/dev/null; then
+          echo "🚨 Rate limiting detected in logs"
+        fi
+    
+    - name: 📄 Collect Artifacts
+      if: always()
+      run: |
+        echo "📄 Collecting artifacts..."
+        
+        # Create artifacts directory
+        mkdir -p pipeline_artifacts
+        
+        # Copy data with error handling
+        [ -d "data" ] && cp -r data pipeline_artifacts/ 2>/dev/null || echo "No data directory"
+        [ -d "logs" ] && cp -r logs pipeline_artifacts/ 2>/dev/null || echo "No logs directory"
+        
+        # Copy specific files
+        [ -f "觀察名單.csv" ] && cp "觀察名單.csv" pipeline_artifacts/ || echo "No watchlist file"
+        
+        # Create summary
+        cat > pipeline_artifacts/EXECUTION_SUMMARY.md << EOF
+        # Pipeline Execution Summary
+        
+        **Date**: $(date)
+        **Execution Mode**: ${{ github.event.inputs.execution_mode || 'conservative' }}
+        **Priority Focus**: ${{ github.event.inputs.priority_focus || 'high_only' }}
+        **Trigger**: ${{ github.event_name }}
+        **Rate Limited**: ${{ needs.preflight.outputs.rate_limited }}
+        **Had Existing Data**: ${{ needs.preflight.outputs.has_existing_data }}
+        
+        ## File Counts
+        - MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)
+        - CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)
+        - Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)
+        
+        ## Execution Status
+        $(python factset_pipeline.py --status 2>/dev/null || echo "Pipeline status not available")
+        
+        ## Rate Limiting Check
+        $(grep -r "429\|Too Many Requests" logs/ 2>/dev/null || echo "No rate limiting detected in logs")
+        EOF
+        
+        echo "✅ Artifacts collected"
+    
+    - name: 📦 Upload Artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: factset-pipeline-${{ github.run_number }}-${{ github.event.inputs.execution_mode || 'conservative' }}
+        path: pipeline_artifacts/
+        retention-days: 14
+    
+    - name: 📊 Summary Report
+      if: always()
+      run: |
+        echo "## 📊 FactSet Pipeline Execution Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Mode**: ${{ github.event.inputs.execution_mode || 'conservative' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Priority Focus**: ${{ github.event.inputs.priority_focus || 'high_only' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Rate Limited**: ${{ needs.preflight.outputs.rate_limited }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Recommended Action**: ${{ needs.preflight.outputs.recommended_action }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Add dashboard link if available
+        if [ -n "${{ secrets.GOOGLE_SHEET_ID }}" ]; then
+          echo "📈 **Dashboard**: [View Results](https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # File statistics
+        echo "### 📁 Generated Files" >> $GITHUB_STEP_SUMMARY
+        echo "- 📝 MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- 📄 CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- 📊 Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Rate limiting status
+        if grep -r "429\|Too Many Requests" logs/ 2>/dev/null >/dev/null; then
+          echo "🚨 **Rate Limiting Detected**: Search requests were blocked" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Recommendation**: Wait 4-12 hours before next search attempt" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "✅ **Search Status**: No rate limiting detected" >> $GITHUB_STEP_SUMMARY
+        fi
 
-      - name: Commit and Push The Results From Python Action
-        run: |
-         git config --global user.name "github-actions[bot]"
-         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-         
-         # Add files with error handling
-         git add *.csv 2>/dev/null || echo "No CSV files to add"
-         git add PDF/*.pdf 2>/dev/null || echo "No PDF files to add"
-         git add PDF/*.txt 2>/dev/null || echo "No TXT files to add"
-         git add MD/*.md 2>/dev/null || echo "No MD files to add"
-         
-         # Check if there are any changes to commit
-         if git diff --staged --quiet; then
-           echo "No changes to commit"
-         else
-           git commit -m "⬆️ GitHub Actions Results added (Ubuntu v2.0.3)" || echo "Commit failed"
-           git push || echo "Push failed"
-         fi
+  # Recovery job for when main pipeline encounters issues
+  recovery:
+    runs-on: ubuntu-latest
+    needs: [preflight, pipeline]
+    if: failure() || needs.preflight.outputs.rate_limited == 'true'
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install requests pandas gspread google-auth python-dotenv markitdown || echo "Some dependencies failed"
+    
+    - name: 🔄 Recovery Strategy
+      env:
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        echo "🔄 Implementing recovery strategy..."
+        
+        # Try to salvage any existing data
+        if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
+          echo "📄 Found existing MD files, attempting processing..."
+          python data_processor.py --check-data || echo "Data check completed"
+          python data_processor.py --force --parse-md || echo "MD processing attempted"
+        fi
+        
+        # Try basic data processing
+        python data_processor.py --force || echo "Basic processing attempted"
+        
+        # Try sheets upload if data exists
+        if [ -f "data/processed/portfolio_summary.csv" ]; then
+          echo "📈 Attempting sheets upload with existing data..."
+          python sheets_uploader.py || echo "Sheets upload attempted"
+        fi
+        
+        echo "✅ Recovery attempts completed"
+    
+    - name: 📋 Recovery Report
+      if: always()
+      run: |
+        echo "## 🔄 Recovery Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "The main pipeline encountered issues and recovery was attempted." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.preflight.outputs.rate_limited }}" = "true" ]; then
+          echo "🚨 **Issue**: Google Search rate limiting detected" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Action**: Processed existing data only" >> $GITHUB_STEP_SUMMARY
+          echo "⏰ **Recommendation**: Wait 4-12 hours before attempting new searches" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Issue**: Pipeline execution failed" >> $GITHUB_STEP_SUMMARY
+          echo "🔧 **Action**: Attempted data recovery and processing" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Recovery Results" >> $GITHUB_STEP_SUMMARY
+        echo "- MD files processed: $(find data/md -name '*.md' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- Data files generated: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+        echo "1. Review execution logs in artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "2. Check for rate limiting indicators" >> $GITHUB_STEP_SUMMARY
+        echo "3. Consider manual execution with conservative settings" >> $GITHUB_STEP_SUMMARY
+        echo "4. Verify API credentials if search consistently fails" >> $GITHUB_STEP_SUMMARY

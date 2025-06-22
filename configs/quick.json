@@ -1,0 +1,151 @@
+# File: configs/quick.json
+{
+  "pipeline": {
+    "name": "Google Search FactSet Pipeline - Quick Mode",
+    "description": "Fast pipeline for testing and quick results"
+  },
+  "search": {
+    "max_results": 100,
+    "timeout": 15,
+    "default_days": 90,
+    "parallel_searches": 1
+  },
+  "target_companies": "load_from_csv",
+  "quality": {
+    "min_fields_for_complete": 3
+  }
+}
+
+---
+
+# File: configs/comprehensive.json
+{
+  "pipeline": {
+    "name": "Google Search FactSet Pipeline - Comprehensive Mode",
+    "description": "Deep analysis with extended company coverage from 觀察名單"
+  },
+  "search": {
+    "max_results": 1000,
+    "timeout": 60,
+    "parallel_searches": 3,
+    "default_days": 720
+  },
+  "target_companies": "load_from_csv",
+  "quality": {
+    "min_fields_for_complete": 4,
+    "required_fields": ["公司名稱", "股票代號", "當前EPS預估", "目標價", "分析師數量"]
+  }
+}
+
+---
+
+# File: configs/missing_companies.json
+{
+  "pipeline": {
+    "name": "Google Search FactSet Pipeline - Missing Companies Focus",
+    "description": "Targeted search for companies with insufficient data"
+  },
+  "search": {
+    "max_results": 300,
+    "timeout": 45,
+    "default_days": 365,
+    "enable_watch_list": false
+  },
+  "target_companies": [
+    {"code": "2412", "name": "中華電", "full": "2412中華電"},
+    {"code": "2480", "name": "敦陽科", "full": "2480敦陽科"}
+  ],
+  "quality": {
+    "min_fields_for_complete": 2,
+    "required_fields": ["公司名稱", "股票代號"]
+  },
+  "sheets": {
+    "auto_backup": true,
+    "sheet_names": {
+      "portfolio": "Missing Companies Summary",
+      "detailed": "Missing Companies Data",
+      "statistics": "Missing Companies Stats"
+    }
+  }
+}
+
+---
+
+# File: configs/development.json
+{
+  "pipeline": {
+    "name": "Google Search FactSet Pipeline - Development",
+    "description": "Configuration optimized for development and testing"
+  },
+  "search": {
+    "max_results": 50,
+    "timeout": 10,
+    "default_days": 30,
+    "parallel_searches": 1
+  },
+  "target_companies": [
+    {"code": "2382", "name": "廣達", "full": "2382廣達"},
+    {"code": "2330", "name": "台積電", "full": "2330台積電"}
+  ],
+  "output": {
+    "processed_dir": "data/test_processed",
+    "logs_dir": "logs/test"
+  },
+  "sheets": {
+    "auto_backup": false,
+    "sheet_names": {
+      "portfolio": "Test Portfolio",
+      "detailed": "Test Data",
+      "statistics": "Test Stats"
+    }
+  },
+  "logging": {
+    "level": "DEBUG",
+    "console_logging": true,
+    "file_logging": true
+  }
+}
+
+---
+
+# File: configs/production.json
+{
+  "pipeline": {
+    "name": "Google Search FactSet Pipeline - Production",
+    "description": "Production configuration with monitoring and reliability features"
+  },
+  "search": {
+    "max_results": 800,
+    "timeout": 45,
+    "default_days": 360,
+    "parallel_searches": 2,
+    "enable_watch_list": true
+  },
+  "target_companies": "load_from_csv",
+  "quality": {
+    "min_fields_for_complete": 4,
+    "required_fields": ["公司名稱", "股票代號", "當前EPS預估", "目標價"],
+    "quality_thresholds": {
+      "excellent": 4,
+      "good": 3,
+      "fair": 2,
+      "poor": 1,
+      "missing": 0
+    }
+  },
+  "sheets": {
+    "auto_backup": true,
+    "max_backup_count": 10,
+    "create_missing_sheets": true,
+    "sheet_names": {
+      "portfolio": "Google Search FactSet Dashboard",
+      "detailed": "Complete FactSet Data",
+      "statistics": "Pipeline Statistics"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file_logging": true,
+    "console_logging": true
+  }
+}

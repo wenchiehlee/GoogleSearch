@@ -1,3 +1,107 @@
-requests
-python-dotenv
-markitdown
+# FactSet Pipeline - Modular Architecture Dependencies  
+# Version: 3.1.0
+# Date: 2025-06-21
+# CLEANED VERSION - No duplicates, compatible versions
+
+# ============================================================================
+# CORE DEPENDENCIES (Required)
+# ============================================================================
+
+# Data processing and analysis
+pandas>=2.0.0,<3.0.0
+numpy>=1.24.0,<2.0.0
+
+# HTTP requests and web scraping
+requests>=2.31.0,<3.0.0
+beautifulsoup4>=4.12.0,<5.0.0
+lxml>=4.9.0,<5.0.0
+
+# Google Search (try multiple options)
+googlesearch-python>=1.2.3
+# Alternative if above fails: google>=3.0.0
+
+# HTML to Markdown conversion
+markdownify>=0.11.0,<1.0.0
+
+# Excel file support
+openpyxl>=3.1.0,<4.0.0
+
+# ============================================================================
+# GOOGLE SHEETS INTEGRATION (Required for upload)
+# ============================================================================
+
+# Google Sheets API - Use EITHER gspread OR google-auth group
+gspread>=5.10.0,<6.0.0
+
+# Google Authentication (compatible with gspread)
+google-auth>=2.22.0,<3.0.0
+google-auth-oauthlib>=1.0.0,<2.0.0
+google-auth-httplib2>=0.1.0,<1.0.0
+
+# ============================================================================
+# UTILITY LIBRARIES (Required)
+# ============================================================================
+
+# Environment configuration
+python-dotenv>=1.0.0,<2.0.0
+
+# Date and time processing
+python-dateutil>=2.8.0,<3.0.0
+
+# Text processing
+regex>=2023.0.0
+
+# Console output formatting
+colorama>=0.4.6,<1.0.0
+tqdm>=4.65.0,<5.0.0
+
+# ============================================================================
+# OPTIONAL DEPENDENCIES (Advanced features)
+# ============================================================================
+
+# Document conversion (uncomment if needed)
+# markitdown>=0.0.1a2
+
+# Advanced visualizations (uncomment if needed)
+# plotly>=5.15.0,<6.0.0
+
+# ============================================================================
+# DEVELOPMENT DEPENDENCIES (Uncomment for development)
+# ============================================================================
+
+# Testing
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# Code formatting
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.5.0
+
+# ============================================================================
+# SYSTEM REQUIREMENTS
+# ============================================================================
+
+# Optional external tools:
+# - wkhtmltopdf (for PDF conversion)
+#   Ubuntu/Debian: sudo apt-get install wkhtmltopdf
+#   macOS: brew install wkhtmltopdf  
+#   Windows: Download from https://wkhtmltopdf.org/downloads.html
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+
+# 1. Install core dependencies:
+#    pip install -r requirements.txt
+#
+# 2. If googlesearch-python fails, try alternatives:
+#    pip uninstall googlesearch-python
+#    pip install google
+#
+# 3. For Google Sheets integration, you need:
+#    - Google Cloud credentials (service account JSON)
+#    - GOOGLE_SHEET_ID environment variable
+#
+# 4. Test installation:
+#    python -c "import pandas, requests, gspread; print('✅ All core dependencies installed')"
