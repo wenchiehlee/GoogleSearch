@@ -103,7 +103,7 @@
 
   
 
-Something went wrong
+Oops, something went wrong
 
               [![鉅亨網](https://s.yimg.com/ny/api/res/1.2/UM5hrThmhlnSiBO4o4qlLg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")   
 # 鉅亨速報 - Factset 最新調查：友達(2409-TW)EPS預估上修至0.57元，預估目標價為14元
