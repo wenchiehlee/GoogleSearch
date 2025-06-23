@@ -1,25 +1,42 @@
 {
-  "generated_at": "2025-06-23T07:53:45.652930",
-  "guideline_version": "3.3.0",
+  "generated_at": "2025-06-23T17:43:40.558689",
+  "guideline_version": "3.3.1",
   "total_companies": 116,
   "companies_with_data": 17,
   "total_md_files": 71,
+  "performance_stats": {
+    "files_processed": 142,
+    "batches_completed": 0,
+    "memory_cleanups": 0,
+    "peak_memory_mb": 97.7109375
+  },
   "data_quality": {},
   "file_level_stats": {
     "files_with_eps_data": 59,
     "files_with_target_price": 3,
-    "average_file_quality": 3.0,
+    "average_file_quality": 2.9295774647887325,
     "quality_distribution": {
       "4": 31,
-      "3": 18,
-      "2": 13,
-      "1": 9
+      "3": 15,
+      "2": 14,
+      "1": 11
     }
   },
   "company_level_stats": {
     "companies_with_target_price": 2,
     "companies_with_analyst_data": 15,
-    "average_quality_score": 3.6470588235294117,
+    "average_quality_score": 3.588235294117647,
     "average_files_per_company": 4.176470588235294
+  },
+  "memory_stats": {
+    "current_mb": 87.5859375,
+    "peak_mb": 97.7109375,
+    "limit_mb": 2048,
+    "cleanup_count": 0,
+    "processing_stats": {
+      "files_processed": 142,
+      "batches_completed": 0,
+      "memory_cleanups": 0
+    }
   }
 }
