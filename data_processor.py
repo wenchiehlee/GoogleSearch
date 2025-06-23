@@ -682,9 +682,9 @@ def process_all_data_v330(config_file: Optional[str] = None, force: bool = False
     
     # Load configuration
     if config_file:
-        config = config_module.load_config(config_file)
+        config = config_module.load_config_v330(config_file)
     else:
-        config = config_module.load_config()
+        config = config_module.load_config_v330()
     
     if not config:
         print("❌ Could not load configuration")

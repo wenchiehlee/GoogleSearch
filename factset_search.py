@@ -869,7 +869,7 @@ def main():
     print(f"🔍 Enhanced Search Module v{__version__} (v3.3.0)")
     
     try:
-        config = config_module.load_config()
+        config = config_module.load_config_v330()
     except:
         config = {
             'target_companies': [],
