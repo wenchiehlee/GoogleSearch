@@ -1,38 +1,25 @@
 {
-  "generated_at": "2025-06-23T03:52:51.946781",
-  "guideline_version": "3.2.4",
+  "generated_at": "2025-06-23T07:53:45.652930",
+  "guideline_version": "3.3.0",
   "total_companies": 116,
-  "companies_with_data": 10,
-  "data_quality": {
-    "companies_with_md_files": 10,
-    "companies_with_target_price": 1,
-    "companies_with_analyst_count": 9,
-    "average_md_files_per_company": 15.7,
-    "average_quality_score": 3.3
+  "companies_with_data": 17,
+  "total_md_files": 71,
+  "data_quality": {},
+  "file_level_stats": {
+    "files_with_eps_data": 59,
+    "files_with_target_price": 3,
+    "average_file_quality": 3.0,
+    "quality_distribution": {
+      "4": 31,
+      "3": 18,
+      "2": 13,
+      "1": 9
+    }
   },
-  "financial_coverage": {},
-  "quality_distribution": {
-    "excellent_4": 5,
-    "good_3": 3,
-    "fair_2": 2,
-    "poor_1": 0,
-    "no_data_0": 106
-  },
-  "eps_coverage": {
-    "2025_eps_coverage": 0,
-    "2026_eps_coverage": 0,
-    "2027_eps_coverage": 0,
-    "multi_year_coverage": 0
-  },
-  "status_distribution": {
-    "🔴 無資料": 106,
-    "🟢 完整": 5,
-    "🟠 部分": 4,
-    "🟡 良好": 1
-  },
-  "success_rates": {
-    "data_collection_rate": 8.620689655172415,
-    "financial_data_rate": 0.8620689655172413,
-    "eps_forecast_rate": 0.0
+  "company_level_stats": {
+    "companies_with_target_price": 2,
+    "companies_with_analyst_data": 15,
+    "average_quality_score": 3.6470588235294117,
+    "average_files_per_company": 4.176470588235294
   }
 }
