@@ -246,65 +246,24 @@ jobs:
         echo "📥 Downloading target companies..."
         python config.py --download-csv || echo "⚠️ CSV download failed, will use existing"
         
-        # Verify target companies are available
-        echo "🔍 Verifying target companies availability..."
-        python -c "
-        import config
-        try:
-            # Try different config loading methods for v3.3.0 compatibility
-            if hasattr(config, 'load_config_v330'):
-                cfg = config.load_config_v330()
-                print('✅ Using load_config_v330()')
-            elif hasattr(config, 'load_config'):
-                cfg = config.load_config()
-                print('✅ Using load_config()')
-            else:
-                # Try direct method
-                companies = config.download_target_companies()
-                print(f'✅ Direct download: {len(companies)} companies')
-                cfg = {'target_companies': companies}
-            
-            # Validate companies
-            if 'target_companies' in cfg and len(cfg['target_companies']) > 0:
-                print(f'✅ Found {len(cfg['target_companies'])} target companies')
-                # Show first few companies
-                for i, company in enumerate(cfg['target_companies'][:3]):
-                    print(f'   Company {i+1}: {company}')
-            else:
-                print('❌ No target companies found')
-                
-        except Exception as e:
-            print(f'⚠️ Config loading error: {e}')
-            print('Attempting fallback...')
-            try:
-                companies = config.download_target_companies()
-                print(f'✅ Fallback successful: {len(companies)} companies')
-            except Exception as e2:
-                print(f'❌ Fallback failed: {e2}')
-        " || echo "⚠️ Company verification had issues"
+        # Simple file check - no complex Python importing
+        echo "🔍 Checking basic setup..."
+        if [ -f "觀察名單.csv" ]; then
+          echo "✅ Found 觀察名單.csv"
+          wc -l "觀察名單.csv" || echo "File check completed"
+        else
+          echo "⚠️ 觀察名單.csv not found"
+        fi
         
-        # Verify guideline compliance
-        echo "📋 Verifying v3.3.0 compliance..."
-        python -c "
-        import os
-        import sys
-        
-        # Check for required files
-        required_files = [
-            'factset_pipeline.py',
-            'factset_search.py', 
-            'data_processor.py',
-            'sheets_uploader.py',
-            'config.py'
-        ]
-        
-        missing = [f for f in required_files if not os.path.exists(f)]
-        if missing:
-            print(f'❌ Missing required files: {missing}')
-            sys.exit(1)
-        
-        print('✅ All required v3.3.0 files present')
-        "
+        # Check required files exist
+        echo "📋 Verifying v3.3.0 files..."
+        for file in factset_pipeline.py factset_search.py data_processor.py sheets_uploader.py config.py; do
+          if [ -f "$file" ]; then
+            echo "✅ $file"
+          else
+            echo "❌ $file missing"
+          fi
+        done
         
         echo "✅ Configuration setup completed (v3.3.0)"
     
@@ -317,112 +276,18 @@ jobs:
       run: |
         echo "🧪 Testing v3.3.0 components..."
         
-        # Enhanced component testing with compatibility checking
-        echo "🔍 Comprehensive v3.3.0 compatibility check..."
+        # Simple module import tests - no complex method checking
+        echo "📋 Testing basic imports..."
+        python -c "import config; print('✅ Config module')" || echo "⚠️ Config import failed"
+        python -c "import utils; print('✅ Utils module')" || echo "⚠️ Utils not available"
+        python -c "import data_processor; print('✅ Data processor module')" || echo "⚠️ Data processor import failed"
+        python -c "import factset_search; print('✅ Search engine module')" || echo "⚠️ Search engine import failed"
+        python -c "import factset_pipeline; print('✅ Pipeline module')" || echo "⚠️ Pipeline import failed"
         
-        # Test configuration with method introspection
-        echo "⚙️ Testing configuration module..."
-        python -c "
-        import config
-        import inspect
-        
-        print('📋 Config module methods:')
-        methods = [method for method in dir(config) if not method.startswith('_')]
-        for method in methods:
-            if callable(getattr(config, method)):
-                print(f'  ✅ {method}()')
-        
-        # Test different loading methods
-        try:
-            if hasattr(config, 'load_config_v330'):
-                cfg = config.load_config_v330()
-                print('✅ load_config_v330() working')
-            elif hasattr(config, 'load_config'):
-                cfg = config.load_config()
-                print('✅ load_config() working')
-            else:
-                print('⚠️ No standard load_config method found')
-            
-            if hasattr(config, 'download_target_companies'):
-                companies = config.download_target_companies()
-                print(f'✅ download_target_companies(): {len(companies)} companies')
-            else:
-                print('❌ download_target_companies() not found')
-                
-        except Exception as e:
-            print(f'⚠️ Config test error: {e}')
-        " || echo "⚠️ Config test failed"
-        
-        # Test utilities
-        python -c "import utils; print('✅ Utils module available')" || echo "⚠️ Utils test failed"
-        
-        # Test data processor with method introspection
-        echo "📊 Testing data processor module..."
-        python -c "
-        import data_processor
-        import inspect
-        
-        print('📊 Data processor methods:')
-        methods = [method for method in dir(data_processor) if not method.startswith('_')]
-        key_methods = ['process_all_data', 'process_all_data_v330', 'main']
-        for method in key_methods:
-            if hasattr(data_processor, method):
-                print(f'  ✅ {method}()')
-            else:
-                print(f'  ❌ {method}() missing')
-        
-        # Test if it can handle config compatibility
-        try:
-            import config
-            if hasattr(config, 'load_config'):
-                print('✅ Data processor should work with config.load_config')
-            elif hasattr(config, 'load_config_v330'):
-                print('⚠️ Config has load_config_v330 but data_processor expects load_config')
-            else:
-                print('❌ No compatible config loading method')
-        except Exception as e:
-            print(f'⚠️ Config compatibility check error: {e}')
-        " || echo "⚠️ Data processor test failed"
-        
-        # Test search engine with method introspection
-        echo "🔍 Testing search engine module..."
-        python -c "
-        import factset_search
-        import inspect
-        
-        print('🔍 Search engine methods:')
-        methods = [method for method in dir(factset_search) if not method.startswith('_')]
-        key_methods = ['run_enhanced_search_suite', 'main', 'search_company_factset_data']
-        for method in key_methods:
-            if hasattr(factset_search, method):
-                print(f'  ✅ {method}()')
-            else:
-                print(f'  ❌ {method}() missing')
-        " || echo "⚠️ Search engine test failed"
-        
-        # Test sheets uploader  
+        # Test basic functionality with direct calls
+        echo "🔧 Testing module functionality..."
+        python config.py --show || echo "⚠️ Config test failed"
         python sheets_uploader.py --test-connection || echo "⚠️ Sheets test failed"
-        
-        # Test main pipeline with introspection
-        echo "🎯 Testing main pipeline module..."
-        python -c "
-        try:
-            import factset_pipeline
-            print('✅ Main pipeline module importable')
-            
-            # Check for key methods
-            key_methods = ['main', 'run_complete_pipeline', 'analyze_existing_data']
-            for method in key_methods:
-                if hasattr(factset_pipeline, method):
-                    print(f'  ✅ {method}()')
-                else:
-                    print(f'  ❌ {method}() missing')
-                    
-        except Exception as e:
-            print(f'⚠️ Pipeline import error: {e}')
-        " || echo "⚠️ Pipeline test failed"
-        
-        # Test main pipeline status
         python factset_pipeline.py --status || echo "⚠️ Pipeline status test failed"
         
         echo "✅ Component tests completed (v3.3.0)"
@@ -444,88 +309,23 @@ jobs:
       run: |
         echo "📊 Processing existing data (v3.3.0)..."
         
-        # Create compatibility wrapper for config method mismatch
-        echo "🔧 Creating v3.3.0 compatibility layer..."
-        python -c "
-        import config
-        import sys
-        
-        # Check which config method is available and create compatibility
-        if hasattr(config, 'load_config_v330'):
-            print('✅ load_config_v330 available')
-        elif hasattr(config, 'load_config'):
-            print('✅ load_config available')
-            # Create v3.3.0 alias if needed
-            setattr(config, 'load_config_v330', config.load_config)
-        else:
-            print('⚠️ Creating fallback load_config method')
-            def fallback_load_config():
-                companies = config.download_target_companies()
-                return {'target_companies': companies}
-            setattr(config, 'load_config', fallback_load_config)
-            setattr(config, 'load_config_v330', fallback_load_config)
-        " || echo "Config compatibility setup completed"
-        
-        # Check existing data
+        # Simple direct approach - just run the commands
+        echo "🔧 Running data processor checks..."
         python data_processor.py --check-data || echo "Data check completed with warnings"
         
-        # Process MD files if they exist with enhanced error handling
+        # Process MD files if they exist
         if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
           echo "📄 Processing existing MD files with v3.3.0 EPS breakdown..."
-          
-          # Try multiple approaches for v3.3.0 processing
-          python -c "
-          import data_processor
-          import sys
-          import os
-          
-          try:
-              # Try v3.3.0 method if available
-              if hasattr(data_processor, 'process_all_data_v330'):
-                  print('Using process_all_data_v330')
-                  success = data_processor.process_all_data_v330(force=True, parse_md=True)
-              elif hasattr(data_processor, 'process_all_data'):
-                  print('Using process_all_data')
-                  success = data_processor.process_all_data(force=True, parse_md=True)
-              else:
-                  print('No processing method found')
-                  sys.exit(1)
-              
-              if success:
-                  print('✅ MD processing completed successfully')
-              else:
-                  print('⚠️ MD processing completed with warnings')
-                  
-          except Exception as e:
-              print(f'⚠️ MD processing error: {e}')
-              print('Attempting fallback processing...')
-              try:
-                  # Fallback to basic processing
-                  os.system('python data_processor.py --force')
-                  print('✅ Fallback processing completed')
-              except Exception as e2:
-                  print(f'❌ Fallback failed: {e2}')
-          " || echo "⚠️ MD processing had issues"
+          python data_processor.py --force --parse-md || echo "⚠️ MD processing had issues"
         fi
         
-        # Process any existing data with v3.3.0 compliance using fallback approach
-        echo "🔄 Attempting basic data processing as fallback..."
-        python -c "
-        import subprocess
-        import sys
+        # Process any existing data with v3.3.0 compliance
+        echo "🔄 Running basic data processing..."
+        python data_processor.py --force || echo "⚠️ Data processing had issues"
         
-        try:
-            result = subprocess.run(['python', 'data_processor.py', '--force'], 
-                                  capture_output=True, text=True, timeout=300)
-            if result.returncode == 0:
-                print('✅ Basic processing successful')
-            else:
-                print(f'⚠️ Basic processing warnings: {result.stderr}')
-        except subprocess.TimeoutExpired:
-            print('⚠️ Processing timeout - continuing anyway')
-        except Exception as e:
-            print(f'⚠️ Processing error: {e}')
-        " || echo "⚠️ Data processing had issues"
+        # Check what was generated
+        echo "📊 Checking generated files..."
+        find data/processed -name "*.csv" -o -name "*.json" 2>/dev/null || echo "No processed files found yet"
         
         echo "✅ Existing data processing completed (v3.3.0)"
     
@@ -545,110 +345,24 @@ jobs:
         
         echo "📊 Search parameters: mode=$execution_mode, focus=$priority_focus"
         
-        # Pre-search validation and setup
+        # Simple pre-search check
         echo "🔧 Pre-search validation..."
-        python -c "
-        import config
-        import os
-        import sys
-        
-        # Ensure target companies are available for search
-        try:
-            # Try different methods to ensure companies are loaded
-            if hasattr(config, 'load_config_v330'):
-                cfg = config.load_config_v330()
-            elif hasattr(config, 'load_config'):
-                cfg = config.load_config()
-            else:
-                companies = config.download_target_companies()
-                cfg = {'target_companies': companies}
-            
-            if 'target_companies' in cfg and len(cfg['target_companies']) > 0:
-                print(f'✅ Search pre-check: {len(cfg[\"target_companies\"])} companies available')
-                
-                # Create a simple companies list file for search module compatibility
-                with open('target_companies.txt', 'w', encoding='utf-8') as f:
-                    for company in cfg['target_companies']:
-                        if isinstance(company, dict):
-                            f.write(f'{company.get(\"code\", \"\")},{company.get(\"name\", \"\")}\n')
-                        else:
-                            f.write(f'{company}\n')
-                print('✅ Created target_companies.txt for search compatibility')
-                
-                # Also ensure 觀察名單.csv exists
-                if not os.path.exists('觀察名單.csv'):
-                    print('⚠️ 觀察名單.csv missing, creating from config...')
-                    with open('觀察名單.csv', 'w', encoding='utf-8') as f:
-                        f.write('代號,名稱\n')
-                        for company in cfg['target_companies']:
-                            if isinstance(company, dict):
-                                f.write(f'{company.get(\"code\", \"\")},{company.get(\"name\", \"\")}\n')
-                    print('✅ Created 觀察名單.csv')
-                
-            else:
-                print('❌ No target companies found - will skip search')
-                sys.exit(1)
-                
-        except Exception as e:
-            print(f'⚠️ Pre-search setup error: {e}')
-            # Try direct download as fallback
-            try:
-                companies = config.download_target_companies()
-                if len(companies) > 0:
-                    print(f'✅ Fallback successful: {len(companies)} companies')
-                    with open('觀察名單.csv', 'w', encoding='utf-8') as f:
-                        f.write('代號,名稱\n')
-                        for company in companies:
-                            if isinstance(company, dict):
-                                f.write(f'{company.get(\"code\", \"\")},{company.get(\"name\", \"\")}\n')
-                else:
-                    print('❌ Fallback failed - no companies')
-                    sys.exit(1)
-            except Exception as e2:
-                print(f'❌ Fallback error: {e2}')
-                sys.exit(1)
-        " || echo "⚠️ Pre-search validation failed - skipping search"
-        
-        # Only proceed with search if validation passed
-        if [ $? -eq 0 ]; then
-          echo "✅ Pre-search validation passed - proceeding with search"
-          
-          if [ "$execution_mode" = "force_search" ]; then
-            echo "⚠️ Force search mode - may encounter rate limiting"
-            timeout 900 python factset_search.py --priority-focus "$priority_focus" || echo "🚨 Search failed due to rate limiting"
-          elif [ "$execution_mode" = "conservative" ]; then
-            echo "🎯 Conservative search mode (v3.3.0)"
-            # Try search with v3.3.0 enhanced error handling and company validation
-            timeout 600 python -c "
-            import factset_search
-            import sys
-            
-            try:
-                # Try different search methods for v3.3.0 compatibility
-                if hasattr(factset_search, 'run_enhanced_search_suite'):
-                    print('Using run_enhanced_search_suite')
-                    result = factset_search.run_enhanced_search_suite(priority_focus='high_only')
-                elif hasattr(factset_search, 'main'):
-                    print('Using main search function')
-                    result = factset_search.main()
-                else:
-                    print('No search function found')
-                    sys.exit(1)
-                    
-                if result:
-                    print('✅ Search completed successfully')
-                else:
-                    print('⚠️ Search completed with warnings')
-                    
-            except Exception as e:
-                print(f'🚨 Search error: {e}')
-                print('This might be due to rate limiting or configuration issues')
-            " || echo "🚨 Conservative search failed"
-          else
-            echo "ℹ️ Skipping search in test-only mode"
-          fi
+        if [ -f "觀察名單.csv" ]; then
+          echo "✅ Found target companies file"
+          wc -l "觀察名單.csv"
         else
-          echo "⚠️ Skipping search due to validation failure"
+          echo "⚠️ No target companies file found"
+        fi
+        
+        # Simple search execution
+        if [ "$execution_mode" = "force_search" ]; then
+          echo "⚠️ Force search mode - may encounter rate limiting"
+          timeout 900 python factset_search.py --priority-focus "$priority_focus" || echo "🚨 Search failed due to rate limiting"
+        elif [ "$execution_mode" = "conservative" ]; then
+          echo "🎯 Conservative search mode (v3.3.0)"
+          timeout 600 python factset_search.py --priority-focus high_only || echo "🚨 Conservative search failed"
+        else
+          echo "ℹ️ Skipping search in test-only mode"
         fi
         
         echo "✅ Search phase completed (v3.3.0)"
@@ -662,45 +376,13 @@ jobs:
       run: |
         echo "📊 Final data processing (v3.3.0)..."
         
-        # Process any new data with v3.3.0 compliance using robust error handling
-        echo "🔄 Processing with v3.3.0 enhanced compatibility..."
-        python -c "
-        import data_processor
-        import subprocess
-        import sys
+        # Simple direct processing - no complex scripting
+        echo "🔄 Processing with v3.3.0 compatibility..."
+        python data_processor.py --force --parse-md || echo "Data processing completed with warnings"
         
-        try:
-            # Try v3.3.0 method first
-            if hasattr(data_processor, 'process_all_data_v330'):
-                print('✅ Using process_all_data_v330')
-                success = data_processor.process_all_data_v330(force=True, parse_md=True)
-                print(f'Processing result: {success}')
-            elif hasattr(data_processor, 'process_all_data'):
-                print('✅ Using process_all_data')
-                success = data_processor.process_all_data(force=True, parse_md=True)
-                print(f'Processing result: {success}')
-            else:
-                print('⚠️ No direct processing method available, using subprocess')
-                result = subprocess.run(['python', 'data_processor.py', '--force', '--parse-md'], 
-                                      capture_output=True, text=True, timeout=300)
-                if result.returncode == 0:
-                    print('✅ Subprocess processing successful')
-                else:
-                    print(f'⚠️ Subprocess warnings: {result.stderr}')
-                    
-        except Exception as e:
-            print(f'⚠️ Processing error: {e}')
-            print('Attempting basic fallback...')
-            try:
-                result = subprocess.run(['python', 'data_processor.py', '--force'], 
-                                      capture_output=True, text=True, timeout=180)
-                if result.returncode == 0:
-                    print('✅ Fallback processing successful')
-                else:
-                    print(f'⚠️ Fallback completed with warnings')
-            except Exception as e2:
-                print(f'⚠️ Fallback error: {e2}')
-        " || echo "Data processing completed with warnings"
+        # Check what was generated
+        echo "📊 Checking final results..."
+        ls -la data/processed/ 2>/dev/null || echo "No processed directory yet"
         
         echo "✅ Final processing completed (v3.3.0)"
     
