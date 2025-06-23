@@ -1,4 +1,4 @@
-name: FactSet Pipeline v3.2.4 - Rate Limiting Aware
+name: FactSet Pipeline v3.3.0 - Enhanced EPS Breakdown
 
 on:
   push:
@@ -39,7 +39,7 @@ env:
   FACTSET_PIPELINE_DEBUG: true
 
 jobs:
-  # Pre-flight checks to assess current status - v3.2.4
+  # Pre-flight checks to assess current status - v3.3.0
   preflight:
     runs-on: ubuntu-latest
     outputs:
@@ -63,16 +63,16 @@ jobs:
         pip install --upgrade pip
         pip install requests pandas python-dotenv
     
-    - name: 🔍 Check Current Status (v3.2.4)
+    - name: 🔍 Check Current Status (v3.3.0)
       id: check_status
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
         GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
       run: |
-        echo "🔍 Checking pipeline status (Guideline v3.2.4)..."
+        echo "🔍 Checking pipeline status (Guideline v3.3.0)..."
         
         # Set guideline version
-        echo "guideline_version=3.2.4" >> $GITHUB_OUTPUT
+        echo "guideline_version=3.3.0" >> $GITHUB_OUTPUT
         
         # Check for existing data
         existing_md_files=$(find data/md -name "*.md" 2>/dev/null | wc -l || echo "0")
@@ -81,7 +81,7 @@ jobs:
         
         echo "📊 Found $existing_md_files MD files, $existing_csv_files CSV files, $existing_processed processed files"
         
-        # Enhanced data quality check - v3.2.4
+        # Enhanced data quality check - v3.3.0
         if [ "$existing_md_files" -gt "10" ] && [ "$existing_processed" -gt "2" ]; then
           echo "has_existing_data=true" >> $GITHUB_OUTPUT
           echo "📊 Quality existing data detected"
@@ -94,11 +94,11 @@ jobs:
         fi
         
         # Test rate limiting status with enhanced detection
-        echo "🧪 Testing search access (enhanced rate limiting check)..."
+        echo "🧪 Testing search access (enhanced rate limiting check v3.3.0)..."
         rate_limited="false"
         
-        # Create enhanced test script for v3.2.4
-        cat > test_search_v324.py << 'EOF'
+        # Create enhanced test script for v3.3.0
+        cat > test_search_v330.py << 'EOF'
         import requests
         import os
         import sys
@@ -123,7 +123,7 @@ jobs:
             }
             
             try:
-                print("Testing Google Search API...")
+                print("Testing Google Search API v3.3.0...")
                 response = requests.get(url, params=params, timeout=30)
                 
                 if response.status_code == 429:
@@ -165,10 +165,10 @@ jobs:
             sys.exit(exit_code)
         EOF
         
-        python test_search_v324.py
+        python test_search_v330.py
         search_status=$?
         
-        # Enhanced status determination for v3.2.4
+        # Enhanced status determination for v3.3.0
         case $search_status in
           0)
             echo "✅ Search API accessible and functional"
@@ -200,7 +200,7 @@ jobs:
             ;;
         esac
 
-  # Main pipeline execution with v3.2.4 compliance
+  # Main pipeline execution with v3.3.0 compliance
   pipeline:
     runs-on: ubuntu-latest
     needs: preflight
@@ -221,11 +221,11 @@ jobs:
         sudo apt-get install -y wkhtmltopdf || echo "wkhtmltopdf installation failed (optional)"
         echo "✅ System dependencies installed"
     
-    - name: 📦 Install Python Dependencies (v3.2.4)
+    - name: 📦 Install Python Dependencies (v3.3.0)
       run: |
         pip install --upgrade pip
         
-        # Install core requirements for v3.2.4
+        # Install core requirements for v3.3.0
         pip install requests pandas gspread google-auth python-dotenv
         pip install beautifulsoup4 markdownify
         
@@ -233,20 +233,20 @@ jobs:
         pip install googlesearch-python || echo "⚠️ googlesearch-python failed (optional)"
         pip install validators || echo "⚠️ validators failed (optional)"
         
-        echo "✅ Python dependencies installed for v3.2.4"
+        echo "✅ Python dependencies installed for v3.3.0"
     
-    - name: 🔧 Setup Configuration (v3.2.4)
+    - name: 🔧 Setup Configuration (v3.3.0)
       run: |
-        echo "🔧 Setting up v3.2.4 configuration..."
+        echo "🔧 Setting up v3.3.0 configuration..."
         
-        # Create directories with v3.2.4 structure
+        # Create directories with v3.3.0 structure
         mkdir -p data/{csv,md,pdf,processed} logs
         
         # Download target companies with error handling
         python config.py --download-csv || echo "⚠️ CSV download failed, will use existing"
         
         # Verify guideline compliance
-        echo "📋 Verifying v3.2.4 compliance..."
+        echo "📋 Verifying v3.3.0 compliance..."
         python -c "
         import os
         import sys
@@ -265,19 +265,19 @@ jobs:
             print(f'❌ Missing required files: {missing}')
             sys.exit(1)
         
-        print('✅ All required v3.2.4 files present')
+        print('✅ All required v3.3.0 files present')
         "
         
-        echo "✅ Configuration setup completed (v3.2.4)"
+        echo "✅ Configuration setup completed (v3.3.0)"
     
-    - name: 🧪 Test Components (v3.2.4)
+    - name: 🧪 Test Components (v3.3.0)
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
         GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "🧪 Testing v3.2.4 components..."
+        echo "🧪 Testing v3.3.0 components..."
         
         # Test configuration
         python config.py --show || echo "⚠️ Config test failed"
@@ -289,7 +289,7 @@ jobs:
         python -c "
         import data_processor
         if hasattr(data_processor, 'process_all_data'):
-            print('✅ Data processor v3.2.4 compliant')
+            print('✅ Data processor v3.3.0 compliant')
         else:
             print('❌ Data processor missing required functions')
         " || echo "⚠️ Data processor test failed"
@@ -298,7 +298,7 @@ jobs:
         python -c "
         import factset_search
         if hasattr(factset_search, 'run_enhanced_search_suite'):
-            print('✅ Search engine v3.2.4 compliant')
+            print('✅ Search engine v3.3.0 compliant')
         else:
             print('❌ Search engine missing required functions')
         " || echo "⚠️ Search engine test failed"
@@ -309,7 +309,7 @@ jobs:
         # Test main pipeline
         python factset_pipeline.py --status || echo "⚠️ Pipeline status test failed"
         
-        echo "✅ Component tests completed (v3.2.4)"
+        echo "✅ Component tests completed (v3.3.0)"
     
     - name: ⏰ Wait for Rate Limiting (if specified)
       if: github.event.inputs.wait_for_rate_limits && github.event.inputs.wait_for_rate_limits != '0'
@@ -318,7 +318,7 @@ jobs:
         echo "⏰ Waiting ${wait_minutes} minutes for rate limits to clear..."
         sleep $((wait_minutes * 60))
     
-    - name: 📊 Process Existing Data (v3.2.4)
+    - name: 📊 Process Existing Data (v3.3.0)
       if: needs.preflight.outputs.has_existing_data == 'true' || needs.preflight.outputs.has_existing_data == 'moderate' || needs.preflight.outputs.rate_limited == 'true'
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
@@ -326,23 +326,23 @@ jobs:
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "📊 Processing existing data (v3.2.4)..."
+        echo "📊 Processing existing data (v3.3.0)..."
         
         # Check existing data
         python data_processor.py --check-data || echo "Data check completed with warnings"
         
         # Process MD files if they exist
         if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
-          echo "📄 Processing existing MD files..."
+          echo "📄 Processing existing MD files with v3.3.0 EPS breakdown..."
           python data_processor.py --force --parse-md || echo "⚠️ MD processing had issues"
         fi
         
-        # Process any existing data with v3.2.4 compliance
+        # Process any existing data with v3.3.0 compliance
         python data_processor.py --force || echo "⚠️ Data processing had issues"
         
-        echo "✅ Existing data processing completed (v3.2.4)"
+        echo "✅ Existing data processing completed (v3.3.0)"
     
-    - name: 🔍 Conservative Search (v3.2.4)
+    - name: 🔍 Conservative Search (v3.3.0)
       if: needs.preflight.outputs.rate_limited != 'true' && github.event.inputs.execution_mode != 'process_only'
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
@@ -350,7 +350,7 @@ jobs:
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "🔍 Attempting conservative search (v3.2.4)..."
+        echo "🔍 Attempting conservative search (v3.3.0)..."
         
         # Determine search parameters
         priority_focus="${{ github.event.inputs.priority_focus || 'high_only' }}"
@@ -362,39 +362,39 @@ jobs:
           echo "⚠️ Force search mode - may encounter rate limiting"
           timeout 900 python factset_search.py --priority-focus "$priority_focus" || echo "🚨 Search failed due to rate limiting"
         elif [ "$execution_mode" = "conservative" ]; then
-          echo "🎯 Conservative search mode (v3.2.4)"
-          # Try search with v3.2.4 enhanced error handling
+          echo "🎯 Conservative search mode (v3.3.0)"
+          # Try search with v3.3.0 enhanced error handling
           timeout 600 python factset_search.py --priority-focus high_only || echo "🚨 Conservative search failed"
         else
           echo "ℹ️ Skipping search in test-only mode"
         fi
         
-        echo "✅ Search phase completed (v3.2.4)"
+        echo "✅ Search phase completed (v3.3.0)"
     
-    - name: 📊 Final Data Processing (v3.2.4)
+    - name: 📊 Final Data Processing (v3.3.0)
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
         GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "📊 Final data processing (v3.2.4)..."
+        echo "📊 Final data processing (v3.3.0)..."
         
-        # Process any new data with v3.2.4 compliance
+        # Process any new data with v3.3.0 compliance
         python data_processor.py --force --parse-md || echo "Data processing completed with warnings"
         
-        echo "✅ Final processing completed (v3.2.4)"
+        echo "✅ Final processing completed (v3.3.0)"
     
-    - name: 💾 Validate and Commit Results (v3.2.4)
+    - name: 💾 Validate and Commit Results (v3.3.0)
       run: |
-        echo "💾 Validating data before commit (v3.2.4)..."
+        echo "💾 Validating data before commit (v3.3.0)..."
         
         # Configure git for GitHub Actions bot
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
-        # Enhanced validation for v3.2.4
-        echo "🔍 Running comprehensive v3.2.4 data validation..."
+        # Enhanced validation for v3.3.0
+        echo "🔍 Running comprehensive v3.3.0 data validation..."
         
         # Check files with enhanced quality requirements
         md_count=$(find data/md -name '*.md' -size +100c 2>/dev/null | wc -l)
@@ -403,10 +403,11 @@ jobs:
         
         echo "📊 File counts: ${md_count} MD files (>100 bytes), ${csv_count} CSV files (>50 bytes), ${processed_count} processed files"
         
-        # Enhanced MD file validation for v3.2.4
+        # Enhanced MD file validation for v3.3.0 - Focus on EPS data
         valid_md_count=0
         factset_md_count=0
         quality_md_count=0
+        eps_breakdown_count=0
         
         if [ -d "data/md" ]; then
           for file in data/md/*.md; do
@@ -425,11 +426,16 @@ jobs:
               if grep -q -E "(2025|2026|2027)" "$file" 2>/dev/null; then
                 quality_md_count=$((quality_md_count + 1))
               fi
+              
+              # v3.3.0: Check for enhanced EPS breakdown data
+              if grep -q -E "(EPS.*2025.*2026.*2027|最高值.*最低值.*平均值)" "$file" 2>/dev/null; then
+                eps_breakdown_count=$((eps_breakdown_count + 1))
+              fi
             fi
           done
         fi
         
-        # Enhanced CSV validation for v3.2.4
+        # Enhanced CSV validation for v3.3.0
         valid_csv_count=0
         quality_csv_count=0
         
@@ -451,25 +457,32 @@ jobs:
           done
         fi
         
-        # Enhanced processed file validation for v3.2.4
+        # Enhanced processed file validation for v3.3.0
         valid_processed_count=0
         has_portfolio_summary=false
         has_detailed_data=false
         has_statistics=false
+        has_v330_format=false
         
         if [ -f "data/processed/portfolio_summary.csv" ] && [ -s "data/processed/portfolio_summary.csv" ]; then
           has_portfolio_summary=true
           valid_processed_count=$((valid_processed_count + 1))
           
-          # Validate portfolio summary format
-          if head -1 "data/processed/portfolio_summary.csv" | grep -q "代號.*名稱.*股票代號.*MD最舊日期.*MD最新日期.*MD資料筆數" 2>/dev/null; then
-            echo "✅ Portfolio Summary has v3.2.4 format"
+          # Validate v3.3.0 portfolio summary format - Enhanced EPS breakdown
+          if head -1 "data/processed/portfolio_summary.csv" | grep -q "代號.*名稱.*股票代號.*MD最舊日期.*MD最新日期.*MD資料筆數.*分析師數量.*目標價.*2025EPS平均值.*2026EPS平均值.*2027EPS平均值.*品質評分.*狀態.*更新日期" 2>/dev/null; then
+            echo "✅ Portfolio Summary has v3.3.0 enhanced format (EPS breakdown)"
+            has_v330_format=true
           fi
         fi
         
         if [ -f "data/processed/detailed_data.csv" ] && [ -s "data/processed/detailed_data.csv" ]; then
           has_detailed_data=true
           valid_processed_count=$((valid_processed_count + 1))
+          
+          # Validate v3.3.0 detailed data format - Full EPS breakdown with high/low/avg
+          if head -1 "data/processed/detailed_data.csv" | grep -q "2025EPS最高值.*2025EPS最低值.*2025EPS平均值.*2026EPS最高值.*2026EPS最低值.*2026EPS平均值.*2027EPS最高值.*2027EPS最低值.*2027EPS平均值" 2>/dev/null; then
+            echo "✅ Detailed Data has v3.3.0 enhanced EPS breakdown format"
+          fi
         fi
         
         if [ -f "data/processed/statistics.json" ] && [ -s "data/processed/statistics.json" ]; then
@@ -477,62 +490,63 @@ jobs:
           valid_processed_count=$((valid_processed_count + 1))
         fi
         
-        echo "✅ Enhanced validation results (v3.2.4):"
-        echo "   📄 Valid MD files: ${valid_md_count} (${factset_md_count} with FactSet, ${quality_md_count} with quality indicators)"
+        echo "✅ Enhanced validation results (v3.3.0):"
+        echo "   📄 Valid MD files: ${valid_md_count} (${factset_md_count} with FactSet, ${quality_md_count} with quality indicators, ${eps_breakdown_count} with EPS breakdown)"
         echo "   📊 Valid CSV files: ${valid_csv_count} (${quality_csv_count} with quality content)"
         echo "   🎯 Valid processed files: ${valid_processed_count}"
         echo "   💼 Has portfolio summary: ${has_portfolio_summary}"
         echo "   📈 Has detailed data: ${has_detailed_data}"
         echo "   📊 Has statistics: ${has_statistics}"
+        echo "   🆕 Has v3.3.0 format: ${has_v330_format}"
         
-        # Enhanced decision logic for v3.2.4
+        # Enhanced decision logic for v3.3.0
         should_commit="false"
         commit_reason=""
         commit_priority="low"
         
-        # Premium quality commit conditions (v3.2.4)
-        if [ "$valid_md_count" -gt "30" ] && [ "$factset_md_count" -gt "10" ] && [ "$quality_md_count" -gt "15" ] && [ "$has_portfolio_summary" = "true" ]; then
+        # Premium quality commit conditions (v3.3.0) - Enhanced EPS data requirements
+        if [ "$valid_md_count" -gt "30" ] && [ "$factset_md_count" -gt "10" ] && [ "$eps_breakdown_count" -gt "10" ] && [ "$has_v330_format" = "true" ]; then
           should_commit="true"
           commit_priority="premium"
-          commit_reason="Premium v3.2.4 data: ${valid_md_count} MD (${factset_md_count} FactSet, ${quality_md_count} quality) + complete processed data"
+          commit_reason="Premium v3.3.0 data: ${valid_md_count} MD (${factset_md_count} FactSet, ${eps_breakdown_count} EPS breakdown) + v3.3.0 format"
         
         # High quality commit conditions
         elif [ "$valid_md_count" -gt "20" ] && [ "$factset_md_count" -gt "5" ] && [ "$valid_csv_count" -gt "2" ] && [ "$has_portfolio_summary" = "true" ]; then
           should_commit="true"
           commit_priority="high"
-          commit_reason="High quality v3.2.4 data: ${valid_md_count} MD (${factset_md_count} FactSet) + ${valid_csv_count} CSV + portfolio"
+          commit_reason="High quality v3.3.0 data: ${valid_md_count} MD (${factset_md_count} FactSet, ${eps_breakdown_count} EPS) + ${valid_csv_count} CSV + portfolio"
         
         # Medium quality commit conditions  
         elif [ "$valid_md_count" -gt "10" ] && [ "$valid_csv_count" -gt "1" ] && [ "$has_portfolio_summary" = "true" ]; then
           should_commit="true"
           commit_priority="medium"
-          commit_reason="Medium quality v3.2.4 data: ${valid_md_count} MD + ${valid_csv_count} CSV + portfolio"
+          commit_reason="Medium quality v3.3.0 data: ${valid_md_count} MD + ${valid_csv_count} CSV + portfolio"
         
         # Low quality but acceptable commit conditions
         elif [ "$valid_md_count" -gt "5" ] || ([ "$has_portfolio_summary" = "true" ] && [ "$has_statistics" = "true" ]); then
           should_commit="true"
           commit_priority="low"
-          commit_reason="Acceptable v3.2.4 data: ${valid_md_count} MD files, portfolio=${has_portfolio_summary}, stats=${has_statistics}"
+          commit_reason="Acceptable v3.3.0 data: ${valid_md_count} MD files, portfolio=${has_portfolio_summary}, stats=${has_statistics}"
         
         # First-time data collection (more lenient)
         elif [ "${{ needs.preflight.outputs.has_existing_data }}" = "false" ] && [ "$valid_md_count" -gt "0" ]; then
           should_commit="true"
           commit_priority="initial"
-          commit_reason="Initial v3.2.4 data collection: ${valid_md_count} MD files"
+          commit_reason="Initial v3.3.0 data collection: ${valid_md_count} MD files"
         
         # Skip commit if data quality is poor
         else
           should_commit="false"
-          commit_reason="Insufficient v3.2.4 data quality (${valid_md_count} MD, ${valid_csv_count} CSV, processed=${valid_processed_count})"
+          commit_reason="Insufficient v3.3.0 data quality (${valid_md_count} MD, ${valid_csv_count} CSV, processed=${valid_processed_count})"
         fi
         
-        echo "🎯 v3.2.4 Decision: should_commit=${should_commit}, priority=${commit_priority}"
+        echo "🎯 v3.3.0 Decision: should_commit=${should_commit}, priority=${commit_priority}"
         echo "📝 Reason: ${commit_reason}"
         
         if [ "$should_commit" = "true" ]; then
-          echo "✅ Proceeding with validated v3.2.4 commit..."
+          echo "✅ Proceeding with validated v3.3.0 commit..."
           
-          # Create enhanced .gitattributes for v3.2.4
+          # Create enhanced .gitattributes for v3.3.0
           cat > .gitattributes << 'EOF'
         # Handle large files with Git LFS
         *.pdf filter=lfs diff=lfs merge=lfs -text
@@ -548,8 +562,8 @@ jobs:
         *.yml text eol=lf
         EOF
           
-          # Enhanced cleanup for v3.2.4
-          echo "🧹 Enhanced cleanup for v3.2.4..."
+          # Enhanced cleanup for v3.3.0
+          echo "🧹 Enhanced cleanup for v3.3.0..."
           
           # Remove files larger than 50MB
           find data/ -size +50M -delete 2>/dev/null || true
@@ -560,8 +574,8 @@ jobs:
           # Remove obvious error files
           find data/ -name "*.md" -exec grep -l "404 Not Found\|403 Forbidden\|500 Internal Server Error\|Rate limit exceeded" {} \; -delete 2>/dev/null || true
           
-          # Enhanced selective file addition for v3.2.4
-          echo "📁 Adding validated v3.2.4 files to git..."
+          # Enhanced selective file addition for v3.3.0
+          echo "📁 Adding validated v3.3.0 files to git..."
           
           # Add validated MD files
           if [ "$valid_md_count" -gt "0" ]; then
@@ -583,19 +597,19 @@ jobs:
             echo "✅ Added ${valid_csv_count} validated CSV files"
           fi
           
-          # Add v3.2.4 processed data if valid
+          # Add v3.3.0 processed data if valid
           if [ "$valid_processed_count" -gt "0" ]; then
             if [ "$has_portfolio_summary" = "true" ]; then
               git add data/processed/portfolio_summary.csv
-              echo "✅ Added portfolio_summary.csv (v3.2.4 format)"
+              echo "✅ Added portfolio_summary.csv (v3.3.0 format)"
             fi
             if [ "$has_detailed_data" = "true" ]; then
               git add data/processed/detailed_data.csv
-              echo "✅ Added detailed_data.csv (v3.2.4 format)"
+              echo "✅ Added detailed_data.csv (v3.3.0 enhanced EPS format)"
             fi
             if [ "$has_statistics" = "true" ]; then
               git add data/processed/statistics.json
-              echo "✅ Added statistics.json (v3.2.4 format)"
+              echo "✅ Added statistics.json (v3.3.0 format)"
             fi
           fi
           
@@ -604,7 +618,7 @@ jobs:
           git add "觀察名單.csv" 2>/dev/null || true
           git add .gitattributes 2>/dev/null || true
           
-          # Create comprehensive v3.2.4 commit message
+          # Create comprehensive v3.3.0 commit message
           execution_mode="${{ github.event.inputs.execution_mode || 'conservative' }}"
           priority_focus="${{ github.event.inputs.priority_focus || 'high_only' }}"
           
@@ -618,38 +632,41 @@ jobs:
             "initial") quality_emoji="🆕" ;;
           esac
           
-          commit_message="${quality_emoji} FactSet Pipeline v3.2.4: ${commit_reason}
+          commit_message="${quality_emoji} FactSet Pipeline v3.3.0: ${commit_reason}
 
         📊 Data Quality Summary:
-        - MD Files: ${valid_md_count} total (${factset_md_count} FactSet, ${quality_md_count} quality indicators)
+        - MD Files: ${valid_md_count} total (${factset_md_count} FactSet, ${quality_md_count} quality indicators, ${eps_breakdown_count} EPS breakdown)
         - CSV Files: ${valid_csv_count} total (${quality_csv_count} quality content)
         - Processed: ${valid_processed_count} files (Portfolio=${has_portfolio_summary}, Details=${has_detailed_data}, Stats=${has_statistics})
+        - v3.3.0 Format: ${has_v330_format}
 
         🎯 Execution Details:
         - Mode: ${execution_mode}
         - Focus: ${priority_focus}
-        - Guideline: v3.2.4
+        - Guideline: v3.3.0
         - Quality: ${commit_priority}
         - Rate Limited: ${{ needs.preflight.outputs.rate_limited }}
 
-        🔧 v3.2.4 Features:
-        - Enhanced EPS breakdown (2025/2026/2027)
-        - Quality scoring system (1-4 scale)
-        - Status emoji indicators
+        🆕 v3.3.0 Features:
+        - Enhanced EPS breakdown (2025/2026/2027 with 最高值/最低值/平均值)
+        - Quality scoring system with emoji status (🟢🟡🟠🔴)
+        - Improved duplicate detection for MD files
         - Immediate rate limiting protection
-        - 觀察名單.csv integration (116+ companies)"
+        - 觀察名單.csv integration (116+ companies)
+        - Advanced financial data extraction patterns"
           
           # Commit and push with comprehensive error handling
           if git diff --staged --quiet; then
             echo "ℹ️ No validated changes to commit (files may have been filtered out)"
           else
-            echo "✅ Committing validated v3.2.4 data..."
+            echo "✅ Committing validated v3.3.0 data..."
             if git commit -m "$commit_message"; then
               echo "📤 Pushing to repository..."
               if git push; then
-                echo "🎉 Validated v3.2.4 results committed and pushed successfully!"
+                echo "🎉 Validated v3.3.0 results committed and pushed successfully!"
                 echo "📈 Quality level: ${commit_priority}"
                 echo "📊 Data summary: ${valid_md_count} MD + ${valid_csv_count} CSV + ${valid_processed_count} processed files"
+                echo "🆕 v3.3.0 enhanced EPS breakdown: ${eps_breakdown_count} files"
               else
                 echo "⚠️ Commit succeeded but push failed - changes are saved locally"
               fi
@@ -659,30 +676,31 @@ jobs:
           fi
           
         else
-          echo "⚠️ Skipping commit due to v3.2.4 data quality requirements"
+          echo "⚠️ Skipping commit due to v3.3.0 data quality requirements"
           echo "📝 Reason: ${commit_reason}"
           echo "💡 Previous good data preserved in repository"
           
-          # Create execution log for v3.2.4
+          # Create execution log for v3.3.0
           mkdir -p logs
-          echo "$(date '+%Y-%m-%d %H:%M:%S'): SKIPPED COMMIT v3.2.4 - ${commit_reason}" >> logs/pipeline_execution.log
-          echo "  - MD files: ${md_count} total, ${valid_md_count} valid (${factset_md_count} FactSet, ${quality_md_count} quality)" >> logs/pipeline_execution.log
+          echo "$(date '+%Y-%m-%d %H:%M:%S'): SKIPPED COMMIT v3.3.0 - ${commit_reason}" >> logs/pipeline_execution.log
+          echo "  - MD files: ${md_count} total, ${valid_md_count} valid (${factset_md_count} FactSet, ${quality_md_count} quality, ${eps_breakdown_count} EPS breakdown)" >> logs/pipeline_execution.log
           echo "  - CSV files: ${csv_count} total, ${valid_csv_count} valid (${quality_csv_count} quality)" >> logs/pipeline_execution.log
           echo "  - Processed files: ${processed_count} total, ${valid_processed_count} valid" >> logs/pipeline_execution.log
+          echo "  - v3.3.0 format compliance: ${has_v330_format}" >> logs/pipeline_execution.log
           echo "  - Execution mode: ${{ github.event.inputs.execution_mode || 'conservative' }}" >> logs/pipeline_execution.log
           echo "  - Priority focus: ${{ github.event.inputs.priority_focus || 'high_only' }}" >> logs/pipeline_execution.log
           echo "  - Rate limited: ${{ needs.preflight.outputs.rate_limited }}" >> logs/pipeline_execution.log
-          echo "  - Guideline version: 3.2.4" >> logs/pipeline_execution.log
+          echo "  - Guideline version: 3.3.0" >> logs/pipeline_execution.log
           
           # Commit just the execution log
           git add logs/pipeline_execution.log 2>/dev/null || true
-          git commit -m "📋 v3.2.4 Pipeline execution log: ${commit_reason}" 2>/dev/null || true
+          git commit -m "📋 v3.3.0 Pipeline execution log: ${commit_reason}" 2>/dev/null || true
           git push 2>/dev/null || true
           
-          echo "📋 v3.2.4 execution logged for debugging purposes"
+          echo "📋 v3.3.0 execution logged for debugging purposes"
         fi
     
-    - name: 📈 Upload to Google Sheets (v3.2.4)
+    - name: 📈 Upload to Google Sheets (v3.3.0)
       if: env.GOOGLE_SHEET_ID != ''
       env:
         GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
@@ -690,42 +708,54 @@ jobs:
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "📈 Uploading to Google Sheets (v3.2.4)..."
+        echo "📈 Uploading to Google Sheets (v3.3.0)..."
         
-        # Check if we have v3.2.4 compliant data to upload
+        # Check if we have v3.3.0 compliant data to upload
         if [ -f "data/processed/portfolio_summary.csv" ] || [ -f "data/processed/detailed_data.csv" ]; then
-          echo "📊 Found v3.2.4 processed data for upload"
+          echo "📊 Found v3.3.0 processed data for upload"
           python sheets_uploader.py || echo "⚠️ Sheets upload had issues"
         else
-          echo "ℹ️ No v3.2.4 processed data found for upload"
+          echo "ℹ️ No v3.3.0 processed data found for upload"
         fi
         
-        echo "✅ Upload attempt completed (v3.2.4)"
+        echo "✅ Upload attempt completed (v3.3.0)"
     
-    - name: 📊 Generate Status Report (v3.2.4)
+    - name: 📊 Generate Status Report (v3.3.0)
       if: always()
       run: |
-        echo "📊 Generating v3.2.4 status report..."
+        echo "📊 Generating v3.3.0 status report..."
         
         # Try to get pipeline status
         python factset_pipeline.py --status || echo "Status command not available"
         
-        # Enhanced manual status check for v3.2.4
-        echo "=== v3.2.4 Manual Status Check ==="
+        # Enhanced manual status check for v3.3.0
+        echo "=== v3.3.0 Manual Status Check ==="
         echo "MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)"
         echo "CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)"
         echo "Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)"
         
-        # Check for v3.2.4 format compliance
+        # Check for v3.3.0 format compliance
         if [ -f "data/processed/portfolio_summary.csv" ]; then
           echo "Portfolio Summary: ✅ Present"
-          if head -1 "data/processed/portfolio_summary.csv" | grep -q "代號.*名稱.*股票代號.*MD最舊日期.*MD最新日期.*MD資料筆數" 2>/dev/null; then
-            echo "Portfolio Format: ✅ v3.2.4 compliant"
+          if head -1 "data/processed/portfolio_summary.csv" | grep -q "代號.*名稱.*股票代號.*MD最舊日期.*MD最新日期.*MD資料筆數.*分析師數量.*目標價.*2025EPS平均值.*2026EPS平均值.*2027EPS平均值.*品質評分.*狀態.*更新日期" 2>/dev/null; then
+            echo "Portfolio Format: ✅ v3.3.0 compliant (Enhanced EPS breakdown)"
           else
             echo "Portfolio Format: ⚠️ Format check failed"
           fi
         else
           echo "Portfolio Summary: ❌ Missing"
+        fi
+        
+        # Check detailed data for v3.3.0 EPS breakdown
+        if [ -f "data/processed/detailed_data.csv" ]; then
+          echo "Detailed Data: ✅ Present"
+          if head -1 "data/processed/detailed_data.csv" | grep -q "2025EPS最高值.*2025EPS最低值.*2025EPS平均值" 2>/dev/null; then
+            echo "Detailed Format: ✅ v3.3.0 compliant (Full EPS breakdown)"
+          else
+            echo "Detailed Format: ⚠️ Missing v3.3.0 EPS breakdown"
+          fi
+        else
+          echo "Detailed Data: ❌ Missing"
         fi
         
         # Check for rate limiting indicators in logs
@@ -735,55 +765,62 @@ jobs:
           echo "✅ No rate limiting indicators found"
         fi
         
-        echo "✅ v3.2.4 status report completed"
+        echo "✅ v3.3.0 status report completed"
     
-    - name: 📄 Collect Artifacts (v3.2.4)
+    - name: 📄 Collect Artifacts (v3.3.0)
       if: always()
       run: |
-        echo "📄 Collecting v3.2.4 artifacts..."
+        echo "📄 Collecting v3.3.0 artifacts..."
         
         # Create artifacts directory
-        mkdir -p pipeline_artifacts_v324
+        mkdir -p pipeline_artifacts_v330
         
         # Copy data with error handling
-        [ -d "data" ] && cp -r data pipeline_artifacts_v324/ 2>/dev/null || echo "No data directory"
-        [ -d "logs" ] && cp -r logs pipeline_artifacts_v324/ 2>/dev/null || echo "No logs directory"
+        [ -d "data" ] && cp -r data pipeline_artifacts_v330/ 2>/dev/null || echo "No data directory"
+        [ -d "logs" ] && cp -r logs pipeline_artifacts_v330/ 2>/dev/null || echo "No logs directory"
         
         # Copy specific files
-        [ -f "觀察名單.csv" ] && cp "觀察名單.csv" pipeline_artifacts_v324/ || echo "No watchlist file"
+        [ -f "觀察名單.csv" ] && cp "觀察名單.csv" pipeline_artifacts_v330/ || echo "No watchlist file"
         
-        # Create comprehensive v3.2.4 summary
-        cat > pipeline_artifacts_v324/EXECUTION_SUMMARY_v324.md << EOF
-        # FactSet Pipeline v3.2.4 Execution Summary
+        # Create comprehensive v3.3.0 summary
+        cat > pipeline_artifacts_v330/EXECUTION_SUMMARY_v330.md << EOF
+        # FactSet Pipeline v3.3.0 Execution Summary
         
         **Date**: $(date)
-        **Guideline Version**: 3.2.4
+        **Guideline Version**: 3.3.0
         **Execution Mode**: ${{ github.event.inputs.execution_mode || 'conservative' }}
         **Priority Focus**: ${{ github.event.inputs.priority_focus || 'high_only' }}
         **Trigger**: ${{ github.event_name }}
         **Rate Limited**: ${{ needs.preflight.outputs.rate_limited }}
         **Had Existing Data**: ${{ needs.preflight.outputs.has_existing_data }}
         
-        ## v3.2.4 Features
-        - Enhanced EPS breakdown (2025/2026/2027)
+        ## v3.3.0 Enhanced Features
+        - Enhanced EPS breakdown (2025/2026/2027 with 最高值/最低值/平均值)
         - Quality scoring system (1-4 scale)
         - Status emoji indicators (🟢 完整, 🟡 良好, 🟠 部分, 🔴 不足)
         - Immediate rate limiting protection
         - 觀察名單.csv integration (116+ companies)
+        - Advanced duplicate detection for MD files with same data
+        - Improved financial data extraction patterns
         
         ## File Counts
         - MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)
         - CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)
         - Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)
         
-        ## Data Quality
+        ## Data Quality (v3.3.0)
         $(find data/md -name '*.md' -exec grep -l "factset\|EPS\|預估\|目標價" {} \; 2>/dev/null | wc -l) MD files with financial content
         $(find data/md -name '*.md' -exec grep -l "2025\|2026\|2027" {} \; 2>/dev/null | wc -l) MD files with multi-year data
+        $(find data/md -name '*.md' -exec grep -l "EPS.*2025.*2026.*2027\|最高值.*最低值.*平均值" {} \; 2>/dev/null | wc -l) MD files with enhanced EPS breakdown
         
-        ## Format Compliance
+        ## Format Compliance (v3.3.0)
         $([ -f "data/processed/portfolio_summary.csv" ] && echo "✅ Portfolio Summary present" || echo "❌ Portfolio Summary missing")
         $([ -f "data/processed/detailed_data.csv" ] && echo "✅ Detailed Data present" || echo "❌ Detailed Data missing")
         $([ -f "data/processed/statistics.json" ] && echo "✅ Statistics present" || echo "❌ Statistics missing")
+        
+        ## EPS Breakdown Validation (v3.3.0)
+        $([ -f "data/processed/portfolio_summary.csv" ] && head -1 "data/processed/portfolio_summary.csv" | grep -q "2025EPS平均值.*2026EPS平均值.*2027EPS平均值" && echo "✅ Portfolio has v3.3.0 EPS format" || echo "❌ Portfolio missing v3.3.0 EPS format")
+        $([ -f "data/processed/detailed_data.csv" ] && head -1 "data/processed/detailed_data.csv" | grep -q "2025EPS最高值.*2025EPS最低值.*2025EPS平均值" && echo "✅ Detailed data has v3.3.0 EPS breakdown" || echo "❌ Detailed data missing v3.3.0 EPS breakdown")
         
         ## Execution Status
         $(python factset_pipeline.py --status 2>/dev/null || echo "Pipeline status not available")
@@ -792,22 +829,22 @@ jobs:
         $(grep -r "429\|Too Many Requests\|rate limit" logs/ 2>/dev/null || echo "No rate limiting detected in logs")
         EOF
         
-        echo "✅ v3.2.4 artifacts collected"
+        echo "✅ v3.3.0 artifacts collected"
     
-    - name: 📦 Upload Artifacts (v3.2.4)
+    - name: 📦 Upload Artifacts (v3.3.0)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: factset-pipeline-v324-${{ github.run_number }}-${{ github.event.inputs.execution_mode || 'conservative' }}
-        path: pipeline_artifacts_v324/
+        name: factset-pipeline-v330-${{ github.run_number }}-${{ github.event.inputs.execution_mode || 'conservative' }}
+        path: pipeline_artifacts_v330/
         retention-days: 14
     
-    - name: 📊 Summary Report (v3.2.4)
+    - name: 📊 Summary Report (v3.3.0)
       if: always()
       run: |
-        echo "## 📊 FactSet Pipeline v3.2.4 Execution Report" >> $GITHUB_STEP_SUMMARY
+        echo "## 📊 FactSet Pipeline v3.3.0 Execution Report" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Guideline Version**: 3.2.4" >> $GITHUB_STEP_SUMMARY
+        echo "**Guideline Version**: 3.3.0 (Enhanced EPS Breakdown)" >> $GITHUB_STEP_SUMMARY
         echo "**Execution Mode**: ${{ github.event.inputs.execution_mode || 'conservative' }}" >> $GITHUB_STEP_SUMMARY
         echo "**Priority Focus**: ${{ github.event.inputs.priority_focus || 'high_only' }}" >> $GITHUB_STEP_SUMMARY
         echo "**Rate Limited**: ${{ needs.preflight.outputs.rate_limited }}" >> $GITHUB_STEP_SUMMARY
@@ -816,35 +853,44 @@ jobs:
         
         # Add dashboard link if available
         if [ -n "${{ secrets.GOOGLE_SHEET_ID }}" ]; then
-          echo "📈 **Dashboard**: [View v3.2.4 Results](https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
+          echo "📈 **Dashboard**: [View v3.3.0 Results](https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         fi
         
-        # Enhanced file statistics for v3.2.4
-        echo "### 📁 Generated Files (v3.2.4)" >> $GITHUB_STEP_SUMMARY
+        # Enhanced file statistics for v3.3.0
+        echo "### 📁 Generated Files (v3.3.0)" >> $GITHUB_STEP_SUMMARY
         echo "- 📝 MD files: $(find data/md -name '*.md' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "- 📄 CSV files: $(find data/csv -name '*.csv' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "- 📊 Processed files: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "- 💰 Files with financial content: $(find data/md -name '*.md' -exec grep -l "factset\|EPS\|預估\|目標價" {} \; 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "- 📈 Files with multi-year data: $(find data/md -name '*.md' -exec grep -l "2025\|2026\|2027" {} \; 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🆕 Files with v3.3.0 EPS breakdown: $(find data/md -name '*.md' -exec grep -l "EPS.*2025.*2026.*2027\|最高值.*最低值.*平均值" {} \; 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        # v3.2.4 format compliance
-        echo "### 🎯 v3.2.4 Format Compliance" >> $GITHUB_STEP_SUMMARY
+        # v3.3.0 format compliance
+        echo "### 🎯 v3.3.0 Format Compliance" >> $GITHUB_STEP_SUMMARY
         if [ -f "data/processed/portfolio_summary.csv" ]; then
-          echo "- ✅ **Portfolio Summary**: Present (14-column format)" >> $GITHUB_STEP_SUMMARY
+          if head -1 "data/processed/portfolio_summary.csv" | grep -q "2025EPS平均值.*2026EPS平均值.*2027EPS平均值" 2>/dev/null; then
+            echo "- ✅ **Portfolio Summary**: v3.3.0 Enhanced EPS format (14-column with 3-year breakdown)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ **Portfolio Summary**: Present but missing v3.3.0 EPS format" >> $GITHUB_STEP_SUMMARY
+          fi
         else
           echo "- ❌ **Portfolio Summary**: Missing" >> $GITHUB_STEP_SUMMARY
         fi
         
         if [ -f "data/processed/detailed_data.csv" ]; then
-          echo "- ✅ **Detailed Data**: Present (21-column EPS breakdown)" >> $GITHUB_STEP_SUMMARY
+          if head -1 "data/processed/detailed_data.csv" | grep -q "2025EPS最高值.*2025EPS最低值.*2025EPS平均值" 2>/dev/null; then
+            echo "- ✅ **Detailed Data**: v3.3.0 Full EPS breakdown (21-column with high/low/avg)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ **Detailed Data**: Present but missing v3.3.0 EPS breakdown" >> $GITHUB_STEP_SUMMARY
+          fi
         else
           echo "- ❌ **Detailed Data**: Missing" >> $GITHUB_STEP_SUMMARY
         fi
         
         if [ -f "data/processed/statistics.json" ]; then
-          echo "- ✅ **Statistics**: Present (v3.2.4 metrics)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **Statistics**: Present (v3.3.0 metrics)" >> $GITHUB_STEP_SUMMARY
         else
           echo "- ❌ **Statistics**: Missing" >> $GITHUB_STEP_SUMMARY
         fi
@@ -858,16 +904,18 @@ jobs:
           echo "✅ **Search Status**: No rate limiting detected" >> $GITHUB_STEP_SUMMARY
         fi
         
-        # v3.2.4 features summary
+        # v3.3.0 features summary
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 🚀 v3.2.4 Features Delivered" >> $GITHUB_STEP_SUMMARY
-        echo "- 📊 **Portfolio Summary**: 14-column exact guideline format" >> $GITHUB_STEP_SUMMARY
-        echo "- 📈 **Detailed Data**: Multi-year EPS breakdown (2025/2026/2027)" >> $GITHUB_STEP_SUMMARY
-        echo "- 🎯 **Quality Scoring**: 1-4 scale with emoji status indicators" >> $GITHUB_STEP_SUMMARY
+        echo "### 🚀 v3.3.0 Enhanced Features Delivered" >> $GITHUB_STEP_SUMMARY
+        echo "- 📊 **Portfolio Summary**: 14-column format with 2025/2026/2027 EPS平均值" >> $GITHUB_STEP_SUMMARY
+        echo "- 📈 **Detailed Data**: 21-column format with full EPS breakdown (最高值/最低值/平均值)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🎯 **Quality Scoring**: 1-4 scale with emoji status indicators (🟢🟡🟠🔴)" >> $GITHUB_STEP_SUMMARY
         echo "- 🛑 **Rate Protection**: Immediate stop on 429 errors" >> $GITHUB_STEP_SUMMARY
         echo "- 📋 **Company Integration**: 觀察名單.csv (116+ companies)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🔍 **Duplicate Detection**: Advanced MD file deduplication for same data" >> $GITHUB_STEP_SUMMARY
+        echo "- 💰 **Enhanced Extraction**: Improved financial data extraction patterns" >> $GITHUB_STEP_SUMMARY
 
-  # Enhanced recovery job for v3.2.4
+  # Enhanced recovery job for v3.3.0
   recovery:
     runs-on: ubuntu-latest
     needs: [preflight, pipeline]
@@ -888,57 +936,66 @@ jobs:
         pip install --upgrade pip
         pip install requests pandas gspread google-auth python-dotenv markdownify || echo "Some dependencies failed"
     
-    - name: 🔄 Recovery Strategy (v3.2.4)
+    - name: 🔄 Recovery Strategy (v3.3.0)
       env:
         GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
-        echo "🔄 Implementing v3.2.4 recovery strategy..."
+        echo "🔄 Implementing v3.3.0 recovery strategy..."
         
         # Try to salvage any existing data
         if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
-          echo "📄 Found existing MD files, attempting v3.2.4 processing..."
+          echo "📄 Found existing MD files, attempting v3.3.0 processing with enhanced EPS breakdown..."
           python data_processor.py --check-data || echo "Data check completed"
           python data_processor.py --force --parse-md || echo "MD processing attempted"
         fi
         
-        # Try v3.2.4 compliant data processing
+        # Try v3.3.0 compliant data processing
         python data_processor.py --force || echo "Basic processing attempted"
         
-        # Try sheets upload if v3.2.4 data exists
+        # Try sheets upload if v3.3.0 data exists
         if [ -f "data/processed/portfolio_summary.csv" ]; then
-          echo "📈 Attempting v3.2.4 sheets upload with existing data..."
+          echo "📈 Attempting v3.3.0 sheets upload with existing data..."
           python sheets_uploader.py || echo "Sheets upload attempted"
         fi
         
-        echo "✅ v3.2.4 recovery attempts completed"
+        echo "✅ v3.3.0 recovery attempts completed"
     
-    - name: 📋 Recovery Report (v3.2.4)
+    - name: 📋 Recovery Report (v3.3.0)
       if: always()
       run: |
-        echo "## 🔄 v3.2.4 Recovery Report" >> $GITHUB_STEP_SUMMARY
+        echo "## 🔄 v3.3.0 Recovery Report" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "The main v3.2.4 pipeline encountered issues and recovery was attempted." >> $GITHUB_STEP_SUMMARY
+        echo "The main v3.3.0 pipeline encountered issues and recovery was attempted." >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
         if [ "${{ needs.preflight.outputs.rate_limited }}" = "true" ]; then
           echo "🚨 **Issue**: Google Search rate limiting detected" >> $GITHUB_STEP_SUMMARY
-          echo "💡 **Action**: Processed existing data with v3.2.4 compliance" >> $GITHUB_STEP_SUMMARY
+          echo "💡 **Action**: Processed existing data with v3.3.0 enhanced EPS compliance" >> $GITHUB_STEP_SUMMARY
           echo "⏰ **Recommendation**: Wait 4-12 hours before attempting new searches" >> $GITHUB_STEP_SUMMARY
         else
-          echo "⚠️ **Issue**: v3.2.4 pipeline execution failed" >> $GITHUB_STEP_SUMMARY
-          echo "🔧 **Action**: Attempted data recovery and v3.2.4 processing" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Issue**: v3.3.0 pipeline execution failed" >> $GITHUB_STEP_SUMMARY
+          echo "🔧 **Action**: Attempted data recovery and v3.3.0 processing" >> $GITHUB_STEP_SUMMARY
         fi
         
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### v3.2.4 Recovery Results" >> $GITHUB_STEP_SUMMARY
+        echo "### v3.3.0 Recovery Results" >> $GITHUB_STEP_SUMMARY
         echo "- MD files processed: $(find data/md -name '*.md' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
         echo "- Data files generated: $(find data/processed -name '*' -type f 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
-        echo "- v3.2.4 compliance: $([ -f "data/processed/portfolio_summary.csv" ] && echo "✅ Portfolio format" || echo "❌ No portfolio")" >> $GITHUB_STEP_SUMMARY
+        if [ -f "data/processed/portfolio_summary.csv" ]; then
+          if head -1 "data/processed/portfolio_summary.csv" | grep -q "2025EPS平均值.*2026EPS平均值.*2027EPS平均值" 2>/dev/null; then
+            echo "- v3.3.0 compliance: ✅ Enhanced EPS format" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- v3.3.0 compliance: ⚠️ Basic format only" >> $GITHUB_STEP_SUMMARY
+          fi
+        else
+          echo "- v3.3.0 compliance: ❌ No portfolio data" >> $GITHUB_STEP_SUMMARY
+        fi
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
-        echo "1. Review v3.2.4 execution logs in artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "1. Review v3.3.0 execution logs in artifacts" >> $GITHUB_STEP_SUMMARY
         echo "2. Check for rate limiting indicators" >> $GITHUB_STEP_SUMMARY
-        echo "3. Consider manual execution with v3.2.4 conservative settings" >> $GITHUB_STEP_SUMMARY
+        echo "3. Consider manual execution with v3.3.0 conservative settings" >> $GITHUB_STEP_SUMMARY
         echo "4. Verify API credentials if search consistently fails" >> $GITHUB_STEP_SUMMARY
-        echo "5. Ensure all modules are v3.2.4 compliant" >> $GITHUB_STEP_SUMMARY
+        echo "5. Ensure all modules are v3.3.0 compliant with enhanced EPS breakdown" >> $GITHUB_STEP_SUMMARY
+        echo "6. Validate duplicate detection for MD files with same data" >> $GITHUB_STEP_SUMMARY
