@@ -1,0 +1,14 @@
+2025-06-23 15:10:49,190 - factset_pipeline_v331 - INFO - 🚀 Enhanced FactSet Pipeline v3.3.1 initialized
+2025-06-23 15:10:49,190 - factset_pipeline_v331 - INFO - 🚀 Enhanced FactSet Pipeline v3.3.1
+2025-06-23 15:10:49,190 - factset_pipeline_v331 - INFO - 📅 Date: 2025-06-23
+2025-06-23 15:10:49,190 - factset_pipeline_v331 - INFO - 🔧 Comprehensive Fixes: Issues #1-9
+2025-06-23 15:10:49,191 - factset_pipeline_v331 - INFO - ================================================================================
+2025-06-23 15:10:49,201 - factset_pipeline_v331 - INFO - 📈 v3.3.1 analysis: 84 files, 84 quality (100.0%), 0 companies
+2025-06-23 15:10:49,201 - factset_pipeline_v331.workflow - INFO - 🚀 Started v3.3.1 workflow: 20250623_151049 (mode: process_only)
+2025-06-23 15:10:49,526 - factset_pipeline_v331.config - INFO - 📥 Downloading enhanced watchlist (v3.3.1)...
+2025-06-23 15:10:49,584 - factset_pipeline_v331.config - INFO - ✅ Downloaded 116 companies (v3.3.1)
+2025-06-23 15:10:49,585 - factset_pipeline_v331 - INFO - 🎯 Target Companies: 116 (v3.3.1)
+2025-06-23 15:10:49,585 - factset_pipeline_v331 - INFO - 
+📊 Enhanced Processing Phase (v3.3.1)
+2025-06-23 15:10:49,597 - factset_pipeline_v331 - ERROR - ❌ Processing phase error: process_all_data_v331() got an unexpected keyword argument 'memory_monitor'
+2025-06-23 15:10:49,597 - factset_pipeline_v331 - ERROR - ❌ Processing phase failed
