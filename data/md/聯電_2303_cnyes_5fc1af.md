@@ -64,7 +64,7 @@
 
 [台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
 
-[聯電47.65-0.21%](https://www.cnyes.com/twstock/2303)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[聯電47.2-0.94%](https://www.cnyes.com/twstock/2303)[美元/台幣29.669+0.47%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
 
 ### 鉅亨贏指標
 

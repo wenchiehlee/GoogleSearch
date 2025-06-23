@@ -64,13 +64,13 @@
 
 [台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
 
-[台達電400-0.99%](https://www.cnyes.com/twstock/2308)[美元/台幣29.529-0.31%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[台達電401.5+0.38%](https://www.cnyes.com/twstock/2308)[美元/台幣29.669+0.47%](https://invest.cnyes.com/forex/detail/USDTWD)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
 
 ### 鉅亨贏指標
 
 [了解更多](https://events.cnyes.com/anuewin-25942)
 
-#當沖高手\_弱
+#偏強機會股
 
 [![偏強](/assets/icons/win-indicator/long.svg)
 
@@ -80,7 +80,7 @@
 
 勝率](https://events.cnyes.com/anuewin-25942)
 
-#動能指標下跌股
+#波段上揚股
 
 [![偏強](/assets/icons/win-indicator/long.svg)
 

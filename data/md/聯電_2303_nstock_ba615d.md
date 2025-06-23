@@ -81,29 +81,29 @@
 
 ☞警語：以上媒體報導，非任何形式之投資建議，投資前請獨立思考、審慎評估。nStock網站所有內容僅供APP使用教學參考，並無任何推介買賣之意，投資人應自行承擔交易風險。
 
-每日補充新知識
+5月營收成長股
 
 [![](/img/recommend_icon/graduate.png)
 
 公司小百科
 
-富邦深100做什麼？](/富邦深100做什麼.html)[![](/img/recommend_icon/graduate.png)
+弘煜科做什麼？](/弘煜科做什麼.html)[![](/img/recommend_icon/graduate.png)
 
 公司小百科
 
-復華香港正2做什麼？](/復華香港正2做什麼.html)[![](/img/recommend_icon/graduate.png)
+華德動能做什麼？](/華德動能做什麼.html)[![](/img/recommend_icon/graduate.png)
 
 公司小百科
 
-台燿做什麼？](/台燿做什麼.html)[![](/img/recommend_icon/graduate.png)
+安倉做什麼？](/安倉做什麼.html)[![](/img/recommend_icon/graduate.png)
 
 公司小百科
 
-元大美債20年做什麼？](/元大美債20年做什麼.html)[![](/img/recommend_icon/graduate.png)
+創為精密做什麼？](/創為精密做什麼.html)[![](/img/recommend_icon/graduate.png)
 
 公司小百科
 
-中信優息投資級債做什麼？](/中信優息投資級債做什麼.html)
+普鴻做什麼？](/普鴻做什麼.html)
 
 熱門排行
 

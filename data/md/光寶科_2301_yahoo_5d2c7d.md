@@ -5,6 +5,10 @@ Oops, something went wrong
 
  
 
+[#### MoneyTalk直播
+
+市場關注以伊局勢 港股低開近200點後倒升](https://hk.tv.yahoo.com/moneytalk%E7%9B%B4%E6%92%AD-025742366.html)
+
 [![鉅亨網](https://s.yimg.com/ny/api/res/1.2/UM5hrThmhlnSiBO4o4qlLg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")
 
 # 鉅亨速報 - Factset 最新調查：光寶科(2301-TW)EPS預估下修至6.49元，預估目標價為110元
@@ -13,13 +17,13 @@ Oops, something went wrong
 
 鉅亨網新聞中心
 
-2025年6月5日週四 下午11:10
+2025年6月6日週五 上午12:10
 
 ## 在這篇文章中:
 
 [2301.TW
 
-0.00%](/quote/2301.TW/ "2301.TW")
+-1.40%](/quote/2301.TW/ "2301.TW")
 
 根據FactSet最新調查，共10位分析師，對光寶科(2301-TW)做出2025年EPS預估：中位數由6.52元下修至6.49元，其中最高估值7.69元，最低估值6元，預估目標價為110元。
 
@@ -62,4 +66,4 @@ Oops, something went wrong
 
 [Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
 
-[私隱資訊主頁](https://guce.yahoo.com/privacy-dashboard?locale=zh-Hant-HK)
+[你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)

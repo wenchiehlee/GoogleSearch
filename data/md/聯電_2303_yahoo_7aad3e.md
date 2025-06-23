@@ -5,6 +5,10 @@ Oops, something went wrong
 
  
 
+[#### MoneyTalk直播
+
+市場關注以伊局勢 港股低開近200點後倒升](https://hk.tv.yahoo.com/moneytalk%E7%9B%B4%E6%92%AD-025742366.html)
+
 [![鉅亨網](https://s.yimg.com/ny/api/res/1.2/UM5hrThmhlnSiBO4o4qlLg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE0NjtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2020-01/147c7630-36ab-11ea-ae7c-5ee7a0016555)](http://www.cnyes.com/ "鉅亨網")
 
 # 鉅亨速報 - Factset 最新調查：聯電(2303-TW)EPS預估下修至3.27元，預估目標價為48元
@@ -13,7 +17,7 @@ Oops, something went wrong
 
 鉅亨網新聞中心
 
-2025年6月6日週五 上午5:11
+2025年6月6日週五 上午6:11
 
 根據FactSet最新調查，共23位分析師，對聯電(2303-TW)做出2025年EPS預估：中位數由3.31元下修至3.27元，其中最高估值4.72元，最低估值2.85元，預估目標價為48元。
 
@@ -56,4 +60,4 @@ Oops, something went wrong
 
 [Terms](https://guce.yahoo.com/terms?locale=zh-Hant-HK)  and [Privacy Policy](https://guce.yahoo.com/privacy-policy?locale=zh-Hant-HK)
 
-[私隱資訊主頁](https://guce.yahoo.com/privacy-dashboard?locale=zh-Hant-HK)
+[你的私隱選擇 ![](https://s.yimg.com/dv/static/siteApp/img/privacy-choice-control.png)](https://guce.yahoo.com/state-controls?locale=zh-Hant-HK&state=VA)

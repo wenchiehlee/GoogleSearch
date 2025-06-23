@@ -45,7 +45,21 @@
 
 [台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
 
-[集中市場加權指數22045.74+0.19%](https://invest.cnyes.com/index/TWS/TSE01)[吉茂29.4-1.51%](https://www.cnyes.com/twstock/1587)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[集中市場加權指數21701.08-1.56%](https://invest.cnyes.com/index/TWS/TSE01)[吉茂28.95-1.53%](https://www.cnyes.com/twstock/1587)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+
+### 鉅亨贏指標
+
+[了解更多](https://events.cnyes.com/anuewin-25942)
+
+#下跌三黑K線
+
+[![偏弱](/assets/icons/win-indicator/short.svg)
+
+###### 吉茂
+
+80.77%
+
+勝率](https://events.cnyes.com/anuewin-25942)
 
 ### 延伸閱讀
 

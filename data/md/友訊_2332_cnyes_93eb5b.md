@@ -41,7 +41,7 @@
 
 [台股首頁](https://www.cnyes.com/twstock)[我要存股](https://supr.link/8OHaU)
 
-[集中市場加權指數22045.74+0.19%](https://invest.cnyes.com/index/TWS/TSE01)[友訊15.75-3.67%](https://www.cnyes.com/twstock/2332)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
+[集中市場加權指數21690.74-1.61%](https://invest.cnyes.com/index/TWS/TSE01)[友訊15.45-1.90%](https://www.cnyes.com/twstock/2332)更多![arrow-icon](/assets/icons/arrows/arrow-down.svg)
 
 ### 鉅亨贏指標
 
@@ -67,7 +67,27 @@
 
 勝率](https://events.cnyes.com/anuewin-25942)
 
-#跌破區間
+#下跌三黑K線
+
+[![偏弱](/assets/icons/win-indicator/short.svg)
+
+###### 友訊
+
+78.57%
+
+勝率](https://events.cnyes.com/anuewin-25942)
+
+#空頭均線下殺
+
+[![偏弱](/assets/icons/win-indicator/short.svg)
+
+###### 友訊
+
+78.57%
+
+勝率](https://events.cnyes.com/anuewin-25942)
+
+#帶量跌破均線糾結
 
 [![偏弱](/assets/icons/win-indicator/short.svg)
 
