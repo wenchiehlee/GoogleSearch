@@ -510,11 +510,11 @@ class StageRunner:
                 validation_mode = stage_context.parameters.get("mode", "comprehensive")
                 
                 if validation_mode == "quick":
-                    success = validator.run_validation_v330(quick=True)
+                    success = validator.run_validation_v332(quick=True)
                 elif validation_mode == "comprehensive":
-                    success = validator.run_validation_v330(quick=False, fix_issues=True)
+                    success = validator.run_validation_v332(quick=False, fix_issues=True)
                 else:
-                    success = validator.run_validation_v330()
+                    success = validator.run_validation_v332()
                 
                 if success:
                     stage_logger.info("System validation passed")
@@ -532,7 +532,49 @@ class StageRunner:
         except Exception as e:
             stage_logger.error(f"Validation stage error: {e}")
             return False
-    
+
+    def _run_pipeline_stage(self, stage_context: StageContext,
+                          exec_context: ExecutionContext,
+                          stage_logger: Any) -> bool:
+        """Run complete pipeline"""
+        stage_logger.info("Starting complete pipeline execution...")
+        
+        try:
+            # Import main pipeline with lazy loading
+            pipeline_module = self._get_v331_component("factset_pipeline")
+            if not pipeline_module:
+                stage_logger.error("factset_pipeline module not available")
+                return False
+            
+            # Determine execution strategy based on mode
+            execution_mode = stage_context.parameters.get("mode", "intelligent")
+            skip_phases = stage_context.parameters.get("skip_phases", [])
+            
+            if hasattr(pipeline_module, 'EnhancedFactSetPipeline'):
+                # Use v3.3.2 enhanced pipeline
+                pipeline = pipeline_module.EnhancedFactSetPipeline()
+                
+                success = pipeline.run_complete_pipeline_v332(
+                    force_all=stage_context.parameters.get("force_all", False),
+                    skip_phases=skip_phases,
+                    execution_mode=execution_mode
+                )
+            else:
+                stage_logger.warning("Using sequential stage execution")
+                success = self._run_sequential_pipeline(exec_context, stage_logger)
+            
+            if success:
+                stage_logger.info("Complete pipeline executed successfully")
+                stage_context.results["pipeline_status"] = "completed"
+                return True
+            else:
+                stage_logger.error("Pipeline execution failed")
+                return False
+                
+        except Exception as e:
+            stage_logger.error(f"Pipeline stage error: {e}")
+            return False
+        
     def _run_download_watchlist_stage(self, stage_context: StageContext,
                                     exec_context: ExecutionContext, 
                                     stage_logger: Any) -> bool:

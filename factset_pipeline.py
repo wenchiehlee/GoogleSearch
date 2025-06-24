@@ -823,6 +823,103 @@ class EnhancedFactSetPipeline:
         
         self.logger.info(f"Enhanced FactSet Pipeline v{__version__} initialized")
     
+    def run_complete_pipeline_v332(self, force_all=False, skip_phases=None, 
+                                execution_mode="intelligent"):
+        """Run complete pipeline with v3.3.2 enhanced logging and performance monitoring"""
+        if skip_phases is None:
+            skip_phases = []
+        
+        pipeline_start = time.time()
+        
+        self.logger.info(f"Enhanced FactSet Pipeline v{__version__}")
+        self.logger.info(f"Date: {__date__}")
+        self.logger.info("v3.3.2: Enhanced Logging, Performance Monitoring & Cross-platform Support")
+        self.logger.info("All v3.3.1 Comprehensive Fixes Maintained")
+        self.logger.info("=" * 80)
+        
+        with self.perf_monitor.time_operation("complete_pipeline"):
+            # Enhanced data analysis
+            existing_files, data_status = self.analyze_existing_data_v332()
+            
+            # Initialize workflow
+            if force_all or not self.state.state.get("workflow_id"):
+                self.state.start_workflow_v332(execution_mode)
+            
+            # Load target companies
+            if not self.config.config.get('target_companies'):
+                self.config.download_watchlist_v332()
+            
+            companies = self.config.config.get('target_companies', [])
+            self.logger.info(f"Target Companies: {len(companies)} (v3.3.2)")
+            
+            success_phases = 0
+            total_phases = 3 - len(skip_phases)
+            
+            # Phase 1: Enhanced Search with cascade failure protection
+            if "search" not in skip_phases:
+                self.logger.info("🔍 Enhanced Search Phase (v3.3.2)")
+                
+                if self.run_enhanced_search_phase_v332(force=force_all):
+                    success_phases += 1
+                    self.logger.info("Search phase completed")
+                else:
+                    self.logger.error("Search phase failed")
+                    
+                    # Enhanced fallback
+                    if existing_files > 0:
+                        self.logger.info("Continuing with existing data...")
+                        success_phases += 1
+                    else:
+                        return False
+            else:
+                success_phases += 1
+            
+            # Phase 2: Enhanced Processing with performance fixes
+            if "processing" not in skip_phases:
+                self.logger.info("📊 Enhanced Processing Phase (v3.3.2)")
+                
+                if self.run_enhanced_processing_phase_v332(force=force_all):
+                    success_phases += 1
+                    self.logger.info("Processing phase completed")
+                else:
+                    self.logger.error("Processing phase failed")
+                    return False
+            else:
+                success_phases += 1
+            
+            # Phase 3: Enhanced Upload
+            if "upload" not in skip_phases:
+                self.logger.info("📈 Enhanced Upload Phase (v3.3.2)")
+                
+                if self.run_enhanced_upload_phase_v332(force=force_all):
+                    success_phases += 1
+                    self.logger.info("Upload phase completed")
+                else:
+                    self.logger.warning("Upload phase failed")
+            else:
+                success_phases += 1
+        
+        # Enhanced summary
+        total_duration = time.time() - pipeline_start
+        
+        self.logger.info("="*80)
+        self.logger.info("ENHANCED PIPELINE EXECUTION COMPLETED! (v3.3.2)")
+        self.logger.info("="*80)
+        self.logger.info(f"Success Rate: {success_phases}/{total_phases} phases")
+        self.logger.info(f"Total Duration: {total_duration:.1f} seconds")
+        
+        return success_phases == total_phases
+
+    # ============================================================================
+    # LEGACY COMPATIBILITY FUNCTIONS (v3.3.2)
+    # ============================================================================
+
+    # Maintain backward compatibility with v3.3.1
+    def run_complete_pipeline_v331(force_all=False, skip_phases=None, execution_mode="intelligent"):
+        """Legacy v3.3.1 compatibility wrapper"""
+        pipeline = EnhancedFactSetPipeline()
+        return pipeline.run_complete_pipeline_v332(force_all, skip_phases, execution_mode)
+
     def _create_fallback_memory_manager(self):
         """Create a fallback memory manager with minimal interface"""
         class FallbackMemoryManager:

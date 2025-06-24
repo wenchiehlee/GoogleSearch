@@ -30,7 +30,7 @@ import requests
 import gc
 from datetime import datetime, timedelta
 from pathlib import Path
-from urllib.parse import urlparse, quote_plus, unquote
+from urllib.parse import urlparse, quote_plus, unquote, quote
 from typing import List, Dict, Optional, Tuple, Any
 
 # Version Information - v3.3.2

@@ -72,6 +72,60 @@ class EnhancedSetupValidator:
         except ImportError:
             self.logger = None
     
+        def run_validation_v332(self, quick: bool = False, fix_issues: bool = False, 
+                           test_v332: bool = False, test_cli: bool = False) -> bool:
+            """Run complete v3.3.2 enhanced validation"""
+            print(f"🚀 Enhanced FactSet Pipeline Setup Validator v{__version__}")
+            print("=" * 80)
+            
+            if fix_issues:
+                print("🔧 Auto-fix mode enabled")
+            if quick:
+                print("⚡ Quick validation mode")
+            if test_v332:
+                print("🧪 v3.3.2 specific feature testing enabled")
+            if test_cli:
+                print("🖥️ CLI interface testing enabled")
+            
+            # Core checks
+            checks = [
+                ("Python Version", self.check_python_version),
+                ("Required Files (v3.3.2)", self.check_required_files_v332),
+                ("Python Dependencies (v3.3.2)", self.check_dependencies_v332),
+                ("External Tools (v3.3.2)", self.check_external_tools_v332),
+                ("Environment Variables (v3.3.2)", self.check_environment_variables_v332),
+            ]
+            
+            # Additional checks for full validation
+            if not quick:
+                checks.extend([
+                    ("Directory Structure (v3.3.2)", lambda: self.check_directory_structure_v332(fix_issues)),
+                    ("Module Imports (v3.3.2)", self.test_module_imports_v332),
+                ])
+            
+            # v3.3.2 specific tests
+            if test_v332 or not quick:
+                checks.append(("v3.3.2 Enhanced Features", self.test_v332_enhanced_features))
+            
+            # CLI interface tests
+            if test_cli or not quick:
+                checks.append(("CLI Interface (v3.3.2)", self.test_cli_interface_v332))
+            
+            # Run all checks
+            results = {}
+            for check_name, check_func in checks:
+                try:
+                    results[check_name] = check_func()
+                except Exception as e:
+                    self.log_error(f"Check '{check_name}' failed with exception: {e}")
+                    results[check_name] = False
+            
+            # Summary
+            self.print_v332_summary(results)
+            
+            # Return overall success
+            return all(results.values()) and len(self.errors) == 0
+    
     def log_error(self, message: str):
         """Log an error"""
         self.errors.append(message)
