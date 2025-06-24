@@ -1,9 +1,7 @@
-# Google Search FactSet Pipeline 指南
+# Google Search FactSet Pipeline 完整指南 (v3.3.2 簡化與可觀測性增強版)
 
 ## Version
-{Guideline version}=3.3.1
-
-# Google Search FactSet Pipeline 完整指南 (v3.3.1 綜合修復版)
+{Guideline version}=3.3.2
 
 ## 🎯 系統概述
 
@@ -12,344 +10,377 @@
 **輸入**: `觀察名單.csv` (代號,名稱 格式，116+ 家公司)
 **輸出**: Google Sheets 投資組合儀表板 + 結構化數據檔案
 
-**v3.3.1 狀態**: ✅ **生產就緒** - 綜合修復完成，99%+ 可靠性
+**v3.3.2 狀態**: ✅ **生產就緒** - 簡化工作流程 + 增強可觀測性
 
-## 📊 核心架構
+## 📊 v3.3.2 核心改進
+
+### 🔄 從 v3.3.1 到 v3.3.2 的關鍵升級
 
 ```
-GitHub Actions → 目標公司載入 → 搜尋引擎 → 資料處理 → Google Sheets
-      ↓              ↓           ↓         ↓           ↓
-   定時執行     觀察名單.csv   factset搜尋   MD→CSV    投資組合報告
-   (Python)    (116+公司)    (級聯保護)   (性能優化)  (v3.3.1格式)
+v3.3.1 (綜合修復版)          →          v3.3.2 (簡化增強版)
+├─ 複雜的 Actions.yml                  ├─ 簡潔的 Actions.yml  
+├─ 內嵌 Python 邏輯                   ├─ 模組化 Python 呼叫
+├─ 基礎日誌記錄                       ├─ 階段式雙重日誌系統
+├─ 平台特定命令                       ├─ 統一跨平台 CLI
+└─ 手動錯誤追蹤                       └─ 自動化問題診斷
 ```
 
-## 🏗️ 模組設計規範 (v3.3.1)
+### 🏗️ v3.3.2 設計原則
 
-### 1. 主控制器 (`factset_pipeline.py`)
+1. **簡化優先** (Simplicity First)
+   - Actions.yml 只負責協調，不包含業務邏輯
+   - 所有複雜邏輯移至 Python 模組
+   - 清晰的階段劃分和命令結構
 
-版本={Guideline version}
+2. **統一 CLI 介面** (Unified CLI)
+   - Windows 開發環境與 GitHub Actions 使用相同命令
+   - 跨平台兼容的路徑和編碼處理
+   - 一致的參數和行為
+
+3. **增強可觀測性** (Enhanced Observability)
+   - 每階段獨立日誌檔案
+   - 雙重輸出：控制台 + 檔案
+   - 自動問題診斷和建議
+
+4. **保持 v3.3.1 修復** (Maintain v3.3.1 Fixes)
+   - 所有 #1-9 修復保持不變
+   - 效能和可靠性提升延續
+   - 向後兼容現有配置
+
+## 🚀 v3.3.2 架構設計
+
+### 核心架構
+```
+統一 CLI 入口 → 階段執行器 → 專業模組 → 雙重日誌 → 結果匯總
+      ↓              ↓           ↓         ↓         ↓
+  factset_cli.py  stage_runner  各模組    logs/     報告生成
+  (跨平台命令)     (協調執行)   (業務邏輯)  (分階段)   (狀態摘要)
+```
+
+### 模組職責重新定義
+
+#### 1. 統一 CLI 入口 (`factset_cli.py`) - 🆕 v3.3.2
+
 ```python
-# v3.3.1 核心職責 - 綜合修復版
-class EnhancedFactSetPipeline:
+# v3.3.2 核心職責 - 統一命令介面
+class FactSetCLI:
     def __init__(self):
+        self.logger = self._setup_enhanced_logging()
+        self.stage_runner = StageRunner()
         self.config = EnhancedConfig()
-        self.rate_protector = UnifiedRateLimitProtector()  # FIXED #3
-        self.state = EnhancedWorkflowState()
-        self.memory_monitor = MemoryManager()  # FIXED #9
     
-    # v3.3.1 必要方法
-    def run_complete_pipeline_v331(self, execution_mode="intelligent"):
-        # 1. 分析現有資料 (性能優化)
-        # 2. 決定執行策略 (智能化)
-        # 3. 執行搜尋階段 (級聯故障保護) - FIXED #1
-        # 4. 執行資料處理 (批次處理) - FIXED #2
-        # 5. 上傳到 Google Sheets (v3.3.1格式)
+    # v3.3.2 統一命令 - 跨平台兼容
+    def execute(self, command, **kwargs):
+        """統一執行入口 - Windows 和 Linux 相同行為"""
+        with self._create_execution_context(command) as ctx:
+            return self.stage_runner.run_stage(command, ctx, **kwargs)
     
-    def analyze_existing_data_v331(self):
-        # v3.3.1: 性能優化的資料分析
-        return file_count, quality_status
-    
-    def determine_strategy(self, existing_data):
-        # enhanced: 使用所有 v3.3.1 修復
-        # intelligent: 智能適應策略
-        # conservative: 限制搜尋
-        # process_only: 只處理現有資料  
-        return strategy
+    # v3.3.2 階段式命令
+    def run_validation(self):      # 驗證階段
+    def run_search(self):          # 搜尋階段  
+    def run_processing(self):      # 處理階段
+    def run_upload(self):          # 上傳階段
+    def run_full_pipeline(self):   # 完整流程
+    def run_recovery(self):        # 恢復流程
 ```
 
-**v3.3.1 關鍵特性**:
-- ✅ 級聯故障保護 (FIXED #1)
-- ✅ 預編譯正則表達式 70% 性能提升 (FIXED #2)
-- ✅ 統一速率限制器 (FIXED #3)
-- ✅ 延遲載入模組 (FIXED #4)
-- ✅ 記憶體管理 (FIXED #9)
-
-### 2. 搜尋引擎 (`factset_search.py`)
-
-版本={Guideline version}
+#### 2. 階段執行器 (`stage_runner.py`) - 🆕 v3.3.2
 
 ```python
-# v3.3.1 核心職責 - 級聯故障保護
-def search_company_factset_data_v331(company_name, stock_code, rate_protector=None):
-    # v3.3.1 搜尋策略
-    patterns = {
-        'factset': ['{company} factset EPS 預估', '{company} 目標價'],
-        'financial': ['{company} 財報 分析師 預估'],
-        'comprehensive': ['{company} 股價 分析']
-    }
+# v3.3.2 核心職責 - 階段協調與日誌管理
+class StageRunner:
+    def __init__(self):
+        self.memory_manager = MemoryManager()      # v3.3.1 保持
+        self.rate_protector = UnifiedRateLimitProtector()  # v3.3.1 保持
+        self.logger_manager = EnhancedLoggerManager()      # v3.3.2 新增
     
-    # v3.3.1 級聯故障保護 - FIXED #1
-    for url in search_results:
-        try:
-            content = download_webpage_content_enhanced_v331(url)
-            save_as_markdown(content, unique_filename_v331)
-        except Exception as url_error:
-            print(f"⚠️ URL處理錯誤: {url_error}")
-            continue  # FIXED #1: 繼續處理其他URL，不中斷整個搜尋
-    
-    # v3.3.1 統一速率限制 - FIXED #3
-    try:
-        results = google_search(query)
-        if rate_protector:
-            rate_protector.record_request()
-    except RateLimitException:
-        if rate_protector:
-            rate_protector.record_429_error()
-        raise  # 統一處理
-
-# v3.3.1 必要功能
-def generate_unique_filename_v331(company, stock_code, url, search_index, content_preview):
-    # FIXED #6: 增強唯一檔名生成，減少衝突
-    content_hash = hashlib.sha256(content_identifier.encode()).hexdigest()[:8]
-    timestamp = datetime.now().strftime("%m%d_%H%M%S_%f")[:15]
-    # 格式: {stock_code}_{company}_{domain}_{content_hash}_{timestamp}.md
-
-class UnifiedRateLimitProtector:
-    # FIXED #3: 統一速率限制保護
-    def record_429_error(self):
-        self.should_stop_searching = True  # 立即停止
-        return True
-```
-
-**v3.3.1 關鍵特性**:
-- 🚨 **級聯故障保護**: 單一 URL 錯誤不會中斷整個搜尋 (FIXED #1)
-- 🔄 **增強 URL 清理**: 更好的編碼處理
-- 💾 **改進防覆蓋**: 更強的唯一檔名生成 (IMPROVED #6)
-- 📊 **統一速率限制**: 一致的 429 處理 (FIXED #3)
-
-### 3. 資料處理器 (`data_processor.py`)
-
-版本={Guideline version}
-
-```python
-# v3.3.1 核心職責 - 性能優化
-def process_all_data_v331(memory_manager=None):
-    # 1. 整合 CSV 檔案
-    consolidated_df = consolidate_csv_files()
-    
-    # 2. v3.3.1 批次處理 MD 檔案 - FIXED #2
-    if parse_md:
-        md_data = process_md_files_in_batches_v331(md_files, memory_manager, batch_size=50)
-        consolidated_df = apply_md_data_to_csv(consolidated_df, md_data)
-    
-    # 3. v3.3.1 增強重複資料偵測 - FIXED #5
-    consolidated_df = deduplicate_financial_data_v331(consolidated_df)
-    
-    # 4. 生成投資組合摘要
-    summary_df = generate_portfolio_summary_v331(consolidated_df)
-    
-    # 5. 產生統計報告
-    stats = generate_statistics_v331(summary_df, consolidated_df)
-
-# v3.3.1 預編譯財務數據提取模式 - FIXED #2
-COMPILED_FACTSET_PATTERNS = {}
-def _initialize_compiled_patterns():
-    for year in ['2025', '2026', '2027']:
-        COMPILED_FACTSET_PATTERNS[f'eps_{year}_patterns'] = [
-            re.compile(rf'{year}.*?EPS.*?([0-9]+\.?[0-9]*)', re.IGNORECASE),
-            # 預編譯模式 = 70% 性能提升
-        ]
-
-def deduplicate_financial_data_v331(data_list):
-    # FIXED #5: 增強重複資料偵測
-    # 區分真正的共識數據 vs 重複文章
-    if len(unique_values) == 1 and len(values) >= 3:
-        # 可能是多來源的共識數據
-    elif len(unique_values) <= 3 and len(values) >= 5:
-        # 可能是有限範圍的估計（良好共識）
-```
-
-**v3.3.1 關鍵特性**:
-- 📄 **批次處理**: 記憶體效率的大量檔案處理 (FIXED #2, #9)
-- 🏢 **增強重複偵測**: 智能區分共識 vs 重複數據 (FIXED #5)
-- 📊 **預編譯模式**: 70% 性能提升 (FIXED #2)
-- 💾 **記憶體管理**: 資源限制和清理 (FIXED #9)
-
-### 4. 配置管理 (`config.py`)
-
-```python
-# v3.3.1 觀察名單載入 - 增強驗證
-def download_target_companies_v330():
-    """從 GitHub 載入觀察名單.csv - v3.3.1 增強錯誤處理"""
-    url = "https://raw.githubusercontent.com/wenchiehlee/GoPublic/refs/heads/main/觀察名單.csv"
-    
-    # v3.3.1 增強錯誤處理
-    for i, fallback_url in enumerate(WATCHLIST_URLS):
-        try:
-            response = requests.get(fallback_url, headers=enhanced_headers, timeout=30)
-            response.raise_for_status()
-            break
-        except Exception as e:
-            if i == len(WATCHLIST_URLS) - 1:
+    def run_stage(self, stage_name, context, **kwargs):
+        """v3.3.2 階段執行 - 增強日誌和錯誤處理"""
+        stage_logger = self.logger_manager.get_stage_logger(stage_name)
+        
+        with self._stage_context(stage_name, stage_logger) as stage_ctx:
+            try:
+                # v3.3.2 階段前檢查
+                self._pre_stage_validation(stage_name, stage_ctx)
+                
+                # 執行實際階段邏輯
+                result = self._execute_stage_logic(stage_name, stage_ctx, **kwargs)
+                
+                # v3.3.2 階段後檢查
+                self._post_stage_validation(stage_name, stage_ctx, result)
+                
+                return result
+                
+            except Exception as e:
+                stage_logger.error(f"Stage {stage_name} failed: {e}")
+                self._stage_recovery(stage_name, stage_ctx, e)
                 raise
-    
-    # v3.3.1 增強 CSV 解析和驗證
-    companies = parse_csv_companies_v330(response.text)
-    return companies
-
-# v3.3.1 配置結構
-DEFAULT_CONFIG_V331 = {
-    "version": "3.3.1",
-    "target_companies": download_target_companies_v330(),
-    "search": {
-        "max_results": 10,
-        "rate_limit_delay": 3,           # FIXED #3: 統一速率限制
-        "circuit_breaker_threshold": 1,  # 立即停止
-        "batch_size": 20,               # FIXED #9: 記憶體管理
-        "max_file_size_mb": 50          # FIXED #9: 資源限制
-    },
-    "processing": {
-        "batch_processing": True,        # FIXED #2: 性能優化
-        "memory_limit_mb": 2048,        # FIXED #9: 記憶體管理
-        "max_files_per_batch": 50       # FIXED #9: 批次處理
-    }
-}
 ```
 
-### 5. Google Sheets 整合 (`sheets_uploader.py`)
+#### 3. 增強日誌管理器 (`enhanced_logger.py`) - 🆕 v3.3.2
 
 ```python
-def upload_all_sheets_v330(config):
-    # v3.3.1 載入處理後的資料
-    data = {
-        'summary': pd.read_csv('data/processed/portfolio_summary.csv'),
-        'detailed': pd.read_csv('data/processed/detailed_data.csv'),  # v3.3.1 格式
-        'statistics': json.load('data/processed/statistics.json')
-    }
+# v3.3.2 核心職責 - 階段式雙重日誌系統
+class EnhancedLoggerManager:
+    def __init__(self):
+        self.log_dir = Path("logs") / datetime.now().strftime("%Y%m%d")
+        self.log_dir.mkdir(parents=True, exist_ok=True)
+        self.stage_loggers = {}
     
-    # v3.3.1 更新三個工作表
-    update_portfolio_summary_sheet_v330(client, data)     # 14欄位格式
-    update_detailed_data_sheet_v330(client, data)         # 21欄位 EPS 分解
-    update_statistics_sheet_v330(client, data)            # v3.3.1 統計
+    def get_stage_logger(self, stage_name):
+        """v3.3.2 取得階段專屬日誌器"""
+        if stage_name not in self.stage_loggers:
+            self.stage_loggers[stage_name] = self._create_dual_logger(stage_name)
+        return self.stage_loggers[stage_name]
+    
+    def _create_dual_logger(self, stage_name):
+        """v3.3.2 建立雙重輸出日誌器"""
+        logger = logging.getLogger(f'factset_v332.{stage_name}')
+        logger.setLevel(logging.INFO)
+        logger.handlers.clear()
+        
+        # 檔案輸出 - 階段專屬
+        file_handler = logging.FileHandler(
+            self.log_dir / f"{stage_name}_{datetime.now().strftime('%H%M%S')}.log",
+            encoding='utf-8'
+        )
+        file_handler.setFormatter(self._get_detailed_formatter())
+        
+        # 控制台輸出 - 簡潔格式
+        console_handler = SafeConsoleHandler()
+        console_handler.setFormatter(self._get_console_formatter())
+        
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
+        
+        return logger
 
-# v3.3.1 增強資料品質驗證
-def validate_data_quality_v330(data):
-    # 檢查 v3.3.1 格式合規性
-    if 'summary' in data and not data['summary'].empty:
-        v331_columns = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值']
-        format_compliance = all(col in data['summary'].columns for col in v331_columns)
+# v3.3.2 跨平台安全控制台處理器
+class SafeConsoleHandler(logging.StreamHandler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            # v3.3.2 跨平台編碼處理
+            if sys.platform == "win32":
+                msg = msg.encode('utf-8', errors='replace').decode('utf-8')
+            self.stream.write(msg + '\n')
+            self.flush()
+        except Exception:
+            self.handleError(record)
 ```
 
-## 🚨 v3.3.1 速率限制保護機制
-
-### 統一立即停止策略 - FIXED #3
+### 4. 保持 v3.3.1 修復的核心模組
 
 ```python
-class UnifiedRateLimitProtector:
-    def __init__(self, config):
-        self.circuit_breaker_threshold = 1  # v3.3.1: 第一次 429 就停止
-        self.should_stop_searching = False
-        self.consecutive_429s = 0
-    
-    def record_429_error(self):
-        self.consecutive_429s += 1
-        self.should_stop_searching = True  # v3.3.1: 立即停止
-        logger.error("🛑 v3.3.1: 偵測到速率限制 - 立即停止搜尋")
-        return True
-    
-    def should_stop_immediately(self):
-        return self.should_stop_searching
+# 以下模組保持 v3.3.1 的所有修復，僅增加 v3.3.2 日誌整合
+
+# factset_pipeline.py - 保持 v3.3.1 + 新增階段式日誌
+class EnhancedFactSetPipeline:
+    # 保持所有 v3.3.1 修復
+    # 新增: 與 StageRunner 整合的日誌系統
+
+# factset_search.py - 保持 v3.3.1 + 新增搜尋階段日誌  
+# data_processor.py - 保持 v3.3.1 + 新增處理階段日誌
+# sheets_uploader.py - 保持 v3.3.1 + 新增上傳階段日誌
+# config.py - 保持 v3.3.1 + 新增配置階段日誌
 ```
 
-### v3.3.1 增強回退策略
+## 🔧 v3.3.2 統一 CLI 命令
 
-```python
-def enhanced_fallback_to_existing_data_v331():
-    """v3.3.1: 當搜尋被限制時，性能優化處理現有資料"""
-    file_count, data_status = analyze_existing_data_v331()
-    if file_count > 0:
-        logger.info(f"📄 v3.3.1 使用現有資料: {file_count} 個檔案")
-        return process_all_data_v331(force=True)  # 使用 v3.3.1 優化
-    else:
-        logger.warning("⚠️ 無現有資料可處理")
-        return False
+### 本地開發 (Windows/Linux 通用)
+
+```bash
+# 🧪 v3.3.2 系統驗證
+python factset_cli.py validate --comprehensive
+python factset_cli.py validate --quick
+python factset_cli.py validate --test-v332
+
+# 📥 觀察名單管理  
+python factset_cli.py download-watchlist --validate
+python factset_cli.py download-watchlist --force-refresh
+
+# 🔍 搜尋階段
+python factset_cli.py search --mode=enhanced --priority=high_only
+python factset_cli.py search --mode=conservative --companies=30
+python factset_cli.py search --test-cascade-protection
+
+# 📊 資料處理階段
+python factset_cli.py process --mode=v332 --memory-limit=2048
+python factset_cli.py process --deduplicate --aggregate
+python factset_cli.py process --benchmark
+
+# 📈 上傳階段
+python factset_cli.py upload --sheets=all --backup
+python factset_cli.py upload --test-connection
+python factset_cli.py upload --sheets=portfolio,detailed
+
+# 🚀 完整流程
+python factset_cli.py pipeline --mode=intelligent --log-level=info
+python factset_cli.py pipeline --mode=enhanced --memory=2048 --batch-size=50
+python factset_cli.py pipeline --mode=process-only
+
+# 🔄 恢復和診斷
+python factset_cli.py recover --analyze --fix-common-issues
+python factset_cli.py diagnose --stage=search --detailed
+python factset_cli.py status --comprehensive
+
+# 📋 日誌和報告
+python factset_cli.py logs --stage=all --tail=100
+python factset_cli.py logs --stage=search --export
+python factset_cli.py report --format=summary --email
 ```
 
-## ⚙️ v3.3.1 GitHub Actions 工作流程
-
-### Actions.yml v3.3.1 結構 - FIXED #8
+### GitHub Actions 對應命令 (相同語法)
 
 ```yaml
-name: FactSet Pipeline v3.3.1 - Python-Enhanced Workflow
+# v3.3.2 簡化 Actions.yml - 直接呼叫 CLI
+- name: 🧪 系統驗證
+  run: python factset_cli.py validate --comprehensive
 
-on:
-  schedule:
-    - cron: "10 2 * * *"  # 每日 2:10 AM
-  workflow_dispatch:
-    inputs:
-      execution_mode:
-        type: choice
-        options: ['intelligent', 'enhanced', 'conservative', 'process_only']  # v3.3.1 新模式
-      memory_limit:
-        description: 'Memory limit (MB)'
-        default: '2048'
-        type: string
+- name: 🚀 執行管線
+  run: python factset_cli.py pipeline --mode=${{ inputs.mode }} --log-level=info
 
-jobs:
-  # v3.3.1 Python-based 預檢階段 - FIXED #8
-  preflight_v331:
-    runs-on: ubuntu-latest
-    outputs:
-      validation_status: ${{ steps.python_validation.outputs.status }}
-      rate_limited: ${{ steps.python_validation.outputs.rate_limited }}
-    steps:
-      - name: 🧪 v3.3.1 Python 驗證 (FIXED #8)
-        run: |
-          python << 'EOF'
-          # v3.3.1: 所有驗證邏輯移至 Python (取代 bash)
-          import factset_pipeline
-          validation_results = test_v331_enhancements()
-          print(f"::set-output name=status::{validation_results['status']}")
-          EOF
-  
-  # v3.3.1 主要管線
-  pipeline_v331:
-    needs: preflight_v331
-    steps:
-      - name: 🚀 v3.3.1 增強管線執行 (FIXED #1-9)
-        env:
-          FACTSET_MEMORY_LIMIT: ${{ github.event.inputs.memory_limit || '2048' }}
-        run: |
-          python << 'EOF'
-          # v3.3.1: Python-based 執行邏輯
-          import factset_pipeline
-          pipeline = factset_pipeline.EnhancedFactSetPipeline()
-          success = pipeline.run_complete_pipeline_v331(
-              execution_mode="${{ github.event.inputs.execution_mode || 'intelligent' }}"
-          )
-          EOF
-      
-      - name: 💾 v3.3.1 智能提交策略
-        run: |
-          python << 'EOF'
-          # v3.3.1: Python-based 提交邏輯 (取代 bash)
-          commit_worthy = validate_v331_data_quality()
-          if commit_worthy:
-              commit_v331_enhanced_data()
-          EOF
+- name: 📊 生成報告
+  run: python factset_cli.py report --format=github-summary
 ```
 
-## 📊 v3.3.1 輸出規格 (不變)
+## 📋 v3.3.2 日誌系統架構
 
-### Portfolio Summary (投資組合摘要) - 14欄位格式
+### 階段式日誌檔案結構
+
+```
+logs/
+├── 20250624/                    # 日期目錄
+│   ├── validation_094530.log    # 驗證階段
+│   ├── search_094645.log        # 搜尋階段
+│   ├── processing_095230.log    # 處理階段
+│   ├── upload_095845.log        # 上傳階段
+│   ├── pipeline_094530.log      # 完整流程總日誌
+│   └── error_summary.log        # 錯誤摘要
+├── latest/                      # 最新日誌連結
+│   ├── validation.log -> ../20250624/validation_094530.log
+│   ├── search.log -> ../20250624/search_094645.log
+│   └── pipeline.log -> ../20250624/pipeline_094530.log
+└── reports/                     # 日誌報告
+    ├── daily_summary_20250624.html
+    └── error_analysis_20250624.json
+```
+
+### 雙重輸出範例
+
+```python
+# v3.3.2 階段式日誌輸出範例
+
+# 控制台輸出 (簡潔)
+🔍 [SEARCH] Starting enhanced search for 116 companies...
+✅ [SEARCH] Company 1/116: 台積電 (2330) - 5 files saved
+⚠️ [SEARCH] Company 14/116: Rate limiting detected - switching to conservative mode
+📊 [SEARCH] Completed: 95/116 companies, 847 files saved
+
+# 檔案輸出 (詳細) - search_094645.log
+2025-06-24 09:46:45,123 [INFO] factset_v332.search - Starting enhanced search suite v3.3.2
+2025-06-24 09:46:45,124 [INFO] factset_v332.search - Configuration: mode=enhanced, companies=116
+2025-06-24 09:46:45,125 [DEBUG] factset_v332.search - Rate protector initialized: threshold=1
+2025-06-24 09:46:47,234 [INFO] factset_v332.search - Processing company: 台積電 (2330)
+2025-06-24 09:46:47,235 [DEBUG] factset_v332.search - Search query: 台積電 factset EPS 預估
+2025-06-24 09:46:48,456 [INFO] factset_v332.search - Found 10 URLs for 台積電
+2025-06-24 09:46:49,678 [INFO] factset_v332.search - Saved: 2330_台積電_factset_a1b2c3d4_0624094649.md
+[詳細的 URL 處理、錯誤處理、效能統計...]
+2025-06-24 09:52:30,789 [WARNING] factset_v332.search - Rate limiting detected: 429 Too Many Requests
+2025-06-24 09:52:30,790 [INFO] factset_v332.search - Switching to conservative mode
+[恢復策略、繼續處理...]
+2025-06-24 10:15:45,123 [INFO] factset_v332.search - Search completed: 95/116 companies successful
+```
+
+## 🎯 v3.3.2 簡化 Actions.yml
+
+### 簡潔的工作流程定義
+
+```yaml
+name: FactSet Pipeline v3.3.2 - Simplified & Observable
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [intelligent, enhanced, conservative, process_only] }
+      priority: { type: choice, options: [high_only, top_30, balanced] }
+      memory_limit: { type: string, default: '2048' }
+  schedule: [cron: "10 2 * * *"]
+
+jobs:
+  # v3.3.2 簡化驗證
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.validate.outputs.status }}
+      recommendation: ${{ steps.validate.outputs.recommendation }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - id: validate
+        run: python factset_cli.py validate --github-actions
+
+  # v3.3.2 主要管線
+  pipeline:
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+      GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
+      GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+      GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      
+      - name: 🚀 執行 v3.3.2 管線
+        run: |
+          python factset_cli.py pipeline \
+            --mode=${{ inputs.mode || 'intelligent' }} \
+            --priority=${{ inputs.priority || 'high_only' }} \
+            --memory-limit=${{ inputs.memory_limit || '2048' }} \
+            --github-actions
+      
+      - name: 📊 生成報告
+        if: always()
+        run: python factset_cli.py report --format=github-summary
+      
+      - name: 💾 智能提交
+        run: python factset_cli.py commit --smart --validate
+
+  # v3.3.2 恢復
+  recovery:
+    needs: [validate, pipeline]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.11', cache: 'pip' }
+      - run: pip install -r requirements.txt
+      - run: python factset_cli.py recover --analyze --github-actions
+```
+
+## 📊 v3.3.2 輸出規格 (保持 v3.3.1)
+
+### Portfolio Summary (投資組合摘要) - 14欄位格式 ✅ 不變
 
 ```csv
 代號,名稱,股票代號,MD最舊日期,MD最新日期,MD資料筆數,分析師數量,目標價,2025EPS平均值,2026EPS平均值,2027EPS平均值,品質評分,狀態,更新日期
-1587,吉茂,1587-TW,2025/1/22,2025/6/22,6,23,102.3,20,20,20,4,🟢 完整,2025-06-23 10:45:00
+1587,吉茂,1587-TW,2025/1/22,2025/6/22,6,23,102.3,20,20,20,4,🟢 完整,2025-06-24 10:45:00
 ```
 
-### Detailed Data (詳細資料) - 21欄位 EPS 分解
+### Detailed Data (詳細資料) - 21欄位 EPS 分解 ✅ 不變
 
-```csv
-代號,名稱,股票代號,MD日期,分析師數量,目標價,2025EPS最高值,2025EPS最低值,2025EPS平均值,2026EPS最高值,2026EPS最低值,2026EPS平均值,2027EPS最高值,2027EPS最低值,2027EPS平均值,品質評分,狀態,MD File,更新日期
-1587,吉茂,1587-TW,2025/1/22,23,102.3,22,18,20,22,18,20,22,18,20,4,🟢 完整,data/md/吉茂_1587_xxxxx.md,2025-06-23 10:45:00
-```
-
-### v3.3.1 Statistics (增強統計資料)
+### v3.3.2 Statistics (增強統計資料) - 新增可觀測性指標
 
 ```json
 {
-  "version": "3.3.1",
+  "version": "3.3.2",
   "total_companies": 116,
   "companies_with_data": 95,
   "success_rate": 82.1,
@@ -359,271 +390,239 @@ jobs:
     "memory_cleanups": 3,
     "peak_memory_mb": 1847
   },
-  "reliability_metrics": {
-    "cascade_failures_prevented": 12,
-    "rate_limit_protections": 1,
-    "successful_recoveries": 5
+  "observability_stats": {
+    "stage_execution_times": {
+      "validation": 12.5,
+      "search": 1245.7,
+      "processing": 87.3,
+      "upload": 23.1
+    },
+    "log_files_generated": 5,
+    "error_recovery_attempts": 2,
+    "cross_platform_compatibility": true
   },
-  "rate_limited": false,
-  "guideline_version": "3.3.1"
+  "v331_fixes_maintained": {
+    "cascade_failure_protection": true,
+    "performance_optimization": true,
+    "unified_rate_limiting": true,
+    "memory_management": true,
+    "data_deduplication": true
+  },
+  "guideline_version": "3.3.2"
 }
 ```
 
-## 🛠️ v3.3.1 實作重點
+## 🛠️ v3.3.2 實作重點
 
-### 1. 級聯故障保護 - FIXED #1
-```python
-# v3.3.1: 個別錯誤隔離
-for company in companies:
-    try:
-        process_company(company)
-    except Exception as company_error:
-        logger.error(f"公司 {company} 失敗: {company_error}")
-        continue  # FIXED #1: 繼續處理其他公司
-```
+### 1. 統一 CLI 介面實作
 
-### 2. 性能優化 - FIXED #2
 ```python
-# v3.3.1: 預編譯正則表達式
-COMPILED_PATTERNS = {}
-def _initialize_compiled_patterns():
-    # 編譯一次，使用多次 = 70% 性能提升
+# factset_cli.py - v3.3.2 統一入口
+def main():
+    cli = FactSetCLI()
     
-def process_md_files_in_batches_v331(files, batch_size=50):
-    # FIXED #2: 批次處理避免記憶體問題
+    # 跨平台參數解析
+    parser = create_unified_parser()
+    args = parser.parse_args()
+    
+    # 執行命令 (Windows/Linux 相同行為)
+    try:
+        result = cli.execute(args.command, **vars(args))
+        sys.exit(0 if result else 1)
+    except KeyboardInterrupt:
+        cli.logger.warning("執行被使用者中斷")
+        sys.exit(130)
+    except Exception as e:
+        cli.logger.error(f"執行失敗: {e}")
+        sys.exit(1)
 ```
 
-### 3. 統一速率限制 - FIXED #3
+### 2. 階段式執行器實作
+
 ```python
-class UnifiedRateLimitProtector:
-    def record_429_error(self):
-        self.should_stop_searching = True  # 立即停止
-        logger.error("🛑 v3.3.1 統一速率限制 - 停止所有搜尋")
-        return True
+# stage_runner.py - v3.3.2 階段協調
+class StageRunner:
+    def _execute_stage_logic(self, stage_name, context, **kwargs):
+        """根據階段名稱執行對應邏輯"""
+        stage_map = {
+            'validate': self._run_validation_stage,
+            'search': self._run_search_stage,
+            'process': self._run_processing_stage,
+            'upload': self._run_upload_stage,
+            'pipeline': self._run_pipeline_stage
+        }
+        
+        if stage_name not in stage_map:
+            raise ValueError(f"Unknown stage: {stage_name}")
+        
+        return stage_map[stage_name](context, **kwargs)
 ```
 
-## 🚀 v3.3.1 部署指令
+### 3. 保持 v3.3.1 所有修復
 
-### 本地開發 (增強版)
+```python
+# 以下類別和功能完全保持 v3.3.1 版本，確保所有修復維持有效：
+
+# ✅ FIXED #1: 級聯故障保護
+class CascadeFailureProtection:  # 保持不變
+
+# ✅ FIXED #2: 性能優化 (預編譯正則表達式)
+COMPILED_FACTSET_PATTERNS = {}  # 保持不變
+
+# ✅ FIXED #3: 統一速率限制器
+class UnifiedRateLimitProtector:  # 保持不變
+
+# ✅ FIXED #4: 模組導入修復 (延遲載入)
+class LazyImporter:  # 保持不變
+
+# ✅ FIXED #5: 資料聚合修復 (智能去重)
+def deduplicate_financial_data_v331():  # 保持不變
+
+# ✅ FIXED #9: 記憶體管理
+class MemoryManager:  # 保持不變
+
+# v3.3.2 新增: 只是在現有功能基礎上增加更好的日誌整合
+```
+
+## 🚀 v3.3.2 部署指令
+
+### 本地開發 (跨平台)
+
 ```bash
-# 1. 驗證 v3.3.1 設定
-python setup_validator.py --test-v331
+# Windows PowerShell 或 Linux Bash - 相同命令
 
-# 2. 下載目標公司 (增強驗證)
-python config.py --download-csv --validate-v331
+# 1. 快速開始
+python factset_cli.py pipeline --mode=intelligent
 
-# 3. 執行 v3.3.1 增強管線
-python factset_pipeline.py --mode enhanced
+# 2. 完整驗證
+python factset_cli.py validate --comprehensive --fix-issues
 
-# 4. 檢查 v3.3.1 狀態
-python factset_pipeline.py --status-v331
+# 3. 階段式執行
+python factset_cli.py search --mode=conservative --log-level=debug
+python factset_cli.py process --memory-limit=2048 --batch-size=25
+python factset_cli.py upload --test-connection
+
+# 4. 診斷和日誌
+python factset_cli.py logs --stage=search --tail=50
+python factset_cli.py diagnose --issue="rate limiting" --suggest-fix
+python factset_cli.py status --detailed --export=json
 ```
 
-### v3.3.1 測試指令
+### GitHub Actions (相同命令)
+
+```yaml
+# 完全相同的命令語法
+run: python factset_cli.py pipeline --mode=enhanced --github-actions
+```
+
+## 📋 v3.3.2 維護和監控
+
+### 日誌檢查命令
+
 ```bash
-# 測試級聯故障保護
-python factset_search.py --test-cascade-protection
+# 查看今日所有階段日誌
+python factset_cli.py logs --today --all-stages
 
-# 測試性能優化
-python data_processor.py --benchmark-v331
+# 查看特定階段錯誤
+python factset_cli.py logs --stage=search --level=error --last=24h
 
-# 測試記憶體管理
-python factset_pipeline.py --memory-limit 2048 --batch-size 25
+# 生成日誌摘要報告
+python factset_cli.py report --logs --format=html --email=admin@company.com
+
+# 診斷特定問題
+python factset_cli.py diagnose --symptom="no data generated" --verbose
 ```
 
-## 📋 v3.3.1 維護檢查清單
+### 效能監控
 
-### 每日檢查
-- [ ] 檢查 v3.3.1 GitHub Actions 執行狀態
-- [ ] 確認級聯故障保護運作正常
-- [ ] 監控統一速率限制器狀態
-
-### 每週檢查  
-- [ ] 檢查 v3.3.1 性能統計
-- [ ] 驗證記憶體使用效率
-- [ ] 分析批次處理效果
-
-### 每月檢查
-- [ ] 更新 v3.3.1 增強功能
-- [ ] 檢查綜合修復效果
-- [ ] 分析可靠性指標
-
-## 🔧 v3.3.1 故障排除
-
-### v3.3.1 解決的問題
-1. **級聯故障** (FIXED #1): 現在可處理 100+ 公司 vs 以前停在第 14 家
-2. **性能問題** (FIXED #2): 20-30 分鐘 vs 以前 2+ 小時
-3. **速率限制混亂** (FIXED #3): 統一處理，零 API 浪費
-4. **模組導入錯誤** (FIXED #4): 100% 可靠啟動
-5. **資料重複** (FIXED #5): 98% 準確的財務數據
-
-### v3.3.1 恢復策略
 ```bash
-# v3.3.1 增強恢復
-python factset_pipeline.py --mode enhanced --recover-v331
+# 檢查 v3.3.2 效能統計
+python factset_cli.py performance --compare-with=v331 --detailed
 
-# 如果搜尋完全失敗 (使用 v3.3.1 優化)
-python data_processor.py --process-v331
+# 記憶體使用分析
+python factset_cli.py analyze --memory --stage=processing --optimization-tips
 
-# v3.3.1 性能監控
-python factset_pipeline.py --performance-monitor
+# 跨平台兼容性檢查
+python factset_cli.py validate --cross-platform --windows --linux
 ```
 
-## 🎯 完整實作規範 (Code Generation Guide)
+## 🔧 v3.3.2 故障排除
 
-### 必要檔案結構
+### 自動診斷系統
+
+```bash
+# v3.3.2 智能診斷
+python factset_cli.py diagnose --auto --fix-common
+
+# 常見問題自動修復
+python factset_cli.py recover --issue="module import error" --auto-fix
+python factset_cli.py recover --issue="rate limiting" --wait-and-retry
+python factset_cli.py recover --issue="memory exhaustion" --optimize
+
+# 跨平台問題診斷
+python factset_cli.py diagnose --platform-specific --encoding --paths
+```
+
+### 階段式恢復
+
+```bash
+# 從特定階段恢復
+python factset_cli.py recover --from-stage=search --continue-pipeline
+python factset_cli.py recover --from-stage=processing --reprocess-data
+
+# 使用現有資料恢復
+python factset_cli.py recover --use-existing --skip-search --process-only
+```
+
+## 📈 v3.3.2 與 v3.3.1 比較摘要
+
+| 特性 | v3.3.1 | v3.3.2 | 改進 |
+|------|--------|--------|------|
+| **工作流程複雜度** | 複雜 Actions.yml | 簡潔 Actions.yml | ✅ 80% 簡化 |
+| **跨平台命令** | 部分兼容 | 完全統一 | ✅ 100% 兼容 |
+| **日誌系統** | 基礎日誌 | 階段式雙重日誌 | ✅ 可觀測性大幅提升 |
+| **錯誤診斷** | 手動檢查 | 自動診斷修復 | ✅ 智能化故障排除 |
+| **開發體驗** | 良好 | 優秀 | ✅ CLI 統一化 |
+| **維護性** | 複雜 | 簡單 | ✅ 模組化清晰 |
+| **所有 v3.3.1 修復** | ✅ | ✅ | ✅ 完全保持 |
+
+## 🎯 v3.3.2 完整實作檢查清單
+
+### 必要檔案 (新增/修改)
+
 ```
 FactSet-Pipeline/
-├── factset_pipeline.py        # EnhancedFactSetPipeline, UnifiedRateLimitProtector, MemoryManager
-├── factset_search.py          # search_company_factset_data_v331, generate_unique_filename_v331
-├── data_processor.py          # process_all_data_v331, COMPILED_FACTSET_PATTERNS
-├── sheets_uploader.py         # upload_all_sheets_v330, validate_data_quality_v330
-├── config.py                  # download_target_companies_v330, DEFAULT_CONFIG_V331
-├── utils.py                   # 輔助函數, 日誌處理, 錯誤處理
-├── setup_validator.py         # 安裝驗證, test_v331_enhancements
-├── .github/workflows/Actions.yml  # Python-based workflow (FIXED #8)
-├── requirements.txt           # 完整依賴清單
-├── .env.example              # 環境變數範本
-└── README.md                 # v3.3.1 說明文件
+├── factset_cli.py              # 🆕 統一 CLI 入口
+├── stage_runner.py             # 🆕 階段執行器
+├── enhanced_logger.py          # 🆕 增強日誌管理器
+├── factset_pipeline.py         # 🔄 保持 v3.3.1 + 日誌整合
+├── factset_search.py           # 🔄 保持 v3.3.1 + 日誌整合
+├── data_processor.py           # 🔄 保持 v3.3.1 + 日誌整合
+├── sheets_uploader.py          # 🔄 保持 v3.3.1 + 日誌整合
+├── config.py                   # 🔄 保持 v3.3.1 + 日誌整合
+├── utils.py                    # 🔄 保持 v3.3.1 + 日誌整合
+├── setup_validator.py          # 🔄 保持 v3.3.1 + 日誌整合
+├── .github/workflows/Actions.yml # 🔄 大幅簡化 (移除內嵌 Python)
+├── requirements.txt            # 🔄 新增日誌相關依賴
+├── .env.example               # ✅ 保持不變
+└── README.md                  # 🔄 更新為 v3.3.2 說明
 ```
 
-### 核心類別實作範本
+### 核心實作要點
 
-#### 1. EnhancedFactSetPipeline
-```python
-class EnhancedFactSetPipeline:
-    def __init__(self):
-        self.config = EnhancedConfig()
-        self.rate_protector = UnifiedRateLimitProtector(self.config)
-        self.memory_manager = MemoryManager(limit_mb=2048)
-        self.state = EnhancedWorkflowState()
-    
-    def run_complete_pipeline_v331(self, execution_mode="intelligent"):
-        # 1. 分析現有資料
-        file_count, data_status = self.analyze_existing_data_v331()
-        
-        # 2. 決定策略
-        if execution_mode == "enhanced":
-            # 使用所有 v3.3.1 修復
-        elif execution_mode == "process_only":
-            # 僅處理現有資料
-        
-        # 3. 執行階段
-        success = self.execute_phases(strategy)
-        return success
-```
+1. **factset_cli.py** - 實作所有統一命令
+2. **stage_runner.py** - 協調執行並管理階段
+3. **enhanced_logger.py** - 雙重輸出日誌系統
+4. **Actions.yml** - 移除所有內嵌 Python，只呼叫 CLI
+5. **跨平台測試** - Windows 和 Linux 命令一致性
 
-#### 2. UnifiedRateLimitProtector
-```python
-class UnifiedRateLimitProtector:
-    def __init__(self, config):
-        self.consecutive_429s = 0
-        self.should_stop_searching = False
-        self.circuit_breaker_threshold = 1
-    
-    def record_429_error(self):
-        self.consecutive_429s += 1
-        self.should_stop_searching = True
-        return True
-```
+### v3.3.1 修復維護要求
 
-### 必要環境變數
-```bash
-# .env 檔案必須包含
-GOOGLE_SEARCH_API_KEY=your_api_key
-GOOGLE_SEARCH_CSE_ID=your_cse_id
-GOOGLE_SHEETS_CREDENTIALS='{"type":"service_account",...}'
-GOOGLE_SHEET_ID=your_spreadsheet_id
-
-# v3.3.1 專用設定
-FACTSET_MEMORY_LIMIT=2048
-FACTSET_BATCH_SIZE=50
-FACTSET_PIPELINE_VERSION=3.3.1
-```
-
-### GitHub Actions 完整規範
-```yaml
-# Actions.yml 必須包含的 jobs:
-jobs:
-  preflight_v331:    # Python-based validation (FIXED #8)
-  pipeline_v331:     # Enhanced execution with all fixes
-  recovery_v331:     # Enhanced recovery strategy
-
-# 必要的 Python 邏輯嵌入:
-- 模組導入測試 (FIXED #4)
-- 記憶體檢查 (FIXED #9)  
-- 資料品質驗證
-- 智能提交策略
-```
-
-### 必要依賴清單 (requirements.txt)
-```
-requests>=2.28.0
-pandas>=1.5.0
-gspread>=5.7.0
-google-auth>=2.15.0
-python-dotenv>=0.19.0
-beautifulsoup4>=4.11.0
-markdownify>=0.11.0
-validators>=0.20.0
-psutil>=5.9.0
-```
-
-### 關鍵性能模式
-```python
-# 預編譯正則表達式 (FIXED #2)
-COMPILED_FACTSET_PATTERNS = {}
-def _initialize_compiled_patterns():
-    # 一次編譯，多次使用
-
-# 批次處理 (FIXED #2, #9)
-def process_md_files_in_batches_v331(files, batch_size=50):
-    # 記憶體效率處理
-
-# 級聯故障保護 (FIXED #1)
-for item in items:
-    try:
-        process_item(item)
-    except Exception as e:
-        logger.error(f"Item {item} failed: {e}")
-        continue  # 繼續處理其他項目
-```
-
-### 資料格式驗證規則
-```python
-# Portfolio Summary 14欄位驗證
-PORTFOLIO_COLUMNS = [
-    '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
-    '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
-    '品質評分', '狀態', '更新日期'
-]
-
-# Detailed Data 21欄位驗證  
-DETAILED_COLUMNS = [
-    '代號', '名稱', '股票代號', 'MD日期', '分析師數量', '目標價',
-    '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
-    '2026EPS最高值', '2026EPS最低值', '2026EPS平均值', 
-    '2027EPS最高值', '2027EPS最低值', '2027EPS平均值',
-    '品質評分', '狀態', 'MD File', '更新日期'
-]
-```
-
-### 測試驗證規範
-```python
-# 必要測試函數
-def test_v331_enhancements():
-    # 測試級聯故障保護
-    # 測試統一速率限制器
-    # 測試記憶體管理
-    # 測試批次處理
-    # 測試模組導入
-    
-def validate_v331_data_quality():
-    # 檢查檔案數量和品質
-    # 驗證格式合規性
-    # 確認資料完整性
-```
+- ✅ 所有 FIXED #1-9 功能必須完全保持
+- ✅ 效能優化不能退化
+- ✅ 現有配置檔案向後兼容
+- ✅ 輸出格式完全相同
 
 ---
 
-**此完整指南作為緊湊的程式碼生成參考，包含所有必要的架構規範、實作細節、配置要求和驗證規則，可直接用於生成完整的 v3.3.1 FactSet Pipeline 系統。**
+**v3.3.2 總結**: 在保持 v3.3.1 所有修復和效能的基礎上，大幅簡化了工作流程、統一了跨平台 CLI、增強了可觀測性，提供了更好的開發和維護體驗。

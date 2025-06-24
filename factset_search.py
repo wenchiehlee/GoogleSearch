@@ -1,11 +1,18 @@
 """
-factset_search.py - Enhanced Google Search Module (v3.3.1)
+factset_search.py - Enhanced Google Search Module (v3.3.2)
 
-Version: 3.3.1
-Date: 2025-06-23
-Author: Google Search FactSet Pipeline - v3.3.1 Cascade Failure Fixed
+Version: 3.3.2
+Date: 2025-06-24
+Author: Google Search FactSet Pipeline - v3.3.2 Simplified & Observable
 
-v3.3.1 COMPREHENSIVE FIXES:
+v3.3.2 ENHANCEMENTS:
+- ✅ Integration with enhanced logging system (stage-specific dual output)
+- ✅ Stage runner compatibility for unified CLI interface
+- ✅ Cross-platform safe output handling
+- ✅ Enhanced performance monitoring integration
+- ✅ All v3.3.1 fixes and functionality preserved
+
+v3.3.1 FEATURES MAINTAINED:
 - ✅ FIXED #1: Search cascade failure - proper error isolation per company/URL
 - ✅ FIXED #3: Rate limiting logic - unified rate limiter integration  
 - ✅ FIXED #4: Module import issues - removed circular dependencies
@@ -26,19 +33,78 @@ from pathlib import Path
 from urllib.parse import urlparse, quote_plus, unquote
 from typing import List, Dict, Optional, Tuple, Any
 
-# Version Information - v3.3.1
-__version__ = "3.3.1"
-__date__ = "2025-06-23"
-__author__ = "Google Search FactSet Pipeline - v3.3.1 Cascade Failure Fixed"
+# Version Information - v3.3.2
+__version__ = "3.3.2"
+__date__ = "2025-06-24"
+__author__ = "Google Search FactSet Pipeline - v3.3.2 Simplified & Observable"
 
-# FIXED #4: Remove circular imports - import only when needed
-def get_utils_module():
-    """Lazy import utils to avoid circular dependencies"""
+# ============================================================================
+# v3.3.2 LOGGING INTEGRATION
+# ============================================================================
+
+def get_v332_logger(module_name: str = "search"):
+    """Get v3.3.2 enhanced logger with fallback"""
     try:
-        import utils
-        return utils
+        from enhanced_logger import get_stage_logger
+        return get_stage_logger(module_name)
     except ImportError:
-        return None
+        # Fallback to standard logging if v3.3.2 components not available
+        import logging
+        logger = logging.getLogger(f'factset_v332.{module_name}')
+        if not logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+            logger.setLevel(logging.INFO)
+        return logger
+
+def get_performance_monitor(stage_name: str = "search"):
+    """Get v3.3.2 performance monitor with fallback"""
+    try:
+        from enhanced_logger import get_performance_logger
+        return get_performance_logger(stage_name)
+    except ImportError:
+        # Fallback performance monitor
+        class FallbackPerformanceMonitor:
+            def time_operation(self, operation_name: str):
+                from contextlib import contextmanager
+                import time
+                
+                @contextmanager
+                def timer():
+                    start = time.time()
+                    try:
+                        yield
+                    finally:
+                        duration = time.time() - start
+                        print(f"Operation {operation_name} took {duration:.2f}s")
+                
+                return timer()
+        
+        return FallbackPerformanceMonitor()
+
+# ============================================================================
+# FIXED #4: Proper module imports without circular dependencies
+# ============================================================================
+
+class LazyImporter:
+    """Lazy module importer to avoid circular dependencies"""
+    def __init__(self):
+        self._modules = {}
+    
+    def get_module(self, name):
+        if name not in self._modules:
+            try:
+                self._modules[name] = __import__(name)
+            except ImportError as e:
+                logger = get_v332_logger()
+                logger.warning(f"Module {name} not available: {e}")
+                self._modules[name] = None
+        return self._modules[name]
+
+# Global lazy importer
+lazy_modules = LazyImporter()
 
 # Enhanced imports with fallbacks
 try:
@@ -51,14 +117,16 @@ try:
     from googlesearch import search
     GOOGLESEARCH_AVAILABLE = True
 except ImportError:
-    print("⚠️ googlesearch-python not installed. Install with: pip install googlesearch-python")
+    logger = get_v332_logger()
+    logger.warning("googlesearch-python not installed. Install with: pip install googlesearch-python")
     GOOGLESEARCH_AVAILABLE = False
 
 try:
     from bs4 import BeautifulSoup
     BS4_AVAILABLE = True
 except ImportError:
-    print("⚠️ beautifulsoup4 not installed. Install with: pip install beautifulsoup4")
+    logger = get_v332_logger()
+    logger.warning("beautifulsoup4 not installed. Install with: pip install beautifulsoup4")
     BS4_AVAILABLE = False
 
 try:
@@ -106,7 +174,7 @@ PRIORITY_DOMAINS = [
 
 # Rate limiting exception for unified handling - FIXED #3
 class RateLimitException(Exception):
-    """Unified rate limiting exception for v3.3.1"""
+    """Unified rate limiting exception for v3.3.2"""
     pass
 
 # ============================================================================
@@ -114,11 +182,16 @@ class RateLimitException(Exception):
 # ============================================================================
 
 def generate_unique_filename_v331(company_name: str, stock_code: str, url: str, 
-                                 search_index: int, content_preview: str = "") -> str:
+                                 search_index: int, content_preview: str = "", logger=None) -> str:
     """
     FIXED #6: Enhanced unique filename generation with collision prevention
     Format: {stock_code}_{company}_{domain}_{content_hash}_{timestamp}.md
     """
+    if logger is None:
+        logger = get_v332_logger()
+    
+    logger.debug(f"Generating filename for {company_name} ({stock_code})")
+    
     # Clean components
     clean_company = clean_filename_component(company_name, 12)
     clean_stock = clean_filename_component(stock_code, 4) or 'XXXX'
@@ -138,6 +211,7 @@ def generate_unique_filename_v331(company_name: str, stock_code: str, url: str,
     if len(filename) > 200:
         filename = f"{clean_stock}_{clean_company[:6]}_{domain[:6]}_{content_hash}_{timestamp}.md"
     
+    logger.debug(f"Generated filename: {filename}")
     return filename
 
 def clean_filename_component(text: str, max_length: int = 15) -> str:
@@ -187,11 +261,14 @@ def extract_domain_info(url: str) -> str:
 # ENHANCED CONTENT QUALITY ASSESSMENT (v3.3.1)
 # ============================================================================
 
-def assess_content_quality_v331(content: str, title: str = "") -> int:
+def assess_content_quality_v331(content: str, title: str = "", logger=None) -> int:
     """
     Enhanced content quality assessment for v3.3.1
     Returns score 1-10 (10 being highest quality)
     """
+    if logger is None:
+        logger = get_v332_logger()
+    
     if not content:
         return 1
     
@@ -244,26 +321,33 @@ def assess_content_quality_v331(content: str, title: str = "") -> int:
         elif len(content) > 5000:
             score += 2
         
-        return max(1, min(10, score))
+        final_score = max(1, min(10, score))
+        logger.debug(f"Content quality assessed: {final_score}/10")
+        return final_score
         
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Content quality assessment error: {e}")
         return 5  # Default middle score if assessment fails
 
 # ============================================================================
 # ENHANCED URL VALIDATION (v3.3.1) - FIXED #1
 # ============================================================================
 
-def clean_and_validate_url_v331(url: str) -> Optional[str]:
+def clean_and_validate_url_v331(url: str, logger=None) -> Optional[str]:
     """FIXED #1: Enhanced URL cleaning and validation with robust error handling"""
+    if logger is None:
+        logger = get_v332_logger()
+    
     try:
         if not url or not isinstance(url, str):
+            logger.debug(f"Invalid URL type: {type(url)}")
             return None
         
         url = str(url).strip()
         
         # FIXED #1: Length check first to prevent issues
         if len(url) > 2000:
-            print(f"   ⚠️ URL too long ({len(url)} chars), skipping")
+            logger.warning(f"URL too long ({len(url)} chars), skipping")
             return None
         
         # Handle Google redirects
@@ -273,8 +357,9 @@ def clean_and_validate_url_v331(url: str) -> Optional[str]:
                 if match:
                     actual_url = unquote(match.group(1))
                     url = actual_url
+                    logger.debug(f"Decoded Google redirect URL")
             except Exception as e:
-                print(f"   ⚠️ Google redirect handling failed: {e}")
+                logger.warning(f"Google redirect handling failed: {e}")
                 return None
         
         # Ensure proper protocol
@@ -288,47 +373,52 @@ def clean_and_validate_url_v331(url: str) -> Optional[str]:
             # Test if URL can be encoded/decoded safely
             test_encode = quote(url, safe=':/?#[]@!$&\'()*+,;=')
             if len(test_encode) > 2000:
-                print(f"   ⚠️ URL too long after encoding, skipping")
+                logger.warning("URL too long after encoding, skipping")
                 return None
         except Exception as e:
-            print(f"   ⚠️ URL encoding test failed: {e}")
+            logger.warning(f"URL encoding test failed: {e}")
             return None
         
         # Basic URL pattern validation
         if not re.match(r'https?://[^\s/$.?#].[^\s]*$', url):
-            print(f"   ⚠️ Invalid URL pattern, skipping")
+            logger.warning("Invalid URL pattern, skipping")
             return None
         
         # Basic validation with validators if available
         if VALIDATORS_AVAILABLE:
             try:
                 if not validators.url(url):
+                    logger.debug("URL failed validators check")
                     return None
             except Exception:
                 # If validation fails, continue anyway
                 pass
         
+        logger.debug(f"URL validated successfully: {url[:60]}...")
         return url
         
     except Exception as e:
-        print(f"   ⚠️ URL validation error: {e}")
+        logger.warning(f"URL validation error: {e}")
         return None
 
 # ============================================================================
 # ENHANCED WEB CONTENT PROCESSING (v3.3.1) - FIXED #1
 # ============================================================================
 
-def download_webpage_content_enhanced_v331(url: str, timeout: int = 30) -> Tuple[Optional[str], Optional[str], int]:
+def download_webpage_content_enhanced_v331(url: str, timeout: int = 30, logger=None) -> Tuple[Optional[str], Optional[str], int]:
     """
     FIXED #1: Enhanced webpage content download with robust error handling
     Prevents single bad URL from killing entire search
     """
+    if logger is None:
+        logger = get_v332_logger()
+    
     try:
-        print(f"   📥 Downloading: {url[:60]}...")
+        logger.debug(f"Downloading: {url[:60]}...")
         
         # FIXED #1: URL length check
         if len(url) > 2000:
-            print(f"   ⚠️ URL too long, skipping: {len(url)} chars")
+            logger.warning(f"URL too long, skipping: {len(url)} chars")
             return None, None, 0
         
         # Enhanced headers for better access
@@ -347,11 +437,11 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30) -> Tuple
         
         # FIXED #3: Enhanced rate limiting detection for unified handling
         if response.status_code == 429:
-            print(f"   🚨 Rate limiting detected (429)")
+            logger.warning("Rate limiting detected (429)")
             raise RateLimitException("429 Too Many Requests")
         
         if 'rate limit' in response.text.lower() or 'too many requests' in response.text.lower():
-            print(f"   🚨 Rate limiting detected in content")
+            logger.warning("Rate limiting detected in content")
             raise RateLimitException("Rate limiting in response content")
         
         response.raise_for_status()
@@ -389,23 +479,23 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30) -> Tuple
             if content is None:
                 content = response.content.decode('latin-1', errors='replace')
                 encoding_used = 'latin-1'
-                print(f"   ⚠️ Using latin-1 encoding as fallback")
+                logger.warning("Using latin-1 encoding as fallback")
             
             if '�' in content:
-                print(f"   ⚠️ Some characters replaced due to encoding issues ({encoding_used})")
+                logger.warning(f"Some characters replaced due to encoding issues ({encoding_used})")
             
         except Exception as encoding_error:
-            print(f"   ❌ Critical encoding error: {encoding_error}")
+            logger.error(f"Critical encoding error: {encoding_error}")
             return None, None, 0
         
         # Content validation
         if not content or len(content) < 100:
-            print(f"   ⚠️ Content too short: {len(content) if content else 0} chars")
+            logger.warning(f"Content too short: {len(content) if content else 0} chars")
             return None, None, 0
         
         # HTML processing with enhanced error handling
         if not BS4_AVAILABLE:
-            quality_score = assess_content_quality_v331(content)
+            quality_score = assess_content_quality_v331(content, logger=logger)
             return content, content, quality_score
         
         try:
@@ -429,37 +519,37 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30) -> Tuple
                 try:
                     markdown_content = md(str(soup), heading_style="ATX")
                 except Exception as md_error:
-                    print(f"   ⚠️ Markdown conversion failed: {md_error}")
+                    logger.warning(f"Markdown conversion failed: {md_error}")
                     markdown_content = text_content
             else:
                 markdown_content = text_content
             
             # Assess content quality
-            quality_score = assess_content_quality_v331(text_content, title)
+            quality_score = assess_content_quality_v331(text_content, title, logger=logger)
             
-            print(f"   ✅ Downloaded: {len(text_content)} chars, quality: {quality_score}/10")
+            logger.info(f"Downloaded: {len(text_content)} chars, quality: {quality_score}/10")
             return markdown_content, text_content, quality_score
             
         except Exception as html_error:
-            print(f"   ⚠️ HTML processing error: {html_error}")
+            logger.warning(f"HTML processing error: {html_error}")
             # Fallback to raw content
-            quality_score = assess_content_quality_v331(content)
+            quality_score = assess_content_quality_v331(content, logger=logger)
             return content, content, quality_score
         
     except RateLimitException:
         # Re-raise rate limiting exceptions for unified handling
         raise
     except requests.exceptions.Timeout:
-        print(f"   ⚠️ Download timeout: {url[:60]}")
+        logger.warning(f"Download timeout: {url[:60]}")
         return None, None, 0
     except requests.exceptions.ConnectionError:
-        print(f"   ⚠️ Connection error: {url[:60]}")
+        logger.warning(f"Connection error: {url[:60]}")
         return None, None, 0
     except requests.exceptions.RequestException as e:
-        print(f"   ⚠️ Request error: {e}")
+        logger.warning(f"Request error: {e}")
         return None, None, 0
     except Exception as e:
-        print(f"   ⚠️ Unexpected download error: {e}")
+        logger.warning(f"Unexpected download error: {e}")
         return None, None, 0
 
 # ============================================================================
@@ -467,13 +557,17 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30) -> Tuple
 # ============================================================================
 
 def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "", 
-                                      watchlist_df=None) -> Tuple[Optional[str], Optional[str]]:
+                                      watchlist_df=None, logger=None) -> Tuple[Optional[str], Optional[str]]:
     """Enhanced company name and stock code extraction for v3.3.1"""
+    if logger is None:
+        logger = get_v332_logger()
+    
     company_name = None
     stock_code = None
     
     # Combine all available text
     text_to_analyze = f"{title} {snippet} {url}".lower()
+    logger.debug(f"Extracting company info from: {text_to_analyze[:100]}...")
     
     # Enhanced stock code patterns
     stock_patterns = [
@@ -492,6 +586,7 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
             code = match.group(1)
             if len(code) == 4 and code.isdigit():
                 stock_code = code
+                logger.debug(f"Extracted stock code: {code}")
                 break
     
     # Enhanced company name patterns with more Taiwan companies
@@ -530,6 +625,7 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
         if match:
             # Take the first (usually Chinese) name
             company_name = match.group(1).split('|')[0]
+            logger.debug(f"Extracted company name: {company_name}")
             break
     
     # Use watchlist for validation if available
@@ -540,8 +636,9 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
                 watchlist_name = match.iloc[0]['名稱']
                 if not company_name or len(watchlist_name) > len(company_name):
                     company_name = watchlist_name
-        except Exception:
-            pass
+                    logger.debug(f"Company name updated from watchlist: {company_name}")
+        except Exception as e:
+            logger.warning(f"Error accessing watchlist: {e}")
     
     # Fallback: stock code to company mapping
     if stock_code and not company_name:
@@ -555,6 +652,8 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
             '2603': '長榮', '2609': '陽明', '2359': '所羅門'
         }
         company_name = stock_to_company.get(stock_code)
+        if company_name:
+            logger.debug(f"Company name from fallback mapping: {company_name}")
     
     return company_name, stock_code
 
@@ -563,8 +662,11 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
 # ============================================================================
 
 def save_content_to_md_file_v331(content: str, filename: str, md_dir: str, 
-                                metadata: Dict = None) -> bool:
+                                metadata: Dict = None, logger=None) -> bool:
     """Save content to MD file with enhanced metadata for v3.3.1"""
+    if logger is None:
+        logger = get_v332_logger()
+    
     try:
         os.makedirs(md_dir, exist_ok=True)
         filepath = os.path.join(md_dir, filename)
@@ -580,7 +682,7 @@ def save_content_to_md_file_v331(content: str, filename: str, md_dir: str,
                 new_hash = hashlib.md5(content.encode()).hexdigest()
                 
                 if existing_hash == new_hash:
-                    print(f"   ℹ️ Identical content exists: {filename}")
+                    logger.info(f"Identical content exists: {filename}")
                     return True  # Don't overwrite identical content
             except Exception:
                 pass  # If we can't read existing file, proceed with save
@@ -595,7 +697,7 @@ def save_content_to_md_file_v331(content: str, filename: str, md_dir: str,
             header += f"stock_code: {metadata.get('stock_code', '')}\n"
             header += f"extracted_date: {datetime.now().isoformat()}\n"
             header += f"search_query: {metadata.get('query', '')}\n"
-            header += f"version: v3.3.1\n"
+            header += f"version: v3.3.2\n"
             header += "---\n\n"
             
             final_content = header + content
@@ -606,10 +708,11 @@ def save_content_to_md_file_v331(content: str, filename: str, md_dir: str,
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(final_content)
         
+        logger.debug(f"Saved MD file: {filename}")
         return True
         
     except Exception as e:
-        print(f"   ❌ Error saving file {filename}: {e}")
+        logger.error(f"Error saving file {filename}: {e}")
         return False
 
 # ============================================================================
@@ -620,13 +723,17 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
                                     search_type: str = 'factset', 
                                     max_results: int = 10,
                                     watchlist_df=None,
-                                    rate_protector=None) -> List[Dict]:
+                                    rate_protector=None,
+                                    logger=None) -> List[Dict]:
     """
     FIXED #1: Enhanced search with proper error isolation per URL
     Prevents single bad URL from killing entire company search
     """
+    if logger is None:
+        logger = get_v332_logger()
+    
     if not GOOGLESEARCH_AVAILABLE:
-        print(f"❌ Google search not available for {company_name}")
+        logger.error(f"Google search not available for {company_name}")
         return []
     
     results = []
@@ -634,131 +741,140 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
     
     max_results = max(1, min(20, int(max_results)))
     
-    for pattern_index, pattern in enumerate(patterns):
-        try:
-            # Format search query
-            query = pattern.format(
-                company_name=company_name,
-                stock_code=stock_code or ''
-            ).strip()
-            
-            print(f"   🔍 Search {pattern_index + 1}/{len(patterns)}: {query}")
-            
-            # FIXED #3: Use rate protector if available
-            if rate_protector:
-                rate_protector.record_request()
-            
-            # Perform search with enhanced error handling
+    # v3.3.2 Performance monitoring
+    perf_monitor = get_performance_monitor()
+    
+    with perf_monitor.time_operation(f"search_company_{company_name}"):
+        for pattern_index, pattern in enumerate(patterns):
             try:
-                num_results_per_pattern = min(5, max(1, max_results // len(patterns)))
+                # Format search query
+                query = pattern.format(
+                    company_name=company_name,
+                    stock_code=stock_code or ''
+                ).strip()
                 
-                search_results = search(
-                    query,
-                    num_results=num_results_per_pattern,
-                    lang='zh-TW',
-                    sleep_interval=1
-                )
-            except Exception as e:
-                error_str = str(e).lower()
+                logger.info(f"Search {pattern_index + 1}/{len(patterns)}: {query}")
                 
-                # FIXED #3: Enhanced rate limiting detection for unified handling
-                if any(keyword in error_str for keyword in [
-                    "429", "too many requests", "blocked", "rate limit", 
-                    "quota", "sorry/index", "temporarily unavailable"
-                ]):
-                    print(f"   🚨 RATE LIMITING DETECTED: {e}")
-                    if rate_protector:
-                        rate_protector.record_429_error()
-                    raise RateLimitException(f"Search API rate limiting: {e}")
-                else:
-                    print(f"   ⚠️ Search error for pattern: {e}")
-                    continue  # FIXED #1: Skip this pattern, continue with others
-            
-            # FIXED #1: Process results with individual URL error handling
-            for i, url in enumerate(search_results):
+                # FIXED #3: Use rate protector if available
+                if rate_protector:
+                    rate_protector.record_request()
+                
+                # Perform search with enhanced error handling
                 try:
-                    # Clean and validate URL
-                    clean_url = clean_and_validate_url_v331(url)
-                    if not clean_url:
-                        print(f"   ⚠️ Invalid URL skipped: {url[:60]}...")
-                        continue  # FIXED #1: Skip this URL, continue with others
+                    num_results_per_pattern = min(5, max(1, max_results // len(patterns)))
                     
-                    # Skip duplicates
-                    if any(r['url'] == clean_url for r in results):
-                        continue
+                    search_results = search(
+                        query,
+                        num_results=num_results_per_pattern,
+                        lang='zh-TW',
+                        sleep_interval=1
+                    )
+                except Exception as e:
+                    error_str = str(e).lower()
                     
-                    # Add delay between requests
-                    if i > 0:
-                        time.sleep(1)
-                    
-                    # FIXED #1: Download with individual error handling
-                    try:
-                        markdown_content, text_content, quality_score = download_webpage_content_enhanced_v331(clean_url)
-                    except RateLimitException as e:
-                        print(f"   🚨 Rate limiting during download")
+                    # FIXED #3: Enhanced rate limiting detection for unified handling
+                    if any(keyword in error_str for keyword in [
+                        "429", "too many requests", "blocked", "rate limit", 
+                        "quota", "sorry/index", "temporarily unavailable"
+                    ]):
+                        logger.warning(f"RATE LIMITING DETECTED: {e}")
                         if rate_protector:
                             rate_protector.record_429_error()
-                        raise  # Re-raise rate limiting for unified handling
-                    except Exception as download_error:
-                        print(f"   ⚠️ Download failed: {clean_url[:60]} - {download_error}")
-                        continue  # FIXED #1: Skip this download, continue with others
-                    
-                    # Only keep quality content
-                    if not markdown_content or not text_content or quality_score < 3:
-                        print(f"   📊 Low quality content skipped (score: {quality_score}/10)")
-                        continue
-                    
-                    # Extract enhanced company info
-                    detected_company, detected_stock = extract_company_info_enhanced_v331(
-                        clean_url, clean_url, text_content[:500], watchlist_df
-                    )
-                    
-                    # FIXED #6: Generate enhanced unique filename
-                    filename = generate_unique_filename_v331(
-                        detected_company or company_name,
-                        detected_stock or stock_code,
-                        clean_url,
-                        i,
-                        text_content[:200]
-                    )
-                    
-                    results.append({
-                        'title': clean_url[:100],
-                        'url': clean_url,
-                        'snippet': text_content[:300],
-                        'content': markdown_content,
-                        'quality_score': quality_score,
-                        'detected_company': detected_company or company_name,
-                        'detected_stock_code': detected_stock or stock_code,
-                        'filename': filename,
-                        'query': query,
-                        'search_type': search_type,
-                        'content_length': len(text_content)
-                    })
-                    
-                    print(f"   ✅ Quality content found: {filename} (score: {quality_score}/10)")
-                    
-                    # FIXED #3: Record success with rate protector
-                    if rate_protector:
-                        rate_protector.record_success()
-                    
-                except Exception as url_error:
-                    print(f"   ⚠️ URL processing error: {url_error}")
-                    continue  # FIXED #1: Skip this URL, continue with others
-            
-            # Delay between patterns
-            time.sleep(2)
-            
-        except RateLimitException:
-            print(f"   🛑 Rate limiting - stopping search for this company")
-            break  # Stop searching for this company due to rate limiting
-        except Exception as pattern_error:
-            print(f"   ⚠️ Pattern error: {pattern_error}")
-            continue  # FIXED #1: Skip this pattern, continue with others
+                        raise RateLimitException(f"Search API rate limiting: {e}")
+                    else:
+                        logger.warning(f"Search error for pattern: {e}")
+                        continue  # FIXED #1: Skip this pattern, continue with others
+                
+                # FIXED #1: Process results with individual URL error handling
+                for i, url in enumerate(search_results):
+                    try:
+                        # Clean and validate URL
+                        clean_url = clean_and_validate_url_v331(url, logger=logger)
+                        if not clean_url:
+                            logger.debug(f"Invalid URL skipped: {url[:60]}...")
+                            continue  # FIXED #1: Skip this URL, continue with others
+                        
+                        # Skip duplicates
+                        if any(r['url'] == clean_url for r in results):
+                            continue
+                        
+                        # Add delay between requests
+                        if i > 0:
+                            time.sleep(1)
+                        
+                        # FIXED #1: Download with individual error handling
+                        try:
+                            markdown_content, text_content, quality_score = download_webpage_content_enhanced_v331(
+                                clean_url, logger=logger
+                            )
+                        except RateLimitException as e:
+                            logger.warning("Rate limiting during download")
+                            if rate_protector:
+                                rate_protector.record_429_error()
+                            raise  # Re-raise rate limiting for unified handling
+                        except Exception as download_error:
+                            logger.warning(f"Download failed: {clean_url[:60]} - {download_error}")
+                            continue  # FIXED #1: Skip this download, continue with others
+                        
+                        # Only keep quality content
+                        if not markdown_content or not text_content or quality_score < 3:
+                            logger.debug(f"Low quality content skipped (score: {quality_score}/10)")
+                            continue
+                        
+                        # Extract enhanced company info
+                        detected_company, detected_stock = extract_company_info_enhanced_v331(
+                            clean_url, clean_url, text_content[:500], watchlist_df, logger=logger
+                        )
+                        
+                        # FIXED #6: Generate enhanced unique filename
+                        filename = generate_unique_filename_v331(
+                            detected_company or company_name,
+                            detected_stock or stock_code,
+                            clean_url,
+                            i,
+                            text_content[:200],
+                            logger=logger
+                        )
+                        
+                        results.append({
+                            'title': clean_url[:100],
+                            'url': clean_url,
+                            'snippet': text_content[:300],
+                            'content': markdown_content,
+                            'quality_score': quality_score,
+                            'detected_company': detected_company or company_name,
+                            'detected_stock_code': detected_stock or stock_code,
+                            'filename': filename,
+                            'query': query,
+                            'search_type': search_type,
+                            'content_length': len(text_content)
+                        })
+                        
+                        logger.info(f"Quality content found: {filename} (score: {quality_score}/10)")
+                        
+                        # FIXED #3: Record success with rate protector
+                        if rate_protector:
+                            rate_protector.record_success()
+                        
+                    except Exception as url_error:
+                        logger.warning(f"URL processing error: {url_error}")
+                        continue  # FIXED #1: Skip this URL, continue with others
+                
+                # Delay between patterns
+                time.sleep(2)
+                
+            except RateLimitException:
+                logger.warning("Rate limiting - stopping search for this company")
+                break  # Stop searching for this company due to rate limiting
+            except Exception as pattern_error:
+                logger.warning(f"Pattern error: {pattern_error}")
+                continue  # FIXED #1: Skip this pattern, continue with others
     
     # Sort by quality score and return best results
     results.sort(key=lambda x: x['quality_score'], reverse=True)
-    return results[:max_results]
+    final_results = results[:max_results]
+    logger.info(f"Search completed for {company_name}: {len(final_results)} quality results")
+    return final_results
 
 # ============================================================================
 # ENHANCED BATCH PROCESSING (v3.3.1) - FIXED #1
@@ -767,15 +883,19 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
 def process_company_search_v331(company_data: Dict, config: Dict, 
                                search_type: str = 'factset',
                                watchlist_df=None,
-                               rate_protector=None) -> Dict:
+                               rate_protector=None,
+                               logger=None) -> Dict:
     """
     FIXED #1: Enhanced company search processing with proper error isolation
     Each company failure is isolated and doesn't affect other companies
     """
+    if logger is None:
+        logger = get_v332_logger()
+    
     company_name = company_data.get('name', company_data.get('名稱', ''))
     stock_code = company_data.get('code', company_data.get('代號', ''))
     
-    print(f"🔍 Searching {company_name} ({stock_code}) - v3.3.1")
+    logger.info(f"Searching {company_name} ({stock_code}) - v3.3.2")
     
     try:
         search_results = search_company_factset_data_v331(
@@ -784,10 +904,11 @@ def process_company_search_v331(company_data: Dict, config: Dict,
             search_type,
             config.get('search', {}).get('max_results', 10),
             watchlist_df,
-            rate_protector
+            rate_protector,
+            logger
         )
     except RateLimitException as e:
-        print(f"   🚨 Rate limiting for {company_name}: {e}")
+        logger.warning(f"Rate limiting for {company_name}: {e}")
         return {
             'company': company_name,
             'stock_code': stock_code,
@@ -799,7 +920,7 @@ def process_company_search_v331(company_data: Dict, config: Dict,
             'error': str(e)
         }
     except Exception as e:
-        print(f"   ❌ Search error for {company_name}: {e}")
+        logger.error(f"Search error for {company_name}: {e}")
         return {
             'company': company_name,
             'stock_code': stock_code,
@@ -812,7 +933,7 @@ def process_company_search_v331(company_data: Dict, config: Dict,
         }
     
     if not search_results:
-        print(f"   ❌ No quality results found for {company_name}")
+        logger.warning(f"No quality results found for {company_name}")
         return {
             'company': company_name,
             'stock_code': stock_code,
@@ -841,16 +962,16 @@ def process_company_search_v331(company_data: Dict, config: Dict,
                 'query': result['query']
             }
             
-            if save_content_to_md_file_v331(content, filename, md_dir, metadata):
+            if save_content_to_md_file_v331(content, filename, md_dir, metadata, logger=logger):
                 files_saved += 1
-                print(f"   ✅ Saved: {filename}")
+                logger.info(f"Saved: {filename}")
             
         except Exception as e:
-            print(f"   ⚠️ Error saving result: {e}")
+            logger.warning(f"Error saving result: {e}")
             continue  # FIXED #1: Continue with other files even if one save fails
     
     success = files_saved > 0
-    print(f"   📊 {company_name}: {files_saved} files saved")
+    logger.info(f"{company_name}: {files_saved} files saved")
     
     return {
         'company': company_name,
@@ -868,142 +989,211 @@ def process_company_search_v331(company_data: Dict, config: Dict,
 
 def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str]] = None, 
                                   priority_focus: str = "balanced",
-                                  rate_protector=None) -> bool:
+                                  rate_protector=None,
+                                  logger=None) -> bool:
     """
     FIXED #1: Enhanced search suite with proper error isolation
     FIXED #3: Unified rate limiting integration
     FIXED #9: Memory management with batching
+    v3.3.2: Enhanced logging integration
     """
-    print(f"🚀 Enhanced Search Suite v{__version__} (v3.3.1)")
-    print(f"📅 Date: {__date__}")
-    print(f"🔧 FIXED: #1 Cascade failures, #3 Rate limiting, #9 Memory management")
-    print("=" * 80)
+    if logger is None:
+        logger = get_v332_logger()
     
-    # Validate dependencies
-    missing_deps = []
-    if not GOOGLESEARCH_AVAILABLE:
-        missing_deps.append('googlesearch-python')
-    if not BS4_AVAILABLE:
-        missing_deps.append('beautifulsoup4')
+    logger.info(f"Enhanced Search Suite v{__version__} (v3.3.2)")
+    logger.info(f"Date: {__date__}")
+    logger.info("FIXED: #1 Cascade failures, #3 Rate limiting, #9 Memory management")
+    logger.info("v3.3.2: Enhanced logging and CLI integration")
+    logger.info("=" * 80)
     
-    if missing_deps:
-        print(f"❌ Missing dependencies: {', '.join(missing_deps)}")
-        return False
+    # v3.3.2 Performance monitoring
+    perf_monitor = get_performance_monitor()
     
-    # Load target companies
-    target_companies = config.get('target_companies', [])
-    if not target_companies:
-        print("❌ No target companies found in configuration")
-        return False
-    
-    # Load watchlist for better company matching
-    try:
-        import pandas as pd
-        watchlist_df = pd.read_csv('觀察名單.csv') if os.path.exists('觀察名單.csv') else None
-    except Exception:
-        watchlist_df = None
-    
-    # Apply priority focus
-    if priority_focus == "high_only":
-        target_companies = target_companies[:10]
-        print(f"🎯 High priority focus: {len(target_companies)} companies")
-    elif priority_focus == "top_30":
-        target_companies = target_companies[:30]
-        print(f"🎯 Top 30 focus: {len(target_companies)} companies")
-    else:
-        print(f"🎯 Balanced approach: {len(target_companies)} companies")
-    
-    # Set up search types
-    if search_types is None:
-        search_types = ['factset', 'financial']
-    
-    # Create output directories
-    os.makedirs(config['output']['md_dir'], exist_ok=True)
-    os.makedirs(config['output']['csv_dir'], exist_ok=True)
-    
-    # FIXED #9: Process companies with memory management and batching
-    total_files_saved = 0
-    successful_companies = 0
-    rate_limiting_detected = False
-    
-    # FIXED #9: Process in batches to manage memory
-    batch_size = config.get('search', {}).get('batch_size', 20)
-    
-    for search_type in search_types:
-        print(f"\n🔍 SEARCH TYPE: {search_type.upper()}")
-        print("="*40)
+    with perf_monitor.time_operation("enhanced_search_suite"):
+        # Validate dependencies
+        missing_deps = []
+        if not GOOGLESEARCH_AVAILABLE:
+            missing_deps.append('googlesearch-python')
+        if not BS4_AVAILABLE:
+            missing_deps.append('beautifulsoup4')
         
+        if missing_deps:
+            logger.error(f"Missing dependencies: {', '.join(missing_deps)}")
+            return False
+        
+        # Load target companies
+        target_companies = config.get('target_companies', [])
+        if not target_companies:
+            logger.error("No target companies found in configuration")
+            return False
+        
+        # Load watchlist for better company matching
         try:
-            # FIXED #9: Process companies in batches
-            for batch_start in range(0, len(target_companies), batch_size):
-                batch_end = min(batch_start + batch_size, len(target_companies))
-                batch_companies = target_companies[batch_start:batch_end]
-                
-                print(f"\n📦 Processing batch {batch_start//batch_size + 1}: companies {batch_start+1}-{batch_end}")
-                
-                for i, company in enumerate(batch_companies):
-                    company_index = batch_start + i + 1
-                    print(f"\n[{company_index}/{len(target_companies)}] Processing company...")
+            import pandas as pd
+            watchlist_df = pd.read_csv('觀察名單.csv') if os.path.exists('觀察名單.csv') else None
+            if watchlist_df is not None:
+                logger.info(f"Loaded watchlist: {len(watchlist_df)} companies")
+        except Exception as e:
+            logger.warning(f"Could not load watchlist: {e}")
+            watchlist_df = None
+        
+        # Apply priority focus
+        if priority_focus == "high_only":
+            target_companies = target_companies[:10]
+            logger.info(f"High priority focus: {len(target_companies)} companies")
+        elif priority_focus == "top_30":
+            target_companies = target_companies[:30]
+            logger.info(f"Top 30 focus: {len(target_companies)} companies")
+        else:
+            logger.info(f"Balanced approach: {len(target_companies)} companies")
+        
+        # Set up search types
+        if search_types is None:
+            search_types = ['factset', 'financial']
+        
+        # Create output directories
+        os.makedirs(config['output']['md_dir'], exist_ok=True)
+        os.makedirs(config['output']['csv_dir'], exist_ok=True)
+        
+        # FIXED #9: Process companies with memory management and batching
+        total_files_saved = 0
+        successful_companies = 0
+        rate_limiting_detected = False
+        
+        # FIXED #9: Process in batches to manage memory
+        batch_size = config.get('search', {}).get('batch_size', 20)
+        
+        for search_type in search_types:
+            logger.info(f"SEARCH TYPE: {search_type.upper()}")
+            logger.info("="*40)
+            
+            try:
+                # FIXED #9: Process companies in batches
+                for batch_start in range(0, len(target_companies), batch_size):
+                    batch_end = min(batch_start + batch_size, len(target_companies))
+                    batch_companies = target_companies[batch_start:batch_end]
                     
-                    try:
-                        result = process_company_search_v331(
-                            company, config, search_type, watchlist_df, rate_protector
-                        )
+                    logger.info(f"Processing batch {batch_start//batch_size + 1}: companies {batch_start+1}-{batch_end}")
+                    
+                    for i, company in enumerate(batch_companies):
+                        company_index = batch_start + i + 1
+                        logger.info(f"[{company_index}/{len(target_companies)}] Processing company...")
                         
-                        # FIXED #1: Check for rate limiting but don't stop entire batch
-                        if result.get('rate_limited'):
-                            print(f"   🚨 Rate limiting detected - STOPPING SEARCH")
+                        try:
+                            result = process_company_search_v331(
+                                company, config, search_type, watchlist_df, rate_protector, logger
+                            )
+                            
+                            # FIXED #1: Check for rate limiting but don't stop entire batch
+                            if result.get('rate_limited'):
+                                logger.warning("Rate limiting detected - STOPPING SEARCH")
+                                rate_limiting_detected = True
+                                break
+                            
+                            if result['success']:
+                                successful_companies += 1
+                                total_files_saved += result['files_saved']
+                            else:
+                                logger.warning(f"Company {company.get('name', 'Unknown')} failed - continuing")
+                            
+                            # Rate limiting between companies
+                            if company_index < len(target_companies):
+                                time.sleep(2)
+                                
+                        except RateLimitException as e:
+                            logger.warning(f"Rate limiting at company {company_index}: {e}")
                             rate_limiting_detected = True
                             break
-                        
-                        if result['success']:
-                            successful_companies += 1
-                            total_files_saved += result['files_saved']
-                        else:
-                            print(f"   ⚠️ Company {company.get('name', 'Unknown')} failed - continuing")
-                        
-                        # Rate limiting between companies
-                        if company_index < len(target_companies):
-                            time.sleep(2)
-                            
-                    except RateLimitException as e:
-                        print(f"   🚨 Rate limiting at company {company_index}: {e}")
-                        rate_limiting_detected = True
+                        except Exception as e:
+                            logger.error(f"Error processing company {company_index}: {e}")
+                            continue  # FIXED #1: Continue with next company
+                    
+                    # FIXED #9: Memory cleanup after each batch
+                    gc.collect()
+                    logger.info(f"Batch {batch_start//batch_size + 1} completed, memory cleaned")
+                    
+                    if rate_limiting_detected:
                         break
-                    except Exception as e:
-                        print(f"   ❌ Error processing company {company_index}: {e}")
-                        continue  # FIXED #1: Continue with next company
-                
-                # FIXED #9: Memory cleanup after each batch
-                gc.collect()
-                print(f"   🧹 Batch {batch_start//batch_size + 1} completed, memory cleaned")
                 
                 if rate_limiting_detected:
                     break
-            
-            if rate_limiting_detected:
-                break
-                
-        except Exception as e:
-            print(f"❌ Search type {search_type} failed: {e}")
-            continue  # FIXED #1: Continue with next search type
+                    
+            except Exception as e:
+                logger.error(f"Search type {search_type} failed: {e}")
+                continue  # FIXED #1: Continue with next search type
     
     # Enhanced summary
-    print(f"\n{'='*80}")
-    print("📊 ENHANCED SEARCH SUITE SUMMARY (v3.3.1)")
-    print("="*80)
-    print(f"🎯 Companies processed: {successful_companies}/{len(target_companies)}")
-    print(f"📄 Total MD files saved: {total_files_saved}")
+    logger.info("="*80)
+    logger.info("ENHANCED SEARCH SUITE SUMMARY (v3.3.2)")
+    logger.info("="*80)
+    logger.info(f"Companies processed: {successful_companies}/{len(target_companies)}")
+    logger.info(f"Total MD files saved: {total_files_saved}")
     
     if rate_limiting_detected:
-        print(f"🚨 Rate limiting detected - search stopped early")
-        print(f"📄 Recommendation: Process existing {total_files_saved} files")
+        logger.warning("Rate limiting detected - search stopped early")
+        logger.info(f"Recommendation: Process existing {total_files_saved} files")
         return "rate_limited"
     elif total_files_saved > 0:
-        print(f"✅ Search completed successfully")
+        logger.info("Search completed successfully")
         return True
     else:
-        print(f"⚠️ No files saved - check search parameters")
+        logger.warning("No files saved - check search parameters")
+        return False
+
+# ============================================================================
+# v3.3.2 CLI INTEGRATION FUNCTIONS
+# ============================================================================
+
+def run_enhanced_search_v332(config: Dict, **kwargs) -> bool:
+    """v3.3.2 CLI integration function for enhanced search"""
+    logger = get_v332_logger()
+    
+    # Extract CLI parameters
+    mode = kwargs.get('mode', 'enhanced')
+    priority = kwargs.get('priority', 'high_only')
+    max_results = kwargs.get('max_results', 10)
+    
+    logger.info(f"Starting v3.3.2 enhanced search - mode: {mode}, priority: {priority}")
+    
+    # Create rate protector
+    try:
+        # Import and create unified rate protector
+        factset_pipeline = lazy_modules.get_module('factset_pipeline')
+        if factset_pipeline and hasattr(factset_pipeline, 'UnifiedRateLimitProtector'):
+            rate_protector = factset_pipeline.UnifiedRateLimitProtector(config)
+        else:
+            rate_protector = None
+    except Exception as e:
+        logger.warning(f"Could not create rate protector: {e}")
+        rate_protector = None
+    
+    # Update config with CLI parameters
+    search_config = config.copy()
+    search_config.setdefault('search', {})
+    search_config['search']['max_results'] = max_results
+    
+    # Run enhanced search
+    try:
+        result = run_enhanced_search_suite_v331(
+            search_config,
+            search_types=['factset', 'financial'] if mode == 'enhanced' else ['factset'],
+            priority_focus=priority,
+            rate_protector=rate_protector,
+            logger=logger
+        )
+        
+        if result == "rate_limited":
+            logger.warning("Search stopped due to rate limiting")
+            return "rate_limited"
+        elif result:
+            logger.info("Enhanced search completed successfully")
+            return True
+        else:
+            logger.error("Enhanced search failed")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Enhanced search error: {e}")
         return False
 
 # ============================================================================
@@ -1011,13 +1201,15 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
 # ============================================================================
 
 def main():
-    """Main entry point for v3.3.1 search with comprehensive fixes"""
-    print(f"🔍 Enhanced Search Module v{__version__} (v3.3.1)")
-    print("🔧 COMPREHENSIVE FIXES:")
-    print("   ✅ #1 Cascade failure protection")
-    print("   ✅ #3 Unified rate limiting")  
-    print("   ✅ #6 Enhanced filename generation")
-    print("   ✅ #9 Memory management with batching")
+    """Main entry point for v3.3.2 search with comprehensive fixes"""
+    logger = get_v332_logger()
+    logger.info(f"Enhanced Search Module v{__version__} (v3.3.2)")
+    logger.info("COMPREHENSIVE FIXES:")
+    logger.info("   ✅ #1 Cascade failure protection")
+    logger.info("   ✅ #3 Unified rate limiting")  
+    logger.info("   ✅ #6 Enhanced filename generation")
+    logger.info("   ✅ #9 Memory management with batching")
+    logger.info("   ✅ v3.3.2 Enhanced logging integration")
     
     try:
         # FIXED #4: Lazy import config to avoid circular dependencies
@@ -1038,22 +1230,30 @@ def main():
                 }
             }
     except Exception as e:
-        print(f"⚠️ Config loading error: {e}")
+        logger.warning(f"Config loading error: {e}")
         return False
     
     # FIXED #3: Create unified rate protector
-    rate_protector = UnifiedRateLimitProtector(config)
+    try:
+        factset_pipeline = lazy_modules.get_module('factset_pipeline')
+        if factset_pipeline and hasattr(factset_pipeline, 'UnifiedRateLimitProtector'):
+            rate_protector = factset_pipeline.UnifiedRateLimitProtector(config)
+        else:
+            rate_protector = None
+    except Exception as e:
+        logger.warning(f"Rate protector creation error: {e}")
+        rate_protector = None
     
-    result = run_enhanced_search_suite_v331(config, rate_protector=rate_protector)
+    result = run_enhanced_search_suite_v331(config, rate_protector=rate_protector, logger=logger)
     
     if result == "rate_limited":
-        print("🚨 Search stopped due to rate limiting")
+        logger.warning("Search stopped due to rate limiting")
         return "rate_limited"
     elif result:
-        print("✅ Search completed successfully")
+        logger.info("Search completed successfully")
         return True
     else:
-        print("❌ Search failed")
+        logger.error("Search failed")
         return False
 
 if __name__ == "__main__":
