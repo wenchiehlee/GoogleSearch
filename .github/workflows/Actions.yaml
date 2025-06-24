@@ -118,12 +118,14 @@ jobs:
         GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
       run: |
         echo "🚀 Starting v3.3.2 enhanced pipeline..."
+
         python factset_cli.py pipeline \
           --mode=${{ github.event.inputs.execution_mode || 'intelligent' }} \
           --priority=${{ github.event.inputs.priority_focus || 'high_only' }} \
-          --memory-limit=${{ github.event.inputs.memory_limit || '2048' }} \
+          --memory-limit=${{ github.event.inputs.memory_limit || '8192' }} \
           --log-level=${{ github.event.inputs.log_level || 'info' }} \
           --github-actions
+
     
     - name: 📊 Generate v3.3.2 Report
       if: always()

@@ -1187,8 +1187,11 @@ Enhanced CLI v3.3.2 - Simplified & Observable
     
     # Pipeline command
     pipeline_parser = subparsers.add_parser('pipeline', help='Complete pipeline')
-    pipeline_parser.add_argument('--mode', choices=['intelligent', 'enhanced', 'conservative', 'process_only'],
-                                 default='intelligent', help='Execution mode')
+    pipeline_parser.add_argument('--mode', choices=['intelligent', 'conservative', 'process_only', 'enhanced'],
+                                 default='intelligent', help='Execution strategy')
+    pipeline_parser.add_argument('--priority', choices=['high_only', 'top_30', 'balanced'],
+                             default='high_only', help='Search priority level')
+    
     pipeline_parser.add_argument('--memory-limit', type=int, default=2048, help='Memory limit (MB)')
     pipeline_parser.add_argument('--batch-size', type=int, default=50, help='Batch size')
     pipeline_parser.add_argument('--log-level', choices=['debug', 'info', 'warning'],
@@ -1202,6 +1205,7 @@ Enhanced CLI v3.3.2 - Simplified & Observable
     recover_parser.add_argument('--analyze', action='store_true', help='Analyze and recover')
     recover_parser.add_argument('--fix-common-issues', action='store_true', help='Fix common issues')
     recover_parser.add_argument('--github-actions', action='store_true', help='GitHub Actions mode')
+   
     
     # Diagnose command
     diagnose_parser = subparsers.add_parser('diagnose', help='System diagnostics')
