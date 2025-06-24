@@ -756,7 +756,7 @@ class StageRunner:
                 # Use v3.3.1 enhanced pipeline
                 pipeline = pipeline_module.EnhancedFactSetPipeline()
                 
-                success = pipeline.run_complete_pipeline_v331(
+                success = pipeline.run_complete_pipeline_v332(
                     force_all=stage_context.parameters.get("force_all", False),
                     skip_phases=skip_phases,
                     execution_mode=execution_mode
