@@ -1,0 +1,26 @@
+2025-06-24 03:32:58,849 - factset_pipeline_v331 - INFO - 🚀 Enhanced FactSet Pipeline v3.3.1 initialized
+2025-06-24 03:32:58,849 - factset_pipeline_v331 - INFO - 🚀 Enhanced FactSet Pipeline v3.3.1
+2025-06-24 03:32:58,849 - factset_pipeline_v331 - INFO - 📅 Date: 2025-06-23
+2025-06-24 03:32:58,849 - factset_pipeline_v331 - INFO - 🔧 Comprehensive Fixes: Issues #1-9
+2025-06-24 03:32:58,849 - factset_pipeline_v331 - INFO - ================================================================================
+2025-06-24 03:32:58,866 - factset_pipeline_v331 - INFO - 📈 v3.3.1 analysis: 84 files, 84 quality (100.0%), 0 companies
+2025-06-24 03:32:58,866 - factset_pipeline_v331.workflow - INFO - 🚀 Started v3.3.1 workflow: 20250624_033258 (mode: process_only)
+2025-06-24 03:32:58,934 - factset_pipeline_v331.config - INFO - 📥 Downloading enhanced watchlist (v3.3.1)...
+2025-06-24 03:32:58,953 - factset_pipeline_v331.config - INFO - ✅ Downloaded 116 companies (v3.3.1)
+2025-06-24 03:32:58,954 - factset_pipeline_v331 - INFO - 🎯 Target Companies: 116 (v3.3.1)
+2025-06-24 03:32:58,954 - factset_pipeline_v331 - INFO - 
+📊 Enhanced Processing Phase (v3.3.1)
+2025-06-24 08:11:37,564 - factset_pipeline_v331 - INFO - ✅ Processing phase completed
+2025-06-24 08:11:37,564 - factset_pipeline_v331 - INFO - 
+📈 Enhanced Upload Phase (v3.3.1)
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - WARNING - ⚠️ Using fallback uploader
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - ERROR - ❌ Upload phase error: module 'sheets_uploader' has no attribute 'upload_all_sheets'
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - WARNING - ⚠️ Upload phase failed
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - 
+================================================================================
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - 🎉 ENHANCED PIPELINE EXECUTION COMPLETED! (v3.3.1)
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - ================================================================================
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - 📊 Success Rate: 2/2 phases
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - ⏱️ Total Duration: 16719.0 seconds
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - 🔄 Requests: 0/0 successful
+2025-06-24 08:11:37,833 - factset_pipeline_v331 - INFO - 💾 Peak Memory: 97.4MB

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-06-23T17:43:40.558689",
+  "generated_at": "2025-06-24T08:11:37.560842",
   "guideline_version": "3.3.1",
   "total_companies": 116,
   "companies_with_data": 17,
@@ -8,7 +8,7 @@
     "files_processed": 142,
     "batches_completed": 0,
     "memory_cleanups": 0,
-    "peak_memory_mb": 97.7109375
+    "peak_memory_mb": 97.359375
   },
   "data_quality": {},
   "file_level_stats": {
@@ -29,8 +29,8 @@
     "average_files_per_company": 4.176470588235294
   },
   "memory_stats": {
-    "current_mb": 87.5859375,
-    "peak_mb": 97.7109375,
+    "current_mb": 87.00390625,
+    "peak_mb": 97.359375,
     "limit_mb": 2048,
     "cleanup_count": 0,
     "processing_stats": {
