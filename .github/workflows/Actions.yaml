@@ -139,7 +139,7 @@ jobs:
     
     - name: 📋 Upload Execution Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: v3.3.2-execution-logs
         path: |
@@ -184,7 +184,7 @@ jobs:
     
     - name: 📋 Upload Recovery Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: v3.3.2-recovery-logs
         path: logs/
