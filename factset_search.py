@@ -1,11 +1,16 @@
 """
-factset_search.py - Enhanced Google Search Module (v3.3.2)
+factset_search.py - Enhanced Google Search Module (v3.3.3)
 
-Version: 3.3.2
+Version: 3.3.3
 Date: 2025-06-24
-Author: Google Search FactSet Pipeline - v3.3.2 Simplified & Observable
+Author: Google Search FactSet Pipeline - v3.3.3 Final Integrated Edition
 
-v3.3.2 ENHANCEMENTS:
+v3.3.3 ENHANCEMENTS:
+- ✅ Integration with StandardizedQualityScorer (0-10 scale)
+- ✅ Quality scoring integration across all search functions
+- ✅ All v3.3.2 functionality preserved and enhanced
+
+v3.3.2 FEATURES MAINTAINED:
 - ✅ Integration with enhanced logging system (stage-specific dual output)
 - ✅ Stage runner compatibility for unified CLI interface
 - ✅ Cross-platform safe output handling
@@ -33,24 +38,24 @@ from pathlib import Path
 from urllib.parse import urlparse, quote_plus, unquote, quote
 from typing import List, Dict, Optional, Tuple, Any
 
-# Version Information - v3.3.2
-__version__ = "3.3.2"
+# Version Information - v3.3.3
+__version__ = "3.3.3"
 __date__ = "2025-06-24"
-__author__ = "Google Search FactSet Pipeline - v3.3.2 Simplified & Observable"
+__author__ = "Google Search FactSet Pipeline - v3.3.3 Final Integrated Edition"
 
 # ============================================================================
-# v3.3.2 LOGGING INTEGRATION
+# v3.3.3 LOGGING INTEGRATION
 # ============================================================================
 
-def get_v332_logger(module_name: str = "search"):
-    """Get v3.3.2 enhanced logger with fallback"""
+def get_v333_logger(module_name: str = "search"):
+    """Get v3.3.3 enhanced logger with fallback"""
     try:
         from enhanced_logger import get_stage_logger
         return get_stage_logger(module_name)
     except ImportError:
-        # Fallback to standard logging if v3.3.2 components not available
+        # Fallback to standard logging if v3.3.3 components not available
         import logging
-        logger = logging.getLogger(f'factset_v332.{module_name}')
+        logger = logging.getLogger(f'factset_v333.{module_name}')
         if not logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -60,7 +65,7 @@ def get_v332_logger(module_name: str = "search"):
         return logger
 
 def get_performance_monitor(stage_name: str = "search"):
-    """Get v3.3.2 performance monitor with fallback"""
+    """Get v3.3.3 performance monitor with fallback"""
     try:
         from enhanced_logger import get_performance_logger
         return get_performance_logger(stage_name)
@@ -85,6 +90,71 @@ def get_performance_monitor(stage_name: str = "search"):
         return FallbackPerformanceMonitor()
 
 # ============================================================================
+# v3.3.3 STANDARDIZED QUALITY SCORING INTEGRATION
+# ============================================================================
+
+def get_quality_scorer():
+    """Get v3.3.3 standardized quality scorer"""
+    try:
+        from factset_cli import StandardizedQualityScorer
+        return StandardizedQualityScorer()
+    except ImportError:
+        # Fallback quality scorer
+        return FallbackQualityScorer()
+
+class FallbackQualityScorer:
+    """Fallback quality scorer when StandardizedQualityScorer not available"""
+    
+    def __init__(self):
+        self.scoring_version = "3.3.3-fallback"
+    
+    def calculate_score(self, data_metrics: Dict[str, Any]) -> int:
+        """Calculate 0-10 fallback quality score"""
+        score = 0
+        
+        # Data completeness (40% weight)
+        eps_completeness = data_metrics.get('eps_data_completeness', 0)
+        if eps_completeness >= 0.9:
+            score += 4
+        elif eps_completeness >= 0.7:
+            score += 3
+        elif eps_completeness >= 0.5:
+            score += 2
+        elif eps_completeness >= 0.3:
+            score += 1
+        
+        # Analyst coverage (30% weight)
+        analyst_count = data_metrics.get('analyst_count', 0)
+        if analyst_count >= 20:
+            score += 3
+        elif analyst_count >= 10:
+            score += 2
+        elif analyst_count >= 5:
+            score += 1
+        
+        # Data freshness (30% weight)
+        days_old = data_metrics.get('data_age_days', float('inf'))
+        if days_old <= 7:
+            score += 3
+        elif days_old <= 30:
+            score += 2
+        elif days_old <= 90:
+            score += 1
+        
+        return min(10, max(0, score))
+    
+    def get_quality_indicator(self, score: int) -> str:
+        """Get quality indicator for score"""
+        if 9 <= score <= 10:
+            return '🟢 完整'
+        elif score == 8:
+            return '🟡 良好'
+        elif 3 <= score <= 7:
+            return '🟠 部分'
+        else:
+            return '🔴 不足'
+
+# ============================================================================
 # FIXED #4: Proper module imports without circular dependencies
 # ============================================================================
 
@@ -98,7 +168,7 @@ class LazyImporter:
             try:
                 self._modules[name] = __import__(name)
             except ImportError as e:
-                logger = get_v332_logger()
+                logger = get_v333_logger()
                 logger.warning(f"Module {name} not available: {e}")
                 self._modules[name] = None
         return self._modules[name]
@@ -117,7 +187,7 @@ try:
     from googlesearch import search
     GOOGLESEARCH_AVAILABLE = True
 except ImportError:
-    logger = get_v332_logger()
+    logger = get_v333_logger()
     logger.warning("googlesearch-python not installed. Install with: pip install googlesearch-python")
     GOOGLESEARCH_AVAILABLE = False
 
@@ -125,7 +195,7 @@ try:
     from bs4 import BeautifulSoup
     BS4_AVAILABLE = True
 except ImportError:
-    logger = get_v332_logger()
+    logger = get_v333_logger()
     logger.warning("beautifulsoup4 not installed. Install with: pip install beautifulsoup4")
     BS4_AVAILABLE = False
 
@@ -174,7 +244,7 @@ PRIORITY_DOMAINS = [
 
 # Rate limiting exception for unified handling - FIXED #3
 class RateLimitException(Exception):
-    """Unified rate limiting exception for v3.3.2"""
+    """Unified rate limiting exception for v3.3.3"""
     pass
 
 # ============================================================================
@@ -188,7 +258,7 @@ def generate_unique_filename_v331(company_name: str, stock_code: str, url: str,
     Format: {stock_code}_{company}_{domain}_{content_hash}_{timestamp}.md
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     logger.debug(f"Generating filename for {company_name} ({stock_code})")
     
@@ -258,76 +328,90 @@ def extract_domain_info(url: str) -> str:
         return 'web'
 
 # ============================================================================
-# ENHANCED CONTENT QUALITY ASSESSMENT (v3.3.1)
+# ENHANCED CONTENT QUALITY ASSESSMENT (v3.3.3) - Updated to 0-10 scale
 # ============================================================================
 
-def assess_content_quality_v331(content: str, title: str = "", logger=None) -> int:
+def assess_content_quality_v333(content: str, title: str = "", logger=None) -> int:
     """
-    Enhanced content quality assessment for v3.3.1
-    Returns score 1-10 (10 being highest quality)
+    v3.3.3: Enhanced content quality assessment using StandardizedQualityScorer
+    Returns score 0-10 (10 being highest quality)
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     if not content:
-        return 1
+        return 0
     
     try:
         content_lower = content.lower()
         title_lower = title.lower()
         combined_text = f"{title_lower} {content_lower}"
         
-        score = 1  # Base score
+        # Build quality metrics for StandardizedQualityScorer
+        quality_metrics = {
+            'eps_data_completeness': 0,
+            'analyst_count': 0,
+            'data_age_days': 0,
+            'content_quality_factors': 0
+        }
         
-        # High-value financial keywords
-        factset_keywords = ['factset', 'eps', '每股盈餘', '目標價', 'target price']
-        analyst_keywords = ['分析師', 'analyst', '券商', '投資', '評等']
-        forecast_keywords = ['預估', '預測', 'forecast', '展望', '2025', '2026', '2027']
+        # Assess EPS data completeness
+        eps_indicators = ['eps', '每股盈餘', 'earnings per share', '2025', '2026', '2027']
+        eps_found = sum(1 for indicator in eps_indicators if indicator in combined_text)
+        quality_metrics['eps_data_completeness'] = min(1.0, eps_found / 6)
         
-        # Score based on keyword presence
-        for keyword in factset_keywords:
-            if keyword in combined_text:
-                score += 2
+        # Assess analyst coverage indicators
+        analyst_indicators = ['分析師', 'analyst', '券商', '研究報告', 'research']
+        analyst_found = sum(1 for indicator in analyst_indicators if indicator in combined_text)
+        quality_metrics['analyst_count'] = min(50, analyst_found * 10)  # Estimate
         
-        for keyword in analyst_keywords:
-            if keyword in combined_text:
-                score += 1
+        # Assess data freshness (newer content gets better score)
+        current_year = datetime.now().year
+        year_indicators = [str(current_year), str(current_year - 1)]
+        recent_mentions = sum(combined_text.count(year) for year in year_indicators)
+        quality_metrics['data_age_days'] = max(1, 30 - (recent_mentions * 5))  # Estimate
         
-        for keyword in forecast_keywords:
-            if keyword in combined_text:
-                score += 1
+        # Additional content quality factors
+        quality_keywords = ['factset', 'target price', '目標價', 'forecast', '預測', 'estimate']
+        quality_found = sum(1 for keyword in quality_keywords if keyword in combined_text)
         
-        # Check for numerical data (prices, percentages, etc.)
-        numeric_patterns = [
-            r'\d+\.\d+',  # Decimal numbers
-            r'\$\d+',     # Dollar amounts
-            r'\d+%',      # Percentages
-            r'NT\$\d+',   # NT dollar amounts
-        ]
+        # Bonus for numerical data
+        numeric_patterns = [r'\d+\.\d+', r'\$\d+', r'\d+%', r'NT\$\d+']
+        numeric_found = sum(len(re.findall(pattern, content)) for pattern in numeric_patterns)
         
-        for pattern in numeric_patterns:
-            if re.search(pattern, content):
-                score += 1
-        
-        # Penalty for low-quality indicators
+        # Penalty for low-quality content
         low_quality_indicators = ['廣告', 'advertisement', '購物', 'shop', '404', 'error']
-        for indicator in low_quality_indicators:
-            if indicator in combined_text:
-                score -= 2
+        penalties = sum(1 for indicator in low_quality_indicators if indicator in combined_text)
         
-        # Bonus for length (more comprehensive content)
+        # Use StandardizedQualityScorer for final calculation
+        quality_scorer = get_quality_scorer()
+        
+        # Adjust metrics based on content analysis
+        if quality_found >= 3:
+            quality_metrics['eps_data_completeness'] = min(1.0, quality_metrics['eps_data_completeness'] + 0.3)
+        if numeric_found >= 5:
+            quality_metrics['analyst_count'] = min(50, quality_metrics['analyst_count'] + 15)
         if len(content) > 2000:
-            score += 1
-        elif len(content) > 5000:
-            score += 2
+            quality_metrics['data_age_days'] = max(1, quality_metrics['data_age_days'] - 10)
         
-        final_score = max(1, min(10, score))
-        logger.debug(f"Content quality assessed: {final_score}/10")
+        # Apply penalties
+        if penalties > 0:
+            quality_metrics['eps_data_completeness'] = max(0, quality_metrics['eps_data_completeness'] - 0.2 * penalties)
+        
+        final_score = quality_scorer.calculate_score(quality_metrics)
+        logger.debug(f"v3.3.3 content quality assessed: {final_score}/10")
         return final_score
         
     except Exception as e:
         logger.warning(f"Content quality assessment error: {e}")
         return 5  # Default middle score if assessment fails
+
+# Legacy compatibility function
+def assess_content_quality_v331(content: str, title: str = "", logger=None) -> int:
+    """Legacy v3.3.1 compatibility - converts to v3.3.3 scale"""
+    v333_score = assess_content_quality_v333(content, title, logger)
+    # Convert 0-10 scale back to 1-10 for legacy compatibility
+    return max(1, v333_score)
 
 # ============================================================================
 # ENHANCED URL VALIDATION (v3.3.1) - FIXED #1
@@ -336,7 +420,7 @@ def assess_content_quality_v331(content: str, title: str = "", logger=None) -> i
 def clean_and_validate_url_v331(url: str, logger=None) -> Optional[str]:
     """FIXED #1: Enhanced URL cleaning and validation with robust error handling"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     try:
         if not url or not isinstance(url, str):
@@ -411,7 +495,7 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30, logger=N
     Prevents single bad URL from killing entire search
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     try:
         logger.debug(f"Downloading: {url[:60]}...")
@@ -495,7 +579,7 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30, logger=N
         
         # HTML processing with enhanced error handling
         if not BS4_AVAILABLE:
-            quality_score = assess_content_quality_v331(content, logger=logger)
+            quality_score = assess_content_quality_v333(content, logger=logger)
             return content, content, quality_score
         
         try:
@@ -524,8 +608,8 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30, logger=N
             else:
                 markdown_content = text_content
             
-            # Assess content quality
-            quality_score = assess_content_quality_v331(text_content, title, logger=logger)
+            # v3.3.3: Assess content quality using new scoring system
+            quality_score = assess_content_quality_v333(text_content, title, logger=logger)
             
             logger.info(f"Downloaded: {len(text_content)} chars, quality: {quality_score}/10")
             return markdown_content, text_content, quality_score
@@ -533,7 +617,7 @@ def download_webpage_content_enhanced_v331(url: str, timeout: int = 30, logger=N
         except Exception as html_error:
             logger.warning(f"HTML processing error: {html_error}")
             # Fallback to raw content
-            quality_score = assess_content_quality_v331(content, logger=logger)
+            quality_score = assess_content_quality_v333(content, logger=logger)
             return content, content, quality_score
         
     except RateLimitException:
@@ -560,7 +644,7 @@ def extract_company_info_enhanced_v331(title: str, url: str, snippet: str = "",
                                       watchlist_df=None, logger=None) -> Tuple[Optional[str], Optional[str]]:
     """Enhanced company name and stock code extraction for v3.3.1"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     company_name = None
     stock_code = None
@@ -665,7 +749,7 @@ def save_content_to_md_file_v331(content: str, filename: str, md_dir: str,
                                 metadata: Dict = None, logger=None) -> bool:
     """Save content to MD file with enhanced metadata for v3.3.1"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     try:
         os.makedirs(md_dir, exist_ok=True)
@@ -697,7 +781,7 @@ def save_content_to_md_file_v331(content: str, filename: str, md_dir: str,
             header += f"stock_code: {metadata.get('stock_code', '')}\n"
             header += f"extracted_date: {datetime.now().isoformat()}\n"
             header += f"search_query: {metadata.get('query', '')}\n"
-            header += f"version: v3.3.2\n"
+            header += f"version: v3.3.3\n"
             header += "---\n\n"
             
             final_content = header + content
@@ -730,7 +814,7 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
     Prevents single bad URL from killing entire company search
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     if not GOOGLESEARCH_AVAILABLE:
         logger.error(f"Google search not available for {company_name}")
@@ -741,7 +825,7 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
     
     max_results = max(1, min(20, int(max_results)))
     
-    # v3.3.2 Performance monitoring
+    # v3.3.3 Performance monitoring
     perf_monitor = get_performance_monitor()
     
     with perf_monitor.time_operation(f"search_company_{company_name}"):
@@ -816,7 +900,7 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
                             logger.warning(f"Download failed: {clean_url[:60]} - {download_error}")
                             continue  # FIXED #1: Skip this download, continue with others
                         
-                        # Only keep quality content
+                        # v3.3.3: Updated quality threshold for 0-10 scale
                         if not markdown_content or not text_content or quality_score < 3:
                             logger.debug(f"Low quality content skipped (score: {quality_score}/10)")
                             continue
@@ -847,7 +931,8 @@ def search_company_factset_data_v331(company_name: str, stock_code: str,
                             'filename': filename,
                             'query': query,
                             'search_type': search_type,
-                            'content_length': len(text_content)
+                            'content_length': len(text_content),
+                            'v333_scored': True  # v3.3.3 marker
                         })
                         
                         logger.info(f"Quality content found: {filename} (score: {quality_score}/10)")
@@ -890,12 +975,12 @@ def process_company_search_v331(company_data: Dict, config: Dict,
     Each company failure is isolated and doesn't affect other companies
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     company_name = company_data.get('name', company_data.get('名稱', ''))
     stock_code = company_data.get('code', company_data.get('代號', ''))
     
-    logger.info(f"Searching {company_name} ({stock_code}) - v3.3.2")
+    logger.info(f"Searching {company_name} ({stock_code}) - v3.3.3")
     
     try:
         search_results = search_company_factset_data_v331(
@@ -917,7 +1002,8 @@ def process_company_search_v331(company_data: Dict, config: Dict,
             'files_saved': 0,
             'success': False,
             'rate_limited': True,
-            'error': str(e)
+            'error': str(e),
+            'v333_processed': True
         }
     except Exception as e:
         logger.error(f"Search error for {company_name}: {e}")
@@ -929,7 +1015,8 @@ def process_company_search_v331(company_data: Dict, config: Dict,
             'files_saved': 0,
             'success': False,
             'rate_limited': False,
-            'error': str(e)
+            'error': str(e),
+            'v333_processed': True
         }
     
     if not search_results:
@@ -941,7 +1028,8 @@ def process_company_search_v331(company_data: Dict, config: Dict,
             'results': [],
             'files_saved': 0,
             'success': False,
-            'rate_limited': False
+            'rate_limited': False,
+            'v333_processed': True
         }
     
     # Save content to MD files with enhanced error handling
@@ -959,7 +1047,8 @@ def process_company_search_v331(company_data: Dict, config: Dict,
                 'quality_score': result['quality_score'],
                 'company': result['detected_company'],
                 'stock_code': result['detected_stock_code'],
-                'query': result['query']
+                'query': result['query'],
+                'v333_scored': True
             }
             
             if save_content_to_md_file_v331(content, filename, md_dir, metadata, logger=logger):
@@ -980,7 +1069,8 @@ def process_company_search_v331(company_data: Dict, config: Dict,
         'results': search_results,
         'files_saved': files_saved,
         'success': success,
-        'rate_limited': False
+        'rate_limited': False,
+        'v333_processed': True
     }
 
 # ============================================================================
@@ -995,18 +1085,18 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
     FIXED #1: Enhanced search suite with proper error isolation
     FIXED #3: Unified rate limiting integration
     FIXED #9: Memory management with batching
-    v3.3.2: Enhanced logging integration
+    v3.3.3: Enhanced logging integration + quality scoring
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    logger.info(f"Enhanced Search Suite v{__version__} (v3.3.2)")
+    logger.info(f"Enhanced Search Suite v{__version__} (v3.3.3)")
     logger.info(f"Date: {__date__}")
     logger.info("FIXED: #1 Cascade failures, #3 Rate limiting, #9 Memory management")
-    logger.info("v3.3.2: Enhanced logging and CLI integration")
+    logger.info("v3.3.3: Enhanced logging, CLI integration, and standardized quality scoring")
     logger.info("=" * 80)
     
-    # v3.3.2 Performance monitoring
+    # v3.3.3 Performance monitoring
     perf_monitor = get_performance_monitor()
     
     with perf_monitor.time_operation("enhanced_search_suite"):
@@ -1059,6 +1149,7 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
         total_files_saved = 0
         successful_companies = 0
         rate_limiting_detected = False
+        quality_scores = []  # v3.3.3: Track quality scores
         
         # FIXED #9: Process in batches to manage memory
         batch_size = config.get('search', {}).get('batch_size', 20)
@@ -1093,6 +1184,11 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
                             if result['success']:
                                 successful_companies += 1
                                 total_files_saved += result['files_saved']
+                                
+                                # v3.3.3: Collect quality scores
+                                for search_result in result.get('results', []):
+                                    if 'quality_score' in search_result:
+                                        quality_scores.append(search_result['quality_score'])
                             else:
                                 logger.warning(f"Company {company.get('name', 'Unknown')} failed - continuing")
                             
@@ -1122,12 +1218,27 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
                 logger.error(f"Search type {search_type} failed: {e}")
                 continue  # FIXED #1: Continue with next search type
     
-    # Enhanced summary
+    # Enhanced summary with v3.3.3 quality metrics
     logger.info("="*80)
-    logger.info("ENHANCED SEARCH SUITE SUMMARY (v3.3.2)")
+    logger.info("ENHANCED SEARCH SUITE SUMMARY (v3.3.3)")
     logger.info("="*80)
     logger.info(f"Companies processed: {successful_companies}/{len(target_companies)}")
     logger.info(f"Total MD files saved: {total_files_saved}")
+    
+    # v3.3.3: Quality analysis
+    if quality_scores:
+        avg_quality = sum(quality_scores) / len(quality_scores)
+        quality_scorer = get_quality_scorer()
+        quality_distribution = {}
+        
+        for score in quality_scores:
+            indicator = quality_scorer.get_quality_indicator(score)
+            quality_distribution[indicator] = quality_distribution.get(indicator, 0) + 1
+        
+        logger.info(f"Average quality score: {avg_quality:.1f}/10")
+        logger.info("Quality distribution:")
+        for indicator, count in quality_distribution.items():
+            logger.info(f"   {indicator}: {count}")
     
     if rate_limiting_detected:
         logger.warning("Rate limiting detected - search stopped early")
@@ -1141,19 +1252,19 @@ def run_enhanced_search_suite_v331(config: Dict, search_types: Optional[List[str
         return False
 
 # ============================================================================
-# v3.3.2 CLI INTEGRATION FUNCTIONS
+# v3.3.3 CLI INTEGRATION FUNCTIONS
 # ============================================================================
 
-def run_enhanced_search_v332(config: Dict, **kwargs) -> bool:
-    """v3.3.2 CLI integration function for enhanced search"""
-    logger = get_v332_logger()
+def run_enhanced_search_v333(config: Dict, **kwargs) -> bool:
+    """v3.3.3 CLI integration function for enhanced search"""
+    logger = get_v333_logger()
     
     # Extract CLI parameters
     mode = kwargs.get('mode', 'enhanced')
     priority = kwargs.get('priority', 'high_only')
     max_results = kwargs.get('max_results', 10)
     
-    logger.info(f"Starting v3.3.2 enhanced search - mode: {mode}, priority: {priority}")
+    logger.info(f"Starting v3.3.3 enhanced search - mode: {mode}, priority: {priority}")
     
     # Create rate protector
     try:
@@ -1197,25 +1308,35 @@ def run_enhanced_search_v332(config: Dict, **kwargs) -> bool:
         return False
 
 # ============================================================================
+# LEGACY COMPATIBILITY FUNCTIONS
+# ============================================================================
+
+# Maintain backward compatibility with v3.3.2
+def run_enhanced_search_v332(config: Dict, **kwargs) -> bool:
+    """Legacy v3.3.2 compatibility wrapper"""
+    return run_enhanced_search_v333(config, **kwargs)
+
+# ============================================================================
 # MAIN ENTRY POINT
 # ============================================================================
 
 def main():
-    """Main entry point for v3.3.2 search with comprehensive fixes"""
-    logger = get_v332_logger()
-    logger.info(f"Enhanced Search Module v{__version__} (v3.3.2)")
+    """Main entry point for v3.3.3 search with comprehensive fixes"""
+    logger = get_v333_logger()
+    logger.info(f"Enhanced Search Module v{__version__} (v3.3.3)")
     logger.info("COMPREHENSIVE FIXES:")
     logger.info("   ✅ #1 Cascade failure protection")
     logger.info("   ✅ #3 Unified rate limiting")  
     logger.info("   ✅ #6 Enhanced filename generation")
     logger.info("   ✅ #9 Memory management with batching")
-    logger.info("   ✅ v3.3.2 Enhanced logging integration")
+    logger.info("   ✅ v3.3.3 Standardized quality scoring (0-10)")
+    logger.info("   ✅ v3.3.3 Enhanced logging integration")
     
     try:
         # FIXED #4: Lazy import config to avoid circular dependencies
         config_module = lazy_modules.get_module('config')
-        if config_module and hasattr(config_module, 'load_config_v331'):
-            config = config_module.load_config_v331()
+        if config_module and hasattr(config_module, 'load_config_v332'):
+            config = config_module.load_config_v332()
         else:
             # Fallback configuration
             config = {

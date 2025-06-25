@@ -1,22 +1,22 @@
 """
-data_processor.py - Enhanced Data Processing Module (v3.3.2)
+data_processor.py - Enhanced Data Processing Module (v3.3.3)
 
-Version: 3.3.2
+Version: 3.3.3
 Date: 2025-06-24
-Author: Google Search FactSet Pipeline - v3.3.2 Simplified & Observable
+Author: Google Search FactSet Pipeline - v3.3.3 Final Integrated Edition
 
-v3.3.2 ENHANCEMENTS:
+v3.3.3 ENHANCEMENTS:
+- ✅ Integration with StandardizedQualityScorer (0-10 scale)
+- ✅ Quality scoring migration from 1-4 to 0-10 scale
+- ✅ v3.3.3 quality indicators (🟢🟡🟠🔴)
+- ✅ All v3.3.2 functionality preserved and enhanced
+
+v3.3.2 FEATURES MAINTAINED:
 - ✅ Integration with enhanced logging system (stage-specific dual output)
 - ✅ Stage runner compatibility for unified CLI interface
 - ✅ Cross-platform safe output and file handling
 - ✅ Enhanced performance monitoring integration
 - ✅ All v3.3.1 fixes and functionality preserved
-
-v3.3.1 FEATURES MAINTAINED:
-- ✅ FIXED #2: Performance issues - optimized processing with pre-compiled regex and batching
-- ✅ FIXED #5: Data aggregation errors - improved deduplication logic and validation
-- ✅ FIXED #4: Module import issues - removed circular dependencies
-- ✅ FIXED #9: Memory management - streaming, batching, and resource limits
 """
 
 import os
@@ -37,24 +37,24 @@ import hashlib
 # Suppress pandas warnings
 warnings.filterwarnings('ignore', category=FutureWarning, module='pandas')
 
-# Version Information - v3.3.2
-__version__ = "3.3.2"
+# Version Information - v3.3.3
+__version__ = "3.3.3"
 __date__ = "2025-06-24"
-__author__ = "Google Search FactSet Pipeline - v3.3.2 Simplified & Observable"
+__author__ = "Google Search FactSet Pipeline - v3.3.3 Final Integrated Edition"
 
 # ============================================================================
-# v3.3.2 LOGGING INTEGRATION
+# v3.3.3 LOGGING INTEGRATION
 # ============================================================================
 
-def get_v332_logger(module_name: str = "processor"):
-    """Get v3.3.2 enhanced logger with fallback"""
+def get_v333_logger(module_name: str = "processor"):
+    """Get v3.3.3 enhanced logger with fallback"""
     try:
         from enhanced_logger import get_stage_logger
         return get_stage_logger(module_name)
     except ImportError:
-        # Fallback to standard logging if v3.3.2 components not available
+        # Fallback to standard logging if v3.3.3 components not available
         import logging
-        logger = logging.getLogger(f'factset_v332.{module_name}')
+        logger = logging.getLogger(f'factset_v333.{module_name}')
         if not logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -64,7 +64,7 @@ def get_v332_logger(module_name: str = "processor"):
         return logger
 
 def get_performance_monitor(stage_name: str = "processor"):
-    """Get v3.3.2 performance monitor with fallback"""
+    """Get v3.3.3 performance monitor with fallback"""
     try:
         from enhanced_logger import get_performance_logger
         return get_performance_logger(stage_name)
@@ -106,6 +106,82 @@ def get_config_module():
         return None
 
 # ============================================================================
+# v3.3.3 STANDARDIZED QUALITY SCORING INTEGRATION
+# ============================================================================
+
+def get_quality_scorer():
+    """Get v3.3.3 standardized quality scorer"""
+    try:
+        from factset_cli import StandardizedQualityScorer
+        return StandardizedQualityScorer()
+    except ImportError:
+        # Fallback quality scorer
+        return FallbackQualityScorer()
+
+class FallbackQualityScorer:
+    """Fallback quality scorer when StandardizedQualityScorer not available"""
+    
+    def __init__(self):
+        self.scoring_version = "3.3.3-fallback"
+    
+    def calculate_score(self, data_metrics: Dict[str, Any]) -> int:
+        """Calculate 0-10 fallback quality score"""
+        score = 0
+        
+        # Data completeness (40% weight)
+        eps_completeness = data_metrics.get('eps_data_completeness', 0)
+        if eps_completeness >= 0.9:
+            score += 4
+        elif eps_completeness >= 0.7:
+            score += 3
+        elif eps_completeness >= 0.5:
+            score += 2
+        elif eps_completeness >= 0.3:
+            score += 1
+        
+        # Analyst coverage (30% weight)
+        analyst_count = data_metrics.get('analyst_count', 0)
+        if analyst_count >= 20:
+            score += 3
+        elif analyst_count >= 10:
+            score += 2
+        elif analyst_count >= 5:
+            score += 1
+        
+        # Data freshness (30% weight)
+        days_old = data_metrics.get('data_age_days', float('inf'))
+        if days_old <= 7:
+            score += 3
+        elif days_old <= 30:
+            score += 2
+        elif days_old <= 90:
+            score += 1
+        
+        return min(10, max(0, score))
+    
+    def get_quality_indicator(self, score: int) -> str:
+        """Get quality indicator for score"""
+        if 9 <= score <= 10:
+            return '🟢 完整'
+        elif score == 8:
+            return '🟡 良好'
+        elif 3 <= score <= 7:
+            return '🟠 部分'
+        else:
+            return '🔴 不足'
+    
+    def convert_legacy_score(self, legacy_score: int) -> int:
+        """Convert legacy 1-4 score to 0-10 scale"""
+        conversion_map = {
+            4: 10,  # Excellent → Complete (10)
+            3: 8,   # Good → Good (8)
+            2: 5,   # Fair → Partial (5)
+            1: 2,   # Poor → Insufficient (2)
+            0: 0    # None → Insufficient (0)
+        }
+        return conversion_map.get(legacy_score, 0)
+
+# ============================================================================
 # ENHANCED FINANCIAL DATA EXTRACTION PATTERNS (v3.3.1) - FIXED #2
 # ============================================================================
 
@@ -116,8 +192,8 @@ def _initialize_compiled_patterns():
     """Initialize pre-compiled regex patterns for performance"""
     global COMPILED_FACTSET_PATTERNS
     
-    logger = get_v332_logger()
-    logger.debug("Initializing compiled regex patterns for v3.3.2")
+    logger = get_v333_logger()
+    logger.debug("Initializing compiled regex patterns for v3.3.3")
     
     # EPS patterns for multiple years
     for year in ['2025', '2026', '2027']:
@@ -161,14 +237,14 @@ def _initialize_compiled_patterns():
 # Initialize patterns on module load
 _initialize_compiled_patterns()
 
-# Portfolio Summary columns (v3.3.1)
+# Portfolio Summary columns (v3.3.3 - maintained)
 PORTFOLIO_SUMMARY_COLUMNS = [
     '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
     '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
     '品質評分', '狀態', '更新日期'
 ]
 
-# Detailed Data columns (v3.3.1)
+# Detailed Data columns (v3.3.3 - maintained)
 DETAILED_DATA_COLUMNS = [
     '代號', '名稱', '股票代號', 'MD日期', '分析師數量', '目標價',
     '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
@@ -182,7 +258,7 @@ DETAILED_DATA_COLUMNS = [
 # ============================================================================
 
 class MemoryManager:
-    """Enhanced memory management for v3.3.1 with v3.3.2 logging"""
+    """Enhanced memory management for v3.3.1 with v3.3.3 logging"""
     
     def __init__(self, limit_mb=2048):
         self.limit_mb = limit_mb
@@ -193,7 +269,7 @@ class MemoryManager:
             'batches_completed': 0,
             'memory_cleanups': 0
         }
-        self.logger = get_v332_logger("memory")
+        self.logger = get_v333_logger("memory")
         self.logger.info(f"Memory manager initialized: {limit_mb}MB limit")
     
     def check_memory_usage(self):
@@ -245,7 +321,7 @@ class MemoryManager:
 def load_watchlist_v331(watchlist_path: str = '觀察名單.csv', logger=None) -> Optional[pd.DataFrame]:
     """Load the 觀察名單.csv file with enhanced error handling"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     try:
         if os.path.exists(watchlist_path):
@@ -262,7 +338,7 @@ def load_watchlist_v331(watchlist_path: str = '觀察名單.csv', logger=None) -
 def get_company_mapping_from_watchlist_v331(watchlist_df: Optional[pd.DataFrame], logger=None) -> Dict[str, Dict]:
     """Create comprehensive company mapping from watchlist"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     if watchlist_df is None:
         logger.warning("No watchlist data available for mapping")
@@ -293,7 +369,7 @@ def get_company_mapping_from_watchlist_v331(watchlist_df: Optional[pd.DataFrame]
 def extract_company_code_from_filename(filename: str, logger=None) -> Optional[str]:
     """Extract company code from MD filename with enhanced patterns"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     patterns = [
         r'(\d{4})_',        # 2330_
@@ -318,7 +394,7 @@ def extract_company_code_from_filename(filename: str, logger=None) -> Optional[s
 def extract_date_from_md_file_v331(md_file_path: Path, logger=None) -> Optional[datetime]:
     """FIXED #2: Optimized date extraction with streaming"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     try:
         # Read only first 2KB for date extraction (performance optimization)
@@ -376,12 +452,19 @@ def extract_date_from_md_file_v331(md_file_path: Path, logger=None) -> Optional[
         logger.warning(f"Error extracting date from {md_file_path}: {e}")
         return datetime.now()
 
-def extract_financial_data_from_md_file_v331(md_file_path: Path, 
+def extract_financial_data_from_md_file_v333(md_file_path: Path, 
                                             memory_manager: Optional[MemoryManager] = None,
+                                            quality_scorer=None,
                                             logger=None) -> Dict[str, Any]:
-    """FIXED #2: Optimized financial data extraction with pre-compiled patterns"""
+    """
+    v3.3.3: Enhanced financial data extraction with StandardizedQualityScorer integration
+    FIXED #2: Optimized financial data extraction with pre-compiled patterns
+    """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
+    
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
     
     perf_monitor = get_performance_monitor()
     
@@ -408,7 +491,7 @@ def extract_financial_data_from_md_file_v331(md_file_path: Path,
                 'file_path': str(md_file_path),
                 'file_date': extract_date_from_md_file_v331(md_file_path, logger),
                 'file_size': file_size,
-                'processing_version': '3.3.2',
+                'processing_version': '3.3.3',
                 'extraction_timestamp': datetime.now().isoformat()
             }
             
@@ -466,23 +549,23 @@ def extract_financial_data_from_md_file_v331(md_file_path: Path,
             logger.debug(f"Found {len(analyst_count_values)} analyst count values")
             
             # Calculate final values with enhanced logic
-            extracted_data.update(_calculate_final_values_v331(extracted_data, logger))
+            extracted_data.update(_calculate_final_values_v333(extracted_data, quality_scorer, logger))
             
             # Update memory manager stats
             if memory_manager:
                 memory_manager.processing_stats['files_processed'] += 1
             
-            logger.info(f"Extracted data from {md_file_path.name}: quality score {extracted_data.get('quality_score', 1)}")
+            logger.info(f"Extracted data from {md_file_path.name}: quality score {extracted_data.get('quality_score', 0)}")
             return extracted_data
             
         except Exception as e:
             logger.error(f"Error extracting data from {md_file_path}: {e}")
             return {'file_path': str(md_file_path), 'file_date': datetime.now(), 'error': str(e)}
 
-def _calculate_final_values_v331(data: Dict[str, Any], logger=None) -> Dict[str, Any]:
-    """FIXED #5: Enhanced final value calculation with better validation"""
+def _calculate_final_values_v333(data: Dict[str, Any], quality_scorer, logger=None) -> Dict[str, Any]:
+    """v3.3.3: Enhanced final value calculation with StandardizedQualityScorer integration"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     final_values = {}
     
@@ -537,15 +620,54 @@ def _calculate_final_values_v331(data: Dict[str, Any], logger=None) -> Dict[str,
         final_values['analyst_count'] = None
         final_values['analyst_count_sources'] = 0
     
-    # Calculate quality score
-    final_values['quality_score'] = calculate_quality_score_v331(final_values, logger=logger)
+    # v3.3.3: Calculate quality score using StandardizedQualityScorer
+    quality_metrics = _build_quality_metrics_v333(final_values, data, logger)
+    quality_score = quality_scorer.calculate_score(quality_metrics)
+    quality_status = quality_scorer.get_quality_indicator(quality_score)
+    
+    final_values['quality_score'] = quality_score
+    final_values['quality_status'] = quality_status
+    final_values['quality_metrics'] = quality_metrics
+    final_values['scoring_version'] = '3.3.3'
     
     return final_values
+
+def _build_quality_metrics_v333(final_values: Dict[str, Any], raw_data: Dict[str, Any], logger=None) -> Dict[str, Any]:
+    """v3.3.3: Build quality metrics for StandardizedQualityScorer"""
+    if logger is None:
+        logger = get_v333_logger()
+    
+    # Calculate EPS data completeness
+    eps_years = ['2025', '2026', '2027']
+    eps_with_data = sum(1 for year in eps_years if final_values.get(f'eps_{year}_avg') is not None)
+    eps_data_completeness = eps_with_data / len(eps_years)
+    
+    # Calculate data age
+    file_date = raw_data.get('file_date')
+    if file_date:
+        data_age_days = (datetime.now() - file_date).days
+    else:
+        data_age_days = float('inf')
+    
+    # Get analyst count
+    analyst_count = final_values.get('analyst_count', 0) or 0
+    
+    quality_metrics = {
+        'eps_data_completeness': eps_data_completeness,
+        'analyst_count': analyst_count,
+        'data_age_days': data_age_days,
+        'target_price_available': bool(final_values.get('target_price')),
+        'total_data_points': sum(final_values.get(f'eps_{year}_count', 0) for year in eps_years),
+        'file_size': raw_data.get('file_size', 0)
+    }
+    
+    logger.debug(f"Built quality metrics: completeness={eps_data_completeness:.1%}, analysts={analyst_count}, age={data_age_days}d")
+    return quality_metrics
 
 def _remove_outliers(values: List[float], method='iqr', logger=None) -> List[float]:
     """FIXED #5: Remove statistical outliers from financial data"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     if len(values) < 3:
         return values
@@ -575,59 +697,32 @@ def _remove_outliers(values: List[float], method='iqr', logger=None) -> List[flo
         logger.warning(f"Outlier removal error: {e}")
         return values
 
-def calculate_quality_score_v331(data: Dict[str, Any], logger=None) -> int:
-    """Enhanced quality score calculation for v3.3.1"""
+def calculate_quality_score_v333(data: Dict[str, Any], quality_scorer=None, logger=None) -> int:
+    """v3.3.3: Enhanced quality score calculation using StandardizedQualityScorer"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    score = 1  # Base score
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
     
-    # Check EPS data availability (main indicator)
-    eps_years_with_data = 0
-    total_eps_count = 0
+    # Build quality metrics from data
+    quality_metrics = _build_quality_metrics_v333(data, data, logger)
     
-    for year in ['2025', '2026', '2027']:
-        if data.get(f'eps_{year}_avg') is not None:
-            eps_years_with_data += 1
-            total_eps_count += data.get(f'eps_{year}_count', 0)
+    # Calculate standardized score (0-10)
+    score = quality_scorer.calculate_score(quality_metrics)
     
-    # Enhanced scoring based on data availability and quality
-    if eps_years_with_data >= 3 and total_eps_count >= 6:
-        score = 4  # Excellent - all 3 years with multiple data points
-    elif eps_years_with_data >= 2 and total_eps_count >= 4:
-        score = 3  # Good - 2+ years with good coverage
-    elif eps_years_with_data >= 1 and total_eps_count >= 2:
-        score = 2  # Fair - some EPS data
-    
-    # Bonus for additional data types
-    if data.get('target_price') is not None and data.get('target_price_count', 0) >= 2:
-        score = min(4, score + 1)
-    
-    if data.get('analyst_count') is not None and data.get('analyst_count') >= 3:
-        score = min(4, score + 1)
-    
-    # Quality bonus for data consistency
-    if total_eps_count >= 10:  # Rich data source
-        score = min(4, score + 1)
-    
-    final_score = max(1, min(4, score))
-    logger.debug(f"Quality score calculated: {final_score} (EPS years: {eps_years_with_data}, total points: {total_eps_count})")
-    
-    return final_score
+    logger.debug(f"v3.3.3 quality score calculated: {score}/10")
+    return score
 
-def determine_status_emoji_v331(quality_score: int, logger=None) -> str:
-    """Determine status emoji based on enhanced quality score"""
+def determine_status_emoji_v333(quality_score: int, quality_scorer=None, logger=None) -> str:
+    """v3.3.3: Determine status emoji using StandardizedQualityScorer"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    status_map = {
-        4: "🟢 完整",
-        3: "🟡 良好", 
-        2: "🟠 部分",
-        1: "🔴 不足"
-    }
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
     
-    status = status_map.get(quality_score, "🔴 不足")
+    status = quality_scorer.get_quality_indicator(quality_score)
     logger.debug(f"Status determined: {status} (score: {quality_score})")
     return status
 
@@ -635,12 +730,16 @@ def determine_status_emoji_v331(quality_score: int, logger=None) -> str:
 # ENHANCED DATA DEDUPLICATION (v3.3.1) - FIXED #5
 # ============================================================================
 
-def deduplicate_financial_data_v331(data_list: List[Dict[str, Any]], logger=None) -> Dict[str, Any]:
+def deduplicate_financial_data_v333(data_list: List[Dict[str, Any]], quality_scorer=None, logger=None) -> Dict[str, Any]:
     """
+    v3.3.3: Enhanced deduplication logic with quality scoring integration
     FIXED #5: Enhanced deduplication logic that properly handles consensus vs duplicate data
     """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
+    
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
     
     if not data_list:
         logger.warning("No data provided for deduplication")
@@ -756,33 +855,50 @@ def deduplicate_financial_data_v331(data_list: List[Dict[str, Any]], logger=None
         deduplicated['analyst_count_sources'] = len(all_analyst_counts)
         logger.debug(f"Analyst count: {deduplicated['analyst_count']} (from {len(all_analyst_counts)} sources)")
     
-    logger.info(f"Deduplication completed: {len(deduplicated)} fields generated")
+    # v3.3.3: Calculate quality score for deduplicated data
+    quality_metrics = _build_quality_metrics_v333(deduplicated, {'file_date': datetime.now()}, logger)
+    quality_score = quality_scorer.calculate_score(quality_metrics)
+    quality_status = quality_scorer.get_quality_indicator(quality_score)
+    
+    deduplicated['quality_score'] = quality_score
+    deduplicated['quality_status'] = quality_status
+    deduplicated['quality_metrics'] = quality_metrics
+    deduplicated['deduplication_version'] = '3.3.3'
+    
+    logger.info(f"v3.3.3 deduplication completed: {len(deduplicated)} fields, quality {quality_score}/10")
     return deduplicated
 
 # ============================================================================
 # ENHANCED BATCH PROCESSING (v3.3.1) - FIXED #2, #9
 # ============================================================================
 
-def process_md_files_in_batches_v331(md_files: List[Path], 
+def process_md_files_in_batches_v333(md_files: List[Path], 
                                     memory_manager: MemoryManager,
                                     batch_size: int = 50,
                                     max_processing_time_minutes: int = 120,
+                                    quality_scorer=None,
                                     logger=None) -> List[Dict]:
-    """FIXED #2: Process MD files in batches with progress reporting, memory management, and timeout protection"""
+    """
+    v3.3.3: Process MD files in batches with quality scoring integration
+    FIXED #2: Process MD files in batches with progress reporting, memory management, and timeout protection
+    """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
+    
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
     
     total_files = len(md_files)
     all_results = []
     start_time = time.time()
     max_processing_time = max_processing_time_minutes * 60  # Convert to seconds
     
-    logger.info(f"Processing {total_files} MD files in batches of {batch_size} (v3.3.2)")
+    logger.info(f"Processing {total_files} MD files in batches of {batch_size} (v3.3.3)")
     logger.info(f"Timeout protection: {max_processing_time_minutes} minutes")
     
     perf_monitor = get_performance_monitor()
     
-    with perf_monitor.time_operation("batch_processing"):
+    with perf_monitor.time_operation("batch_processing_v333"):
         for batch_num in range(0, total_files, batch_size):
             # Check timeout before each batch
             elapsed_time = time.time() - start_time
@@ -808,8 +924,8 @@ def process_md_files_in_batches_v331(md_files: List[Path],
                 if i % 10 == 0:
                     logger.debug(f"File {batch_num+i+1}/{total_files}: {md_file.name}")
                 
-                # FIXED #2: Optimized extraction with memory management
-                result = extract_financial_data_from_md_file_v331(md_file, memory_manager, logger)
+                # v3.3.3: Extract with quality scoring
+                result = extract_financial_data_from_md_file_v333(md_file, memory_manager, quality_scorer, logger)
                 if result:
                     batch_results.append(result)
             
@@ -821,7 +937,12 @@ def process_md_files_in_batches_v331(md_files: List[Path],
             
             memory_stats = memory_manager.get_stats()
             elapsed_minutes = elapsed_time / 60
-            logger.info(f"Batch {batch_num//batch_size + 1} completed: {len(batch_results)} files processed ({elapsed_minutes:.1f}min elapsed)")
+            
+            # v3.3.3: Calculate batch quality metrics
+            batch_quality_scores = [r.get('quality_score', 0) for r in batch_results if 'quality_score' in r]
+            avg_batch_quality = sum(batch_quality_scores) / len(batch_quality_scores) if batch_quality_scores else 0
+            
+            logger.info(f"Batch {batch_num//batch_size + 1} completed: {len(batch_results)} files, avg quality {avg_batch_quality:.1f}/10 ({elapsed_minutes:.1f}min elapsed)")
             logger.debug(f"Memory: {memory_stats['current_mb']:.1f}MB (Peak: {memory_stats['peak_mb']:.1f}MB)")
             
             # Early termination if timeout is approaching
@@ -830,26 +951,40 @@ def process_md_files_in_batches_v331(md_files: List[Path],
                 break
     
     total_time = time.time() - start_time
-    logger.info(f"Processing completed: {len(all_results)}/{total_files} files in {total_time/60:.1f} minutes")
+    
+    # v3.3.3: Final quality summary
+    final_quality_scores = [r.get('quality_score', 0) for r in all_results if 'quality_score' in r]
+    avg_quality = sum(final_quality_scores) / len(final_quality_scores) if final_quality_scores else 0
+    
+    logger.info(f"v3.3.3 processing completed: {len(all_results)}/{total_files} files in {total_time/60:.1f} minutes")
+    logger.info(f"Average quality score: {avg_quality:.1f}/10")
+    
     return all_results
 
 # ============================================================================
 # PORTFOLIO SUMMARY GENERATION (v3.3.1) - FIXED #2, #5
 # ============================================================================
 
-def generate_portfolio_summary_v331(config: Dict, 
+def generate_portfolio_summary_v333(config: Dict, 
                                    watchlist_df: Optional[pd.DataFrame] = None,
                                    memory_manager: Optional[MemoryManager] = None,
+                                   quality_scorer=None,
                                    logger=None) -> pd.DataFrame:
-    """FIXED #2 & #5: Generate Portfolio Summary with optimized processing and enhanced aggregation"""
+    """
+    v3.3.3: Generate Portfolio Summary with quality scoring integration
+    FIXED #2 & #5: Generate Portfolio Summary with optimized processing and enhanced aggregation
+    """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    logger.info("Generating Portfolio Summary (v3.3.2 with performance & aggregation fixes)...")
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
+    
+    logger.info("Generating Portfolio Summary (v3.3.3 with quality scoring)...")
     
     perf_monitor = get_performance_monitor()
     
-    with perf_monitor.time_operation("generate_portfolio_summary"):
+    with perf_monitor.time_operation("generate_portfolio_summary_v333"):
         md_dir = Path(config['output']['md_dir'])
         if not md_dir.exists():
             logger.error(f"MD directory not found: {md_dir}")
@@ -894,7 +1029,7 @@ def generate_portfolio_summary_v331(config: Dict,
             
             if not md_files:
                 # Company with no data
-                summary_row = _create_empty_summary_row_v331(company_code, company_info, logger)
+                summary_row = _create_empty_summary_row_v333(company_code, company_info, quality_scorer, logger)
                 summary_data.append(summary_row)
                 continue
             
@@ -905,12 +1040,12 @@ def generate_portfolio_summary_v331(config: Dict,
                 
                 # Process files in smaller batches if many files per company
                 if len(md_files) > 20:
-                    batch_results = process_md_files_in_batches_v331(md_files, memory_manager, batch_size=10, logger=logger)
+                    batch_results = process_md_files_in_batches_v333(md_files, memory_manager, batch_size=10, quality_scorer=quality_scorer, logger=logger)
                     file_data_list = batch_results
                 else:
                     # Process normally for smaller file counts
                     for md_file in md_files:
-                        file_data = extract_financial_data_from_md_file_v331(md_file, memory_manager, logger)
+                        file_data = extract_financial_data_from_md_file_v333(md_file, memory_manager, quality_scorer, logger)
                         if file_data:
                             file_data_list.append(file_data)
                 
@@ -919,17 +1054,17 @@ def generate_portfolio_summary_v331(config: Dict,
                     if data.get('file_date'):
                         file_dates.append(data['file_date'])
                 
-                # FIXED #5: Enhanced deduplication and aggregation
+                # v3.3.3: Enhanced deduplication with quality scoring
                 if file_data_list:
-                    aggregated_data = deduplicate_financial_data_v331(file_data_list, logger)
+                    aggregated_data = deduplicate_financial_data_v333(file_data_list, quality_scorer, logger)
                     
                     # Calculate date range
                     oldest_date = min(file_dates).strftime('%Y/%m/%d') if file_dates else ''
                     newest_date = max(file_dates).strftime('%Y/%m/%d') if file_dates else ''
                     
-                    # Calculate overall quality score
-                    file_scores = [calculate_quality_score_v331(data, logger) for data in file_data_list]
-                    overall_quality = max(file_scores) if file_scores else 1
+                    # v3.3.3: Get quality score from aggregated data
+                    overall_quality = aggregated_data.get('quality_score', 0)
+                    quality_status = aggregated_data.get('quality_status', '🔴 不足')
                     
                     summary_row = {
                         '代號': company_code,
@@ -944,19 +1079,19 @@ def generate_portfolio_summary_v331(config: Dict,
                         '2026EPS平均值': aggregated_data.get('eps_2026_avg', ''),
                         '2027EPS平均值': aggregated_data.get('eps_2027_avg', ''),
                         '品質評分': overall_quality,
-                        '狀態': determine_status_emoji_v331(overall_quality, logger),
+                        '狀態': quality_status,
                         '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     }
                     summary_data.append(summary_row)
                     
-                    logger.debug(f"Processed {company_info['name']}: {len(md_files)} files, quality {overall_quality}")
+                    logger.debug(f"Processed {company_info['name']}: {len(md_files)} files, quality {overall_quality}/10")
                 else:
-                    summary_row = _create_empty_summary_row_v331(company_code, company_info, logger)
+                    summary_row = _create_empty_summary_row_v333(company_code, company_info, quality_scorer, logger)
                     summary_data.append(summary_row)
                     
             except Exception as e:
                 logger.error(f"Error processing {company_info['name']}: {e}")
-                summary_row = _create_empty_summary_row_v331(company_code, company_info, logger)
+                summary_row = _create_empty_summary_row_v333(company_code, company_info, quality_scorer, logger)
                 summary_data.append(summary_row)
             
             # FIXED #9: Periodic memory check
@@ -982,15 +1117,18 @@ def generate_portfolio_summary_v331(config: Dict,
             summary_df.to_csv(output_file, index=False, encoding='utf-8')
             logger.info(f"Portfolio Summary saved: {output_file}")
             
-            # Enhanced statistics
+            # v3.3.3: Enhanced statistics with quality analysis
             companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
             avg_quality = summary_df[summary_df['品質評分'] > 0]['品質評分'].mean()
             total_files = summary_df['MD資料筆數'].sum()
             
+            # Quality distribution analysis
+            quality_dist = summary_df['品質評分'].value_counts().sort_index()
+            
             logger.info(f"Companies with data: {companies_with_data}/{len(summary_df)}")
             logger.info(f"Total MD files: {int(total_files)}")
-            if avg_quality > 0:
-                logger.info(f"Average quality score: {avg_quality:.1f}/4.0")
+            logger.info(f"Average quality score: {avg_quality:.1f}/10")
+            logger.info(f"Quality distribution: {dict(quality_dist)}")
             
             # Memory usage summary
             memory_stats = memory_manager.get_stats()
@@ -1003,10 +1141,10 @@ def generate_portfolio_summary_v331(config: Dict,
     
     return summary_df
 
-def _create_empty_summary_row_v331(company_code: str, company_info: Dict, logger=None) -> Dict:
-    """Create empty summary row for companies with no data"""
+def _create_empty_summary_row_v333(company_code: str, company_info: Dict, quality_scorer, logger=None) -> Dict:
+    """v3.3.3: Create empty summary row with quality scoring"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
     logger.debug(f"Creating empty row for {company_info['name']}")
     
@@ -1023,7 +1161,7 @@ def _create_empty_summary_row_v331(company_code: str, company_info: Dict, logger
         '2026EPS平均值': '',
         '2027EPS平均值': '',
         '品質評分': 0,
-        '狀態': "🔴 無資料",
+        '狀態': quality_scorer.get_quality_indicator(0),
         '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
@@ -1031,19 +1169,23 @@ def _create_empty_summary_row_v331(company_code: str, company_info: Dict, logger
 # DETAILED DATA GENERATION (v3.3.1)
 # ============================================================================
 
-def generate_detailed_data_v331(config: Dict, 
+def generate_detailed_data_v333(config: Dict, 
                                watchlist_df: Optional[pd.DataFrame] = None,
                                memory_manager: Optional[MemoryManager] = None,
+                               quality_scorer=None,
                                logger=None) -> pd.DataFrame:
-    """Generate Detailed Data with enhanced processing for v3.3.1"""
+    """v3.3.3: Generate Detailed Data with quality scoring integration"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    logger.info("Generating Detailed Data (v3.3.2 one row per MD file)...")
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
+    
+    logger.info("Generating Detailed Data (v3.3.3 one row per MD file with quality scoring)...")
     
     perf_monitor = get_performance_monitor()
     
-    with perf_monitor.time_operation("generate_detailed_data"):
+    with perf_monitor.time_operation("generate_detailed_data_v333"):
         md_dir = Path(config['output']['md_dir'])
         if not md_dir.exists():
             return pd.DataFrame(columns=DETAILED_DATA_COLUMNS)
@@ -1072,11 +1214,12 @@ def generate_detailed_data_v331(config: Dict,
             
             company_info = company_mapping[company_code]
             
-            # Extract data from this specific file
-            file_data = extract_financial_data_from_md_file_v331(md_file, memory_manager, logger)
+            # v3.3.3: Extract data with quality scoring
+            file_data = extract_financial_data_from_md_file_v333(md_file, memory_manager, quality_scorer, logger)
             
             if file_data and 'error' not in file_data:
-                quality_score = calculate_quality_score_v331(file_data, logger)
+                quality_score = file_data.get('quality_score', 0)
+                quality_status = file_data.get('quality_status', quality_scorer.get_quality_indicator(quality_score))
                 file_date = file_data.get('file_date')
                 
                 detailed_row = {
@@ -1096,7 +1239,7 @@ def generate_detailed_data_v331(config: Dict,
                     '2027EPS最低值': file_data.get('eps_2027_low', ''),
                     '2027EPS平均值': file_data.get('eps_2027_avg', ''),
                     '品質評分': quality_score,
-                    '狀態': determine_status_emoji_v331(quality_score, logger),
+                    '狀態': quality_status,
                     'MD File': f"data/md/{md_file.name}",
                     '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
@@ -1134,9 +1277,13 @@ def generate_detailed_data_v331(config: Dict,
                 companies_represented = detailed_df['代號'].nunique()
                 avg_quality = detailed_df['品質評分'].mean()
                 
+                # v3.3.3: Quality distribution analysis
+                quality_dist = detailed_df['品質評分'].value_counts().sort_index()
+                
                 logger.info(f"MD files processed: {len(detailed_df)}")
                 logger.info(f"Companies represented: {companies_represented}")
-                logger.info(f"Average file quality: {avg_quality:.1f}/4.0")
+                logger.info(f"Average file quality: {avg_quality:.1f}/10")
+                logger.info(f"Quality distribution: {dict(quality_dist)}")
             
         except Exception as e:
             logger.error(f"Error saving detailed data: {e}")
@@ -1147,21 +1294,28 @@ def generate_detailed_data_v331(config: Dict,
 # MAIN PROCESSING PIPELINE (v3.3.1) - FIXED #2, #5, #9
 # ============================================================================
 
-def process_all_data_v331(config_file: Optional[str] = None, 
+def process_all_data_v333(config_file: Optional[str] = None, 
                          force: bool = False, 
                          parse_md: bool = True,
                          memory_manager: Optional[MemoryManager] = None,
+                         quality_scorer=None,
                          logger=None) -> bool:
-    """FIXED #2, #5, #9: Process all data through the enhanced v3.3.1 pipeline"""
+    """
+    v3.3.3: Process all data through the enhanced pipeline with quality scoring
+    FIXED #2, #5, #9: Process all data through the enhanced v3.3.1 pipeline
+    """
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    logger.info(f"Starting v3.3.2 data processing pipeline...")
-    logger.info("FIXES: #2 Performance, #5 Aggregation, #9 Memory management")
+    if quality_scorer is None:
+        quality_scorer = get_quality_scorer()
+    
+    logger.info(f"Starting v3.3.3 data processing pipeline with standardized quality scoring...")
+    logger.info("FEATURES: Quality scoring 0-10, Quality indicators (🟢🟡🟠🔴), All v3.3.1 fixes maintained")
     
     perf_monitor = get_performance_monitor()
     
-    with perf_monitor.time_operation("complete_data_processing"):
+    with perf_monitor.time_operation("complete_data_processing_v333"):
         # FIXED #4: Lazy load configuration
         config_module = get_config_module()
         if config_module and hasattr(config_module, 'load_config_v331'):
@@ -1198,51 +1352,64 @@ def process_all_data_v331(config_file: Optional[str] = None,
         total_steps = 3
         
         try:
-            # Step 1: Generate Portfolio Summary (v3.3.1 with performance fixes)
-            logger.info("Generating Portfolio Summary (v3.3.2 with performance & aggregation fixes)...")
+            # Step 1: v3.3.3 Portfolio Summary with quality scoring
+            logger.info("Generating Portfolio Summary (v3.3.3 with quality scoring)...")
             start_time = time.time()
             
-            summary_df = generate_portfolio_summary_v331(config, watchlist_df, memory_manager, logger)
+            summary_df = generate_portfolio_summary_v333(config, watchlist_df, memory_manager, quality_scorer, logger)
             
             if summary_df.empty:
                 logger.error("Failed to generate portfolio summary")
                 return False
             
             processing_time = time.time() - start_time
-            logger.info(f"Portfolio Summary completed in {processing_time:.1f} seconds (v3.3.2)")
+            logger.info(f"Portfolio Summary completed in {processing_time:.1f} seconds (v3.3.3)")
             success_count += 1
             
-            # Step 2: Generate Detailed Data (v3.3.1)
-            logger.info("Generating Detailed Data (v3.3.2)...")
+            # Step 2: v3.3.3 Detailed Data with quality scoring
+            logger.info("Generating Detailed Data (v3.3.3 with quality scoring)...")
             start_time = time.time()
             
-            detailed_df = generate_detailed_data_v331(config, watchlist_df, memory_manager, logger)
+            detailed_df = generate_detailed_data_v333(config, watchlist_df, memory_manager, quality_scorer, logger)
             
             if detailed_df.empty:
                 logger.warning("No detailed data generated")
             else:
                 processing_time = time.time() - start_time
-                logger.info(f"Detailed Data completed in {processing_time:.1f} seconds (v3.3.2)")
+                logger.info(f"Detailed Data completed in {processing_time:.1f} seconds (v3.3.3)")
                 success_count += 1
             
-            # Step 3: Generate Enhanced Statistics
-            logger.info("Generating Enhanced Statistics...")
-            stats = generate_statistics_v331(summary_df, detailed_df, config, memory_manager, logger)
+            # Step 3: v3.3.3 Enhanced Statistics with quality analysis
+            logger.info("Generating Enhanced Statistics (v3.3.3)...")
+            stats = generate_statistics_v333(summary_df, detailed_df, config, memory_manager, quality_scorer, logger)
             
             success_count += 1
             logger.info("Statistics generation completed")
             
-            # Final summary with memory stats
+            # Final summary with v3.3.3 quality analysis
             memory_stats = memory_manager.get_stats()
             
             logger.info("="*80)
-            logger.info("V3.3.2 DATA PROCESSING SUMMARY")
+            logger.info("V3.3.3 DATA PROCESSING SUMMARY")
             logger.info("="*80)
             logger.info(f"Processing complete: {success_count}/{total_steps} steps successful")
             logger.info(f"Companies in portfolio: {len(summary_df)}")
             logger.info(f"Individual MD files: {len(detailed_df)}")
             logger.info(f"Memory usage: Peak {memory_stats['peak_mb']:.1f}MB, {memory_stats['cleanup_count']} cleanups")
             logger.info(f"Performance: {memory_stats['processing_stats']['files_processed']} files processed")
+            
+            # v3.3.3: Quality analysis summary
+            if not summary_df.empty:
+                avg_quality = summary_df[summary_df['品質評分'] > 0]['品質評分'].mean()
+                quality_dist = summary_df['品質評分'].value_counts().sort_index()
+                logger.info(f"Average quality score: {avg_quality:.1f}/10")
+                logger.info(f"Quality distribution: {dict(quality_dist)}")
+                
+                # Quality indicators summary
+                status_dist = summary_df['狀態'].value_counts()
+                logger.info("Quality indicators:")
+                for status, count in status_dist.items():
+                    logger.info(f"   {status}: {count} companies")
             
             # Enhanced statistics
             companies_with_data = len(summary_df[summary_df['MD資料筆數'] > 0])
@@ -1254,31 +1421,45 @@ def process_all_data_v331(config_file: Optional[str] = None,
             return True
             
         except Exception as e:
-            logger.error(f"v3.3.2 data processing failed: {e}")
+            logger.error(f"v3.3.3 data processing failed: {e}")
             if memory_manager:
                 logger.debug(f"Memory stats: {memory_manager.get_stats()}")
             return False
 
-def generate_statistics_v331(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, 
-                           config: Dict, memory_manager: MemoryManager, logger=None) -> Dict:
-    """Generate comprehensive statistics for v3.3.1"""
+def generate_statistics_v333(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, 
+                           config: Dict, memory_manager: MemoryManager, 
+                           quality_scorer, logger=None) -> Dict:
+    """v3.3.3: Generate comprehensive statistics with quality analysis"""
     if logger is None:
-        logger = get_v332_logger()
+        logger = get_v333_logger()
     
-    logger.info("Generating v3.3.2 enhanced statistics...")
+    logger.info("Generating v3.3.3 enhanced statistics with quality analysis...")
     
     stats = {
         'generated_at': datetime.now().isoformat(),
-        'guideline_version': '3.3.2',
+        'guideline_version': '3.3.3',
+        'release_type': 'final_integrated',
         'total_companies': len(summary_df),
         'companies_with_data': len(summary_df[summary_df['MD資料筆數'] > 0]),
         'total_md_files': len(detailed_df),
+        'success_rate': 0,
         'performance_stats': {},
         'data_quality': {},
         'file_level_stats': {},
         'company_level_stats': {},
-        'memory_stats': memory_manager.get_stats()
+        'memory_stats': memory_manager.get_stats(),
+        'quality_analysis_v333': {},  # v3.3.3 new section
+        'v333_fixes': {  # v3.3.3 tracking
+            'quality_scoring_standardized': True,
+            'scoring_version': '3.3.3',
+            'quality_indicators_implemented': True,
+            'legacy_score_conversion': True
+        }
     }
+    
+    # Calculate success rate
+    if stats['total_companies'] > 0:
+        stats['success_rate'] = round((stats['companies_with_data'] / stats['total_companies']) * 100, 1)
     
     # Performance statistics
     processing_stats = memory_manager.processing_stats
@@ -1307,6 +1488,9 @@ def generate_statistics_v331(summary_df: pd.DataFrame, detailed_df: pd.DataFrame
             'quality_distribution': detailed_df['品質評分'].value_counts().to_dict()
         }
     
+    # v3.3.3: Enhanced quality analysis
+    stats['quality_analysis_v333'] = _generate_quality_analysis_v333(summary_df, detailed_df, quality_scorer, logger)
+    
     # Save statistics
     output_file = config['output']['stats_json']
     try:
@@ -1320,85 +1504,184 @@ def generate_statistics_v331(summary_df: pd.DataFrame, detailed_df: pd.DataFrame
     
     return stats
 
+def _generate_quality_analysis_v333(summary_df: pd.DataFrame, detailed_df: pd.DataFrame, 
+                                   quality_scorer, logger=None) -> Dict[str, Any]:
+    """v3.3.3: Generate comprehensive quality analysis"""
+    if logger is None:
+        logger = get_v333_logger()
+    
+    quality_analysis = {
+        'scoring_version': '3.3.3',
+        'scale': '0-10',
+        'average_quality_score': 0,
+        'quality_distribution': {},
+        'quality_indicators': {},
+        'data_completeness_avg': 0,
+        'analyst_coverage_avg': 0,
+        'data_freshness_days_avg': 0
+    }
+    
+    if not summary_df.empty:
+        # Average quality score
+        quality_scores = summary_df[summary_df['品質評分'] > 0]['品質評分']
+        if len(quality_scores) > 0:
+            quality_analysis['average_quality_score'] = float(quality_scores.mean())
+        
+        # Quality distribution by score ranges
+        quality_dist = summary_df['品質評分'].value_counts().sort_index()
+        
+        # Group by v3.3.3 quality ranges
+        complete_8_10 = summary_df[(summary_df['品質評分'] >= 8) & (summary_df['品質評分'] <= 10)]
+        good_7 = summary_df[summary_df['品質評分'] == 7]
+        partial_3_6 = summary_df[(summary_df['品質評分'] >= 3) & (summary_df['品質評分'] <= 6)]
+        insufficient_0_2 = summary_df[(summary_df['品質評分'] >= 0) & (summary_df['品質評分'] <= 2)]
+        
+        quality_analysis['quality_distribution'] = {
+            'complete_8_10': len(complete_8_10),
+            'good_7': len(good_7), 
+            'partial_3_6': len(partial_3_6),
+            'insufficient_0_2': len(insufficient_0_2)
+        }
+        
+        # Quality indicators distribution
+        status_dist = summary_df['狀態'].value_counts()
+        quality_analysis['quality_indicators'] = status_dist.to_dict()
+        
+        # Calculate additional metrics
+        companies_with_data = summary_df[summary_df['MD資料筆數'] > 0]
+        if len(companies_with_data) > 0:
+            # Data completeness (companies with EPS data)
+            eps_cols = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值']
+            eps_completeness = []
+            for _, row in companies_with_data.iterrows():
+                non_null_eps = sum(1 for col in eps_cols if pd.notna(row[col]))
+                completeness = non_null_eps / len(eps_cols)
+                eps_completeness.append(completeness)
+            
+            if eps_completeness:
+                quality_analysis['data_completeness_avg'] = sum(eps_completeness) / len(eps_completeness)
+            
+            # Analyst coverage
+            analyst_data = companies_with_data[companies_with_data['分析師數量'] > 0]['分析師數量']
+            if len(analyst_data) > 0:
+                quality_analysis['analyst_coverage_avg'] = float(analyst_data.mean())
+    
+    logger.info(f"Quality analysis generated: avg score {quality_analysis['average_quality_score']:.1f}/10")
+    return quality_analysis
+
 # ============================================================================
-# v3.3.2 CLI INTEGRATION FUNCTIONS
+# v3.3.3 CLI INTEGRATION FUNCTIONS
 # ============================================================================
 
-def process_data_v332(config: Dict, **kwargs) -> bool:
-    """v3.3.2 CLI integration function for data processing"""
-    logger = get_v332_logger()
+def process_data_v333(config: Dict, **kwargs) -> bool:
+    """v3.3.3 CLI integration function for data processing with quality scoring"""
+    logger = get_v333_logger()
     
     # Extract CLI parameters
-    mode = kwargs.get('mode', 'v332')
+    mode = kwargs.get('mode', 'v333')
     memory_limit = kwargs.get('memory_limit', 2048)
     batch_size = kwargs.get('batch_size', 50)
     force = kwargs.get('force', False)
+    quality_scoring = kwargs.get('quality_scoring', True)
+    standardize_quality = kwargs.get('standardize_quality', True)
     
-    logger.info(f"Starting v3.3.2 data processing - mode: {mode}, memory: {memory_limit}MB")
+    logger.info(f"Starting v3.3.3 data processing - mode: {mode}, memory: {memory_limit}MB, quality scoring: {quality_scoring}")
     
     # Create memory manager with CLI parameters
     memory_manager = MemoryManager(limit_mb=memory_limit)
+    
+    # v3.3.3: Create quality scorer
+    quality_scorer = get_quality_scorer() if quality_scoring else None
     
     # Update config with CLI parameters
     processing_config = config.copy()
     processing_config.setdefault('processing', {})
     processing_config['processing']['memory_limit_mb'] = memory_limit
     processing_config['processing']['max_files_per_batch'] = batch_size
+    processing_config['processing']['quality_scoring'] = quality_scoring
+    processing_config['processing']['standardize_quality'] = standardize_quality
     
     # Run processing
     try:
-        result = process_all_data_v331(
+        result = process_all_data_v333(
             force=force,
             memory_manager=memory_manager,
+            quality_scorer=quality_scorer,
             logger=logger
         )
         
         if result:
-            logger.info("v3.3.2 data processing completed successfully")
+            logger.info("v3.3.3 data processing completed successfully")
             return True
         else:
-            logger.error("v3.3.2 data processing failed")
+            logger.error("v3.3.3 data processing failed")
             return False
             
     except Exception as e:
-        logger.error(f"v3.3.2 data processing error: {e}")
+        logger.error(f"v3.3.3 data processing error: {e}")
         return False
+
+# ============================================================================
+# LEGACY COMPATIBILITY FUNCTIONS
+# ============================================================================
+
+# Maintain backward compatibility with v3.3.2
+def process_data_v332(config: Dict, **kwargs) -> bool:
+    """Legacy v3.3.2 compatibility wrapper"""
+    return process_data_v333(config, **kwargs)
+
+def process_all_data_v331(config_file: Optional[str] = None, 
+                         force: bool = False, 
+                         parse_md: bool = True,
+                         memory_manager: Optional[MemoryManager] = None,
+                         logger=None) -> bool:
+    """Legacy v3.3.1 compatibility wrapper"""
+    return process_all_data_v333(config_file, force, parse_md, memory_manager, None, logger)
 
 # ============================================================================
 # MAIN ENTRY POINT
 # ============================================================================
 
 def main():
-    """Main entry point for v3.3.2 processing with comprehensive fixes"""
-    logger = get_v332_logger()
-    logger.info(f"Data Processor v{__version__} (v3.3.2 Comprehensive Fixes)")
-    logger.info("COMPREHENSIVE FIXES:")
-    logger.info("   ✅ #2 Performance optimization with pre-compiled regex and batching")
-    logger.info("   ✅ #5 Enhanced data aggregation with smart deduplication")
-    logger.info("   ✅ #4 Removed circular dependencies with lazy imports")
-    logger.info("   ✅ #9 Memory management with streaming and resource limits")
-    logger.info("   ✅ v3.3.2 Enhanced logging integration")
+    """Main entry point for v3.3.3 processing with comprehensive fixes and quality scoring"""
+    logger = get_v333_logger()
+    logger.info(f"Enhanced Data Processor v{__version__} (v3.3.3 Final Integrated Edition)")
+    logger.info("v3.3.3 ENHANCEMENTS:")
+    logger.info("   ✅ Standardized Quality Scoring (0-10 scale)")
+    logger.info("   ✅ Quality Indicators (🟢🟡🟠🔴)")
+    logger.info("   ✅ Legacy Score Conversion (1-4 → 0-10)")
+    logger.info("   ✅ All v3.3.2 features maintained")
+    logger.info("   ✅ All v3.3.1 comprehensive fixes maintained")
     
     # Initialize memory manager
     memory_manager = MemoryManager(limit_mb=2048)
     
-    success = process_all_data_v331(force=True, parse_md=True, memory_manager=memory_manager, logger=logger)
+    # Initialize quality scorer
+    quality_scorer = get_quality_scorer()
+    
+    success = process_all_data_v333(force=True, parse_md=True, memory_manager=memory_manager, quality_scorer=quality_scorer, logger=logger)
     
     if success:
-        logger.info("v3.3.2 data processing completed successfully!")
+        logger.info("v3.3.3 data processing completed successfully!")
         logger.info("Generated files:")
-        logger.info("   - portfolio_summary.csv (v3.3.2 optimized aggregated format)")
-        logger.info("   - detailed_data.csv (v3.3.2 one-row-per-file format)")
-        logger.info("   - statistics.json (Enhanced v3.3.2 metrics with performance data)")
+        logger.info("   - portfolio_summary.csv (v3.3.3 quality scoring integrated)")
+        logger.info("   - detailed_data.csv (v3.3.3 one-row-per-file with quality)")
+        logger.info("   - statistics.json (v3.3.3 enhanced with quality analysis)")
     else:
-        logger.error("v3.3.2 data processing failed")
+        logger.error("v3.3.3 data processing failed")
     
-    # Show final memory stats
+    # Show final memory and quality stats
     memory_stats = memory_manager.get_stats()
     logger.info("Final Memory Stats:")
     logger.info(f"   Peak usage: {memory_stats['peak_mb']:.1f}MB")
     logger.info(f"   Cleanups performed: {memory_stats['cleanup_count']}")
     logger.info(f"   Files processed: {memory_stats['processing_stats']['files_processed']}")
+    
+    logger.info("v3.3.3 Quality Scoring Features:")
+    logger.info("   - 0-10 standardized scale")
+    logger.info("   - Quality indicators (🟢🟡🟠🔴)")
+    logger.info("   - Legacy score conversion")
+    logger.info("   - Comprehensive quality analysis")
     
     return success
 
