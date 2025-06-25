@@ -1,0 +1,25 @@
+2025-06-25 14:38:59.671 [    INFO] factset_v332.pipeline - _create_stage_logger:286 - v3.3.2 stage logger initialized: pipeline
+2025-06-25 14:38:59.671 [   DEBUG] factset_v332.pipeline - _create_stage_logger:287 - Log file: logs/20250625/pipeline_143859.log
+2025-06-25 14:38:59.671 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:401 - Starting stage: pipeline
+2025-06-25 14:38:59.671 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:402 - Description: Complete pipeline execution
+2025-06-25 14:38:59.671 [   DEBUG] factset_v332.pipeline - _execute_stage_with_monitoring:403 - Parameters: {'mode': 'intelligent', 'memory_limit': 2048, 'batch_size': 50, 'log_level': 'info', 'github_actions': True, 'skip_phases': None, 'v333': True, 'quality_scoring': True}
+2025-06-25 14:38:59.671 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:407 - Quality scoring enabled for pipeline
+2025-06-25 14:38:59.671 [   DEBUG] factset_v332.pipeline - time_operation:424 - Starting operation: stage_pipeline
+2025-06-25 14:38:59.671 [    INFO] factset_v332.pipeline - _run_pipeline_stage:945 - Starting complete pipeline execution...
+2025-06-25 14:38:59.695 [    INFO] factset_v332.pipeline - setup_logging_v333:265 - v3.3.3 enhanced logging system initialized
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - __init__:945 - Memory manager initialized
+2025-06-25 14:39:00.053 [   DEBUG] factset_v332.pipeline - _setup_directories_v333:1107 - Setting up directories...
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - _setup_directories_v333:1128 - Setup complete: 7 directories
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - __init__:957 - Enhanced FactSet Pipeline v3.3.3 initialized
+2025-06-25 14:39:00.053 [   ERROR] factset_v332.pipeline - _run_pipeline_stage:980 - Pipeline stage error: 'EnhancedFactSetPipeline' object has no attribute 'run_complete_pipeline_v332'
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - time_operation:437 - Completed stage_pipeline in 0.38s
+2025-06-25 14:39:00.053 [   ERROR] factset_v332.pipeline - _execute_stage_with_monitoring:467 - Stage pipeline failed: Stage handler returned False
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - _attempt_stage_recovery:670 - Attempting recovery for pipeline (attempt 1)
+2025-06-25 14:39:00.053 [    INFO] factset_v332.pipeline - _attempt_stage_recovery:688 - Waiting 30 seconds before retry...
+2025-06-25 14:39:30.054 [    INFO] factset_v332.pipeline - _run_pipeline_stage:945 - Starting complete pipeline execution...
+2025-06-25 14:39:30.054 [    INFO] factset_v332.pipeline - setup_logging_v333:265 - v3.3.3 enhanced logging system initialized
+2025-06-25 14:39:30.055 [    INFO] factset_v332.pipeline - __init__:945 - Memory manager initialized
+2025-06-25 14:39:30.055 [   DEBUG] factset_v332.pipeline - _setup_directories_v333:1107 - Setting up directories...
+2025-06-25 14:39:30.055 [    INFO] factset_v332.pipeline - _setup_directories_v333:1128 - Setup complete: 7 directories
+2025-06-25 14:39:30.055 [    INFO] factset_v332.pipeline - __init__:957 - Enhanced FactSet Pipeline v3.3.3 initialized
+2025-06-25 14:39:30.055 [   ERROR] factset_v332.pipeline - _run_pipeline_stage:980 - Pipeline stage error: 'EnhancedFactSetPipeline' object has no attribute 'run_complete_pipeline_v332'

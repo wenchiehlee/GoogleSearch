@@ -1,0 +1,6 @@
+2025-06-25 14:38:59.664 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
+2025-06-25 14:38:59.664 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_143859.log
+2025-06-25 14:38:59.670 [    INFO] factset_v332.cli - execute_command:282 - Executing command: pipeline
+2025-06-25 14:38:59.670 [   DEBUG] factset_v332.cli - execute_command:283 - Arguments: {'debug': False, 'command': 'pipeline', 'mode': 'intelligent', 'memory_limit': 2048, 'quality_scoring': True, 'v333': True, 'github_actions': True, 'skip_phases': None}
+2025-06-25 14:39:30.055 [   DEBUG] factset_v332.cli - _handle_github_output:1688 - GitHub output set: pipeline=failed
+2025-06-25 14:39:30.055 [    INFO] factset_v332.cli - execute_command:315 - Command completed in 30.41s: failed
