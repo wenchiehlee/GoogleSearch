@@ -1,0 +1,986 @@
+---
+url: https://www.cmoney.tw/forum/stock/6902
+title: https://www.cmoney.tw/forum/stock/6902
+quality_score: 5
+company: GOGOLOOK
+stock_code: 6902
+extracted_date: 2025-06-25T07:57:07.974270
+search_query: GOGOLOOK 目標價 投資建議
+version: v3.3.2
+---
+
+GOGOLOOK(6902)-今日即時股價與歷史行情走勢
+
+
+
+6902
+ 
+GOGOLOOK
+
+82.9
+
+![]()
+
+-1.2
+
+(-1.43%)
+
+![]()
+
+加入自選
+
+* [首頁](/forum/)
+* ![]()
+* [台股大盤](/forum/stock)
+* ![]()
+* [軟體-系統整合](/forum/category/C23430)
+* ![]()
+* GOGOLOOK
+
+# GOGOLOOK 6902
+
+![]()
+
+加入自選
+
+82.9
+
+![]()
+
+-1.2
+
+(-1.43%)
+
+[軟體-系統整合](/forum/category/C23430)
+
+成交張數
+
+56
+
+本益比
+
+-
+
+實收資本額
+
+3.5億
+
+報價時間 | - ![]()
+更新
+
+走勢圖
+報價
+
+股價
+
+undefined(undefined%)
+
+交易量(張)
+0
+
+開盤 83.2
+
+昨收 84.1
+
+最高
+
+最低
+
+成交 82.9
+
+開盤 83.2
+
+最高 83.3
+
+最低 82.7
+
+均價 82.96
+
+昨收 84.1
+
+昨量(張) 100
+
+內盤(張) 38
+
+漲跌幅 -1.43%
+
+漲跌 -1.2
+
+買價 82.7
+
+賣價 82.9
+
+金額(億) 0.05
+
+單量 7
+
+總量 56
+
+外盤(張) 11
+
+內盤 
+77.55%
+
+22.45%
+ 外盤
+
+委買量
+
+11
+
+買價
+
+賣價
+
+9
+
+委賣量
+
+* 1
+
+  82.7
+* 3
+
+  82.6
+* 5
+
+  82.5
+* 1
+
+  82.4
+* 1
+
+  82.3
+
+* 82.9
+
+  1
+* 83.0
+
+  4
+* 83.1
+
+  1
+* 83.3
+
+  1
+* 83.4
+
+  2
+
+即時走勢 定義
+
+今日即時股價與歷史行情走勢是投資人關注的重要指標，可用於評估公司營運績效及產業趨勢。
+  
+  
+股價即時走勢 (Real-time Trend) 指的是特定時間內某一金融商品的價格變動情況，常用於分析金融市場的波動，為投資決策提供重要參考，是一項關鍵的金融資訊，可協助投資者掌握市場情緒、評估短期趨勢，進而做出更明智的投資選擇，在投資過程中，投資者應密切關注即時走勢，根據市場的變化及時調整策略，以提升投資的成功機率。
+
+![]()
+
+想和大家分享什麼呢？
+
+[![發文者頭像]()](/forum/user/19865211)
+
+[WakuWaku123](/forum/user/19865211)
+
+[2小時前](/forum/article/172082271)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.1
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+1
+
+ 
+
+![]()
+
+0P
+
+ 
+0則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/4916390)
+
+[阿Ray~](/forum/user/4916390)
+
+[3小時前](/forum/article/172080631)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+* [![]()
+
+  台積電](/forum/stock/2330 "2330")
+* [![]()
+
+  聯發科](/forum/stock/2454 "2454")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+10
+
+ 
+
+![]()
+
+0P
+
+ 
+1則留言
+
+![]()
+
+打賞
+
+ 
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+查看 1 則留言...
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/4916390)
+
+[阿Ray~](/forum/user/4916390)
+
+[昨天 16:21](/forum/article/172065804)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+2
+
+ 
+
+![]()
+
+0P
+
+ 
+0則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/19865211)
+
+[WakuWaku123](/forum/user/19865211)
+
+[昨天 12:57](/forum/article/172062099)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.1
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+3
+
+ 
+
+![]()
+
+0P
+
+ 
+2則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+查看 2 則留言...
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/4916390)
+
+[阿Ray~](/forum/user/4916390)
+
+[昨天 09:36](/forum/article/172055086)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+1
+
+ 
+
+![]()
+
+0P
+
+ 
+1則留言
+
+![]()
+
+打賞
+
+ 
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+查看 1 則留言...
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/2567680)
+
+[1edBto76x](/forum/user/2567680)
+
+[星期一 11:34](/forum/article/172039078)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+2
+
+ 
+
+![]()
+
+0P
+
+ 
+2則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+查看 2 則留言...
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/4916390)
+
+[阿Ray~](/forum/user/4916390)
+
+[星期一 09:21](/forum/article/172034748)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+7
+
+ 
+
+![]()
+
+0P
+
+ 
+0則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/18624605)
+
+[hEZQWBOAj2](/forum/user/18624605)
+
+![發文者徽章]()
+
+熱心同學
+
+[星期六 23:04](/forum/article/172024772)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.3
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+4
+
+ 
+
+![]()
+
+0P
+
+ 
+0則留言
+
+![]()
+
+打賞
+
+ 
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+留言...
+
+  
+
+[![發文者頭像]()](/forum/user/4916390)
+
+[阿Ray~](/forum/user/4916390)
+
+[星期六 10:16](/forum/article/172020605)
+
+![已置頂](data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzkzNDVfMTYzMjkzKSI+CjxwYXRoIGQ9Ik0xNS43ODU2IDUuODg3MjZMMTAuMDkyNCAwLjE5NDA4NkM5LjgzMzY2IC0wLjA2NDY5NTIgOS40NDU0OSAtMC4wNjQ2OTUyIDkuMTg2NzEgMC4xOTQwODZMNy4xMTY0NyAyLjI2NDMzQzYuNzkyOTkgMi41ODc4MSA2LjkyMjM4IDIuOTc1OTggNy4xMTY0NyAzLjE3MDA2TDcuNTY5MzMgMy42MjI5M0w1LjYyODQ4IDUuNTYzNzlDNC42NTgwNSA1LjM2OTcgMi4wMDU1NSA0LjkxNjgzIDAuNTgyMjU2IDYuMzQwMTNDMC4zMjM0NzYgNi41OTg5MSAwLjMyMzQ3NiA2Ljk4NzA4IDAuNTgyMjU2IDcuMjQ1ODZMNC4yNjk4OCAxMC45MzM1TDAuMTk0MDg1IDE1LjAwOTNDLTAuMDY0Njk1MiAxNS4yNjgxIC0wLjA2NDY5NTIgMTUuNjU2MiAwLjE5NDA4NSAxNS45MTVDMC40NTI4NjYgMTYuMTczOCAwLjkwNTczMiAxNi4xMDkxIDEuMDk5ODIgMTUuOTE1TDUuMTc1NjEgMTEuODM5Mkw4Ljg2MzI0IDE1LjUyNjhDOS4yNTE0MSAxNS44NTAzIDkuNjM5NTggMTUuNzIwOSA5Ljc2ODk3IDE1LjUyNjhDMTEuMTkyMyAxNC4xMDM2IDEwLjczOTQgMTEuNDUxIDEwLjU0NTMgMTAuNDgwNkwxMi40ODYyIDguNTM5NzdMMTIuOTM5IDguOTkyNjNDMTMuMTk3OCA5LjI1MTQxIDEzLjU4NiA5LjI1MTQxIDEzLjg0NDggOC45OTI2M0wxNS45MTUgNi45MjIzOUMxNi4wNDQ0IDYuNTM0MjIgMTYuMDQ0NCA2LjE0NjA0IDE1Ljc4NTYgNS44ODcyNloiIGZpbGw9IiM4RjhGOEYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF85MzQ1XzE2MzI5MyI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K "置頂文章")
+
+![]()
+
+Lv.22
+
+* [![]()
+
+  GOGOLOOK](/forum/stock/6902 "6902")
+* [![]()
+
+  三商餐飲](/forum/stock/7705 "7705")
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+![]()
+
+6
+
+ 
+
+![]()
+
+0P
+
+ 
+1則留言
+
+![]()
+
+分享
+
+ 
+
+![]()
+
+留言
+
+ 
+
+![]()
+
+讚
+
+![]()
+
+![]()
+
+取消
+
+ 
+
+送出
+
+查看 1 則留言...
+
+留言...
+
+ 
+
+![]()
+
+股市爆料同學會
+
+官方訊息
+
+![]()
+
+下載APP享有即時報價，不用手動刷新！
+
+![]()
+
+使用股市爆料同學會APP｜一起跟百萬網友討論！
+
+立即下載
+
+目前沒有任何文章
+
+已經沒有更多文章了
+
+![]()

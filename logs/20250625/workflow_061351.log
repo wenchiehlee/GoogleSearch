@@ -1,0 +1,5 @@
+2025-06-25 06:13:51.560 [    INFO] factset_v332.workflow - _create_stage_logger:286 - v3.3.2 stage logger initialized: workflow
+2025-06-25 06:13:51.560 [   DEBUG] factset_v332.workflow - _create_stage_logger:287 - Log file: logs/20250625/workflow_061351.log
+2025-06-25 06:13:51.560 [   DEBUG] factset_v332.workflow - _load_state_v332:695 - Loading workflow state...
+2025-06-25 06:13:51.560 [    INFO] factset_v332.workflow - _load_state_v332:738 - Loaded existing workflow state
+2025-06-25 08:13:37.811 [   DEBUG] factset_v332.workflow - save_state:764 - Workflow state saved

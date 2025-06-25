@@ -1,0 +1,4 @@
+2025-06-25 06:13:51.528 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
+2025-06-25 06:13:51.528 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_061351.log
+2025-06-25 06:13:51.535 [    INFO] factset_v332.cli - execute_command:188 - Executing command: pipeline
+2025-06-25 06:13:51.535 [   DEBUG] factset_v332.cli - execute_command:189 - Arguments: {'debug': False, 'command': 'pipeline', 'mode': 'intelligent', 'priority': 'high_only', 'memory_limit': 1024, 'batch_size': 25, 'log_level': 'info', 'github_actions': True, 'skip_phases': None}
