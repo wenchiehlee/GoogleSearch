@@ -46,7 +46,9 @@ on:
 env:
   PYTHONIOENCODING: utf-8
   FACTSET_PIPELINE_VERSION: "3.3.2"
-
+concurrency: 
+  group:  ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
   # v3.3.2 Simplified Validation
   validate:
