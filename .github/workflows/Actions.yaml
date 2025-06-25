@@ -96,6 +96,13 @@ jobs:
           pip install -r requirements.txt
           pip list
       
+      - name: 🔧 Setup Directories
+        run: |
+          mkdir -p data/{csv,md,pdf,processed}
+          mkdir -p logs/{latest,reports,archives}
+          mkdir -p backups temp
+          echo "📁 Directory structure created for validation"
+      
       - name: 🧪 Run v3.3.3 Validation
         id: validate
         run: |
