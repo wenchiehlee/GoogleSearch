@@ -1,0 +1,4 @@
+2025-06-25 14:19:20.659 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
+2025-06-25 14:19:20.659 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_141920.log
+2025-06-25 14:19:20.761 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
+2025-06-25 14:19:20.761 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_141920.log
