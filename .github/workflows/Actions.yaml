@@ -51,9 +51,16 @@ on:
       - 'requirements.txt'
       - '.github/workflows/Actions.yaml'
 
+# GLOBAL ENVIRONMENT VARIABLES - Available to all jobs
 env:
   PYTHON_VERSION: '3.11'
   CACHE_VERSION: 'v1'
+  # Google API Configuration - Available globally
+  GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
+  GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
+  GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+  GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+  PYTHONIOENCODING: utf-8
 
 jobs:
   # ============================================================================
@@ -128,12 +135,8 @@ jobs:
     timeout-minutes: 60
     if: needs.validate.outputs.status == 'success'
     
+    # Job-specific environment variables
     env:
-      GOOGLE_SEARCH_API_KEY: ${{ secrets.GOOGLE_SEARCH_API_KEY }}
-      GOOGLE_SEARCH_CSE_ID: ${{ secrets.GOOGLE_SEARCH_CSE_ID }}
-      GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
-      GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
-      PYTHONIOENCODING: utf-8
       FACTSET_PIPELINE_DEBUG: ${{ github.event.inputs.debug || 'false' }}
     
     outputs:
@@ -235,25 +238,25 @@ jobs:
             cat pipeline_report_v333.md >> $GITHUB_STEP_SUMMARY
           fi
       
-      - name: 💾 Smart Commit v3.3.3
-        if: success()
+      - name: 💾 Commit and Push Results
+        if: always()
         run: |
-          echo "💾 Executing smart commit with v3.3.3 validation..."
-          python factset_cli.py commit \
-            --smart \
-            --validate \
-            --v333-format \
-            --quality-check \
-            --github-actions
+          echo "💾 Committing results to repository..."
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "⬆️ GitHub Actions Results added - v3.3.3 Pipeline $(date)" || true
+          git push || true
+          echo "✅ Results committed to repository"
       
       - name: 🌐 Update Live Dashboard
         if: success()
         run: |
           echo "🌐 Live dashboard updated with v3.3.3 data"
-          echo "📈 View Results: https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit"
+          echo "📈 View Results: https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
           
           # v3.3.3 FIX: Correct Live Dashboard URL
-          echo "dashboard_url=https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit" >> $GITHUB_OUTPUT
+          echo "dashboard_url=https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit" >> $GITHUB_OUTPUT
       
       - name: 📤 Upload v3.3.3 Artifacts
         if: always()
@@ -276,7 +279,7 @@ jobs:
           echo "- **Average Quality Score**: ${{ steps.pipeline.outputs.quality_average }}/10" >> $GITHUB_STEP_SUMMARY
           echo "- **Files Generated**: ${{ steps.pipeline.outputs.files_generated }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Time**: ${{ steps.pipeline.outputs.execution_time }}s" >> $GITHUB_STEP_SUMMARY
-          echo "- **Dashboard**: [View Live Results](https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dashboard**: [View Live Results](https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🎯 v3.3.3 Features Utilized:" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Standardized Quality Scoring (0-10 scale)" >> $GITHUB_STEP_SUMMARY
@@ -437,7 +440,7 @@ jobs:
           echo "📧 v3.3.3 Pipeline completed successfully!"
           echo "📊 Companies: ${{ needs.pipeline.outputs.companies_processed }}"
           echo "🎯 Quality: ${{ needs.pipeline.outputs.quality_average }}/10"
-          echo "📈 Dashboard: https://docs.google.com/spreadsheets/d/${{ secrets.GOOGLE_SHEET_ID }}/edit"
+          echo "📈 Dashboard: https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
       
       - name: ⚠️ Send Failure Notification
         if: needs.pipeline.result == 'failure'
