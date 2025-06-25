@@ -723,7 +723,7 @@ class StageRunner:
     def _run_validation_stage(self, stage_context: StageContext,
                             exec_context: ExecutionContext,
                             stage_logger: Any) -> bool:
-        """Run validation stage (preserved from v3.3.2)"""
+        """Run validation stage (v3.3.3 fixed with proper parameter extraction)"""
         stage_logger.info("Running comprehensive validation...")
         
         try:
@@ -737,15 +737,32 @@ class StageRunner:
             if hasattr(setup_validator, 'EnhancedSetupValidator'):
                 validator = setup_validator.EnhancedSetupValidator()
                 
-                # Run validation with v3.3.2 parameters
+                # FIXED: Properly extract parameters from stage_context
                 validation_mode = stage_context.parameters.get("mode", "comprehensive")
+                test_v333 = stage_context.parameters.get("test_v333", False)
+                test_cli = stage_context.parameters.get("test_cli", False) 
+                quality_scoring = stage_context.parameters.get("quality_scoring", False)
+                fix_issues = stage_context.parameters.get("fix_issues", False)
                 
+                stage_logger.debug(f"Validation parameters: mode={validation_mode}, test_v333={test_v333}, test_cli={test_cli}, quality_scoring={quality_scoring}, fix_issues={fix_issues}")
+                
+                # Run validation with v3.3.3 method name
                 if validation_mode == "quick":
-                    success = validator.run_validation_v332(quick=True)
+                    success = validator.run_validation_v333(quick=True)
                 elif validation_mode == "comprehensive":
-                    success = validator.run_validation_v332(quick=False, fix_issues=True)
+                    success = validator.run_validation_v333(
+                        quick=False, 
+                        fix_issues=fix_issues,
+                        test_v333=test_v333,
+                        test_cli=test_cli,
+                        test_quality=quality_scoring
+                    )
                 else:
-                    success = validator.run_validation_v332()
+                    success = validator.run_validation_v333(
+                        test_v333=test_v333,
+                        test_cli=test_cli,
+                        test_quality=quality_scoring
+                    )
                 
                 if success:
                     stage_logger.info("System validation passed")
@@ -762,6 +779,7 @@ class StageRunner:
                 
         except Exception as e:
             stage_logger.error(f"Validation stage error: {e}")
+            stage_logger.debug(f"Stage context parameters: {stage_context.parameters}")
             return False
     
     def _run_download_watchlist_stage(self, stage_context: StageContext,

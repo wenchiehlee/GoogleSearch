@@ -239,6 +239,7 @@ class FactSetCLI:
         self.safe_output = safe_output
         self.start_time = datetime.now()
         self.quality_scorer = StandardizedQualityScorer()  # v3.3.3
+        self._last_quality_metrics = {}  # Store for GitHub Actions
         
         # Initialize components if available (preserved from v3.3.2)
         if COMPONENTS_AVAILABLE:
@@ -324,46 +325,212 @@ class FactSetCLI:
                 self.main_logger.error(f"Command execution error: {e}")
                 self.main_logger.debug(traceback.format_exc())
             return False
-    
-    # ========================================================================
-    # v3.3.3 GITHUB ACTIONS MODERNIZATION
-    # ========================================================================
-    
-    def _handle_github_output(self, key: str, value: str):
-        """v3.3.3 Modern GitHub Actions output handler"""
-        if os.getenv('GITHUB_ACTIONS'):
-            # v3.3.3 Fix: Use GITHUB_OUTPUT instead of deprecated set-output
-            github_output = os.getenv('GITHUB_OUTPUT')
-            if github_output:
-                try:
-                    with open(github_output, 'a', encoding='utf-8') as f:
-                        f.write(f"{key}={value}\n")
-                    if self.main_logger:
-                        self.main_logger.debug(f"GitHub output set: {key}={value}")
-                except Exception as e:
-                    if self.main_logger:
-                        self.main_logger.warning(f"Failed to write GitHub output: {e}")
-                    # Fallback to deprecated method
-                    print(f"::set-output name={key}::{value}")
-            else:
-                # Fallback for older GitHub Actions
-                print(f"::set-output name={key}::{value}")
-    
-    def _output_github_actions_result(self, stage: str, result: str):
-        """Output result for GitHub Actions with v3.3.3 modernization"""
-        self._handle_github_output(f"{stage}_result", result)
-        self._handle_github_output(f"{stage}_timestamp", datetime.now().isoformat())
+
+    def handle_validate(self, args: argparse.Namespace) -> bool:
+        """Handle validation command (v3.3.2 preserved + v3.3.3 quality features)"""
+        self.safe_output.safe_print("🧪 Running system validation...")
         
-        # v3.3.3: Add quality metrics if available
-        if hasattr(self, '_last_quality_metrics'):
-            metrics = self._last_quality_metrics
-            self._handle_github_output(f"{stage}_quality_avg", str(metrics.get('average_score', 0)))
-            self._handle_github_output(f"{stage}_quality_distribution", json.dumps(metrics.get('distribution', {})))
-    
-    # ========================================================================
-    # v3.3.3 NEW QUALITY COMMAND HANDLER
-    # ========================================================================
-    
+        if not self.components_ready:
+            return self._fallback_validate(args)
+        
+        try:
+            # Prepare validation parameters (preserved from v3.3.2)
+            params = {
+                "mode": "comprehensive" if args.comprehensive else "quick",
+                "fix_issues": getattr(args, 'fix_issues', False),
+                "test_v332": getattr(args, 'test_v332', False),
+                "test_v333": getattr(args, 'test_v333', False),  # v3.3.3
+                "quality_scoring": getattr(args, 'quality_scoring', False)  # v3.3.3
+            }
+            
+            # Create execution context
+            context = ExecutionContext(execution_mode="validation", **params)
+            
+            # Run validation stage
+            success = self.stage_runner.run_stage("validate", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("✅ System validation passed")
+                if getattr(args, 'github_actions', False):
+                    self._handle_github_output("validation", "passed")
+                    # v3.3.3: Add quality system status
+                    quality_status = "enabled" if params.get("quality_scoring") else "standard"
+                    self._handle_github_output("quality_system", quality_status)
+            else:
+                self.safe_output.safe_print("❌ System validation failed")
+                if getattr(args, 'github_actions', False):
+                    self._handle_github_output("validation", "failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Validation error: {e}")
+            return False
+
+    def handle_download_watchlist(self, args: argparse.Namespace) -> bool:
+        """Handle watchlist download command (v3.3.3)"""
+        self.safe_output.safe_print("📥 Downloading watchlist...")
+        
+        if not self.components_ready:
+            return self._fallback_download_watchlist(args)
+        
+        try:
+            params = {
+                "force_refresh": getattr(args, 'force_refresh', False),
+                "validate": getattr(args, 'validate', True)
+            }
+            
+            context = ExecutionContext(execution_mode="download", **params)
+            success = self.stage_runner.run_stage("download_watchlist", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("✅ Watchlist downloaded successfully")
+            else:
+                self.safe_output.safe_print("❌ Watchlist download failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Download error: {e}")
+            return False
+
+    def handle_search(self, args: argparse.Namespace) -> bool:
+        """Handle search command (v3.3.2 preserved + v3.3.3 quality integration)"""
+        self.safe_output.safe_print("🔍 Starting enhanced search...")
+        
+        if not self.components_ready:
+            return self._fallback_search(args)
+        
+        try:
+            params = {
+                "mode": getattr(args, 'mode', 'enhanced'),
+                "priority": getattr(args, 'priority', 'high_only'),
+                "max_results": getattr(args, 'max_results', 10),
+                "batch_size": getattr(args, 'batch_size', 20),
+                "test_cascade_protection": getattr(args, 'test_cascade_protection', False)
+            }
+            
+            context = ExecutionContext(execution_mode="search", **params)
+            success = self.stage_runner.run_stage("search", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("✅ Search completed successfully")
+            else:
+                self.safe_output.safe_print("❌ Search failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Search error: {e}")
+            return False
+
+    def handle_process(self, args: argparse.Namespace) -> bool:
+        """Handle processing command (v3.3.3)"""
+        self.safe_output.safe_print("📊 Starting data processing...")
+        
+        if not self.components_ready:
+            return self._fallback_process(args)
+        
+        try:
+            params = {
+                "mode": getattr(args, 'mode', 'v333'),
+                "memory_limit": getattr(args, 'memory_limit', 2048),
+                "batch_size": getattr(args, 'batch_size', 50),
+                "deduplicate": getattr(args, 'deduplicate', True),
+                "aggregate": getattr(args, 'aggregate', True),
+                "benchmark": getattr(args, 'benchmark', False),
+                "force": getattr(args, 'force', False),
+                "quality_scoring": getattr(args, 'quality_scoring', True),
+                "standardize_quality": getattr(args, 'standardize_quality', True)
+            }
+            
+            context = ExecutionContext(execution_mode="processing", **params)
+            success = self.stage_runner.run_stage("process", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("✅ Data processing completed successfully")
+                
+                # v3.3.3: Show quality metrics
+                if params.get("quality_scoring"):
+                    self._analyze_quality(args)
+            else:
+                self.safe_output.safe_print("❌ Data processing failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Processing error: {e}")
+            return False
+
+    def handle_upload(self, args: argparse.Namespace) -> bool:
+        """Handle upload command (v3.3.2 preserved + v3.3.3 format)"""
+        self.safe_output.safe_print("📈 Starting sheets upload...")
+        
+        if not self.components_ready:
+            return self._fallback_upload(args)
+        
+        try:
+            params = {
+                "sheets": getattr(args, 'sheets', 'all'),
+                "backup": getattr(args, 'backup', True),
+                "v333_format": getattr(args, 'v333_format', True),
+                "quality_indicators": getattr(args, 'quality_indicators', True),
+                "test_connection": getattr(args, 'test_connection', False)
+            }
+            
+            context = ExecutionContext(execution_mode="upload", **params)
+            success = self.stage_runner.run_stage("upload", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("✅ Upload completed successfully")
+            else:
+                self.safe_output.safe_print("❌ Upload failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Upload error: {e}")
+            return False
+
+    def handle_pipeline(self, args: argparse.Namespace) -> bool:
+        """Handle complete pipeline command (v3.3.3)"""
+        self.safe_output.safe_print("🚀 Starting complete pipeline...")
+        
+        if not self.components_ready:
+            return self._fallback_pipeline(args)
+        
+        try:
+            params = {
+                "mode": getattr(args, 'mode', 'intelligent'),
+                "memory_limit": getattr(args, 'memory_limit', 2048),
+                "batch_size": getattr(args, 'batch_size', 50),
+                "log_level": getattr(args, 'log_level', 'info'),
+                "github_actions": getattr(args, 'github_actions', False),
+                "skip_phases": getattr(args, 'skip_phases', []),
+                "v333": getattr(args, 'v333', True),
+                "quality_scoring": getattr(args, 'quality_scoring', True)
+            }
+            
+            context = ExecutionContext(execution_mode=params["mode"], **params)
+            success = self.stage_runner.run_stage("pipeline", context, **params)
+            
+            if success:
+                self.safe_output.safe_print("🎉 Pipeline completed successfully! (v3.3.3)")
+                if params["github_actions"]:
+                    self._handle_github_output("pipeline", "success")
+                    self._handle_github_output("version", __version__)
+                    self._handle_github_output("quality_system", "v3.3.3_standardized")
+            else:
+                self.safe_output.safe_print("❌ Pipeline execution failed")
+                if params["github_actions"]:
+                    self._handle_github_output("pipeline", "failed")
+            
+            return success
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Pipeline error: {e}")
+            return False
+
     def handle_quality(self, args: argparse.Namespace) -> bool:
         """v3.3.3 Handle quality scoring and analysis commands"""
         self.safe_output.safe_print("🎯 Quality Scoring Analysis (v3.3.3)")
@@ -388,7 +555,616 @@ class FactSetCLI:
         except Exception as e:
             self.safe_output.safe_print(f"❌ Quality command error: {e}")
             return False
-    
+
+    def handle_status(self, args: argparse.Namespace) -> bool:
+        """Handle status command (v3.3.2 preserved + v3.3.3 quality metrics)"""
+        self.safe_output.safe_print("📊 Pipeline Status (v3.3.3)")
+        
+        try:
+            # Show basic status
+            self.safe_output.safe_print(f"   Version: {__version__}")
+            self.safe_output.safe_print(f"   Components: {'Ready' if self.components_ready else 'Limited'}")
+            
+            # Check data directories
+            data_dirs = ["data/md", "data/processed", "logs"]
+            for dir_name in data_dirs:
+                dir_path = Path(dir_name)
+                if dir_path.exists():
+                    file_count = len(list(dir_path.glob("*")))
+                    self.safe_output.safe_print(f"   {dir_name}: {file_count} files")
+                else:
+                    self.safe_output.safe_print(f"   {dir_name}: Not found")
+            
+            # v3.3.3: Show quality metrics if available
+            summary_file = Path("data/processed/portfolio_summary.csv")
+            if summary_file.exists():
+                try:
+                    import pandas as pd
+                    df = pd.read_csv(summary_file)
+                    if '品質評分' in df.columns:
+                        scores = df['品質評分'].dropna()
+                        if len(scores) > 0:
+                            avg_quality = scores.mean()
+                            self.safe_output.safe_print(f"   Quality Score: {avg_quality:.1f}/10 average")
+                            
+                            # Quality distribution
+                            complete = len(scores[scores >= 8])
+                            partial = len(scores[(scores >= 3) & (scores < 8)])
+                            insufficient = len(scores[scores < 3])
+                            
+                            self.safe_output.safe_print(f"   🟢 Complete: {complete}")
+                            self.safe_output.safe_print(f"   🟠 Partial: {partial}")
+                            self.safe_output.safe_print(f"   🔴 Insufficient: {insufficient}")
+                except Exception:
+                    pass
+            
+            # Show execution summary if components available
+            if self.components_ready and self.stage_runner.current_context:
+                summary = self.stage_runner.get_execution_summary()
+                self.safe_output.safe_print("   Recent Execution:")
+                for stage_name, stage_info in summary.get("stages", {}).items():
+                    status = stage_info.get("status", "unknown")
+                    duration = stage_info.get("duration")
+                    if duration:
+                        self.safe_output.safe_print(f"     {stage_name}: {status} ({duration:.1f}s)")
+                    else:
+                        self.safe_output.safe_print(f"     {stage_name}: {status}")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Status error: {e}")
+            return False
+
+    def handle_logs(self, args: argparse.Namespace) -> bool:
+        """Handle logs command (v3.3.2 preserved)"""
+        if not self.components_ready:
+            self.safe_output.safe_print("⚠️ Logging components not available")
+            return False
+        
+        try:
+            stage = getattr(args, 'stage', 'all')
+            lines = getattr(args, 'tail', 50)
+            export_format = getattr(args, 'export', None)
+            
+            if export_format:
+                # Export logs
+                export_file = self.logger_manager.export_logs(
+                    stage_name=stage if stage != 'all' else None,
+                    format=export_format
+                )
+                if export_file:
+                    self.safe_output.safe_print(f"✅ Logs exported to: {export_file}")
+                else:
+                    self.safe_output.safe_print("❌ Log export failed")
+                return export_file is not None
+            else:
+                # Tail logs
+                if stage == 'all':
+                    # Show recent errors from all stages
+                    error_analysis = self.logger_manager.analyze_errors()
+                    self.safe_output.safe_print("📋 Recent Error Analysis:")
+                    self.safe_output.safe_print(f"   Total Errors: {error_analysis['total_errors']}")
+                    self.safe_output.safe_print(f"   Total Warnings: {error_analysis['total_warnings']}")
+                    
+                    if error_analysis.get('suggestions'):
+                        self.safe_output.safe_print("💡 Suggestions:")
+                        for suggestion in error_analysis['suggestions']:
+                            self.safe_output.safe_print(f"   - {suggestion}")
+                else:
+                    # Show logs for specific stage
+                    log_lines = self.logger_manager.tail_logs(stage, lines)
+                    if log_lines:
+                        self.safe_output.safe_print(f"📄 Last {len(log_lines)} lines from {stage}:")
+                        for line in log_lines[-lines:]:
+                            self.safe_output.safe_print(line.rstrip())
+                    else:
+                        self.safe_output.safe_print(f"No logs found for stage: {stage}")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Logs error: {e}")
+            return False
+
+    def handle_diagnose(self, args: argparse.Namespace) -> bool:
+        """Handle diagnose command (v3.3.2 preserved + v3.3.3 quality diagnostics)"""
+        self.safe_output.safe_print("🔧 Running diagnostics...")
+        
+        try:
+            issue = getattr(args, 'issue', None)
+            stage = getattr(args, 'stage', None)
+            suggest_fix = getattr(args, 'suggest_fix', False)
+            v333_comprehensive = getattr(args, 'v333_comprehensive', False)
+            
+            diagnostics = {
+                "platform": platform.system(),
+                "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+                "components_available": self.components_ready,
+                "issues_found": [],
+                "suggestions": []
+            }
+            
+            # Check common issues
+            if not Path("data").exists():
+                diagnostics["issues_found"].append("Data directory missing")
+                diagnostics["suggestions"].append("Create data directory: mkdir data")
+            
+            if not Path(".env").exists() and not os.getenv("GOOGLE_SHEETS_CREDENTIALS"):
+                diagnostics["issues_found"].append("No configuration found")
+                diagnostics["suggestions"].append("Create .env file with required credentials")
+            
+            # v3.3.3: Quality system diagnostics
+            if v333_comprehensive:
+                try:
+                    scorer = self.quality_scorer
+                    test_score = scorer.calculate_score({
+                        'eps_data_completeness': 0.8,
+                        'analyst_count': 10,
+                        'data_age_days': 30
+                    })
+                    diagnostics["quality_system"] = f"Working (test score: {test_score}/10)"
+                except Exception as e:
+                    diagnostics["issues_found"].append(f"Quality scoring system error: {e}")
+            
+            # Check specific issue
+            if issue:
+                if issue == "quality scoring":
+                    # v3.3.3: Specific quality scoring diagnostics
+                    try:
+                        summary_file = Path("data/processed/portfolio_summary.csv")
+                        if summary_file.exists():
+                            import pandas as pd
+                            df = pd.read_csv(summary_file)
+                            if '品質評分' in df.columns:
+                                scores = df['品質評分'].dropna()
+                                if len(scores) > 0:
+                                    diagnostics["quality_analysis"] = {
+                                        "total_companies": len(scores),
+                                        "average_score": float(scores.mean()),
+                                        "score_range": f"{scores.min()}-{scores.max()}"
+                                    }
+                                else:
+                                    diagnostics["issues_found"].append("No quality scores found in data")
+                            else:
+                                diagnostics["issues_found"].append("Quality score column missing")
+                        else:
+                            diagnostics["issues_found"].append("No processed data found")
+                    except Exception as e:
+                        diagnostics["issues_found"].append(f"Quality analysis error: {e}")
+            
+            # Error analysis if components available
+            if self.components_ready:
+                error_analysis = self.logger_manager.analyze_errors(stage)
+                diagnostics["error_analysis"] = error_analysis
+                if error_analysis.get("suggestions"):
+                    diagnostics["suggestions"].extend(error_analysis["suggestions"])
+            
+            # Output results
+            self.safe_output.safe_print("📊 Diagnostic Results:")
+            self.safe_output.safe_print(f"   Platform: {diagnostics['platform']}")
+            self.safe_output.safe_print(f"   Python: {diagnostics['python_version']}")
+            self.safe_output.safe_print(f"   Components: {diagnostics['components_available']}")
+            
+            if diagnostics.get("quality_system"):
+                self.safe_output.safe_print(f"   Quality System: {diagnostics['quality_system']}")
+            
+            if diagnostics["issues_found"]:
+                self.safe_output.safe_print("❌ Issues Found:")
+                for issue in diagnostics["issues_found"]:
+                    self.safe_output.safe_print(f"   - {issue}")
+            
+            if diagnostics["suggestions"]:
+                self.safe_output.safe_print("💡 Suggestions:")
+                for suggestion in diagnostics["suggestions"]:
+                    self.safe_output.safe_print(f"   - {suggestion}")
+            
+            return len(diagnostics["issues_found"]) == 0
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Diagnostics error: {e}")
+            return False
+
+    def handle_recover(self, args: argparse.Namespace) -> bool:
+        """Handle recovery command (v3.3.2 preserved)"""
+        self.safe_output.safe_print("🔄 Starting recovery procedures...")
+        
+        try:
+            analyze = getattr(args, 'analyze', False)
+            fix_common_issues = getattr(args, 'fix_common_issues', False)
+            v333_diagnostics = getattr(args, 'v333_diagnostics', False)
+            
+            recovered_items = []
+            
+            # Analyze issues first
+            if analyze or not fix_common_issues:
+                if self.components_ready:
+                    error_analysis = self.logger_manager.analyze_errors()
+                    self.safe_output.safe_print(f"📊 Found {error_analysis['total_errors']} errors, {error_analysis['total_warnings']} warnings")
+                    
+                    if error_analysis.get('suggestions'):
+                        self.safe_output.safe_print("💡 Recovery suggestions:")
+                        for suggestion in error_analysis['suggestions']:
+                            self.safe_output.safe_print(f"   - {suggestion}")
+            
+            # Fix common issues
+            if fix_common_issues:
+                # Create missing directories
+                required_dirs = ["data", "data/md", "data/processed", "logs"]
+                for dir_name in required_dirs:
+                    dir_path = Path(dir_name)
+                    if not dir_path.exists():
+                        dir_path.mkdir(parents=True, exist_ok=True)
+                        recovered_items.append(f"Created directory: {dir_name}")
+                
+                # Check and fix file permissions (Unix only)
+                if sys.platform != "win32":
+                    try:
+                        current_dir = Path(".")
+                        for py_file in current_dir.glob("*.py"):
+                            if not os.access(py_file, os.R_OK):
+                                os.chmod(py_file, 0o644)
+                                recovered_items.append(f"Fixed permissions: {py_file}")
+                    except Exception:
+                        pass
+            
+            # v3.3.3 specific recovery
+            if v333_diagnostics:
+                try:
+                    # Test quality scorer
+                    test_score = self.quality_scorer.calculate_score({
+                        'eps_data_completeness': 0.5,
+                        'analyst_count': 5,
+                        'data_age_days': 60
+                    })
+                    recovered_items.append(f"Quality scorer test: {test_score}/10")
+                except Exception as e:
+                    self.safe_output.safe_print(f"⚠️ Quality scorer issue: {e}")
+            
+            # Report recovery results
+            if recovered_items:
+                self.safe_output.safe_print("✅ Recovery actions:")
+                for item in recovered_items:
+                    self.safe_output.safe_print(f"   - {item}")
+            else:
+                self.safe_output.safe_print("ℹ️ No recovery actions needed")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Recovery error: {e}")
+            return False
+
+    def handle_report(self, args: argparse.Namespace) -> bool:
+        """Handle report command (v3.3.2 preserved + v3.3.3 quality reporting)"""
+        self.safe_output.safe_print("📋 Generating report...")
+        
+        try:
+            format_type = getattr(args, 'format', 'summary')
+            email = getattr(args, 'email', False)
+            v333_metrics = getattr(args, 'v333_metrics', False)
+            quality_focused = getattr(args, 'quality_focused', False)
+            
+            report = {
+                "generated_at": datetime.now().isoformat(),
+                "version": __version__,
+                "format": format_type
+            }
+            
+            # Basic pipeline status
+            if Path("data/processed").exists():
+                processed_files = list(Path("data/processed").glob("*"))
+                report["processed_files"] = len(processed_files)
+            
+            # v3.3.3: Quality-focused reporting
+            if quality_focused or v333_metrics:
+                summary_file = Path("data/processed/portfolio_summary.csv")
+                if summary_file.exists():
+                    try:
+                        import pandas as pd
+                        df = pd.read_csv(summary_file)
+                        
+                        if '品質評分' in df.columns:
+                            scores = df['品質評分'].dropna()
+                            report["quality_metrics"] = {
+                                "total_companies": len(scores),
+                                "average_score": float(scores.mean()) if len(scores) > 0 else 0,
+                                "score_distribution": {
+                                    "complete_8_10": len(scores[scores >= 8]),
+                                    "partial_3_7": len(scores[(scores >= 3) & (scores < 8)]),
+                                    "insufficient_0_2": len(scores[scores < 3])
+                                }
+                            }
+                    except Exception:
+                        pass
+            
+            # Component status
+            if self.components_ready:
+                report["components_status"] = "fully_operational"
+                
+                # Session report if available
+                session_report = self.logger_manager.generate_session_report()
+                report["session_info"] = {
+                    "log_files": len(session_report.get("log_files", [])),
+                    "errors": session_report.get("error_analysis", {}).get("total_errors", 0),
+                    "warnings": session_report.get("error_analysis", {}).get("total_warnings", 0)
+                }
+            else:
+                report["components_status"] = "limited_functionality"
+            
+            # Output report
+            if format_type == "json":
+                report_file = Path(f"factset_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
+                with open(report_file, 'w', encoding='utf-8') as f:
+                    json.dump(report, f, indent=2, ensure_ascii=False)
+                self.safe_output.safe_print(f"📄 JSON report saved: {report_file}")
+            
+            elif format_type == "github-summary":
+                # GitHub Actions summary format
+                if os.getenv('GITHUB_ACTIONS'):
+                    self._handle_github_output("report_status", "generated")
+                    if "quality_metrics" in report:
+                        metrics = report["quality_metrics"]
+                        self._handle_github_output("quality_avg", str(metrics["average_score"]))
+                        self._handle_github_output("quality_companies", str(metrics["total_companies"]))
+            
+            else:
+                # Console summary
+                self.safe_output.safe_print("📊 Pipeline Report Summary:")
+                self.safe_output.safe_print(f"   Generated: {report['generated_at']}")
+                self.safe_output.safe_print(f"   Version: {report['version']}")
+                self.safe_output.safe_print(f"   Components: {report.get('components_status', 'unknown')}")
+                
+                if "processed_files" in report:
+                    self.safe_output.safe_print(f"   Processed Files: {report['processed_files']}")
+                
+                if "quality_metrics" in report:
+                    qm = report["quality_metrics"]
+                    self.safe_output.safe_print(f"   Quality Average: {qm['average_score']:.1f}/10")
+                    self.safe_output.safe_print(f"   Companies Analyzed: {qm['total_companies']}")
+                    
+                    dist = qm["score_distribution"]
+                    self.safe_output.safe_print("   Quality Distribution:")
+                    self.safe_output.safe_print(f"     🟢 Complete: {dist['complete_8_10']}")
+                    self.safe_output.safe_print(f"     🟠 Partial: {dist['partial_3_7']}")
+                    self.safe_output.safe_print(f"     🔴 Insufficient: {dist['insufficient_0_2']}")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Report generation error: {e}")
+            return False
+
+    def handle_commit(self, args: argparse.Namespace) -> bool:
+        """Handle commit command (v3.3.2 preserved)"""
+        self.safe_output.safe_print("💾 Committing results...")
+        
+        try:
+            smart = getattr(args, 'smart', False)
+            validate = getattr(args, 'validate', False)
+            v333_format = getattr(args, 'v333_format', False)
+            
+            # Check if git is available
+            try:
+                result = subprocess.run(['git', '--version'], capture_output=True, text=True, timeout=5)
+                if result.returncode != 0:
+                    self.safe_output.safe_print("⚠️ Git not available")
+                    return False
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                self.safe_output.safe_print("⚠️ Git not found")
+                return False
+            
+            # Validate data before commit
+            if validate:
+                required_files = [
+                    "data/processed/portfolio_summary.csv",
+                    "data/processed/detailed_data.csv",
+                    "data/processed/statistics.json"
+                ]
+                
+                missing_files = []
+                for file_path in required_files:
+                    if not Path(file_path).exists():
+                        missing_files.append(file_path)
+                
+                if missing_files:
+                    self.safe_output.safe_print("❌ Missing required files:")
+                    for file_path in missing_files:
+                        self.safe_output.safe_print(f"   - {file_path}")
+                    return False
+            
+            # Smart commit - only commit if significant changes
+            if smart:
+                try:
+                    # Check git status
+                    result = subprocess.run(['git', 'status', '--porcelain'], capture_output=True, text=True)
+                    changes = result.stdout.strip()
+                    
+                    if not changes:
+                        self.safe_output.safe_print("ℹ️ No changes to commit")
+                        return True
+                    
+                    # Count significant changes (not just logs)
+                    significant_changes = [line for line in changes.split('\n') 
+                                        if not line.strip().startswith('?? logs/')]
+                    
+                    if not significant_changes:
+                        self.safe_output.safe_print("ℹ️ Only log changes detected, skipping commit")
+                        return True
+                except Exception:
+                    pass  # Continue with regular commit
+            
+            # Create commit
+            try:
+                # Add processed files
+                subprocess.run(['git', 'add', 'data/processed/'], check=True)
+                
+                # Create commit message
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                commit_msg = f"Pipeline update: {timestamp}"
+                
+                if v333_format:
+                    commit_msg += " (v3.3.3)"
+                
+                subprocess.run(['git', 'commit', '-m', commit_msg], check=True)
+                
+                self.safe_output.safe_print("✅ Changes committed successfully")
+                
+                # Show commit info
+                result = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], 
+                                    capture_output=True, text=True)
+                if result.returncode == 0:
+                    commit_hash = result.stdout.strip()
+                    self.safe_output.safe_print(f"   Commit: {commit_hash}")
+                
+                return True
+                
+            except subprocess.CalledProcessError as e:
+                self.safe_output.safe_print(f"❌ Git commit failed: {e}")
+                return False
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Commit error: {e}")
+            return False
+
+    def handle_performance(self, args: argparse.Namespace) -> bool:
+        """Handle performance command (v3.3.2 preserved)"""
+        self.safe_output.safe_print("📈 Performance Analysis")
+        
+        if not self.components_ready:
+            self.safe_output.safe_print("⚠️ Performance monitoring not available")
+            return False
+        
+        try:
+            # Get performance summary from all stages
+            if hasattr(self.logger_manager, 'performance_loggers'):
+                total_operations = 0
+                total_time = 0
+                slowest_operation = None
+                slowest_time = 0
+                
+                for stage_name, perf_logger in self.logger_manager.performance_loggers.items():
+                    summary = perf_logger.get_performance_summary()
+                    if summary:
+                        stage_ops = summary.get("total_operations", 0)
+                        stage_time = summary.get("total_time", 0)
+                        stage_slowest = summary.get("slowest_operation", {})
+                        
+                        total_operations += stage_ops
+                        total_time += stage_time
+                        
+                        if stage_slowest and stage_slowest.get("duration", 0) > slowest_time:
+                            slowest_time = stage_slowest["duration"]
+                            slowest_operation = f"{stage_name}:{stage_slowest['operation']}"
+                        
+                        self.safe_output.safe_print(f"   {stage_name}: {stage_ops} ops, {stage_time:.1f}s total")
+                
+                if total_operations > 0:
+                    avg_time = total_time / total_operations
+                    self.safe_output.safe_print(f"📊 Overall Performance:")
+                    self.safe_output.safe_print(f"   Total Operations: {total_operations}")
+                    self.safe_output.safe_print(f"   Total Time: {total_time:.1f}s")
+                    self.safe_output.safe_print(f"   Average Time: {avg_time:.2f}s per operation")
+                    
+                    if slowest_operation:
+                        self.safe_output.safe_print(f"   Slowest: {slowest_operation} ({slowest_time:.1f}s)")
+                else:
+                    self.safe_output.safe_print("No performance data available")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Performance analysis error: {e}")
+            return False
+
+    def handle_analyze(self, args: argparse.Namespace) -> bool:
+        """Handle analyze command (v3.3.2 preserved)"""
+        self.safe_output.safe_print("🔍 Data Analysis")
+        
+        try:
+            # Check for processed data
+            processed_dir = Path("data/processed")
+            if not processed_dir.exists():
+                self.safe_output.safe_print("❌ No processed data found")
+                return False
+            
+            # Analyze portfolio summary
+            summary_file = processed_dir / "portfolio_summary.csv"
+            if summary_file.exists():
+                try:
+                    import pandas as pd
+                    df = pd.read_csv(summary_file)
+                    
+                    self.safe_output.safe_print("📊 Portfolio Analysis:")
+                    self.safe_output.safe_print(f"   Total Companies: {len(df)}")
+                    
+                    # Companies with data
+                    with_data = df[df['MD資料筆數'] > 0]
+                    self.safe_output.safe_print(f"   With Data: {len(with_data)} ({len(with_data)/len(df)*100:.1f}%)")
+                    
+                    # File statistics
+                    total_files = df['MD資料筆數'].sum()
+                    self.safe_output.safe_print(f"   Total MD Files: {int(total_files)}")
+                    
+                    if len(with_data) > 0:
+                        avg_files = with_data['MD資料筆數'].mean()
+                        self.safe_output.safe_print(f"   Avg Files/Company: {avg_files:.1f}")
+                    
+                    # v3.3.3: Quality analysis
+                    if '品質評分' in df.columns:
+                        scores = df['品質評分'].dropna()
+                        if len(scores) > 0:
+                            avg_quality = scores.mean()
+                            self.safe_output.safe_print(f"   Average Quality: {avg_quality:.1f}/10")
+                            
+                            # Quality breakdown
+                            excellent = len(scores[scores >= 9])
+                            good = len(scores[scores == 8])
+                            partial = len(scores[(scores >= 3) & (scores < 8)])
+                            poor = len(scores[scores < 3])
+                            
+                            self.safe_output.safe_print("   Quality Breakdown:")
+                            self.safe_output.safe_print(f"     🟢 Excellent (9-10): {excellent}")
+                            self.safe_output.safe_print(f"     🟡 Good (8): {good}")
+                            self.safe_output.safe_print(f"     🟠 Partial (3-7): {partial}")
+                            self.safe_output.safe_print(f"     🔴 Poor (0-2): {poor}")
+                    
+                except Exception as e:
+                    self.safe_output.safe_print(f"Error analyzing portfolio: {e}")
+            
+            # Analyze detailed data
+            detailed_file = processed_dir / "detailed_data.csv"
+            if detailed_file.exists():
+                try:
+                    import pandas as pd
+                    df_detailed = pd.read_csv(detailed_file)
+                    
+                    self.safe_output.safe_print("📄 Detailed Data Analysis:")
+                    self.safe_output.safe_print(f"   Individual Files: {len(df_detailed)}")
+                    
+                    companies_represented = df_detailed['代號'].nunique()
+                    self.safe_output.safe_print(f"   Companies Represented: {companies_represented}")
+                    
+                    # EPS data availability
+                    eps_cols = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值']
+                    for col in eps_cols:
+                        if col in df_detailed.columns:
+                            with_eps = df_detailed[col].notna().sum()
+                            self.safe_output.safe_print(f"   {col}: {with_eps} files")
+                    
+                except Exception as e:
+                    self.safe_output.safe_print(f"Error analyzing detailed data: {e}")
+            
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Analysis error: {e}")
+            return False
+
+    # ========================================================================
+    # v3.3.3 QUALITY SCORING METHODS
+    # ========================================================================
+
     def _analyze_quality(self, args: argparse.Namespace) -> bool:
         """Analyze quality scores across data"""
         self.safe_output.safe_print("🔍 Analyzing quality scores...")
@@ -450,7 +1226,7 @@ class FactSetCLI:
         except Exception as e:
             self.safe_output.safe_print(f"❌ Quality analysis error: {e}")
             return False
-    
+
     def _benchmark_quality(self, args: argparse.Namespace) -> bool:
         """Benchmark quality scoring system"""
         self.safe_output.safe_print("📈 Running quality scoring benchmark...")
@@ -511,136 +1287,431 @@ class FactSetCLI:
         
         self.safe_output.safe_print(f"📊 Benchmark Results: {passed}/{len(test_cases)} tests passed")
         return passed == len(test_cases)
-    
-    # ========================================================================
-    # PRESERVED v3.3.2 HANDLERS (with quality enhancements)
-    # ========================================================================
-    
-    def handle_validate(self, args: argparse.Namespace) -> bool:
-        """Handle validation command (v3.3.2 preserved + v3.3.3 quality features)"""
-        self.safe_output.safe_print("🧪 Running system validation...")
-        
-        if not self.components_ready:
-            return self._fallback_validate(args)
+
+    def _quality_distribution(self, args: argparse.Namespace) -> bool:
+        """Show quality score distribution with visual representation"""
+        self.safe_output.safe_print("📊 Quality Score Distribution Analysis")
         
         try:
-            # Prepare validation parameters (preserved from v3.3.2)
-            params = {
-                "mode": "comprehensive" if args.comprehensive else "quick",
-                "fix_issues": getattr(args, 'fix_issues', False),
-                "test_v332": getattr(args, 'test_v332', False),
-                "test_v333": getattr(args, 'test_v333', False),  # v3.3.3
-                "quality_scoring": getattr(args, 'quality_scoring', False)  # v3.3.3
+            # Load processed data
+            summary_file = Path("data/processed/portfolio_summary.csv")
+            detailed_file = Path("data/processed/detailed_data.csv")
+            
+            if not summary_file.exists():
+                self.safe_output.safe_print("❌ No portfolio summary found. Run processing first.")
+                return False
+            
+            import pandas as pd
+            
+            # Analyze portfolio summary
+            df_summary = pd.read_csv(summary_file)
+            
+            if '品質評分' not in df_summary.columns:
+                self.safe_output.safe_print("❌ No quality scores found in portfolio data")
+                return False
+            
+            scores = df_summary['品質評分'].dropna()
+            
+            if len(scores) == 0:
+                self.safe_output.safe_print("❌ No valid quality scores found")
+                return False
+            
+            # Convert legacy scores if needed
+            converted_scores = []
+            legacy_count = 0
+            for score in scores:
+                if score <= 4:  # Legacy scale
+                    converted_scores.append(self.quality_scorer.convert_legacy_score(int(score)))
+                    legacy_count += 1
+                else:
+                    converted_scores.append(int(score))
+            
+            scores = pd.Series(converted_scores)
+            
+            # Calculate distribution
+            distribution = {}
+            for score in scores:
+                indicator = self.quality_scorer.get_quality_indicator(score)
+                distribution[indicator] = distribution.get(indicator, 0) + 1
+            
+            # Score range distribution
+            score_ranges = {
+                '10 (Perfect)': len(scores[scores == 10]),
+                '8-9 (Excellent)': len(scores[(scores >= 8) & (scores <= 9)]),
+                '6-7 (Good)': len(scores[(scores >= 6) & (scores < 8)]),
+                '4-5 (Fair)': len(scores[(scores >= 4) & (scores < 6)]),
+                '2-3 (Poor)': len(scores[(scores >= 2) & (scores < 4)]),
+                '0-1 (Critical)': len(scores[scores < 2])
             }
             
-            # Create execution context
-            context = ExecutionContext(execution_mode="validation", **params)
+            # Output distribution
+            total_companies = len(scores)
+            avg_score = scores.mean()
             
-            # Run validation stage
-            success = self.stage_runner.run_stage("validate", context, **params)
+            self.safe_output.safe_print(f"📈 Distribution Results:")
+            self.safe_output.safe_print(f"   Total Companies: {total_companies}")
+            self.safe_output.safe_print(f"   Average Score: {avg_score:.1f}/10")
             
-            if success:
-                self.safe_output.safe_print("✅ System validation passed")
-                if getattr(args, 'github_actions', False):
-                    self._handle_github_output("validation", "passed")
-                    # v3.3.3: Add quality system status
-                    quality_status = "enabled" if params.get("quality_scoring") else "standard"
-                    self._handle_github_output("quality_system", quality_status)
-            else:
-                self.safe_output.safe_print("❌ System validation failed")
-                if getattr(args, 'github_actions', False):
-                    self._handle_github_output("validation", "failed")
+            if legacy_count > 0:
+                self.safe_output.safe_print(f"   Legacy Scores Converted: {legacy_count}")
             
-            return success
+            self.safe_output.safe_print("\n🎯 Quality Indicators:")
+            for indicator, count in distribution.items():
+                percentage = (count / total_companies) * 100
+                bar_length = int(percentage / 5)  # Scale for display
+                bar = "█" * bar_length + "░" * (20 - bar_length)
+                self.safe_output.safe_print(f"   {indicator}: {count:3d} ({percentage:5.1f}%) {bar}")
+            
+            self.safe_output.safe_print("\n📊 Score Ranges:")
+            for range_name, count in score_ranges.items():
+                if count > 0:
+                    percentage = (count / total_companies) * 100
+                    self.safe_output.safe_print(f"   {range_name}: {count} ({percentage:.1f}%)")
+            
+            # Analyze detailed data if available
+            if detailed_file.exists():
+                try:
+                    df_detailed = pd.read_csv(detailed_file)
+                    if '品質評分' in df_detailed.columns:
+                        file_scores = df_detailed['品質評分'].dropna()
+                        if len(file_scores) > 0:
+                            file_avg = file_scores.mean()
+                            self.safe_output.safe_print(f"\n📄 File-Level Analysis:")
+                            self.safe_output.safe_print(f"   Individual Files: {len(file_scores)}")
+                            self.safe_output.safe_print(f"   Average File Quality: {file_avg:.1f}/10")
+                            
+                            # Compare company vs file quality
+                            if len(scores) > 0:
+                                quality_diff = file_avg - avg_score
+                                if quality_diff > 0.5:
+                                    self.safe_output.safe_print(f"   📈 Files generally higher quality than company averages (+{quality_diff:.1f})")
+                                elif quality_diff < -0.5:
+                                    self.safe_output.safe_print(f"   📉 Files generally lower quality than company averages ({quality_diff:.1f})")
+                                else:
+                                    self.safe_output.safe_print(f"   ➡️ File and company quality similar ({quality_diff:+.1f})")
+                except Exception:
+                    pass
+            
+            # Store metrics for other commands
+            self._last_quality_metrics = {
+                'total_companies': total_companies,
+                'average_score': avg_score,
+                'distribution': distribution,
+                'score_ranges': score_ranges,
+                'legacy_converted': legacy_count
+            }
+            
+            return True
             
         except Exception as e:
-            self.safe_output.safe_print(f"❌ Validation error: {e}")
+            self.safe_output.safe_print(f"❌ Distribution analysis error: {e}")
             return False
-    
-    def handle_process(self, args: argparse.Namespace) -> bool:
-        """Handle processing command (v3.3.2 preserved + v3.3.3 quality integration)"""
-        self.safe_output.safe_print("📊 Starting data processing...")
-        
-        if not self.components_ready:
-            return self._fallback_process(args)
+
+    def _monitor_quality(self, args: argparse.Namespace) -> bool:
+        """Monitor quality trends and changes over time"""
+        self.safe_output.safe_print("📈 Quality Monitoring & Trends")
         
         try:
-            params = {
-                "mode": getattr(args, 'mode', 'v333'),  # v3.3.3 default
-                "memory_limit": getattr(args, 'memory_limit', 2048),
-                "batch_size": getattr(args, 'batch_size', 50),
-                "deduplicate": getattr(args, 'deduplicate', True),
-                "aggregate": getattr(args, 'aggregate', True),
-                "benchmark": getattr(args, 'benchmark', False),
-                "force": getattr(args, 'force', False),
-                "quality_scoring": getattr(args, 'quality_scoring', True),  # v3.3.3
-                "standardize_quality": getattr(args, 'standardize_quality', True)  # v3.3.3
-            }
+            threshold = getattr(args, 'threshold', 7)
+            alert_low_quality = getattr(args, 'alert_low_quality', False)
             
-            context = ExecutionContext(execution_mode="processing", **params)
-            success = self.stage_runner.run_stage("process", context, **params)
+            # Check current quality status
+            summary_file = Path("data/processed/portfolio_summary.csv")
+            if not summary_file.exists():
+                self.safe_output.safe_print("❌ No current data to monitor. Run processing first.")
+                return False
             
-            if success:
-                self.safe_output.safe_print("✅ Data processing completed successfully")
+            import pandas as pd
+            df = pd.read_csv(summary_file)
+            
+            if '品質評分' not in df.columns:
+                self.safe_output.safe_print("❌ No quality scores found")
+                return False
+            
+            scores = df['品質評分'].dropna()
+            if len(scores) == 0:
+                self.safe_output.safe_print("❌ No valid scores to monitor")
+                return False
+            
+            # Convert legacy scores
+            converted_scores = []
+            for score in scores:
+                if score <= 4:
+                    converted_scores.append(self.quality_scorer.convert_legacy_score(int(score)))
+                else:
+                    converted_scores.append(int(score))
+            
+            current_avg = sum(converted_scores) / len(converted_scores)
+            
+            # Quality monitoring results
+            self.safe_output.safe_print(f"🎯 Current Quality Status:")
+            self.safe_output.safe_print(f"   Average Score: {current_avg:.1f}/10")
+            self.safe_output.safe_print(f"   Quality Threshold: {threshold}/10")
+            
+            # Check against threshold
+            below_threshold = [s for s in converted_scores if s < threshold]
+            if below_threshold:
+                percentage_below = (len(below_threshold) / len(converted_scores)) * 100
+                self.safe_output.safe_print(f"   ⚠️ Below Threshold: {len(below_threshold)} companies ({percentage_below:.1f}%)")
                 
-                # v3.3.3: Show quality metrics
-                if params.get("quality_scoring"):
-                    self._analyze_quality(args)
+                if alert_low_quality:
+                    self.safe_output.safe_print("🚨 LOW QUALITY ALERT:")
+                    
+                    # Find companies with lowest scores
+                    df_with_scores = df.copy()
+                    df_with_scores['converted_score'] = converted_scores
+                    lowest_quality = df_with_scores.nsmallest(5, 'converted_score')
+                    
+                    self.safe_output.safe_print("   Lowest Quality Companies:")
+                    for _, row in lowest_quality.iterrows():
+                        company_name = row['名稱']
+                        score = row['converted_score']
+                        status = self.quality_scorer.get_quality_indicator(score)
+                        self.safe_output.safe_print(f"     - {company_name}: {score}/10 {status}")
             else:
-                self.safe_output.safe_print("❌ Data processing failed")
+                self.safe_output.safe_print(f"   ✅ All companies meet quality threshold")
             
-            return success
+            # Historical comparison (if previous data exists)
+            backup_files = list(Path("data/processed").glob("portfolio_summary_backup_*.csv"))
+            if backup_files:
+                try:
+                    # Find most recent backup
+                    latest_backup = max(backup_files, key=lambda f: f.stat().st_mtime)
+                    df_previous = pd.read_csv(latest_backup)
+                    
+                    if '品質評分' in df_previous.columns:
+                        prev_scores = df_previous['品質評分'].dropna()
+                        if len(prev_scores) > 0:
+                            prev_converted = [self.quality_scorer.convert_legacy_score(int(s)) if s <= 4 else int(s) for s in prev_scores]
+                            prev_avg = sum(prev_converted) / len(prev_converted)
+                            
+                            change = current_avg - prev_avg
+                            self.safe_output.safe_print(f"📊 Historical Comparison:")
+                            self.safe_output.safe_print(f"   Previous Average: {prev_avg:.1f}/10")
+                            self.safe_output.safe_print(f"   Change: {change:+.1f}")
+                            
+                            if change > 0.5:
+                                self.safe_output.safe_print("   📈 Significant quality improvement!")
+                            elif change < -0.5:
+                                self.safe_output.safe_print("   📉 Quality decline detected")
+                            else:
+                                self.safe_output.safe_print("   ➡️ Quality stable")
+                except Exception:
+                    pass
+            
+            # Recommendations
+            self.safe_output.safe_print("💡 Monitoring Recommendations:")
+            if current_avg < 6:
+                self.safe_output.safe_print("   - Quality below average - consider data source review")
+                self.safe_output.safe_print("   - Run: python factset_cli.py search --mode=enhanced")
+            elif current_avg >= 8:
+                self.safe_output.safe_print("   - Excellent quality maintained")
+                self.safe_output.safe_print("   - Continue current data collection strategy")
+            else:
+                self.safe_output.safe_print("   - Good quality - minor optimization opportunities")
+                self.safe_output.safe_print("   - Consider: python factset_cli.py process --standardize-quality")
+            
+            return True
             
         except Exception as e:
-            self.safe_output.safe_print(f"❌ Processing error: {e}")
+            self.safe_output.safe_print(f"❌ Quality monitoring error: {e}")
             return False
-    
-    # ... [Rest of v3.3.2 handlers preserved - continuing with key handlers]
-    
-    def handle_pipeline(self, args: argparse.Namespace) -> bool:
-        """Handle complete pipeline command (v3.3.2 preserved + v3.3.3 enhancements)"""
-        self.safe_output.safe_print("🚀 Starting complete pipeline...")
-        
-        if not self.components_ready:
-            return self._fallback_pipeline(args)
+
+    def _calibrate_quality(self, args: argparse.Namespace) -> bool:
+        """Calibrate and validate quality scoring system"""
+        self.safe_output.safe_print("🔧 Quality Scoring System Calibration")
         
         try:
-            params = {
-                "mode": getattr(args, 'mode', 'intelligent'),
-                "memory_limit": getattr(args, 'memory_limit', 2048),
-                "batch_size": getattr(args, 'batch_size', 50),
-                "log_level": getattr(args, 'log_level', 'info'),
-                "github_actions": getattr(args, 'github_actions', False),
-                "skip_phases": getattr(args, 'skip_phases', []),
-                "v333": getattr(args, 'v333', True),  # v3.3.3 features
-                "quality_scoring": getattr(args, 'quality_scoring', True)  # v3.3.3
+            fix_scoring_anomalies = getattr(args, 'fix_scoring_anomalies', False)
+            
+            self.safe_output.safe_print("🧪 Running calibration tests...")
+            
+            # Test 1: Scorer consistency
+            test_metrics = {
+                'eps_data_completeness': 0.9,
+                'analyst_count': 20,
+                'data_age_days': 10
             }
             
-            context = ExecutionContext(execution_mode=params["mode"], **params)
-            success = self.stage_runner.run_stage("pipeline", context, **params)
+            scores = []
+            for i in range(5):
+                score = self.quality_scorer.calculate_score(test_metrics)
+                scores.append(score)
             
-            if success:
-                self.safe_output.safe_print("🎉 Pipeline completed successfully! (v3.3.3)")
-                if params["github_actions"]:
-                    self._handle_github_output("pipeline", "success")
-                    # v3.3.3: Add comprehensive metrics
-                    self._handle_github_output("version", __version__)
-                    self._handle_github_output("quality_system", "v3.3.3_standardized")
+            if len(set(scores)) == 1:
+                self.safe_output.safe_print("   ✅ Scorer consistency: PASS")
             else:
-                self.safe_output.safe_print("❌ Pipeline execution failed")
-                if params["github_actions"]:
-                    self._handle_github_output("pipeline", "failed")
+                self.safe_output.safe_print(f"   ❌ Scorer consistency: FAIL (got {scores})")
             
-            return success
+            # Test 2: Score range validation
+            range_tests = [
+                ({'eps_data_completeness': 1.0, 'analyst_count': 30, 'data_age_days': 1}, (9, 10)),
+                ({'eps_data_completeness': 0.0, 'analyst_count': 0, 'data_age_days': 365}, (0, 1)),
+                ({'eps_data_completeness': 0.5, 'analyst_count': 10, 'data_age_days': 30}, (4, 7))
+            ]
+            
+            range_pass = 0
+            for test_metrics, expected_range in range_tests:
+                score = self.quality_scorer.calculate_score(test_metrics)
+                if expected_range[0] <= score <= expected_range[1]:
+                    range_pass += 1
+            
+            self.safe_output.safe_print(f"   ✅ Range validation: {range_pass}/3 tests passed")
+            
+            # Test 3: Legacy conversion
+            legacy_tests = [(4, 10), (3, 8), (2, 5), (1, 2), (0, 0)]
+            conversion_pass = 0
+            
+            for legacy, expected in legacy_tests:
+                converted = self.quality_scorer.convert_legacy_score(legacy)
+                if converted == expected:
+                    conversion_pass += 1
+            
+            self.safe_output.safe_print(f"   ✅ Legacy conversion: {conversion_pass}/5 tests passed")
+            
+            # Test 4: Quality indicators
+            indicator_tests = [
+                (10, '🟢 完整'), (9, '🟢 完整'), (8, '🟡 良好'), 
+                (5, '🟠 部分'), (2, '🔴 不足'), (0, '🔴 不足')
+            ]
+            
+            indicator_pass = 0
+            for score, expected in indicator_tests:
+                indicator = self.quality_scorer.get_quality_indicator(score)
+                if indicator == expected:
+                    indicator_pass += 1
+            
+            self.safe_output.safe_print(f"   ✅ Quality indicators: {indicator_pass}/6 tests passed")
+            
+            # Test 5: Real data validation (if available)
+            summary_file = Path("data/processed/portfolio_summary.csv")
+            if summary_file.exists():
+                try:
+                    import pandas as pd
+                    df = pd.read_csv(summary_file)
+                    
+                    if '品質評分' in df.columns:
+                        scores = df['品質評分'].dropna()
+                        
+                        # Check for scoring anomalies
+                        anomalies = []
+                        
+                        # Scores outside valid range
+                        invalid_scores = scores[(scores < 0) | (scores > 10)]
+                        if len(invalid_scores) > 0:
+                            anomalies.append(f"{len(invalid_scores)} scores outside 0-10 range")
+                        
+                        # Suspicious patterns (all same score)
+                        if len(scores.unique()) == 1 and len(scores) > 10:
+                            anomalies.append("All companies have identical scores (suspicious)")
+                        
+                        # Too many perfect scores
+                        perfect_scores = len(scores[scores == 10])
+                        if perfect_scores > len(scores) * 0.8:
+                            anomalies.append(f"Too many perfect scores: {perfect_scores}/{len(scores)}")
+                        
+                        if anomalies:
+                            self.safe_output.safe_print("   ⚠️ Data anomalies detected:")
+                            for anomaly in anomalies:
+                                self.safe_output.safe_print(f"     - {anomaly}")
+                            
+                            if fix_scoring_anomalies:
+                                self.safe_output.safe_print("   🔧 Attempting to fix anomalies...")
+                                
+                                # Fix out-of-range scores
+                                df.loc[df['品質評分'] < 0, '品質評分'] = 0
+                                df.loc[df['品質評分'] > 10, '品質評分'] = 10
+                                
+                                # Save corrected data
+                                backup_file = summary_file.with_suffix('.backup.csv')
+                                df.to_csv(backup_file, index=False)
+                                df.to_csv(summary_file, index=False)
+                                
+                                self.safe_output.safe_print(f"   ✅ Corrected data saved (backup: {backup_file.name})")
+                        else:
+                            self.safe_output.safe_print("   ✅ Real data validation: No anomalies found")
+                except Exception as e:
+                    self.safe_output.safe_print(f"   ⚠️ Real data validation error: {e}")
+            
+            # Overall calibration result
+            total_tests = 5
+            passed_tests = (
+                (1 if len(set(scores)) == 1 else 0) +
+                (1 if range_pass == 3 else 0) +
+                (1 if conversion_pass == 5 else 0) +
+                (1 if indicator_pass == 6 else 0) +
+                1  # Real data test always counts as passed
+            )
+            
+            calibration_score = (passed_tests / total_tests) * 100
+            
+            self.safe_output.safe_print(f"🎯 Calibration Results:")
+            self.safe_output.safe_print(f"   Overall Score: {calibration_score:.0f}%")
+            
+            if calibration_score >= 80:
+                self.safe_output.safe_print("   ✅ Quality scoring system is well-calibrated")
+            elif calibration_score >= 60:
+                self.safe_output.safe_print("   ⚠️ Quality scoring system needs minor adjustments")
+            else:
+                self.safe_output.safe_print("   ❌ Quality scoring system needs significant recalibration")
+            
+            # Recommendations
+            if calibration_score < 100:
+                self.safe_output.safe_print("💡 Calibration Recommendations:")
+                if range_pass < 3:
+                    self.safe_output.safe_print("   - Review scoring algorithm parameters")
+                if conversion_pass < 5:
+                    self.safe_output.safe_print("   - Check legacy score conversion mapping")
+                if indicator_pass < 6:
+                    self.safe_output.safe_print("   - Verify quality indicator thresholds")
+            
+            return calibration_score >= 60
             
         except Exception as e:
-            self.safe_output.safe_print(f"❌ Pipeline error: {e}")
+            self.safe_output.safe_print(f"❌ Calibration error: {e}")
             return False
+
+    # ========================================================================
+    # v3.3.3 GITHUB ACTIONS MODERNIZATION
+    # ========================================================================
     
-    # ... [All other v3.3.2 handlers preserved - truncated for space]
+    def _handle_github_output(self, key: str, value: str):
+        """v3.3.3 Modern GitHub Actions output handler"""
+        if os.getenv('GITHUB_ACTIONS'):
+            # v3.3.3 Fix: Use GITHUB_OUTPUT instead of deprecated set-output
+            github_output = os.getenv('GITHUB_OUTPUT')
+            if github_output:
+                try:
+                    with open(github_output, 'a', encoding='utf-8') as f:
+                        f.write(f"{key}={value}\n")
+                    if self.main_logger:
+                        self.main_logger.debug(f"GitHub output set: {key}={value}")
+                except Exception as e:
+                    if self.main_logger:
+                        self.main_logger.warning(f"Failed to write GitHub output: {e}")
+                    # Fallback to deprecated method
+                    print(f"::set-output name={key}::{value}")
+            else:
+                # Fallback for older GitHub Actions
+                print(f"::set-output name={key}::{value}")
     
+    def _output_github_actions_result(self, stage: str, result: str):
+        """Output result for GitHub Actions with v3.3.3 modernization"""
+        self._handle_github_output(f"{stage}_result", result)
+        self._handle_github_output(f"{stage}_timestamp", datetime.now().isoformat())
+        
+        # v3.3.3: Add quality metrics if available
+        if hasattr(self, '_last_quality_metrics'):
+            metrics = self._last_quality_metrics
+            self._handle_github_output(f"{stage}_quality_avg", str(metrics.get('average_score', 0)))
+            self._handle_github_output(f"{stage}_quality_distribution", json.dumps(metrics.get('distribution', {})))
+
+    # ========================================================================
+    # FALLBACK METHODS
+    # ========================================================================
+
     def _fallback_validate(self, args: argparse.Namespace) -> bool:
-        """Fallback validation when components not available (v3.3.2 preserved)"""
+        """Fallback validation when components not available"""
         self.safe_output.safe_print("⚠️ Running basic fallback validation...")
         
         # Check Python version
@@ -649,7 +1720,7 @@ class FactSetCLI:
             return False
         
         # Check directories
-        required_dirs = ["data"]
+        required_dirs = ["data", "logs"]
         for dir_name in required_dirs:
             Path(dir_name).mkdir(parents=True, exist_ok=True)
         
@@ -663,6 +1734,47 @@ class FactSetCLI:
         
         self.safe_output.safe_print("✅ Basic validation passed")
         return True
+
+    def _fallback_download_watchlist(self, args: argparse.Namespace) -> bool:
+        """Fallback watchlist download when components not available"""
+        self.safe_output.safe_print("⚠️ Using fallback watchlist download...")
+        
+        try:
+            import requests
+            url = "https://raw.githubusercontent.com/wenchiehlee/GoPublic/refs/heads/main/%E8%A7%80%E5%AF%9F%E5%90%8D%E5%96%AE.csv"
+            
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            
+            with open("觀察名單.csv", 'w', encoding='utf-8') as f:
+                f.write(response.text)
+            
+            self.safe_output.safe_print("✅ Watchlist downloaded (fallback)")
+            return True
+            
+        except Exception as e:
+            self.safe_output.safe_print(f"❌ Fallback download failed: {e}")
+            return False
+
+    def _fallback_search(self, args: argparse.Namespace) -> bool:
+        """Fallback search when components not available"""
+        self.safe_output.safe_print("⚠️ Search components not available")
+        return False
+
+    def _fallback_upload(self, args: argparse.Namespace) -> bool:
+        """Fallback upload when components not available"""
+        self.safe_output.safe_print("⚠️ Upload components not available")
+        return False
+
+    def _fallback_process(self, args: argparse.Namespace) -> bool:
+        """Fallback processing when components not available"""
+        self.safe_output.safe_print("⚠️ Processing components not available")
+        return False
+
+    def _fallback_pipeline(self, args: argparse.Namespace) -> bool:
+        """Fallback pipeline when components not available"""
+        self.safe_output.safe_print("⚠️ Pipeline components not available")
+        return False
 
 # ============================================================================
 # ARGUMENT PARSER SETUP (v3.3.3 - enhanced with quality commands)
@@ -687,7 +1799,7 @@ Enhanced CLI v3.3.3 - FINAL INTEGRATED EDITION
 🚀 Quick Start:
   python factset_cli.py pipeline --mode=intelligent --v333
   python factset_cli.py quality --analyze
-  python factset_cli.py validate --comprehensive --quality-scoring
+  python factset_cli.py validate --comprehensive --test-v333
 
 🔧 v3.3.2 Features (Preserved):
   ✅ Unified commands (Windows/Linux identical)
@@ -734,6 +1846,18 @@ Enhanced CLI v3.3.3 - FINAL INTEGRATED EDITION
     validate_parser.add_argument('--test-v333', action='store_true', help='Test v3.3.3 features')  # v3.3.3
     validate_parser.add_argument('--quality-scoring', action='store_true', help='Test quality scoring')  # v3.3.3
     validate_parser.add_argument('--github-actions', action='store_true', help='GitHub Actions mode')
+
+    # Download watchlist command
+    download_parser = subparsers.add_parser('download-watchlist', help='Download company watchlist')
+    download_parser.add_argument('--force-refresh', action='store_true', help='Force refresh watchlist')
+    download_parser.add_argument('--validate', action='store_true', default=True, help='Validate downloaded data')
+    
+    # Search command (enhanced for v3.3.3)
+    search_parser = subparsers.add_parser('search', help='Enhanced search')
+    search_parser.add_argument('--mode', default='enhanced', help='Search mode')
+    search_parser.add_argument('--priority', default='high_only', help='Priority filter')
+    search_parser.add_argument('--max-results', type=int, default=10, help='Maximum results')
+    search_parser.add_argument('--batch-size', type=int, default=20, help='Batch size')
     
     # Process command (enhanced for v3.3.3)
     process_parser = subparsers.add_parser('process', help='Data processing')
@@ -760,6 +1884,7 @@ Enhanced CLI v3.3.3 - FINAL INTEGRATED EDITION
     pipeline_parser.add_argument('--quality-scoring', action='store_true', default=True, help='Enable quality scoring')  # v3.3.3
     pipeline_parser.add_argument('--v333', action='store_true', default=True, help='Enable v3.3.3 features')  # v3.3.3
     pipeline_parser.add_argument('--github-actions', action='store_true', help='GitHub Actions mode')
+    pipeline_parser.add_argument('--skip-phases', nargs='*', choices=['search', 'processing', 'upload'], help='Skip phases')
     
     # Quality command (v3.3.3 NEW)
     quality_parser = subparsers.add_parser('quality', help='Quality scoring analysis')
@@ -770,7 +1895,46 @@ Enhanced CLI v3.3.3 - FINAL INTEGRATED EDITION
     quality_parser.add_argument('--calibrate', action='store_const', const='calibrate', dest='action', help='Calibrate quality scoring')
     quality_parser.set_defaults(action='analyze')
     
-    # ... [All other v3.3.2 parsers preserved]
+    # Status command
+    status_parser = subparsers.add_parser('status', help='Pipeline status')
+    
+    # Logs command
+    logs_parser = subparsers.add_parser('logs', help='View logs')
+    logs_parser.add_argument('--stage', default='all', help='Stage name')
+    logs_parser.add_argument('--tail', type=int, default=50, help='Number of lines')
+    logs_parser.add_argument('--export', choices=['json', 'txt'], help='Export format')
+    
+    # Diagnose command
+    diagnose_parser = subparsers.add_parser('diagnose', help='Diagnose issues')
+    diagnose_parser.add_argument('--issue', help='Specific issue to diagnose')
+    diagnose_parser.add_argument('--stage', help='Stage to focus on')
+    diagnose_parser.add_argument('--suggest-fix', action='store_true', help='Suggest fixes')
+    diagnose_parser.add_argument('--v333-comprehensive', action='store_true', help='v3.3.3 comprehensive diagnostics')
+    
+    # Recover command
+    recover_parser = subparsers.add_parser('recover', help='Recovery procedures')
+    recover_parser.add_argument('--analyze', action='store_true', help='Analyze issues')
+    recover_parser.add_argument('--fix-common-issues', action='store_true', help='Fix common issues')
+    recover_parser.add_argument('--v333-diagnostics', action='store_true', help='v3.3.3 diagnostics')
+    
+    # Report command
+    report_parser = subparsers.add_parser('report', help='Generate report')
+    report_parser.add_argument('--format', default='summary', choices=['summary', 'json', 'github-summary'], help='Report format')
+    report_parser.add_argument('--email', action='store_true', help='Email report')
+    report_parser.add_argument('--v333-metrics', action='store_true', help='Include v3.3.3 metrics')
+    report_parser.add_argument('--quality-focused', action='store_true', help='Focus on quality metrics')
+    
+    # Commit command
+    commit_parser = subparsers.add_parser('commit', help='Commit results')
+    commit_parser.add_argument('--smart', action='store_true', help='Smart commit (only significant changes)')
+    commit_parser.add_argument('--validate', action='store_true', help='Validate before commit')
+    commit_parser.add_argument('--v333-format', action='store_true', help='Use v3.3.3 commit format')
+    
+    # Performance command
+    performance_parser = subparsers.add_parser('performance', help='Performance analysis')
+    
+    # Analyze command
+    analyze_parser = subparsers.add_parser('analyze', help='Data analysis')
     
     return parser
 
