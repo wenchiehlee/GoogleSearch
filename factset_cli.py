@@ -800,6 +800,53 @@ class FactSetCLI:
             self.safe_output.safe_print(f"❌ Failed to generate GitHub summary: {e}")
             return False
     
+    def _write_data_status_to_file(self, f):
+        """Write data status to file for GitHub summary"""
+        try:
+            # Get data status
+            md_dir = Path("data/md")
+            processed_dir = Path("data/processed")
+            
+            # MD files count
+            if md_dir.exists():
+                md_count = len(list(md_dir.glob("*.md")))
+                f.write(f"- **MD Files**: {md_count} files\n")
+            else:
+                f.write("- **MD Files**: No data directory found\n")
+            
+            # Processed files status
+            if processed_dir.exists():
+                expected_files = ["portfolio_summary.csv", "detailed_data.csv", "statistics.json"]
+                existing_files = []
+                for file_name in expected_files:
+                    file_path = processed_dir / file_name
+                    if file_path.exists():
+                        size_kb = file_path.stat().st_size // 1024
+                        existing_files.append(f"{file_name} ({size_kb}KB)")
+                
+                if existing_files:
+                    f.write(f"- **Processed Files**: {len(existing_files)}/3 files\n")
+                    for file_info in existing_files:
+                        f.write(f"  - {file_info}\n")
+                else:
+                    f.write("- **Processed Files**: No processed files found\n")
+            else:
+                f.write("- **Processed Files**: No processed directory found\n")
+            
+            # Log files status
+            logs_dir = Path("logs")
+            if logs_dir.exists():
+                log_files = list(logs_dir.glob("**/*.log"))
+                if log_files:
+                    f.write(f"- **Log Files**: {len(log_files)} files\n")
+                else:
+                    f.write("- **Log Files**: No log files found\n")
+            else:
+                f.write("- **Log Files**: No logs directory found\n")
+                
+        except Exception as e:
+            f.write(f"- **Error getting data status**: {e}\n")
+
     def _smart_commit(self, args: argparse.Namespace) -> bool:
         """Smart commit based on data quality"""
         self.safe_output.safe_print("💾 Analyzing data for smart commit...")

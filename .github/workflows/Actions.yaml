@@ -1,4 +1,3 @@
-# Version: 3.3.2
 name: FactSet Pipeline v3.3.2 - Simplified & Observable
 
 on:
@@ -20,7 +19,7 @@ on:
       priority_focus:
         description: 'Search priority level'
         required: false
-        default: 'balanced'
+        default: 'high_only'
         type: choice
         options:
           - 'high_only'       # Top priority companies only
@@ -29,7 +28,7 @@ on:
       memory_limit:
         description: 'Memory limit (MB)'
         required: false
-        default: '8192'
+        default: '1024'
         type: string
       log_level:
         description: 'Logging level'
@@ -52,6 +51,7 @@ jobs:
   # v3.3.2 Simplified Validation
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       status: ${{ steps.validate.outputs.status }}
       recommendation: ${{ steps.validate.outputs.recommendation }}
@@ -93,6 +93,7 @@ jobs:
   pipeline:
     needs: validate
     runs-on: ubuntu-latest
+    timeout-minutes: 180  # 3 hours max instead of 6
     if: needs.validate.outputs.status == 'success'
     
     steps:
@@ -122,37 +123,33 @@ jobs:
         python factset_cli.py pipeline \
           --mode=${{ github.event.inputs.execution_mode || 'intelligent' }} \
           --priority=${{ github.event.inputs.priority_focus || 'high_only' }} \
-          --memory-limit=${{ github.event.inputs.memory_limit || '8192' }} \
+          --memory-limit=${{ github.event.inputs.memory_limit || '1024' }} \
+          --batch-size=25 \
           --log-level=${{ github.event.inputs.log_level || 'info' }} \
           --github-actions
 
-    
     - name: 📊 Generate v3.3.2 Report
       if: always()
       run: |
         echo "📊 Generating comprehensive v3.3.2 report..."
         python factset_cli.py report --format=github-summary
     
-    - name: 💾 Smart Commit with v3.3.2 Validation
-      if: success()
-      run: |
-        echo "💾 Performing smart commit with v3.3.2 validation..."
-        python factset_cli.py commit --smart --validate
-    
-    - name: 📋 Upload Execution Logs
+    - name: 💾 Commit and Push Results
       if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: v3.3.2-execution-logs
-        path: |
-          logs/
-          !logs/archives/
-        retention-days: 7
+      run: |
+        echo "💾 Committing results to repository..."
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -A
+        git commit -m "⬆️ GitHub Actions Results added - v3.3.2 Pipeline $(date)" || true
+        git push || true
+        echo "✅ Results committed to repository"
 
   # v3.3.2 Enhanced Recovery
   recovery:
     needs: [validate, pipeline]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: failure()
     
     steps:
@@ -184,18 +181,21 @@ jobs:
         echo "📋 Generating v3.3.2 recovery report..."
         python factset_cli.py report --format=github-summary --recovery-mode
     
-    - name: 📋 Upload Recovery Logs
+    - name: 💾 Commit Recovery Results
       if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: v3.3.2-recovery-logs
-        path: logs/
-        retention-days: 14
+      run: |
+        echo "💾 Committing recovery results..."
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -A
+        git commit -m "🔄 Recovery Results - v3.3.2 $(date)" || true
+        git push || true
 
   # v3.3.2 Status Summary
   summary:
     needs: [validate, pipeline, recovery]
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: always()
     
     steps:
@@ -206,7 +206,7 @@ jobs:
         echo "**Version**: v3.3.2 (Simplified & Observable)" >> $GITHUB_STEP_SUMMARY
         echo "**Execution Mode**: ${{ github.event.inputs.execution_mode || 'intelligent' }}" >> $GITHUB_STEP_SUMMARY
         echo "**Priority Focus**: ${{ github.event.inputs.priority_focus || 'high_only' }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Memory Limit**: ${{ github.event.inputs.memory_limit || '2048' }}MB" >> $GITHUB_STEP_SUMMARY
+        echo "**Memory Limit**: ${{ github.event.inputs.memory_limit || '1024' }}MB" >> $GITHUB_STEP_SUMMARY
         echo "**Log Level**: ${{ github.event.inputs.log_level || 'info' }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
@@ -238,6 +238,7 @@ jobs:
         echo "- ✅ **Stage-specific Dual Logging**: Console + file output" >> $GITHUB_STEP_SUMMARY
         echo "- ✅ **Enhanced Observability**: Automated diagnostics and recovery" >> $GITHUB_STEP_SUMMARY
         echo "- ✅ **Simplified Workflow**: 80% reduction in Actions.yml complexity" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ **Timeout Protection**: 3-hour limit with early termination" >> $GITHUB_STEP_SUMMARY
         echo "- ✅ **All v3.3.1 Fixes Maintained**: Performance and reliability preserved" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         

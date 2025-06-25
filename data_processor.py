@@ -766,27 +766,44 @@ def deduplicate_financial_data_v331(data_list: List[Dict[str, Any]], logger=None
 def process_md_files_in_batches_v331(md_files: List[Path], 
                                     memory_manager: MemoryManager,
                                     batch_size: int = 50,
+                                    max_processing_time_minutes: int = 120,
                                     logger=None) -> List[Dict]:
-    """FIXED #2: Process MD files in batches with progress reporting and memory management"""
+    """FIXED #2: Process MD files in batches with progress reporting, memory management, and timeout protection"""
     if logger is None:
         logger = get_v332_logger()
     
     total_files = len(md_files)
     all_results = []
+    start_time = time.time()
+    max_processing_time = max_processing_time_minutes * 60  # Convert to seconds
     
     logger.info(f"Processing {total_files} MD files in batches of {batch_size} (v3.3.2)")
+    logger.info(f"Timeout protection: {max_processing_time_minutes} minutes")
     
     perf_monitor = get_performance_monitor()
     
     with perf_monitor.time_operation("batch_processing"):
         for batch_num in range(0, total_files, batch_size):
+            # Check timeout before each batch
+            elapsed_time = time.time() - start_time
+            if elapsed_time > max_processing_time:
+                logger.warning(f"Timeout reached ({max_processing_time_minutes} minutes), stopping processing")
+                logger.info(f"Processed {len(all_results)} files before timeout")
+                break
+            
             batch_end = min(batch_num + batch_size, total_files)
             batch = md_files[batch_num:batch_end]
             
-            logger.info(f"Batch {batch_num//batch_size + 1}: files {batch_num+1}-{batch_end}/{total_files}")
+            remaining_time = (max_processing_time - elapsed_time) / 60
+            logger.info(f"Batch {batch_num//batch_size + 1}: files {batch_num+1}-{batch_end}/{total_files} (⏱️ {remaining_time:.1f}min remaining)")
             
             batch_results = []
             for i, md_file in enumerate(batch):
+                # Check timeout more frequently during processing
+                if time.time() - start_time > max_processing_time:
+                    logger.warning("Timeout reached during batch processing, stopping")
+                    break
+                
                 # Progress reporting every 10 files
                 if i % 10 == 0:
                     logger.debug(f"File {batch_num+i+1}/{total_files}: {md_file.name}")
@@ -803,10 +820,17 @@ def process_md_files_in_batches_v331(md_files: List[Path],
             memory_manager.processing_stats['batches_completed'] += 1
             
             memory_stats = memory_manager.get_stats()
-            logger.info(f"Batch {batch_num//batch_size + 1} completed: {len(batch_results)} files processed")
+            elapsed_minutes = elapsed_time / 60
+            logger.info(f"Batch {batch_num//batch_size + 1} completed: {len(batch_results)} files processed ({elapsed_minutes:.1f}min elapsed)")
             logger.debug(f"Memory: {memory_stats['current_mb']:.1f}MB (Peak: {memory_stats['peak_mb']:.1f}MB)")
+            
+            # Early termination if timeout is approaching
+            if elapsed_time > max_processing_time * 0.9:  # 90% of max time
+                logger.warning(f"Approaching timeout limit, processed {len(all_results)}/{total_files} files")
+                break
     
-    logger.info(f"All {total_files} MD files processed successfully")
+    total_time = time.time() - start_time
+    logger.info(f"Processing completed: {len(all_results)}/{total_files} files in {total_time/60:.1f} minutes")
     return all_results
 
 # ============================================================================
