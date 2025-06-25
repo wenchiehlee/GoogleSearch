@@ -956,10 +956,10 @@ class StageRunner:
             skip_phases = stage_context.parameters.get("skip_phases", [])
             
             if hasattr(pipeline_module, 'EnhancedFactSetPipeline'):
-                # Use v3.3.1 enhanced pipeline
+                # Use v3.3.3 enhanced pipeline
                 pipeline = pipeline_module.EnhancedFactSetPipeline()
                 
-                success = pipeline.run_complete_pipeline_v332(
+                success = pipeline.run_complete_pipeline_v333(
                     force_all=stage_context.parameters.get("force_all", False),
                     skip_phases=skip_phases,
                     execution_mode=execution_mode
