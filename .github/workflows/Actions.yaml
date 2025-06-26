@@ -233,41 +233,50 @@ jobs:
           END_TIME=$(date +%s)
           EXECUTION_TIME=$((END_TIME - START_TIME))
           
-          # Count results
-          MD_FILES_FOUND=$(find data/md -name "*.md" 2>/dev/null | wc -l || echo "0")
-          
-          # Check for companies processed by looking at search logs or data structure
-          if [ -f "logs/latest/search.log" ]; then
-            COMPANIES_SEARCHED=$(grep -c "Processing company" "logs/latest/search.log" 2>/dev/null || echo "0")
+          # Count results - use safer file counting
+          if [ -d "data/md" ]; then
+            MD_FILES_FOUND=$(find data/md -name "*.md" -type f 2>/dev/null | wc -l)
           else
-            COMPANIES_SEARCHED="0"
+            MD_FILES_FOUND=0
           fi
           
-          # Count errors
+          # Check for companies processed by looking at search logs or data structure
+          COMPANIES_SEARCHED=0
+          if [ -f "logs/latest/search.log" ]; then
+            COMPANIES_SEARCHED=$(grep -c "Processing company" "logs/latest/search.log" 2>/dev/null || echo "0")
+          fi
+          
+          # Count errors safely
+          SEARCH_ERRORS=0
           if [ -f "logs/latest/search.log" ]; then
             SEARCH_ERRORS=$(grep -c "ERROR" "logs/latest/search.log" 2>/dev/null || echo "0")
-          else
-            SEARCH_ERRORS="0"
           fi
           
           # Determine overall search status
           if [ "$SEARCH_SUCCESS" = "true" ] && [ "$MD_FILES_FOUND" -gt 0 ]; then
             SEARCH_STATUS="success"
           elif [ "$MD_FILES_FOUND" -gt 0 ]; then
-            SEARCH_STATUS="partial_success"
+            SEARCH_STATUS="partial_success"  
           else
             SEARCH_STATUS="failed"
           fi
           
-          # v3.3.3 FIX: Use GITHUB_OUTPUT instead of deprecated set-output
-          echo "status=${SEARCH_STATUS}" >> $GITHUB_OUTPUT
-          echo "files_found=${MD_FILES_FOUND}" >> $GITHUB_OUTPUT
-          echo "companies_searched=${COMPANIES_SEARCHED}" >> $GITHUB_OUTPUT
-          echo "search_errors=${SEARCH_ERRORS}" >> $GITHUB_OUTPUT
-          echo "execution_time=${EXECUTION_TIME}" >> $GITHUB_OUTPUT
+          # v3.3.3 FIX: Use GITHUB_OUTPUT with proper validation
+          echo "status=$SEARCH_STATUS" >> $GITHUB_OUTPUT
+          echo "files_found=$MD_FILES_FOUND" >> $GITHUB_OUTPUT
+          echo "companies_searched=$COMPANIES_SEARCHED" >> $GITHUB_OUTPUT
+          echo "search_errors=$SEARCH_ERRORS" >> $GITHUB_OUTPUT
+          echo "execution_time=$EXECUTION_TIME" >> $GITHUB_OUTPUT
           
-          echo "✅ Search phase completed with status: ${SEARCH_STATUS}"
-          echo "📊 Results: ${MD_FILES_FOUND} files, ${COMPANIES_SEARCHED} companies, ${EXECUTION_TIME}s"
+          echo "✅ Search phase completed with status: $SEARCH_STATUS"
+          echo "📊 Results: $MD_FILES_FOUND files, $COMPANIES_SEARCHED companies, ${EXECUTION_TIME}s"
+          
+          # Debug output
+          echo "🔍 Debug Info:"
+          echo "  - data/md exists: $([ -d 'data/md' ] && echo 'yes' || echo 'no')"
+          echo "  - logs/latest/search.log exists: $([ -f 'logs/latest/search.log' ] && echo 'yes' || echo 'no')"
+          echo "  - Working directory: $(pwd)"
+          echo "  - Directory contents: $(ls -la data/ 2>/dev/null || echo 'data directory not found')"
       
       - name: 📤 Upload Search Results
         if: always()
@@ -430,17 +439,65 @@ jobs:
           END_TIME=$(date +%s)
           EXECUTION_TIME=$((END_TIME - START_TIME))
           
-          # Extract processing statistics
+          # Extract processing statistics safely
+          COMPANIES_PROCESSED=0
+          QUALITY_AVERAGE=0
+          QUALITY_DIST="{}"
+          FILES_PROCESSED=0
+          
           if [ -f "data/processed/statistics.json" ]; then
-            COMPANIES_PROCESSED=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('companies_with_data', 0))" 2>/dev/null || echo "0")
-            QUALITY_AVERAGE=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))" 2>/dev/null || echo "0")
-            QUALITY_DIST=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(json.dumps(data.get('quality_analysis_v333', {}).get('quality_distribution', {})))" 2>/dev/null || echo "{}")
-            FILES_PROCESSED=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('files_processed', 0))" 2>/dev/null || echo "0")
+            echo "📊 Found statistics.json, extracting metrics..."
+            
+            # Use Python to safely extract values
+            COMPANIES_PROCESSED=$(python3 -c "
+import json
+try:
+    with open('data/processed/statistics.json', 'r') as f:
+        data = json.load(f)
+    print(data.get('companies_with_data', 0))
+except:
+    print('0')
+" 2>/dev/null || echo "0")
+            
+            QUALITY_AVERAGE=$(python3 -c "
+import json
+try:
+    with open('data/processed/statistics.json', 'r') as f:
+        data = json.load(f)
+    print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))
+except:
+    print('0')
+" 2>/dev/null || echo "0")
+            
+            FILES_PROCESSED=$(python3 -c "
+import json
+try:
+    with open('data/processed/statistics.json', 'r') as f:
+        data = json.load(f)
+    print(data.get('files_processed', 0))
+except:
+    print('0')
+" 2>/dev/null || echo "0")
+            
+            # Quality distribution as string (simpler)
+            QUALITY_DIST_RAW=$(python3 -c "
+import json
+try:
+    with open('data/processed/statistics.json', 'r') as f:
+        data = json.load(f)
+    dist = data.get('quality_analysis_v333', {}).get('quality_distribution', {})
+    print(json.dumps(dist))
+except:
+    print('{}')
+" 2>/dev/null || echo "{}")
+            
+            QUALITY_DIST="$QUALITY_DIST_RAW"
+            
           else
-            echo "⚠️ Statistics file not found, extracting basic metrics..."
-            COMPANIES_PROCESSED=$(find data/processed -name "*.csv" 2>/dev/null | wc -l || echo "0")
-            QUALITY_AVERAGE=0
-            QUALITY_DIST="{}"
+            echo "⚠️ Statistics file not found, using basic metrics..."
+            if [ -d "data/processed" ]; then
+              COMPANIES_PROCESSED=$(find data/processed -name "*.csv" -type f 2>/dev/null | wc -l)
+            fi
             FILES_PROCESSED=$MD_FILES_AVAILABLE
           fi
           
@@ -466,13 +523,21 @@ jobs:
             PROCESS_STATUS="failed"
           fi
           
-          # v3.3.3 FIX: Use GITHUB_OUTPUT instead of deprecated set-output
-          echo "status=${PROCESS_STATUS}" >> $GITHUB_OUTPUT
-          echo "companies_processed=${COMPANIES_PROCESSED}" >> $GITHUB_OUTPUT
-          echo "quality_average=${QUALITY_AVERAGE}" >> $GITHUB_OUTPUT
-          echo "quality_distribution=${QUALITY_DIST}" >> $GITHUB_OUTPUT
-          echo "files_processed=${FILES_PROCESSED}" >> $GITHUB_OUTPUT
-          echo "execution_time=${EXECUTION_TIME}" >> $GITHUB_OUTPUT
+          # v3.3.3 FIX: Use GITHUB_OUTPUT with proper escaping
+          echo "status=$PROCESS_STATUS" >> $GITHUB_OUTPUT
+          echo "companies_processed=$COMPANIES_PROCESSED" >> $GITHUB_OUTPUT
+          echo "quality_average=$QUALITY_AVERAGE" >> $GITHUB_OUTPUT
+          echo "files_processed=$FILES_PROCESSED" >> $GITHUB_OUTPUT
+          echo "execution_time=$EXECUTION_TIME" >> $GITHUB_OUTPUT
+          
+          # Handle quality distribution safely
+          if [ "$QUALITY_DIST" != "{}" ] && [ -n "$QUALITY_DIST" ]; then
+            echo "quality_distribution<<EOF" >> $GITHUB_OUTPUT
+            echo "$QUALITY_DIST" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "quality_distribution={}" >> $GITHUB_OUTPUT
+          fi
           
           echo "✅ Processing phase completed with status: ${PROCESS_STATUS}"
           echo "📊 Results: ${COMPANIES_PROCESSED} companies, ${FILES_PROCESSED} files, ${EXECUTION_TIME}s"
