@@ -1,0 +1,1092 @@
+2025-06-26 02:29:40.751 [    INFO] factset_v332.rate_limiter - _create_stage_logger:286 - v3.3.2 stage logger initialized: rate_limiter
+2025-06-26 02:29:40.751 [   DEBUG] factset_v332.rate_limiter - _create_stage_logger:287 - Log file: logs/20250626/rate_limiter_022940.log
+2025-06-26 02:29:40.751 [    INFO] factset_v332.rate_limiter - __init__:710 - Rate limiter initialized with 3s delay
+2025-06-26 02:29:41.890 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #1
+2025-06-26 02:29:43.506 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (1/1)
+2025-06-26 02:29:45.284 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (2/1)
+2025-06-26 02:29:48.285 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #2
+2025-06-26 02:30:06.257 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (3/2)
+2025-06-26 02:30:08.021 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (4/2)
+2025-06-26 02:30:11.022 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #3
+2025-06-26 02:30:12.299 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (5/3)
+2025-06-26 02:30:14.002 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (6/3)
+2025-06-26 02:30:17.003 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #4
+2025-06-26 02:30:19.920 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (7/4)
+2025-06-26 02:30:21.494 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (8/4)
+2025-06-26 02:30:24.495 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #5
+2025-06-26 02:30:30.765 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #6
+2025-06-26 02:30:31.834 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (9/6)
+2025-06-26 02:30:33.661 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (10/6)
+2025-06-26 02:30:36.662 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #7
+2025-06-26 02:30:38.712 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (11/7)
+2025-06-26 02:30:41.713 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #8
+2025-06-26 02:30:42.766 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (12/8)
+2025-06-26 02:30:44.482 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (13/8)
+2025-06-26 02:30:47.483 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #9
+2025-06-26 02:30:52.044 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (14/9)
+2025-06-26 02:30:55.045 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #10
+2025-06-26 02:31:01.337 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #11
+2025-06-26 02:31:02.549 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (15/11)
+2025-06-26 02:31:04.609 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (16/11)
+2025-06-26 02:31:07.610 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #12
+2025-06-26 02:31:08.891 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (17/12)
+2025-06-26 02:31:12.137 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (18/12)
+2025-06-26 02:31:15.138 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #13
+2025-06-26 02:31:18.456 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #14
+2025-06-26 02:31:19.767 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (19/14)
+2025-06-26 02:31:22.769 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #15
+2025-06-26 02:31:29.015 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #16
+2025-06-26 02:31:30.066 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (20/16)
+2025-06-26 02:31:34.371 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (21/16)
+2025-06-26 02:31:37.372 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #17
+2025-06-26 02:31:38.502 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (22/17)
+2025-06-26 02:31:41.064 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (23/17)
+2025-06-26 02:31:44.065 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #18
+2025-06-26 02:31:46.073 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (24/18)
+2025-06-26 02:31:49.073 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #19
+2025-06-26 02:31:51.218 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (25/19)
+2025-06-26 02:31:54.219 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #20
+2025-06-26 02:32:00.462 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #21
+2025-06-26 02:32:01.373 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (26/21)
+2025-06-26 02:32:02.944 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (27/21)
+2025-06-26 02:32:05.944 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #22
+2025-06-26 02:32:11.150 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (28/22)
+2025-06-26 02:32:14.151 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #23
+2025-06-26 02:32:17.497 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #24
+2025-06-26 02:32:20.785 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #25
+2025-06-26 02:32:27.008 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #26
+2025-06-26 02:32:28.351 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (29/26)
+2025-06-26 02:32:30.257 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (30/26)
+2025-06-26 02:32:33.258 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #27
+2025-06-26 02:32:35.167 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (31/27)
+2025-06-26 02:32:38.168 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #28
+2025-06-26 02:32:45.304 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (32/28)
+2025-06-26 02:32:48.305 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #29
+2025-06-26 02:32:50.389 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (33/29)
+2025-06-26 02:32:53.389 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #30
+2025-06-26 02:32:59.621 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #31
+2025-06-26 02:33:00.500 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (34/31)
+2025-06-26 02:33:02.059 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (35/31)
+2025-06-26 02:33:05.060 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #32
+2025-06-26 02:33:07.070 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (36/32)
+2025-06-26 02:33:10.070 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #33
+2025-06-26 02:33:12.432 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (37/33)
+2025-06-26 02:33:15.433 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #34
+2025-06-26 02:33:24.110 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (38/34)
+2025-06-26 02:33:27.110 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #35
+2025-06-26 02:33:28.496 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (39/35)
+2025-06-26 02:33:34.566 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #36
+2025-06-26 02:33:35.507 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (40/36)
+2025-06-26 02:33:40.401 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (41/36)
+2025-06-26 02:33:43.402 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #37
+2025-06-26 02:33:46.726 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #38
+2025-06-26 02:33:50.039 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #39
+2025-06-26 02:33:54.546 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (42/39)
+2025-06-26 02:34:01.349 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (43/39)
+2025-06-26 02:34:04.350 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #40
+2025-06-26 02:34:10.627 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #41
+2025-06-26 02:34:11.516 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (44/41)
+2025-06-26 02:34:13.260 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (45/41)
+2025-06-26 02:34:16.260 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #42
+2025-06-26 02:34:18.194 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (46/42)
+2025-06-26 02:34:21.195 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #43
+2025-06-26 02:34:24.522 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #44
+2025-06-26 02:34:25.426 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (47/44)
+2025-06-26 02:34:35.888 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (48/44)
+2025-06-26 02:34:38.889 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #45
+2025-06-26 02:34:45.154 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #46
+2025-06-26 02:34:46.134 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (49/46)
+2025-06-26 02:34:47.995 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (50/46)
+2025-06-26 02:34:50.996 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #47
+2025-06-26 02:34:54.258 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #48
+2025-06-26 02:34:55.420 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (51/48)
+2025-06-26 02:34:58.421 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #49
+2025-06-26 02:35:01.763 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #50
+2025-06-26 02:35:08.033 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #51
+2025-06-26 02:35:09.216 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (52/51)
+2025-06-26 02:35:11.020 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (53/51)
+2025-06-26 02:35:14.020 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #52
+2025-06-26 02:35:15.247 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (54/52)
+2025-06-26 02:35:18.248 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #53
+2025-06-26 02:35:20.212 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (55/53)
+2025-06-26 02:35:23.213 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #54
+2025-06-26 02:35:25.225 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (56/54)
+2025-06-26 02:35:27.348 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (57/54)
+2025-06-26 02:35:30.348 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #55
+2025-06-26 02:35:36.621 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #56
+2025-06-26 02:35:38.271 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (58/56)
+2025-06-26 02:35:40.125 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (59/56)
+2025-06-26 02:35:43.125 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #57
+2025-06-26 02:35:44.847 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (60/57)
+2025-06-26 02:35:47.848 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #58
+2025-06-26 02:35:48.933 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (61/58)
+2025-06-26 02:35:51.934 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #59
+2025-06-26 02:35:55.321 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #60
+2025-06-26 02:36:01.596 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #61
+2025-06-26 02:36:02.838 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (62/61)
+2025-06-26 02:36:04.474 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (63/61)
+2025-06-26 02:36:07.474 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #62
+2025-06-26 02:36:08.235 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (64/62)
+2025-06-26 02:36:11.236 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #63
+2025-06-26 02:36:12.780 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (65/63)
+2025-06-26 02:36:15.781 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #64
+2025-06-26 02:36:17.782 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (66/64)
+2025-06-26 02:36:20.783 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #65
+2025-06-26 02:36:27.025 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #66
+2025-06-26 02:36:28.098 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (67/66)
+2025-06-26 02:36:29.933 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (68/66)
+2025-06-26 02:36:32.934 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #67
+2025-06-26 02:36:34.215 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (69/67)
+2025-06-26 02:36:36.394 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (70/67)
+2025-06-26 02:36:39.395 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #68
+2025-06-26 02:36:40.595 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (71/68)
+2025-06-26 02:36:42.632 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (72/68)
+2025-06-26 02:36:45.633 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #69
+2025-06-26 02:36:47.233 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (73/69)
+2025-06-26 02:36:49.488 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (74/69)
+2025-06-26 02:36:52.489 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #70
+2025-06-26 02:36:58.732 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #71
+2025-06-26 02:36:59.781 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (75/71)
+2025-06-26 02:37:01.656 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (76/71)
+2025-06-26 02:37:04.657 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #72
+2025-06-26 02:37:07.998 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #73
+2025-06-26 02:37:09.516 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (77/73)
+2025-06-26 02:37:11.302 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (78/73)
+2025-06-26 02:37:14.303 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #74
+2025-06-26 02:37:17.601 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #75
+2025-06-26 02:37:18.468 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (79/75)
+2025-06-26 02:37:24.549 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #76
+2025-06-26 02:37:25.787 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (80/76)
+2025-06-26 02:37:27.584 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (81/76)
+2025-06-26 02:37:30.585 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #77
+2025-06-26 02:37:31.683 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (82/77)
+2025-06-26 02:37:33.758 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (83/77)
+2025-06-26 02:37:36.758 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #78
+2025-06-26 02:37:37.995 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (84/78)
+2025-06-26 02:37:40.996 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #79
+2025-06-26 02:37:42.281 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (85/79)
+2025-06-26 02:37:44.103 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (86/79)
+2025-06-26 02:37:47.104 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #80
+2025-06-26 02:37:53.376 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #81
+2025-06-26 02:37:54.424 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (87/81)
+2025-06-26 02:37:57.240 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (88/81)
+2025-06-26 02:38:00.241 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #82
+2025-06-26 02:38:03.540 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #83
+2025-06-26 02:38:05.612 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (89/83)
+2025-06-26 02:38:08.613 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #84
+2025-06-26 02:38:09.855 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (90/84)
+2025-06-26 02:38:12.856 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #85
+2025-06-26 02:38:19.203 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #86
+2025-06-26 02:38:20.155 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (91/86)
+2025-06-26 02:38:22.149 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (92/86)
+2025-06-26 02:38:25.149 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #87
+2025-06-26 02:38:27.120 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (93/87)
+2025-06-26 02:38:30.120 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #88
+2025-06-26 02:38:33.472 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #89
+2025-06-26 02:38:34.470 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (94/89)
+2025-06-26 02:38:37.471 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #90
+2025-06-26 02:38:39.421 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (95/90)
+2025-06-26 02:38:41.660 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (96/90)
+2025-06-26 02:38:46.689 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #91
+2025-06-26 02:38:48.699 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (97/91)
+2025-06-26 02:38:50.723 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (98/91)
+2025-06-26 02:38:53.724 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #92
+2025-06-26 02:38:55.837 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (99/92)
+2025-06-26 02:38:58.838 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #93
+2025-06-26 02:39:03.496 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (100/93)
+2025-06-26 02:39:06.496 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #94
+2025-06-26 02:39:08.566 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (101/94)
+2025-06-26 02:39:11.567 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #95
+2025-06-26 02:39:17.799 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #96
+2025-06-26 02:39:19.343 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (102/96)
+2025-06-26 02:39:21.153 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (103/96)
+2025-06-26 02:39:24.154 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #97
+2025-06-26 02:39:25.103 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (104/97)
+2025-06-26 02:39:26.730 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (105/97)
+2025-06-26 02:39:29.731 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #98
+2025-06-26 02:39:31.724 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (106/98)
+2025-06-26 02:39:34.725 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #99
+2025-06-26 02:39:38.115 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (107/99)
+2025-06-26 02:39:41.115 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #100
+2025-06-26 02:39:47.508 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #101
+2025-06-26 02:39:48.858 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (108/101)
+2025-06-26 02:39:52.368 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (109/101)
+2025-06-26 02:39:55.368 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #102
+2025-06-26 02:39:58.162 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (110/102)
+2025-06-26 02:40:01.163 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #103
+2025-06-26 02:40:02.261 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (111/103)
+2025-06-26 02:40:05.262 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #104
+2025-06-26 02:40:10.294 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #105
+2025-06-26 02:40:16.573 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #106
+2025-06-26 02:40:18.129 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (112/106)
+2025-06-26 02:40:22.002 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (113/106)
+2025-06-26 02:40:25.002 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #107
+2025-06-26 02:40:26.976 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (114/107)
+2025-06-26 02:40:29.977 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #108
+2025-06-26 02:40:34.595 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #109
+2025-06-26 02:40:37.933 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #110
+2025-06-26 02:40:44.180 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #111
+2025-06-26 02:40:46.345 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (115/111)
+2025-06-26 02:40:48.074 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (116/111)
+2025-06-26 02:40:51.075 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #112
+2025-06-26 02:40:52.206 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (117/112)
+2025-06-26 02:40:53.936 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (118/112)
+2025-06-26 02:40:56.936 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #113
+2025-06-26 02:41:01.118 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (119/113)
+2025-06-26 02:41:04.119 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #114
+2025-06-26 02:41:06.415 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (120/114)
+2025-06-26 02:41:09.416 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #115
+2025-06-26 02:41:15.675 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #116
+2025-06-26 02:41:16.814 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (121/116)
+2025-06-26 02:41:20.866 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (122/116)
+2025-06-26 02:41:23.867 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #117
+2025-06-26 02:41:28.245 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #118
+2025-06-26 02:41:30.371 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (123/118)
+2025-06-26 02:41:33.372 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #119
+2025-06-26 02:41:34.142 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (124/119)
+2025-06-26 02:41:36.327 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (125/119)
+2025-06-26 02:41:39.327 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #120
+2025-06-26 02:41:45.575 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #121
+2025-06-26 02:41:49.160 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (126/121)
+2025-06-26 02:41:52.160 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #122
+2025-06-26 02:41:53.752 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (127/122)
+2025-06-26 02:41:55.389 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (128/122)
+2025-06-26 02:41:58.389 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #123
+2025-06-26 02:41:59.616 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (129/123)
+2025-06-26 02:42:03.108 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (130/123)
+2025-06-26 02:42:06.108 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #124
+2025-06-26 02:42:12.078 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #125
+2025-06-26 02:42:18.325 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #126
+2025-06-26 02:42:19.306 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (131/126)
+2025-06-26 02:42:21.027 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (132/126)
+2025-06-26 02:42:24.028 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #127
+2025-06-26 02:42:24.821 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (133/127)
+2025-06-26 02:42:27.822 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #128
+2025-06-26 02:42:31.094 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #129
+2025-06-26 02:42:32.028 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (134/129)
+2025-06-26 02:42:35.029 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #130
+2025-06-26 02:42:41.258 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #131
+2025-06-26 02:42:42.372 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (135/131)
+2025-06-26 02:42:44.221 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (136/131)
+2025-06-26 02:42:47.221 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #132
+2025-06-26 02:42:48.194 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (137/132)
+2025-06-26 02:42:51.195 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #133
+2025-06-26 02:42:52.440 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (138/133)
+2025-06-26 02:42:54.291 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (139/133)
+2025-06-26 02:42:57.291 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #134
+2025-06-26 02:43:00.556 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #135
+2025-06-26 02:43:06.778 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #136
+2025-06-26 02:43:09.084 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (140/136)
+2025-06-26 02:43:11.249 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (141/136)
+2025-06-26 02:43:14.250 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #137
+2025-06-26 02:43:15.560 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (142/137)
+2025-06-26 02:43:17.168 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (143/137)
+2025-06-26 02:43:20.168 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #138
+2025-06-26 02:43:22.164 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (144/138)
+2025-06-26 02:43:25.165 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #139
+2025-06-26 02:43:26.517 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (145/139)
+2025-06-26 02:43:28.491 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (146/139)
+2025-06-26 02:43:31.492 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #140
+2025-06-26 02:43:37.742 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #141
+2025-06-26 02:43:44.991 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (147/141)
+2025-06-26 02:43:47.992 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #142
+2025-06-26 02:43:49.113 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (148/142)
+2025-06-26 02:43:53.205 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #143
+2025-06-26 02:43:54.492 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (149/143)
+2025-06-26 02:44:00.468 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #144
+2025-06-26 02:44:07.660 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (150/144)
+2025-06-26 02:44:10.660 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #145
+2025-06-26 02:44:16.907 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #146
+2025-06-26 02:44:17.851 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (151/146)
+2025-06-26 02:44:19.571 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (152/146)
+2025-06-26 02:44:22.572 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #147
+2025-06-26 02:44:24.266 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (153/147)
+2025-06-26 02:44:25.945 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (154/147)
+2025-06-26 02:44:28.946 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #148
+2025-06-26 02:44:30.518 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (155/148)
+2025-06-26 02:44:32.066 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (156/148)
+2025-06-26 02:44:35.066 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #149
+2025-06-26 02:44:38.363 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #150
+2025-06-26 02:44:44.587 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #151
+2025-06-26 02:44:45.688 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (157/151)
+2025-06-26 02:44:49.607 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (158/151)
+2025-06-26 02:44:52.608 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #152
+2025-06-26 02:44:54.695 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (159/152)
+2025-06-26 02:44:57.696 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #153
+2025-06-26 02:45:06.709 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (160/153)
+2025-06-26 02:45:09.709 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #154
+2025-06-26 02:45:18.858 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #155
+2025-06-26 02:45:25.083 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #156
+2025-06-26 02:45:26.203 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (161/156)
+2025-06-26 02:45:30.235 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #157
+2025-06-26 02:45:31.128 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (162/157)
+2025-06-26 02:45:35.171 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #158
+2025-06-26 02:45:37.339 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (163/158)
+2025-06-26 02:45:40.340 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #159
+2025-06-26 02:45:44.885 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #160
+2025-06-26 02:45:51.125 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #161
+2025-06-26 02:45:51.999 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (164/161)
+2025-06-26 02:45:58.480 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #162
+2025-06-26 02:46:00.014 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (165/162)
+2025-06-26 02:46:01.591 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (166/162)
+2025-06-26 02:46:04.592 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #163
+2025-06-26 02:46:07.862 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #164
+2025-06-26 02:46:09.255 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (167/164)
+2025-06-26 02:46:11.774 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (168/164)
+2025-06-26 02:46:14.775 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #165
+2025-06-26 02:46:21.028 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #166
+2025-06-26 02:46:22.208 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (169/166)
+2025-06-26 02:46:26.240 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #167
+2025-06-26 02:46:27.316 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (170/167)
+2025-06-26 02:46:28.952 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (171/167)
+2025-06-26 02:46:31.952 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #168
+2025-06-26 02:46:34.070 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (172/168)
+2025-06-26 02:46:37.071 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #169
+2025-06-26 02:46:40.582 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (173/169)
+2025-06-26 02:46:43.583 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #170
+2025-06-26 02:46:49.824 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #171
+2025-06-26 02:46:56.675 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #172
+2025-06-26 02:46:57.550 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (174/172)
+2025-06-26 02:46:59.392 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (175/172)
+2025-06-26 02:47:02.393 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #173
+2025-06-26 02:47:04.005 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (176/173)
+2025-06-26 02:47:05.524 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (177/173)
+2025-06-26 02:47:08.524 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #174
+2025-06-26 02:47:09.752 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (178/174)
+2025-06-26 02:47:11.583 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (179/174)
+2025-06-26 02:47:14.583 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #175
+2025-06-26 02:47:20.831 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #176
+2025-06-26 02:47:21.638 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (180/176)
+2025-06-26 02:47:24.541 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (181/176)
+2025-06-26 02:47:27.542 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #177
+2025-06-26 02:47:29.525 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (182/177)
+2025-06-26 02:47:32.526 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #178
+2025-06-26 02:47:35.815 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #179
+2025-06-26 02:47:39.165 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #180
+2025-06-26 02:47:45.410 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #181
+2025-06-26 02:47:46.746 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (183/181)
+2025-06-26 02:47:49.460 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (184/181)
+2025-06-26 02:47:52.461 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #182
+2025-06-26 02:47:53.869 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (185/182)
+2025-06-26 02:47:55.729 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (186/182)
+2025-06-26 02:47:58.729 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #183
+2025-06-26 02:48:02.052 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #184
+2025-06-26 02:48:05.310 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #185
+2025-06-26 02:48:11.529 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #186
+2025-06-26 02:48:14.717 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (187/186)
+2025-06-26 02:48:16.264 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (188/186)
+2025-06-26 02:48:19.264 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #187
+2025-06-26 02:48:20.280 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (189/187)
+2025-06-26 02:48:21.988 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (190/187)
+2025-06-26 02:48:24.989 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #188
+2025-06-26 02:48:28.363 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #189
+2025-06-26 02:48:29.539 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (191/189)
+2025-06-26 02:48:31.419 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (192/189)
+2025-06-26 02:48:34.420 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #190
+2025-06-26 02:48:36.926 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (193/190)
+2025-06-26 02:48:41.929 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #191
+2025-06-26 02:48:44.924 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (194/191)
+2025-06-26 02:48:48.954 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #192
+2025-06-26 02:48:52.835 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (195/192)
+2025-06-26 02:48:55.836 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #193
+2025-06-26 02:48:57.522 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (196/193)
+2025-06-26 02:49:00.523 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #194
+2025-06-26 02:49:04.876 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #195
+2025-06-26 02:49:11.217 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #196
+2025-06-26 02:49:12.200 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (197/196)
+2025-06-26 02:49:15.050 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (198/196)
+2025-06-26 02:49:18.050 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #197
+2025-06-26 02:49:22.482 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (199/197)
+2025-06-26 02:49:25.483 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #198
+2025-06-26 02:49:26.697 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (200/198)
+2025-06-26 02:49:28.605 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (201/198)
+2025-06-26 02:49:31.605 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #199
+2025-06-26 02:49:33.072 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (202/199)
+2025-06-26 02:49:34.950 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (203/199)
+2025-06-26 02:49:37.951 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #200
+2025-06-26 02:49:44.216 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #201
+2025-06-26 02:49:46.361 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (204/201)
+2025-06-26 02:49:48.890 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (205/201)
+2025-06-26 02:49:51.891 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #202
+2025-06-26 02:49:53.097 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (206/202)
+2025-06-26 02:49:58.113 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #203
+2025-06-26 02:49:58.946 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (207/203)
+2025-06-26 02:50:00.728 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (208/203)
+2025-06-26 02:50:03.729 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #204
+2025-06-26 02:50:04.893 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (209/204)
+2025-06-26 02:50:07.022 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (210/204)
+2025-06-26 02:50:10.022 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #205
+2025-06-26 02:50:16.256 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #206
+2025-06-26 02:50:17.659 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (211/206)
+2025-06-26 02:50:19.276 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (212/206)
+2025-06-26 02:50:22.276 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #207
+2025-06-26 02:50:25.234 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (213/207)
+2025-06-26 02:50:28.235 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #208
+2025-06-26 02:50:30.069 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (214/208)
+2025-06-26 02:50:33.020 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (215/208)
+2025-06-26 02:50:36.021 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #209
+2025-06-26 02:50:38.901 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (216/209)
+2025-06-26 02:50:41.902 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #210
+2025-06-26 02:50:48.123 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #211
+2025-06-26 02:50:49.348 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (217/211)
+2025-06-26 02:50:55.294 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (218/211)
+2025-06-26 02:50:58.295 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #212
+2025-06-26 02:51:03.384 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (219/212)
+2025-06-26 02:51:05.044 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (220/212)
+2025-06-26 02:51:08.045 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #213
+2025-06-26 02:51:09.198 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (221/213)
+2025-06-26 02:51:10.749 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (222/213)
+2025-06-26 02:51:13.749 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #214
+2025-06-26 02:51:27.340 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #215
+2025-06-26 02:51:33.567 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #216
+2025-06-26 02:51:34.707 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (223/216)
+2025-06-26 02:51:40.180 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #217
+2025-06-26 02:51:41.528 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (224/217)
+2025-06-26 02:51:43.418 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (225/217)
+2025-06-26 02:51:46.419 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #218
+2025-06-26 02:51:47.387 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (226/218)
+2025-06-26 02:51:49.125 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (227/218)
+2025-06-26 02:51:52.126 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #219
+2025-06-26 02:51:56.151 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (228/219)
+2025-06-26 02:51:59.151 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #220
+2025-06-26 02:52:05.360 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #221
+2025-06-26 02:52:06.668 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (229/221)
+2025-06-26 02:52:08.196 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (230/221)
+2025-06-26 02:52:11.197 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #222
+2025-06-26 02:52:12.409 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (231/222)
+2025-06-26 02:52:14.270 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (232/222)
+2025-06-26 02:52:17.270 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #223
+2025-06-26 02:52:18.201 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (233/223)
+2025-06-26 02:52:20.139 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (234/223)
+2025-06-26 02:52:23.140 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #224
+2025-06-26 02:52:24.713 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (235/224)
+2025-06-26 02:52:26.620 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (236/224)
+2025-06-26 02:52:29.621 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #225
+2025-06-26 02:52:35.879 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #226
+2025-06-26 02:52:37.099 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (237/226)
+2025-06-26 02:52:39.778 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (238/226)
+2025-06-26 02:52:42.779 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #227
+2025-06-26 02:52:44.278 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (239/227)
+2025-06-26 02:52:46.335 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (240/227)
+2025-06-26 02:52:49.336 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #228
+2025-06-26 02:52:52.655 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #229
+2025-06-26 02:52:54.032 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (241/229)
+2025-06-26 02:53:28.098 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #230
+2025-06-26 02:53:34.356 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #231
+2025-06-26 02:53:36.630 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (242/231)
+2025-06-26 02:53:38.639 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (243/231)
+2025-06-26 02:53:41.640 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #232
+2025-06-26 02:53:42.598 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (244/232)
+2025-06-26 02:53:44.451 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (245/232)
+2025-06-26 02:53:47.452 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #233
+2025-06-26 02:53:48.275 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (246/233)
+2025-06-26 02:53:51.276 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #234
+2025-06-26 02:53:52.673 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (247/234)
+2025-06-26 02:53:57.739 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #235
+2025-06-26 02:54:03.983 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #236
+2025-06-26 02:54:04.725 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (248/236)
+2025-06-26 02:54:08.316 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (249/236)
+2025-06-26 02:54:11.316 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #237
+2025-06-26 02:54:14.114 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (250/237)
+2025-06-26 02:54:17.115 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #238
+2025-06-26 02:54:18.255 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (251/238)
+2025-06-26 02:54:20.281 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (252/238)
+2025-06-26 02:54:23.282 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #239
+2025-06-26 02:54:27.519 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (253/239)
+2025-06-26 02:54:29.617 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (254/239)
+2025-06-26 02:54:32.618 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #240
+2025-06-26 02:54:38.886 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #241
+2025-06-26 02:54:39.814 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (255/241)
+2025-06-26 02:54:53.842 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #242
+2025-06-26 02:54:54.686 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (256/242)
+2025-06-26 02:54:59.159 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #243
+2025-06-26 02:55:00.785 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (257/243)
+2025-06-26 02:55:02.949 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (258/243)
+2025-06-26 02:55:05.949 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #244
+2025-06-26 02:55:07.595 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (259/244)
+2025-06-26 02:55:08.887 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (260/244)
+2025-06-26 02:55:11.888 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #245
+2025-06-26 02:55:18.178 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #246
+2025-06-26 02:55:19.774 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (261/246)
+2025-06-26 02:55:21.640 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (262/246)
+2025-06-26 02:55:24.641 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #247
+2025-06-26 02:55:27.904 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #248
+2025-06-26 02:55:31.435 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #249
+2025-06-26 02:55:32.913 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (263/249)
+2025-06-26 02:55:35.914 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #250
+2025-06-26 02:55:42.158 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #251
+2025-06-26 02:55:43.120 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (264/251)
+2025-06-26 02:55:46.186 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (265/251)
+2025-06-26 02:55:49.187 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #252
+2025-06-26 02:55:53.065 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (266/252)
+2025-06-26 02:55:56.066 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #253
+2025-06-26 02:55:59.380 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #254
+2025-06-26 02:56:05.449 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (267/254)
+2025-06-26 02:56:07.318 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (268/254)
+2025-06-26 02:56:10.319 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #255
+2025-06-26 02:56:16.541 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #256
+2025-06-26 02:56:17.640 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (269/256)
+2025-06-26 02:56:20.437 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (270/256)
+2025-06-26 02:56:23.438 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #257
+2025-06-26 02:56:24.619 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (271/257)
+2025-06-26 02:56:26.282 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (272/257)
+2025-06-26 02:56:29.283 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #258
+2025-06-26 02:56:30.334 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (273/258)
+2025-06-26 02:56:32.144 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (274/258)
+2025-06-26 02:56:35.145 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #259
+2025-06-26 02:56:37.665 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (275/259)
+2025-06-26 02:56:40.666 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #260
+2025-06-26 02:56:46.892 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #261
+2025-06-26 02:56:48.250 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (276/261)
+2025-06-26 02:56:49.883 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (277/261)
+2025-06-26 02:56:52.884 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #262
+2025-06-26 02:56:56.207 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #263
+2025-06-26 02:56:59.519 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #264
+2025-06-26 02:57:02.775 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #265
+2025-06-26 02:57:08.992 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #266
+2025-06-26 02:57:10.391 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (278/266)
+2025-06-26 02:57:12.214 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (279/266)
+2025-06-26 02:57:15.215 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #267
+2025-06-26 02:57:16.881 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (280/267)
+2025-06-26 02:57:19.882 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #268
+2025-06-26 02:57:20.673 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (281/268)
+2025-06-26 02:57:23.674 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #269
+2025-06-26 02:57:25.245 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (282/269)
+2025-06-26 02:57:29.329 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #270
+2025-06-26 02:57:35.576 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #271
+2025-06-26 02:57:38.083 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (283/271)
+2025-06-26 02:57:41.084 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #272
+2025-06-26 02:57:42.288 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (284/272)
+2025-06-26 02:57:44.214 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (285/272)
+2025-06-26 02:57:47.215 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #273
+2025-06-26 02:57:49.201 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (286/273)
+2025-06-26 02:57:52.202 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #274
+2025-06-26 02:57:57.339 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #275
+2025-06-26 02:58:03.616 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #276
+2025-06-26 02:58:06.734 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (287/276)
+2025-06-26 02:58:09.735 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #277
+2025-06-26 02:58:14.440 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #278
+2025-06-26 02:58:15.551 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (288/278)
+2025-06-26 02:58:17.334 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (289/278)
+2025-06-26 02:58:20.335 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #279
+2025-06-26 02:58:25.543 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (290/279)
+2025-06-26 02:58:28.544 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #280
+2025-06-26 02:58:34.821 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #281
+2025-06-26 02:58:37.110 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (291/281)
+2025-06-26 02:58:41.282 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (292/281)
+2025-06-26 02:58:44.283 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #282
+2025-06-26 02:58:46.330 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (293/282)
+2025-06-26 02:58:49.331 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #283
+2025-06-26 02:58:52.648 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #284
+2025-06-26 02:58:55.917 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #285
+2025-06-26 02:59:02.150 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #286
+2025-06-26 02:59:04.049 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (294/286)
+2025-06-26 02:59:06.875 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (295/286)
+2025-06-26 02:59:09.876 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #287
+2025-06-26 02:59:10.761 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (296/287)
+2025-06-26 02:59:15.702 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #288
+2025-06-26 02:59:17.648 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (297/288)
+2025-06-26 02:59:20.649 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #289
+2025-06-26 02:59:28.377 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #290
+2025-06-26 02:59:34.652 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #291
+2025-06-26 02:59:35.675 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (298/291)
+2025-06-26 02:59:37.992 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (299/291)
+2025-06-26 02:59:40.993 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #292
+2025-06-26 02:59:45.614 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #293
+2025-06-26 02:59:48.673 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (300/293)
+2025-06-26 02:59:51.673 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #294
+2025-06-26 02:59:52.974 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (301/294)
+2025-06-26 02:59:54.502 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (302/294)
+2025-06-26 02:59:57.503 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #295
+2025-06-26 02:59:57.840 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (303/295)
+2025-06-26 03:00:03.913 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #296
+2025-06-26 03:00:08.254 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (304/296)
+2025-06-26 03:00:16.418 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (305/296)
+2025-06-26 03:00:19.419 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #297
+2025-06-26 03:00:28.050 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (306/297)
+2025-06-26 03:00:31.051 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #298
+2025-06-26 03:00:34.159 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (307/298)
+2025-06-26 03:00:37.160 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #299
+2025-06-26 03:00:40.850 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (308/299)
+2025-06-26 03:00:43.850 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #300
+2025-06-26 03:00:50.114 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #301
+2025-06-26 03:00:51.319 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (309/301)
+2025-06-26 03:00:55.355 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #302
+2025-06-26 03:01:01.011 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (310/302)
+2025-06-26 03:01:02.865 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (311/302)
+2025-06-26 03:01:05.866 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #303
+2025-06-26 03:01:09.307 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #304
+2025-06-26 03:01:10.825 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (312/304)
+2025-06-26 03:01:22.472 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (313/304)
+2025-06-26 03:01:25.473 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #305
+2025-06-26 03:01:31.730 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #306
+2025-06-26 03:01:32.940 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (314/306)
+2025-06-26 03:01:36.989 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #307
+2025-06-26 03:01:37.755 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (315/307)
+2025-06-26 03:01:42.481 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #308
+2025-06-26 03:01:44.815 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (316/308)
+2025-06-26 03:01:47.816 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #309
+2025-06-26 03:01:55.326 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (317/309)
+2025-06-26 03:01:58.327 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #310
+2025-06-26 03:02:04.586 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #311
+2025-06-26 03:02:05.739 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (318/311)
+2025-06-26 03:02:09.772 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #312
+2025-06-26 03:02:10.861 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (319/312)
+2025-06-26 03:02:13.862 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #313
+2025-06-26 03:02:16.061 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (320/313)
+2025-06-26 03:02:19.062 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #314
+2025-06-26 03:02:20.087 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (321/314)
+2025-06-26 03:02:24.154 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #315
+2025-06-26 03:02:30.548 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #316
+2025-06-26 03:02:31.712 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (322/316)
+2025-06-26 03:02:33.431 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (323/316)
+2025-06-26 03:02:36.432 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #317
+2025-06-26 03:02:39.796 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #318
+2025-06-26 03:02:42.848 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (324/318)
+2025-06-26 03:02:45.848 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #319
+2025-06-26 03:02:48.829 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (325/319)
+2025-06-26 03:02:51.830 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #320
+2025-06-26 03:02:58.083 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #321
+2025-06-26 03:02:59.597 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (326/321)
+2025-06-26 03:03:01.496 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (327/321)
+2025-06-26 03:03:04.497 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #322
+2025-06-26 03:03:05.993 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (328/322)
+2025-06-26 03:03:08.296 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (329/322)
+2025-06-26 03:03:11.297 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #323
+2025-06-26 03:03:12.352 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (330/323)
+2025-06-26 03:03:14.361 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (331/323)
+2025-06-26 03:03:17.362 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #324
+2025-06-26 03:03:19.113 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (332/324)
+2025-06-26 03:03:23.146 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #325
+2025-06-26 03:03:29.434 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #326
+2025-06-26 03:03:31.964 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (333/326)
+2025-06-26 03:03:33.738 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (334/326)
+2025-06-26 03:03:36.738 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #327
+2025-06-26 03:03:39.997 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (335/327)
+2025-06-26 03:03:41.749 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (336/327)
+2025-06-26 03:03:44.749 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #328
+2025-06-26 03:03:46.856 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (337/328)
+2025-06-26 03:03:49.857 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #329
+2025-06-26 03:03:51.149 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (338/329)
+2025-06-26 03:03:52.708 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (339/329)
+2025-06-26 03:03:55.709 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #330
+2025-06-26 03:04:01.931 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #331
+2025-06-26 03:04:03.482 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (340/331)
+2025-06-26 03:04:06.537 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (341/331)
+2025-06-26 03:04:09.538 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #332
+2025-06-26 03:04:12.392 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (342/332)
+2025-06-26 03:04:15.392 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #333
+2025-06-26 03:04:17.509 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (343/333)
+2025-06-26 03:04:20.510 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #334
+2025-06-26 03:04:24.251 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (344/334)
+2025-06-26 03:04:27.251 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #335
+2025-06-26 03:04:33.522 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #336
+2025-06-26 03:04:36.268 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (345/336)
+2025-06-26 03:04:38.273 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (346/336)
+2025-06-26 03:04:41.273 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #337
+2025-06-26 03:04:42.219 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (347/337)
+2025-06-26 03:04:45.130 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (348/337)
+2025-06-26 03:04:48.130 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #338
+2025-06-26 03:04:49.334 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (349/338)
+2025-06-26 03:04:52.335 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #339
+2025-06-26 03:04:53.726 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (350/339)
+2025-06-26 03:04:55.873 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (351/339)
+2025-06-26 03:04:58.874 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #340
+2025-06-26 03:05:03.060 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #341
+2025-06-26 03:05:04.446 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (352/341)
+2025-06-26 03:05:06.350 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (353/341)
+2025-06-26 03:05:09.351 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #342
+2025-06-26 03:05:11.460 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (354/342)
+2025-06-26 03:05:14.461 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #343
+2025-06-26 03:05:17.452 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (355/343)
+2025-06-26 03:05:19.268 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (356/343)
+2025-06-26 03:05:22.268 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #344
+2025-06-26 03:05:24.525 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (357/344)
+2025-06-26 03:05:27.525 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #345
+2025-06-26 03:05:33.766 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #346
+2025-06-26 03:05:34.654 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (358/346)
+2025-06-26 03:05:37.895 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (359/346)
+2025-06-26 03:05:40.896 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #347
+2025-06-26 03:05:44.197 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #348
+2025-06-26 03:05:47.522 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #349
+2025-06-26 03:05:57.461 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #350
+2025-06-26 03:05:57.967 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (360/350)
+2025-06-26 03:05:59.354 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (361/350)
+2025-06-26 03:06:04.361 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #351
+2025-06-26 03:06:06.140 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (362/351)
+2025-06-26 03:06:09.160 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (363/351)
+2025-06-26 03:06:12.161 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #352
+2025-06-26 03:06:13.354 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (364/352)
+2025-06-26 03:06:15.394 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (365/352)
+2025-06-26 03:06:18.394 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #353
+2025-06-26 03:06:19.270 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (366/353)
+2025-06-26 03:06:20.800 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (367/353)
+2025-06-26 03:06:23.800 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #354
+2025-06-26 03:06:27.051 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (368/354)
+2025-06-26 03:06:29.177 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (369/354)
+2025-06-26 03:06:32.178 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #355
+2025-06-26 03:06:38.467 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #356
+2025-06-26 03:06:40.530 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (370/356)
+2025-06-26 03:06:44.627 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #357
+2025-06-26 03:06:46.664 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (371/357)
+2025-06-26 03:06:49.665 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #358
+2025-06-26 03:06:51.992 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (372/358)
+2025-06-26 03:06:54.992 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #359
+2025-06-26 03:06:57.916 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (373/359)
+2025-06-26 03:07:00.010 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (374/359)
+2025-06-26 03:07:03.011 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #360
+2025-06-26 03:07:09.287 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #361
+2025-06-26 03:07:10.813 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (375/361)
+2025-06-26 03:07:14.188 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (376/361)
+2025-06-26 03:07:17.188 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #362
+2025-06-26 03:07:19.665 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (377/362)
+2025-06-26 03:07:22.666 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #363
+2025-06-26 03:07:23.696 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (378/363)
+2025-06-26 03:07:26.697 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #364
+2025-06-26 03:07:30.020 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #365
+2025-06-26 03:07:36.283 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #366
+2025-06-26 03:07:38.332 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (379/366)
+2025-06-26 03:07:41.333 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #367
+2025-06-26 03:07:42.292 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (380/367)
+2025-06-26 03:07:44.270 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (381/367)
+2025-06-26 03:07:47.271 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #368
+2025-06-26 03:07:49.512 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (382/368)
+2025-06-26 03:07:51.443 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (383/368)
+2025-06-26 03:07:54.444 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #369
+2025-06-26 03:07:55.408 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (384/369)
+2025-06-26 03:08:00.026 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #370
+2025-06-26 03:08:06.317 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #371
+2025-06-26 03:08:07.283 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (385/371)
+2025-06-26 03:08:08.974 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (386/371)
+2025-06-26 03:08:11.975 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #372
+2025-06-26 03:08:13.193 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (387/372)
+2025-06-26 03:08:15.362 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (388/372)
+2025-06-26 03:08:18.363 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #373
+2025-06-26 03:08:21.651 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #374
+2025-06-26 03:08:26.062 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (389/374)
+2025-06-26 03:08:29.063 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #375
+2025-06-26 03:08:35.308 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #376
+2025-06-26 03:08:36.414 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (390/376)
+2025-06-26 03:08:38.009 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (391/376)
+2025-06-26 03:08:41.009 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #377
+2025-06-26 03:08:42.595 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (392/377)
+2025-06-26 03:08:44.490 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (393/377)
+2025-06-26 03:08:47.491 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #378
+2025-06-26 03:08:48.495 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (394/378)
+2025-06-26 03:08:50.129 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (395/378)
+2025-06-26 03:08:53.130 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #379
+2025-06-26 03:08:54.409 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (396/379)
+2025-06-26 03:08:59.468 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (397/379)
+2025-06-26 03:09:02.469 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #380
+2025-06-26 03:09:08.687 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #381
+2025-06-26 03:09:11.304 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (398/381)
+2025-06-26 03:09:13.491 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (399/381)
+2025-06-26 03:09:16.492 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #382
+2025-06-26 03:09:17.735 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (400/382)
+2025-06-26 03:09:19.286 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (401/382)
+2025-06-26 03:09:22.287 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #383
+2025-06-26 03:09:26.621 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (402/383)
+2025-06-26 03:09:29.621 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #384
+2025-06-26 03:09:31.103 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (403/384)
+2025-06-26 03:09:34.104 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #385
+2025-06-26 03:09:40.341 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #386
+2025-06-26 03:09:42.589 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (404/386)
+2025-06-26 03:09:44.431 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (405/386)
+2025-06-26 03:09:47.432 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #387
+2025-06-26 03:09:53.181 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #388
+2025-06-26 03:09:56.436 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #389
+2025-06-26 03:09:57.705 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (406/389)
+2025-06-26 03:10:00.031 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (407/389)
+2025-06-26 03:10:03.031 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #390
+2025-06-26 03:10:09.256 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #391
+2025-06-26 03:10:10.515 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (408/391)
+2025-06-26 03:10:14.689 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (409/391)
+2025-06-26 03:10:17.690 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #392
+2025-06-26 03:10:19.211 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (410/392)
+2025-06-26 03:10:20.999 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (411/392)
+2025-06-26 03:10:23.999 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #393
+2025-06-26 03:10:25.987 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (412/393)
+2025-06-26 03:10:28.988 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #394
+2025-06-26 03:10:41.191 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (413/394)
+2025-06-26 03:10:43.024 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (414/394)
+2025-06-26 03:10:46.025 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #395
+2025-06-26 03:10:52.261 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #396
+2025-06-26 03:10:54.598 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (415/396)
+2025-06-26 03:10:57.599 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #397
+2025-06-26 03:10:59.966 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (416/397)
+2025-06-26 03:11:02.967 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #398
+2025-06-26 03:11:06.252 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #399
+2025-06-26 03:11:09.419 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (417/399)
+2025-06-26 03:11:12.419 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #400
+2025-06-26 03:11:18.675 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #401
+2025-06-26 03:11:19.742 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (418/401)
+2025-06-26 03:11:22.106 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (419/401)
+2025-06-26 03:11:25.107 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #402
+2025-06-26 03:11:29.012 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (420/402)
+2025-06-26 03:11:30.638 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (421/402)
+2025-06-26 03:11:33.639 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #403
+2025-06-26 03:11:34.796 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (422/403)
+2025-06-26 03:11:36.328 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (423/403)
+2025-06-26 03:11:39.329 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #404
+2025-06-26 03:11:40.646 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (424/404)
+2025-06-26 03:12:14.805 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #405
+2025-06-26 03:12:21.032 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #406
+2025-06-26 03:12:22.227 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (425/406)
+2025-06-26 03:12:31.248 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (426/406)
+2025-06-26 03:12:34.249 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #407
+2025-06-26 03:12:39.297 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (427/407)
+2025-06-26 03:12:42.298 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #408
+2025-06-26 03:12:45.584 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #409
+2025-06-26 03:12:48.870 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #410
+2025-06-26 03:12:55.110 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #411
+2025-06-26 03:12:57.207 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (428/411)
+2025-06-26 03:12:59.108 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (429/411)
+2025-06-26 03:13:02.109 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #412
+2025-06-26 03:13:03.262 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (430/412)
+2025-06-26 03:13:07.561 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #413
+2025-06-26 03:13:09.018 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (431/413)
+2025-06-26 03:13:24.155 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (432/413)
+2025-06-26 03:13:27.156 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #414
+2025-06-26 03:13:29.661 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (433/414)
+2025-06-26 03:13:32.662 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #415
+2025-06-26 03:13:38.906 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #416
+2025-06-26 03:13:41.406 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (434/416)
+2025-06-26 03:13:43.325 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (435/416)
+2025-06-26 03:13:46.326 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #417
+2025-06-26 03:13:47.445 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (436/417)
+2025-06-26 03:14:23.144 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #418
+2025-06-26 03:14:24.151 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (437/418)
+2025-06-26 03:14:25.758 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (438/418)
+2025-06-26 03:14:28.759 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #419
+2025-06-26 03:14:30.164 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (439/419)
+2025-06-26 03:15:04.251 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #420
+2025-06-26 03:15:10.471 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #421
+2025-06-26 03:15:11.676 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (440/421)
+2025-06-26 03:15:13.396 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (441/421)
+2025-06-26 03:15:16.397 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #422
+2025-06-26 03:15:18.019 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (442/422)
+2025-06-26 03:15:19.975 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (443/422)
+2025-06-26 03:15:22.976 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #423
+2025-06-26 03:15:25.143 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (444/423)
+2025-06-26 03:15:28.144 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #424
+2025-06-26 03:15:30.785 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (445/424)
+2025-06-26 03:15:32.842 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (446/424)
+2025-06-26 03:15:35.843 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #425
+2025-06-26 03:15:42.300 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #426
+2025-06-26 03:15:43.340 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (447/426)
+2025-06-26 03:15:47.458 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #427
+2025-06-26 03:15:48.788 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (448/427)
+2025-06-26 03:15:52.055 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (449/427)
+2025-06-26 03:15:55.055 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #428
+2025-06-26 03:15:58.391 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #429
+2025-06-26 03:16:02.119 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (450/429)
+2025-06-26 03:16:05.120 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #430
+2025-06-26 03:16:11.374 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #431
+2025-06-26 03:16:12.440 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (451/431)
+2025-06-26 03:16:14.037 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (452/431)
+2025-06-26 03:16:17.038 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #432
+2025-06-26 03:16:19.342 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (453/432)
+2025-06-26 03:16:22.343 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #433
+2025-06-26 03:16:24.441 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (454/433)
+2025-06-26 03:16:27.442 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #434
+2025-06-26 03:16:28.705 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (455/434)
+2025-06-26 03:17:02.861 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #435
+2025-06-26 03:17:09.126 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #436
+2025-06-26 03:17:09.974 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (456/436)
+2025-06-26 03:17:11.694 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (457/436)
+2025-06-26 03:17:14.695 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #437
+2025-06-26 03:17:16.033 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (458/437)
+2025-06-26 03:17:17.443 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (459/437)
+2025-06-26 03:17:20.444 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #438
+2025-06-26 03:17:21.596 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (460/438)
+2025-06-26 03:17:23.173 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (461/438)
+2025-06-26 03:17:26.174 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #439
+2025-06-26 03:17:27.552 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (462/439)
+2025-06-26 03:17:29.531 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (463/439)
+2025-06-26 03:17:32.532 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #440
+2025-06-26 03:17:38.764 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #441
+2025-06-26 03:17:40.350 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (464/441)
+2025-06-26 03:17:42.218 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (465/441)
+2025-06-26 03:17:45.218 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #442
+2025-06-26 03:17:46.501 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (466/442)
+2025-06-26 03:17:51.293 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #443
+2025-06-26 03:17:52.779 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (467/443)
+2025-06-26 03:17:54.445 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (468/443)
+2025-06-26 03:17:57.446 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #444
+2025-06-26 03:17:58.781 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (469/444)
+2025-06-26 03:18:33.037 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #445
+2025-06-26 03:18:39.322 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #446
+2025-06-26 03:18:40.092 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (470/446)
+2025-06-26 03:18:41.864 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (471/446)
+2025-06-26 03:18:44.865 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #447
+2025-06-26 03:18:45.942 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (472/447)
+2025-06-26 03:18:48.704 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (473/447)
+2025-06-26 03:18:51.704 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #448
+2025-06-26 03:18:55.038 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #449
+2025-06-26 03:18:56.609 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (474/449)
+2025-06-26 03:18:58.603 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (475/449)
+2025-06-26 03:19:01.604 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #450
+2025-06-26 03:19:07.845 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #451
+2025-06-26 03:19:09.223 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (476/451)
+2025-06-26 03:19:10.939 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (477/451)
+2025-06-26 03:19:13.940 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #452
+2025-06-26 03:19:16.051 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (478/452)
+2025-06-26 03:19:19.052 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #453
+2025-06-26 03:19:22.353 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #454
+2025-06-26 03:19:24.917 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (479/454)
+2025-06-26 03:19:27.019 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (480/454)
+2025-06-26 03:19:30.020 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #455
+2025-06-26 03:19:30.536 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (481/455)
+2025-06-26 03:19:36.599 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #456
+2025-06-26 03:19:37.666 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (482/456)
+2025-06-26 03:19:41.758 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #457
+2025-06-26 03:19:47.736 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #458
+2025-06-26 03:19:48.549 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (483/458)
+2025-06-26 03:19:51.550 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #459
+2025-06-26 03:19:54.951 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (484/459)
+2025-06-26 03:19:56.989 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (485/459)
+2025-06-26 03:19:59.990 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #460
+2025-06-26 03:20:06.202 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #461
+2025-06-26 03:20:07.753 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (486/461)
+2025-06-26 03:20:10.714 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (487/461)
+2025-06-26 03:20:13.714 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #462
+2025-06-26 03:20:14.540 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (488/462)
+2025-06-26 03:20:16.580 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (489/462)
+2025-06-26 03:20:19.581 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #463
+2025-06-26 03:20:21.514 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (490/463)
+2025-06-26 03:20:24.515 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #464
+2025-06-26 03:20:25.823 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (491/464)
+2025-06-26 03:20:29.390 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (492/464)
+2025-06-26 03:20:32.391 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #465
+2025-06-26 03:20:38.647 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #466
+2025-06-26 03:20:41.640 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (493/466)
+2025-06-26 03:20:45.635 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (494/466)
+2025-06-26 03:20:48.635 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #467
+2025-06-26 03:20:49.693 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (495/467)
+2025-06-26 03:20:52.272 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (496/467)
+2025-06-26 03:20:55.272 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #468
+2025-06-26 03:20:56.473 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (497/468)
+2025-06-26 03:21:00.535 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #469
+2025-06-26 03:21:06.514 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #470
+2025-06-26 03:21:12.794 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #471
+2025-06-26 03:21:13.841 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (498/471)
+2025-06-26 03:21:15.710 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (499/471)
+2025-06-26 03:21:18.710 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #472
+2025-06-26 03:21:22.168 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (500/472)
+2025-06-26 03:21:23.963 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (501/472)
+2025-06-26 03:21:26.964 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #473
+2025-06-26 03:21:30.144 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (502/473)
+2025-06-26 03:21:31.815 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (503/473)
+2025-06-26 03:21:34.815 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #474
+2025-06-26 03:21:38.184 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (504/474)
+2025-06-26 03:21:41.185 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #475
+2025-06-26 03:21:47.481 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #476
+2025-06-26 03:21:49.680 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (505/476)
+2025-06-26 03:21:56.652 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #477
+2025-06-26 03:22:31.861 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #478
+2025-06-26 03:22:35.762 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (506/478)
+2025-06-26 03:22:38.763 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #479
+2025-06-26 03:22:40.214 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (507/479)
+2025-06-26 03:22:45.091 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #480
+2025-06-26 03:22:51.364 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #481
+2025-06-26 03:22:52.292 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (508/481)
+2025-06-26 03:22:53.783 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (509/481)
+2025-06-26 03:22:56.784 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #482
+2025-06-26 03:23:00.057 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #483
+2025-06-26 03:23:03.352 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #484
+2025-06-26 03:23:05.611 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (510/484)
+2025-06-26 03:23:08.612 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #485
+2025-06-26 03:23:45.068 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #486
+2025-06-26 03:23:46.480 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (511/486)
+2025-06-26 03:23:48.436 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (512/486)
+2025-06-26 03:23:51.437 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #487
+2025-06-26 03:23:53.287 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (513/487)
+2025-06-26 03:23:56.288 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #488
+2025-06-26 03:23:58.889 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (514/488)
+2025-06-26 03:24:01.890 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #489
+2025-06-26 03:24:03.234 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (515/489)
+2025-06-26 03:24:08.359 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #490
+2025-06-26 03:24:14.611 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #491
+2025-06-26 03:24:20.186 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (516/491)
+2025-06-26 03:24:23.187 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #492
+2025-06-26 03:24:24.428 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (517/492)
+2025-06-26 03:24:27.576 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (518/492)
+2025-06-26 03:24:30.577 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #493
+2025-06-26 03:24:36.898 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #494
+2025-06-26 03:24:38.343 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (519/494)
+2025-06-26 03:25:12.398 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #495
+2025-06-26 03:25:18.630 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #496
+2025-06-26 03:25:20.324 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (520/496)
+2025-06-26 03:25:24.425 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #497
+2025-06-26 03:25:26.053 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (521/497)
+2025-06-26 03:25:31.113 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #498
+2025-06-26 03:25:32.672 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (522/498)
+2025-06-26 03:25:36.293 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (523/498)
+2025-06-26 03:25:39.294 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #499
+2025-06-26 03:25:43.935 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (524/499)
+2025-06-26 03:25:46.936 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #500
+2025-06-26 03:25:53.217 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #501
+2025-06-26 03:25:59.577 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (525/501)
+2025-06-26 03:26:01.459 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (526/501)
+2025-06-26 03:26:04.459 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #502
+2025-06-26 03:26:05.655 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (527/502)
+2025-06-26 03:26:40.735 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #503
+2025-06-26 03:26:45.093 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #504
+2025-06-26 03:26:46.502 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (528/504)
+2025-06-26 03:26:51.825 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #505
+2025-06-26 03:26:58.060 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #506
+2025-06-26 03:26:59.386 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (529/506)
+2025-06-26 03:27:01.197 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (530/506)
+2025-06-26 03:27:04.198 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #507
+2025-06-26 03:27:05.417 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (531/507)
+2025-06-26 03:27:07.136 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (532/507)
+2025-06-26 03:27:10.136 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #508
+2025-06-26 03:27:12.457 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (533/508)
+2025-06-26 03:27:15.458 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #509
+2025-06-26 03:27:17.889 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (534/509)
+2025-06-26 03:27:20.890 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #510
+2025-06-26 03:27:27.137 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #511
+2025-06-26 03:27:30.291 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (535/511)
+2025-06-26 03:27:34.231 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (536/511)
+2025-06-26 03:27:37.232 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #512
+2025-06-26 03:27:39.412 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (537/512)
+2025-06-26 03:27:42.413 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #513
+2025-06-26 03:27:43.397 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (538/513)
+2025-06-26 03:27:46.398 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #514
+2025-06-26 03:27:47.736 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (539/514)
+2025-06-26 03:27:50.690 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (540/514)
+2025-06-26 03:27:53.691 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #515
+2025-06-26 03:27:59.939 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #516
+2025-06-26 03:28:01.268 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (541/516)
+2025-06-26 03:28:03.173 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (542/516)
+2025-06-26 03:28:06.174 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #517
+2025-06-26 03:28:07.206 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (543/517)
+2025-06-26 03:28:12.011 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #518
+2025-06-26 03:28:14.637 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (544/518)
+2025-06-26 03:28:17.638 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #519
+2025-06-26 03:28:19.075 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (545/519)
+2025-06-26 03:28:21.146 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (546/519)
+2025-06-26 03:28:24.147 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #520
+2025-06-26 03:28:30.419 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #521
+2025-06-26 03:28:31.643 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (547/521)
+2025-06-26 03:28:37.859 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #522
+2025-06-26 03:28:38.914 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (548/522)
+2025-06-26 03:28:40.396 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (549/522)
+2025-06-26 03:28:43.397 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #523
+2025-06-26 03:28:44.431 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (550/523)
+2025-06-26 03:28:46.226 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (551/523)
+2025-06-26 03:28:49.227 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #524
+2025-06-26 03:28:55.727 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #525
+2025-06-26 03:29:01.956 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #526
+2025-06-26 03:29:06.032 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (552/526)
+2025-06-26 03:29:09.033 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #527
+2025-06-26 03:29:09.998 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (553/527)
+2025-06-26 03:29:11.997 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (554/527)
+2025-06-26 03:29:14.998 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #528
+2025-06-26 03:29:16.199 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (555/528)
+2025-06-26 03:29:18.229 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (556/528)
+2025-06-26 03:29:21.230 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #529
+2025-06-26 03:29:24.488 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #530
+2025-06-26 03:29:30.745 [   DEBUG] factset_v332.rate_limiter - record_request:726 - Request #531
+2025-06-26 03:29:31.880 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (557/531)
+2025-06-26 03:29:33.846 [   DEBUG] factset_v332.rate_limiter - record_success:745 - Successful request (558/531)

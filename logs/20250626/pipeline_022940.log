@@ -1,0 +1,27 @@
+2025-06-26 02:29:40.721 [    INFO] factset_v332.pipeline - _create_stage_logger:286 - v3.3.2 stage logger initialized: pipeline
+2025-06-26 02:29:40.721 [   DEBUG] factset_v332.pipeline - _create_stage_logger:287 - Log file: logs/20250626/pipeline_022940.log
+2025-06-26 02:29:40.721 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:401 - Starting stage: pipeline
+2025-06-26 02:29:40.721 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:402 - Description: Complete pipeline execution
+2025-06-26 02:29:40.721 [   DEBUG] factset_v332.pipeline - _execute_stage_with_monitoring:403 - Parameters: {'mode': 'intelligent', 'memory_limit': 2048, 'batch_size': 50, 'log_level': 'info', 'github_actions': True, 'skip_phases': None, 'v333': True, 'quality_scoring': True}
+2025-06-26 02:29:40.721 [    INFO] factset_v332.pipeline - _execute_stage_with_monitoring:407 - Quality scoring enabled for pipeline
+2025-06-26 02:29:40.721 [   DEBUG] factset_v332.pipeline - time_operation:424 - Starting operation: stage_pipeline
+2025-06-26 02:29:40.721 [    INFO] factset_v332.pipeline - _run_pipeline_stage:945 - Starting complete pipeline execution...
+2025-06-26 02:29:40.746 [    INFO] factset_v332.pipeline - setup_logging_v333:265 - v3.3.3 enhanced logging system initialized
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - __init__:945 - Memory manager initialized
+2025-06-26 02:29:41.189 [   DEBUG] factset_v332.pipeline - _setup_directories_v333:1107 - Setting up directories...
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - _setup_directories_v333:1128 - Setup complete: 7 directories
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - __init__:957 - Enhanced FactSet Pipeline v3.3.3 initialized
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:967 - Enhanced FactSet Pipeline v3.3.3
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:968 - Date: 2025-06-24
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:969 - v3.3.3: Final Integrated Edition with Quality Scoring
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:970 - All v3.3.2 + v3.3.1 Comprehensive Fixes Maintained
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:971 - ================================================================================
+2025-06-26 02:29:41.189 [   DEBUG] factset_v332.pipeline - time_operation:424 - Starting operation: complete_pipeline
+2025-06-26 02:29:41.189 [    INFO] factset_v332.pipeline - analyze_existing_data_v333:1132 - Analyzing existing data (v3.3.3)...
+2025-06-26 02:29:41.189 [   DEBUG] factset_v332.pipeline - time_operation:424 - Starting operation: analyze_existing_data
+2025-06-26 02:29:41.193 [    INFO] factset_v332.pipeline - analyze_existing_data_v333:1144 - Found 1943 MD files
+2025-06-26 02:29:41.594 [    INFO] factset_v332.pipeline - analyze_existing_data_v333:1198 - Analysis: 1943 files, 1848 quality (95.1%), 175 companies
+2025-06-26 02:29:41.594 [    INFO] factset_v332.pipeline - analyze_existing_data_v333:1200 - Average quality score: 8.5/10
+2025-06-26 02:29:41.594 [    INFO] factset_v332.pipeline - time_operation:437 - Completed analyze_existing_data in 0.40s
+2025-06-26 02:29:41.804 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:986 - Target Companies: 116 (v3.3.3)
+2025-06-26 02:29:41.804 [    INFO] factset_v332.pipeline - run_complete_pipeline_v333:993 - 🔍 Enhanced Search Phase (v3.3.3)
