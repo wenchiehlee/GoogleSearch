@@ -1,0 +1,4 @@
+2025-06-26 05:22:12.271 [    INFO] factset_v332.processor - _create_stage_logger:286 - v3.3.2 stage logger initialized: processor
+2025-06-26 05:22:12.271 [   DEBUG] factset_v332.processor - _create_stage_logger:287 - Log file: logs/20250626/processor_052212.log
+2025-06-26 05:22:12.271 [   DEBUG] factset_v332.processor - _initialize_compiled_patterns:196 - Initializing compiled regex patterns for v3.3.3
+2025-06-26 05:22:12.274 [    INFO] factset_v332.processor - _initialize_compiled_patterns:235 - Compiled 5 pattern groups for enhanced performance
