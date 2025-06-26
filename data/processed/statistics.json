@@ -1,42 +1,74 @@
 {
-  "generated_at": "2025-06-24T08:11:37.560842",
-  "guideline_version": "3.3.1",
+  "generated_at": "2025-06-26T09:03:24.803086",
+  "guideline_version": "3.3.3",
+  "release_type": "final_integrated",
   "total_companies": 116,
-  "companies_with_data": 17,
-  "total_md_files": 71,
+  "companies_with_data": 116,
+  "total_md_files": 3069,
+  "success_rate": 100.0,
   "performance_stats": {
-    "files_processed": 142,
-    "batches_completed": 0,
-    "memory_cleanups": 0,
-    "peak_memory_mb": 97.359375
+    "files_processed": 6138,
+    "batches_completed": 312,
+    "memory_cleanups": 312,
+    "peak_memory_mb": 96.09765625
   },
   "data_quality": {},
   "file_level_stats": {
-    "files_with_eps_data": 59,
-    "files_with_target_price": 3,
-    "average_file_quality": 2.9295774647887325,
+    "files_with_eps_data": 2123,
+    "files_with_target_price": 64,
+    "average_file_quality": 5.376018246985989,
     "quality_distribution": {
-      "4": 31,
-      "3": 15,
-      "2": 14,
-      "1": 11
+      "3": 846,
+      "4": 778,
+      "9": 396,
+      "5": 329,
+      "10": 229,
+      "6": 211,
+      "8": 154,
+      "7": 120,
+      "2": 6
     }
   },
   "company_level_stats": {
-    "companies_with_target_price": 2,
-    "companies_with_analyst_data": 15,
-    "average_quality_score": 3.588235294117647,
-    "average_files_per_company": 4.176470588235294
+    "companies_with_target_price": 24,
+    "companies_with_analyst_data": 111,
+    "average_quality_score": 7.827586206896552,
+    "average_files_per_company": 26.45689655172414
   },
   "memory_stats": {
-    "current_mb": 87.00390625,
-    "peak_mb": 97.359375,
+    "current_mb": 98.34765625,
+    "peak_mb": 96.09765625,
     "limit_mb": 2048,
-    "cleanup_count": 0,
+    "cleanup_count": 312,
     "processing_stats": {
-      "files_processed": 142,
-      "batches_completed": 0,
-      "memory_cleanups": 0
+      "files_processed": 6138,
+      "batches_completed": 312,
+      "memory_cleanups": 312
     }
+  },
+  "quality_analysis_v333": {
+    "scoring_version": "3.3.3",
+    "scale": "0-10",
+    "average_quality_score": 7.827586206896552,
+    "quality_distribution": {
+      "complete_8_10": 73,
+      "good_7": 14,
+      "partial_3_6": 29,
+      "insufficient_0_2": 0
+    },
+    "quality_indicators": {
+      "🟢 完整": 54,
+      "🟠 部分": 43,
+      "🟡 良好": 19
+    },
+    "data_completeness_avg": 0.7902298850574709,
+    "analyst_coverage_avg": 16.054054054054053,
+    "data_freshness_days_avg": 0
+  },
+  "v333_fixes": {
+    "quality_scoring_standardized": true,
+    "scoring_version": "3.3.3",
+    "quality_indicators_implemented": true,
+    "legacy_score_conversion": true
   }
 }
