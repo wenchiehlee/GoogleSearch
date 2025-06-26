@@ -341,7 +341,6 @@ jobs:
       process_status: ${{ steps.process.outputs.status }}
       companies_processed: ${{ steps.process.outputs.companies_processed }}
       quality_average: ${{ steps.process.outputs.quality_average }}
-      quality_distribution: ${{ steps.process.outputs.quality_distribution }}
       files_processed: ${{ steps.process.outputs.files_processed }}
       execution_time: ${{ steps.process.outputs.execution_time }}
       dashboard_url: ${{ steps.dashboard.outputs.dashboard_url }}
@@ -442,57 +441,13 @@ jobs:
           # Extract processing statistics safely
           COMPANIES_PROCESSED=0
           QUALITY_AVERAGE=0
-          QUALITY_DIST="{}"
           FILES_PROCESSED=0
           
           if [ -f "data/processed/statistics.json" ]; then
             echo "📊 Found statistics.json, extracting metrics..."
-            
-            # Use Python to safely extract values
-            COMPANIES_PROCESSED=$(python3 -c "
-import json
-try:
-    with open('data/processed/statistics.json', 'r') as f:
-        data = json.load(f)
-    print(data.get('companies_with_data', 0))
-except:
-    print('0')
-" 2>/dev/null || echo "0")
-            
-            QUALITY_AVERAGE=$(python3 -c "
-import json
-try:
-    with open('data/processed/statistics.json', 'r') as f:
-        data = json.load(f)
-    print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))
-except:
-    print('0')
-" 2>/dev/null || echo "0")
-            
-            FILES_PROCESSED=$(python3 -c "
-import json
-try:
-    with open('data/processed/statistics.json', 'r') as f:
-        data = json.load(f)
-    print(data.get('files_processed', 0))
-except:
-    print('0')
-" 2>/dev/null || echo "0")
-            
-            # Quality distribution as string (simpler)
-            QUALITY_DIST_RAW=$(python3 -c "
-import json
-try:
-    with open('data/processed/statistics.json', 'r') as f:
-        data = json.load(f)
-    dist = data.get('quality_analysis_v333', {}).get('quality_distribution', {})
-    print(json.dumps(dist))
-except:
-    print('{}')
-" 2>/dev/null || echo "{}")
-            
-            QUALITY_DIST="$QUALITY_DIST_RAW"
-            
+            COMPANIES_PROCESSED=$(python3 -c "import json,sys; data=json.load(open('data/processed/statistics.json')); print(data.get('companies_with_data', 0))" 2>/dev/null || echo "0")
+            QUALITY_AVERAGE=$(python3 -c "import json,sys; data=json.load(open('data/processed/statistics.json')); print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))" 2>/dev/null || echo "0")
+            FILES_PROCESSED=$(python3 -c "import json,sys; data=json.load(open('data/processed/statistics.json')); print(data.get('files_processed', 0))" 2>/dev/null || echo "0")
           else
             echo "⚠️ Statistics file not found, using basic metrics..."
             if [ -d "data/processed" ]; then
@@ -523,21 +478,12 @@ except:
             PROCESS_STATUS="failed"
           fi
           
-          # v3.3.3 FIX: Use GITHUB_OUTPUT with proper escaping
+          # v3.3.3 FIX: Use GITHUB_OUTPUT with safe formatting
           echo "status=$PROCESS_STATUS" >> $GITHUB_OUTPUT
           echo "companies_processed=$COMPANIES_PROCESSED" >> $GITHUB_OUTPUT
           echo "quality_average=$QUALITY_AVERAGE" >> $GITHUB_OUTPUT
           echo "files_processed=$FILES_PROCESSED" >> $GITHUB_OUTPUT
           echo "execution_time=$EXECUTION_TIME" >> $GITHUB_OUTPUT
-          
-          # Handle quality distribution safely
-          if [ "$QUALITY_DIST" != "{}" ] && [ -n "$QUALITY_DIST" ]; then
-            echo "quality_distribution<<EOF" >> $GITHUB_OUTPUT
-            echo "$QUALITY_DIST" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "quality_distribution={}" >> $GITHUB_OUTPUT
-          fi
           
           echo "✅ Processing phase completed with status: ${PROCESS_STATUS}"
           echo "📊 Results: ${COMPANIES_PROCESSED} companies, ${FILES_PROCESSED} files, ${EXECUTION_TIME}s"
@@ -578,37 +524,29 @@ except:
             echo "✅ Report generated successfully"
           else
             echo "📝 Creating manual processing summary..."
-            cat > processing_report_v333.md << EOF
-          # 📊 FactSet Processing Pipeline v3.3.3 Report
-          
-          **Execution Date:** $(date)
-          **Pipeline Version:** v3.3.3 Final Integrated Edition
-          **Search Status:** ${{ needs.search_pipeline.outputs.search_status || 'not_run' }}
-          **Processing Mode:** v333 (standardized)
-          
-          ## 📈 Processing Results
-          - **Status:** ${{ steps.process.outputs.process_status }}
-          - **Companies Processed:** ${{ steps.process.outputs.companies_processed }}
-          - **Files Processed:** ${{ steps.process.outputs.files_processed }}
-          - **Execution Time:** ${{ steps.process.outputs.execution_time }}s
-          - **Average Quality:** ${{ steps.process.outputs.quality_average }}/10
-          
-          ## 🔍 Search Phase Results (if run)
-          - **Search Status:** ${{ needs.search_pipeline.outputs.search_status || 'skipped' }}
-          - **Files Found:** ${{ needs.search_pipeline.outputs.files_found || '0' }}
-          - **Companies Searched:** ${{ needs.search_pipeline.outputs.companies_searched || '0' }}
-          
-          ## 📁 Generated Files
-          \`\`\`
-          $(find data/processed/ -name "*.csv" -o -name "*.json" | head -10)
-          \`\`\`
-          
-          ## 🔗 Quick Links
-          - [Live Dashboard](https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit)
-          - [GitHub Repository](https://github.com/${{ github.repository }})
-          
-          *Generated by FactSet Processing Pipeline v3.3.3*
-          EOF
+            echo "# 📊 FactSet Processing Pipeline v3.3.3 Report" > processing_report_v333.md
+            echo "" >> processing_report_v333.md
+            echo "**Execution Date:** \$(date)" >> processing_report_v333.md
+            echo "**Pipeline Version:** v3.3.3 Final Integrated Edition" >> processing_report_v333.md
+            echo "**Processing Mode:** v333 (standardized)" >> processing_report_v333.md
+            echo "" >> processing_report_v333.md
+            echo "## 📈 Processing Results" >> processing_report_v333.md
+            echo "- **Status:** ${{ steps.process.outputs.status }}" >> processing_report_v333.md
+            echo "- **Companies Processed:** ${{ steps.process.outputs.companies_processed }}" >> processing_report_v333.md
+            echo "- **Files Processed:** ${{ steps.process.outputs.files_processed }}" >> processing_report_v333.md
+            echo "- **Execution Time:** ${{ steps.process.outputs.execution_time }}s" >> processing_report_v333.md
+            echo "- **Average Quality:** ${{ steps.process.outputs.quality_average }}/10" >> processing_report_v333.md
+            echo "" >> processing_report_v333.md
+            echo "## 🔍 Search Phase Results (if run)" >> processing_report_v333.md
+            echo "- **Search Status:** ${{ needs.search_pipeline.outputs.search_status || 'skipped' }}" >> processing_report_v333.md
+            echo "- **Files Found:** ${{ needs.search_pipeline.outputs.files_found || '0' }}" >> processing_report_v333.md
+            echo "- **Companies Searched:** ${{ needs.search_pipeline.outputs.companies_searched || '0' }}" >> processing_report_v333.md
+            echo "" >> processing_report_v333.md
+            echo "## 🔗 Quick Links" >> processing_report_v333.md
+            echo "- [Live Dashboard](https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit)" >> processing_report_v333.md
+            echo "- [GitHub Repository](https://github.com/${{ github.repository }})" >> processing_report_v333.md
+            echo "" >> processing_report_v333.md
+            echo "*Generated by FactSet Processing Pipeline v3.3.3*" >> processing_report_v333.md
           fi
       
       - name: 💾 Commit Processing Results
@@ -839,30 +777,28 @@ except:
             echo "✅ Advanced diagnostics completed successfully"
           else
             echo "📋 Creating manual diagnostic summary..."
-            cat > diagnostic_report_v333.md << EOF
-          ## 🩺 v3.3.3 Diagnostic Summary
-          - **Recovery Time**: $(date)
-          - **Recovery Type**: ${{ steps.recovery.outputs.status }}
-          - **Validation**: ${{ needs.validate.result || 'not_run' }}
-          - **Search Pipeline**: ${{ needs.search_pipeline.result || 'not_run' }} (Status: ${{ needs.search_pipeline.outputs.search_status || 'unknown' }})
-          - **Process Pipeline**: ${{ needs.process_pipeline.result || 'not_run' }} (Status: ${{ needs.process_pipeline.outputs.process_status || 'unknown' }})
-          
-          ### 📊 Search Results:
-          - Files Found: ${{ needs.search_pipeline.outputs.files_found || '0' }}
-          - Companies Searched: ${{ needs.search_pipeline.outputs.companies_searched || '0' }}
-          - Search Errors: ${{ needs.search_pipeline.outputs.search_errors || '0' }}
-          
-          ### 📈 Processing Results:
-          - Companies Processed: ${{ needs.process_pipeline.outputs.companies_processed || '0' }}
-          - Average Quality: ${{ needs.process_pipeline.outputs.quality_average || '0' }}/10
-          - Files Processed: ${{ needs.process_pipeline.outputs.files_processed || '0' }}
-          
-          ### 💡 Recommendations:
-          1. Check individual job logs for specific error details
-          2. Verify all required environment variables are set
-          3. Consider running jobs individually for debugging
-          4. Check data availability and API limits
-          EOF
+            echo "## 🩺 v3.3.3 Diagnostic Summary" > diagnostic_report_v333.md
+            echo "- **Recovery Time:** \$(date)" >> diagnostic_report_v333.md
+            echo "- **Recovery Type:** ${{ steps.recovery.outputs.status }}" >> diagnostic_report_v333.md
+            echo "- **Validation:** ${{ needs.validate.result || 'not_run' }}" >> diagnostic_report_v333.md
+            echo "- **Search Pipeline:** ${{ needs.search_pipeline.result || 'not_run' }} (Status: ${{ needs.search_pipeline.outputs.search_status || 'unknown' }})" >> diagnostic_report_v333.md
+            echo "- **Process Pipeline:** ${{ needs.process_pipeline.result || 'not_run' }} (Status: ${{ needs.process_pipeline.outputs.process_status || 'unknown' }})" >> diagnostic_report_v333.md
+            echo "" >> diagnostic_report_v333.md
+            echo "### 📊 Search Results:" >> diagnostic_report_v333.md
+            echo "- Files Found: ${{ needs.search_pipeline.outputs.files_found || '0' }}" >> diagnostic_report_v333.md
+            echo "- Companies Searched: ${{ needs.search_pipeline.outputs.companies_searched || '0' }}" >> diagnostic_report_v333.md
+            echo "- Search Errors: ${{ needs.search_pipeline.outputs.search_errors || '0' }}" >> diagnostic_report_v333.md
+            echo "" >> diagnostic_report_v333.md
+            echo "### 📈 Processing Results:" >> diagnostic_report_v333.md
+            echo "- Companies Processed: ${{ needs.process_pipeline.outputs.companies_processed || '0' }}" >> diagnostic_report_v333.md
+            echo "- Average Quality: ${{ needs.process_pipeline.outputs.quality_average || '0' }}/10" >> diagnostic_report_v333.md
+            echo "- Files Processed: ${{ needs.process_pipeline.outputs.files_processed || '0' }}" >> diagnostic_report_v333.md
+            echo "" >> diagnostic_report_v333.md
+            echo "### 💡 Recommendations:" >> diagnostic_report_v333.md
+            echo "1. Check individual job logs for specific error details" >> diagnostic_report_v333.md
+            echo "2. Verify all required environment variables are set" >> diagnostic_report_v333.md
+            echo "3. Consider running jobs individually for debugging" >> diagnostic_report_v333.md
+            echo "4. Check data availability and API limits" >> diagnostic_report_v333.md
           fi
           
           echo "## 🔄 v3.3.3 Recovery Report" >> $GITHUB_STEP_SUMMARY
