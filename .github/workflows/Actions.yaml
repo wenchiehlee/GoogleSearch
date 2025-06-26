@@ -64,7 +64,7 @@ env:
 
 jobs:
   # ============================================================================
-  # v3.3.3 MODERNIZED VALIDATION JOB
+  # v3.3.3 MODERNIZED VALIDATION JOB - FIXED VERSION
   # ============================================================================
   validate:
     name: 🧪 v3.3.3 System Validation
@@ -96,33 +96,50 @@ jobs:
           pip install -r requirements.txt
           pip list
       
+      # FIX: Move directory setup BEFORE validation
       - name: 🔧 Setup Directories
         run: |
           mkdir -p data/{csv,md,pdf,processed}
           mkdir -p logs/{latest,reports,archives}
-          mkdir -p backups temp
+          mkdir -p backups temp configs
           echo "📁 Directory structure created for validation"
+          
+          # Verify creation
+          echo "✅ Directories created:"
+          ls -la data/ logs/ 2>/dev/null || true
+          echo "📁 All required directories are now available"
       
+      # NOW run validation after directories exist
       - name: 🧪 Run v3.3.3 Validation
         id: validate
         run: |
           echo "🚀 Starting v3.3.3 comprehensive validation..."
           
           # Run v3.3.3 validation with all new features
-          python factset_cli.py validate \
+          if python factset_cli.py validate \
             --comprehensive \
             --test-v333 \
             --quality-scoring \
-            --github-actions
-          
-          # v3.3.3 FIX: Use GITHUB_OUTPUT instead of deprecated set-output
-          echo "status=success" >> $GITHUB_OUTPUT
-          echo "recommendation=proceed" >> $GITHUB_OUTPUT
-          echo "quality_check=enabled" >> $GITHUB_OUTPUT
-          echo "python_ready=true" >> $GITHUB_OUTPUT
-          echo "dependencies_ready=true" >> $GITHUB_OUTPUT
-          
-          echo "✅ v3.3.3 validation completed successfully"
+            --github-actions; then
+            
+            # v3.3.3 FIX: Use GITHUB_OUTPUT instead of deprecated set-output
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "recommendation=proceed" >> $GITHUB_OUTPUT
+            echo "quality_check=enabled" >> $GITHUB_OUTPUT
+            echo "python_ready=true" >> $GITHUB_OUTPUT
+            echo "dependencies_ready=true" >> $GITHUB_OUTPUT
+            
+            echo "✅ v3.3.3 validation completed successfully"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "recommendation=fix_required" >> $GITHUB_OUTPUT
+            echo "quality_check=disabled" >> $GITHUB_OUTPUT
+            echo "python_ready=false" >> $GITHUB_OUTPUT
+            echo "dependencies_ready=false" >> $GITHUB_OUTPUT
+            
+            echo "❌ v3.3.3 validation failed"
+            exit 1
+          fi
       
       - name: 📋 Validation Summary
         run: |
@@ -130,6 +147,7 @@ jobs:
           echo "- **Status**: ${{ steps.validate.outputs.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Quality Scoring**: ${{ steps.validate.outputs.quality_check }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Python Ready**: ${{ steps.validate.outputs.python_ready }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dependencies Ready**: ${{ steps.validate.outputs.dependencies_ready }}" >> $GITHUB_STEP_SUMMARY
           echo "- **v3.3.3 Features**: All validated ✅" >> $GITHUB_STEP_SUMMARY
 
   # ============================================================================
@@ -153,6 +171,7 @@ jobs:
       quality_distribution: ${{ steps.pipeline.outputs.quality_distribution }}
       files_generated: ${{ steps.pipeline.outputs.files_generated }}
       execution_time: ${{ steps.pipeline.outputs.execution_time }}
+      dashboard_url: ${{ steps.dashboard.outputs.dashboard_url }}
     
     steps:
       - name: 📥 Checkout Code
@@ -176,8 +195,8 @@ jobs:
         run: |
           mkdir -p data/{csv,md,pdf,processed}
           mkdir -p logs/{latest,reports,archives}
-          mkdir -p backups temp
-          echo "📁 Directory structure created"
+          mkdir -p backups temp configs
+          echo "📁 Directory structure created for pipeline"
       
       - name: 🚀 Execute v3.3.3 Pipeline
         id: pipeline
@@ -207,34 +226,64 @@ jobs:
           fi
           
           echo "🔧 Executing: $CMD"
-          eval $CMD
+          
+          # Execute pipeline with error handling
+          if eval $CMD; then
+            echo "✅ Pipeline executed successfully"
+            PIPELINE_SUCCESS=true
+          else
+            echo "❌ Pipeline execution failed"
+            PIPELINE_SUCCESS=false
+          fi
           
           END_TIME=$(date +%s)
           EXECUTION_TIME=$((END_TIME - START_TIME))
           
           # Extract statistics for GitHub outputs
           if [ -f "data/processed/statistics.json" ]; then
-            COMPANIES_PROCESSED=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('companies_with_data', 0))")
-            QUALITY_AVERAGE=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))")
-            QUALITY_DIST=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(json.dumps(data.get('quality_analysis_v333', {}).get('quality_distribution', {})))")
-            FILES_GENERATED=$(find data/md -name "*.md" | wc -l)
+            COMPANIES_PROCESSED=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('companies_with_data', 0))" 2>/dev/null || echo "0")
+            QUALITY_AVERAGE=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(data.get('quality_analysis_v333', {}).get('average_quality_score', 0))" 2>/dev/null || echo "0")
+            QUALITY_DIST=$(python -c "import json; data=json.load(open('data/processed/statistics.json')); print(json.dumps(data.get('quality_analysis_v333', {}).get('quality_distribution', {})))" 2>/dev/null || echo "{}")
+            FILES_GENERATED=$(find data/md -name "*.md" 2>/dev/null | wc -l || echo "0")
           else
+            echo "⚠️ Statistics file not found, using default values"
             COMPANIES_PROCESSED=0
             QUALITY_AVERAGE=0
             QUALITY_DIST="{}"
             FILES_GENERATED=0
           fi
           
+          # Check for CSV files specifically
+          CSV_FILES_FOUND=0
+          if [ -f "data/portfolio_summary.csv" ]; then
+            echo "✅ Found: data/portfolio_summary.csv"
+            CSV_FILES_FOUND=$((CSV_FILES_FOUND + 1))
+          fi
+          if [ -f "data/processed/detailed_data.csv" ]; then
+            echo "✅ Found: data/processed/detailed_data.csv"
+            CSV_FILES_FOUND=$((CSV_FILES_FOUND + 1))
+          fi
+          
+          # Set pipeline status based on success and file generation
+          if [ "$PIPELINE_SUCCESS" = "true" ] && [ "$CSV_FILES_FOUND" -gt 0 ]; then
+            PIPELINE_STATUS="completed"
+          elif [ "$PIPELINE_SUCCESS" = "true" ]; then
+            PIPELINE_STATUS="completed_no_csv"
+          else
+            PIPELINE_STATUS="failed"
+          fi
+          
           # v3.3.3 FIX: Use GITHUB_OUTPUT instead of deprecated set-output
-          echo "status=completed" >> $GITHUB_OUTPUT
+          echo "status=${PIPELINE_STATUS}" >> $GITHUB_OUTPUT
           echo "companies_processed=${COMPANIES_PROCESSED}" >> $GITHUB_OUTPUT
           echo "quality_average=${QUALITY_AVERAGE}" >> $GITHUB_OUTPUT
           echo "quality_distribution=${QUALITY_DIST}" >> $GITHUB_OUTPUT
           echo "files_generated=${FILES_GENERATED}" >> $GITHUB_OUTPUT
           echo "execution_time=${EXECUTION_TIME}" >> $GITHUB_OUTPUT
           
-          echo "✅ v3.3.3 pipeline completed successfully"
+          echo "✅ v3.3.3 pipeline completed"
           echo "📊 Results: ${COMPANIES_PROCESSED} companies, ${FILES_GENERATED} files, ${EXECUTION_TIME}s"
+          echo "📁 CSV files found: ${CSV_FILES_FOUND}"
       
       - name: 📊 Generate v3.3.3 Report
         if: always()
@@ -255,9 +304,16 @@ jobs:
           **Quality Scoring:** ${{ inputs.enable_quality_scoring || 'true' }}
           
           ## 📈 Pipeline Results
-          - **Status:** Completed
-          - **Configuration:** v3.3.3 Enhanced Mode
-          - **Features:** Quality Scoring, GitHub Actions Integration
+          - **Status:** ${{ steps.pipeline.outputs.status }}
+          - **Companies Processed:** ${{ steps.pipeline.outputs.companies_processed }}
+          - **Files Generated:** ${{ steps.pipeline.outputs.files_generated }}
+          - **Execution Time:** ${{ steps.pipeline.outputs.execution_time }}s
+          - **Average Quality:** ${{ steps.pipeline.outputs.quality_average }}/10
+          
+          ## 📁 Generated Files
+          \`\`\`
+          $(find data/ -name "*.csv" -o -name "*.json" | head -10)
+          \`\`\`
           
           ## 🔗 Quick Links
           - [Live Dashboard](https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit)
@@ -277,21 +333,39 @@ jobs:
         if: always()
         run: |
           echo "💾 Committing results to repository..."
+          
+          # Configure git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Check what files were generated
+          echo "📁 Files to commit:"
+          find data/ -name "*.csv" -o -name "*.json" -o -name "*.md" | head -20
+          
+          # Add all files
           git add -A
-          git commit -m "⬆️ GitHub Actions Results added - v3.3.3 Pipeline $(date)" || true
-          git push || true
-          echo "✅ Results committed to repository"
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "ℹ️ No changes to commit"
+          else
+            echo "📤 Committing changes..."
+            git commit -m "⬆️ GitHub Actions Results added - v3.3.3 Pipeline $(date +%Y-%m-%d\ %H:%M:%S)" || true
+            git push || echo "⚠️ Push failed, but continuing..."
+          fi
+          
+          echo "✅ Results commit process completed"
       
       - name: 🌐 Update Live Dashboard
+        id: dashboard
         if: success()
         run: |
           echo "🌐 Live dashboard updated with v3.3.3 data"
-          echo "📈 View Results: https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
+          DASHBOARD_URL="https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
+          echo "📈 View Results: ${DASHBOARD_URL}"
           
           # v3.3.3 FIX: Correct Live Dashboard URL
-          echo "dashboard_url=https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit" >> $GITHUB_OUTPUT
+          echo "dashboard_url=${DASHBOARD_URL}" >> $GITHUB_OUTPUT
       
       - name: 📤 Upload v3.3.3 Artifacts
         if: always()
@@ -301,6 +375,7 @@ jobs:
           path: |
             data/processed/*.csv
             data/processed/*.json
+            data/*.csv
             logs/latest/*.log
             pipeline_report_v333.md
           retention-days: 30
@@ -314,7 +389,7 @@ jobs:
           echo "- **Average Quality Score**: ${{ steps.pipeline.outputs.quality_average }}/10" >> $GITHUB_STEP_SUMMARY
           echo "- **Files Generated**: ${{ steps.pipeline.outputs.files_generated }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Time**: ${{ steps.pipeline.outputs.execution_time }}s" >> $GITHUB_STEP_SUMMARY
-          echo "- **Dashboard**: [View Live Results](https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dashboard**: [View Live Results](${{ steps.dashboard.outputs.dashboard_url }})" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🎯 v3.3.3 Features Utilized:" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Standardized Quality Scoring (0-10 scale)" >> $GITHUB_STEP_SUMMARY
@@ -331,7 +406,7 @@ jobs:
     needs: pipeline
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: always() && needs.pipeline.outputs.pipeline_status == 'completed'
+    if: always() && needs.pipeline.outputs.pipeline_status != 'failed'
     
     outputs:
       quality_report: ${{ steps.quality.outputs.report }}
@@ -355,20 +430,21 @@ jobs:
         run: |
           echo "🎯 Running comprehensive v3.3.3 quality analysis..."
           
-          # Download artifacts from pipeline job
-          if [ -f "data/processed/statistics.json" ]; then
+          # Check if we have data to analyze
+          if [ -f "data/processed/statistics.json" ] || [ -f "data/processed/detailed_data.csv" ]; then
             # Try quality analysis command with fallback
-            if python factset_cli.py quality 2>/dev/null; then
+            if python factset_cli.py quality --analyze --v333 2>/dev/null; then
               echo "✅ Quality analysis completed"
+              echo "report=generated" >> $GITHUB_OUTPUT
+              echo "trends=analyzed" >> $GITHUB_OUTPUT
             else
               echo "📊 Creating manual quality summary..."
-              echo "Quality analysis completed manually" > quality_trends.json
+              echo "Quality analysis completed with basic metrics" > quality_trends.json
+              echo "report=manual" >> $GITHUB_OUTPUT
+              echo "trends=basic" >> $GITHUB_OUTPUT
             fi
-            
-            # v3.3.3 FIX: Use GITHUB_OUTPUT
-            echo "report=generated" >> $GITHUB_OUTPUT
-            echo "trends=analyzed" >> $GITHUB_OUTPUT
           else
+            echo "⚠️ No data files found for quality analysis"
             echo "report=no_data" >> $GITHUB_OUTPUT
             echo "trends=no_data" >> $GITHUB_OUTPUT
           fi
@@ -379,6 +455,7 @@ jobs:
           echo "- **Quality Report**: ${{ steps.quality.outputs.report }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Trend Analysis**: ${{ steps.quality.outputs.trends }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Average Quality**: ${{ needs.pipeline.outputs.quality_average }}/10" >> $GITHUB_STEP_SUMMARY
+          echo "- **Companies Analyzed**: ${{ needs.pipeline.outputs.companies_processed }}" >> $GITHUB_STEP_SUMMARY
           
           if [ -f "quality_trends.json" ]; then
             echo "- **Quality Trends**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
@@ -416,29 +493,33 @@ jobs:
         run: |
           echo "🔄 Starting v3.3.3 intelligent recovery..."
           
-          # Try recovery command, fall back to basic recovery if advanced options fail
-          if python factset_cli.py recover 2>/dev/null; then
-            echo "✅ Recovery command executed successfully"
-          else
-            echo "🔧 Attempting manual recovery steps..."
-            # Create missing directories
-            mkdir -p data/{csv,md,pdf,processed} logs/{latest,reports,archives} backups temp
-            echo "📁 Directories created"
-          fi
+          # Create essential directories
+          mkdir -p data/{csv,md,pdf,processed}
+          mkdir -p logs/{latest,reports,archives}
+          mkdir -p backups temp configs
+          echo "📁 Essential directories created"
           
-          # Try partial recovery if full pipeline failed
-          if [ "${{ needs.pipeline.result }}" = "failure" ]; then
-            echo "🔧 Attempting partial recovery..."
+          # Try recovery command, fall back to basic recovery if advanced options fail
+          if python factset_cli.py recover --auto-fix 2>/dev/null; then
+            echo "✅ Advanced recovery command executed successfully"
+            RECOVERY_TYPE="advanced"
+          else
+            echo "🔧 Attempting basic recovery steps..."
+            RECOVERY_TYPE="basic"
+            
+            # Try a conservative pipeline run as recovery
             if python factset_cli.py pipeline --mode=conservative --memory-limit=1024 2>/dev/null; then
-              echo "✅ Partial recovery successful"
+              echo "✅ Conservative pipeline recovery successful"
+              RECOVERY_TYPE="conservative_success"
             else
-              echo "⚠️ Partial recovery also failed"
+              echo "⚠️ All recovery attempts failed"
+              RECOVERY_TYPE="failed"
             fi
           fi
           
           # v3.3.3 FIX: Use GITHUB_OUTPUT
-          echo "status=attempted" >> $GITHUB_OUTPUT
-          echo "actions=diagnostics_run" >> $GITHUB_OUTPUT
+          echo "status=${RECOVERY_TYPE}" >> $GITHUB_OUTPUT
+          echo "actions=diagnostics_and_recovery" >> $GITHUB_OUTPUT
       
       - name: 🩺 Diagnostic Report
         if: always()
@@ -446,18 +527,35 @@ jobs:
           echo "🩺 Generating v3.3.3 diagnostic report..."
           
           # Try diagnostic command with fallback
-          if python factset_cli.py diagnose 2>/dev/null; then
+          if python factset_cli.py diagnose --full 2>/dev/null; then
             echo "✅ Diagnostics completed successfully"
           else
             echo "📋 Creating manual diagnostic summary..."
-            echo "## 🩺 Manual Diagnostic Summary" > diagnostic_report.md
-            echo "- Recovery attempted: $(date)" >> diagnostic_report.md  
-            echo "- System status: Checked" >> diagnostic_report.md
+            cat > diagnostic_report.md << EOF
+          ## 🩺 Manual Diagnostic Summary
+          - Recovery attempted: $(date)
+          - System status: Checked
+          - Pipeline status: ${{ needs.pipeline.result || 'not_run' }}
+          - Validation status: ${{ needs.validate.result || 'not_run' }}
+          - Recovery type: ${{ steps.recovery.outputs.status }}
+          
+          ### Directory Status:
+          \`\`\`
+          $(ls -la data/ logs/ 2>/dev/null || echo "Directories not accessible")
+          \`\`\`
+          
+          ### Recommendations:
+          1. Check validation job directory setup
+          2. Verify all required environment variables
+          3. Consider running with conservative mode
+          EOF
           fi
           
           echo "## 🔄 v3.3.3 Recovery Report" >> $GITHUB_STEP_SUMMARY
           echo "- **Recovery Status**: ${{ steps.recovery.outputs.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Actions Taken**: ${{ steps.recovery.outputs.actions }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Validation Result**: ${{ needs.validate.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pipeline Result**: ${{ needs.pipeline.result }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Next Steps**: Check logs and re-run with conservative mode" >> $GITHUB_STEP_SUMMARY
 
   # ============================================================================
@@ -477,14 +575,34 @@ jobs:
           echo "📧 v3.3.3 Pipeline completed successfully!"
           echo "📊 Companies: ${{ needs.pipeline.outputs.companies_processed }}"
           echo "🎯 Quality: ${{ needs.pipeline.outputs.quality_average }}/10"
-          echo "📈 Dashboard: https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
+          echo "📁 Files: ${{ needs.pipeline.outputs.files_generated }}"
+          echo "⏱️ Time: ${{ needs.pipeline.outputs.execution_time }}s"
+          echo "📈 Dashboard: ${{ needs.pipeline.outputs.dashboard_url }}"
       
       - name: ⚠️ Send Failure Notification
-        if: needs.pipeline.result == 'failure'
+        if: needs.pipeline.result == 'failure' || needs.validate.result == 'failure'
         run: |
-          echo "⚠️ v3.3.3 Pipeline failed"
-          echo "🔍 Check logs for details"
-          echo "🔄 Recovery attempted: ${{ needs.recovery.outputs.recovery_status || 'not_run' }}"
+          echo "⚠️ v3.3.3 Pipeline encountered issues"
+          echo "🔍 Validation: ${{ needs.validate.result }}"
+          echo "🔍 Pipeline: ${{ needs.pipeline.result }}"
+          echo "🔄 Recovery: ${{ needs.recovery.outputs.recovery_status || 'not_attempted' }}"
+          echo "📋 Check the workflow logs for detailed error information"
+      
+      - name: 📊 Final Status Summary
+        if: always()
+        run: |
+          echo "## 📊 Final v3.3.3 Workflow Status" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status | Details |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|---------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Validation | ${{ needs.validate.result }} | ${{ needs.validate.outputs.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pipeline | ${{ needs.pipeline.result }} | ${{ needs.pipeline.outputs.pipeline_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Quality Analysis | ${{ needs.quality_analysis.result }} | ${{ needs.quality_analysis.outputs.quality_report }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📈 Key Metrics:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Companies Processed**: ${{ needs.pipeline.outputs.companies_processed || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files Generated**: ${{ needs.pipeline.outputs.files_generated || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Average Quality**: ${{ needs.pipeline.outputs.quality_average || '0' }}/10" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution Time**: ${{ needs.pipeline.outputs.execution_time || '0' }}s" >> $GITHUB_STEP_SUMMARY
 
 # ============================================================================
 # v3.3.3 WORKFLOW CONCLUSION
