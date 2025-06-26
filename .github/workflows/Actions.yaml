@@ -495,7 +495,7 @@ jobs:
           echo "📈 Uploading processed data to Google Sheets..."
           
           # Build upload command
-          CMD="python factset_cli.py upload --sheets=all --github-actions"
+          CMD="python factset_cli.py upload --sheets=all"
           
           # Add v3.3.3 format flags if enabled
           if [ "${{ inputs.v333_format || 'true' }}" = "true" ]; then
@@ -559,7 +559,9 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           # Add processed results
-          git add data/processed/ processing_report_v333.md || true
+          git add data/processed/detailed_data.csv || true
+          git add data/processed/portfolio_summary.csv || true
+          git add data/processed/statistics.json || true
           git add logs/latest/process.log || true
           
           # Commit if there are changes
