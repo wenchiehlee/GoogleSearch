@@ -217,7 +217,7 @@ jobs:
           START_TIME=$(date +%s)
           
           # Build search command
-          CMD="python factset_cli.py search --mode=${{ inputs.mode || 'enhanced' }} --priority=${{ inputs.priority || 'high_only' }} --github-actions"
+          CMD="python factset_cli.py search --mode=${{ inputs.mode || 'enhanced' }} --priority=${{ inputs.priority || 'high_only' }}"
           
           echo "🔧 Executing: $CMD"
           
@@ -417,7 +417,7 @@ jobs:
           fi
           
           # Build processing command
-          CMD="python factset_cli.py process --mode=v333 --memory-limit=${{ inputs.memory_limit || '2048' }} --github-actions"
+          CMD="python factset_cli.py process --mode=v333 --memory-limit=${{ inputs.memory_limit || '2048' }}"
           
           # Add quality scoring flags if enabled
           if [ "${{ inputs.enable_quality_scoring || 'true' }}" = "true" ]; then
