@@ -1,0 +1,33 @@
+{
+  "version": "3.3.3",
+  "workflow_id": "20250625_145523",
+  "started_at": "2025-06-25T14:55:23.658720",
+  "last_updated": "2025-06-25T14:55:23.658777",
+  "search_completed": false,
+  "search_timestamp": null,
+  "companies_attempted": 0,
+  "companies_successful": 0,
+  "md_files_generated": 0,
+  "search_stopped_early": false,
+  "rate_limiting_detected": false,
+  "processing_completed": false,
+  "processing_timestamp": null,
+  "files_processed": 0,
+  "processing_duration": 0,
+  "sheets_uploaded": false,
+  "upload_timestamp": null,
+  "sheets_updated": [],
+  "last_error": null,
+  "total_errors": 0,
+  "execution_mode": "intelligent",
+  "quality_metrics": {
+    "scoring_enabled": true,
+    "average_quality_score": 0,
+    "quality_distribution": {},
+    "total_scored_items": 0,
+    "quality_thresholds_met": {}
+  },
+  "logging_mode": "stage_specific",
+  "performance_monitoring": true,
+  "github_actions_modernized": true
+}
