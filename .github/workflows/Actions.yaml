@@ -340,25 +340,20 @@ jobs:
           
           # Check what files were generated
           echo "📁 Files to commit:"
-          find data/ -name "*.csv" -o -name "*.json" -o -name "*.md" | head -20
-          
+
           # Add all files
           git add -A
           
           # Check if there are changes to commit
-          if git diff --staged --quiet; then
-            echo "ℹ️ No changes to commit"
-          else
-            echo "📤 Committing changes..."
-            git commit -m "⬆️ GitHub Actions Results added - v3.3.3 Pipeline $(date +%Y-%m-%d\ %H:%M:%S)" || true
-            git push || echo "⚠️ Push failed, but continuing..."
-          fi
-          
+
+          echo "📤 Committing changes..."
+          git commit -m "⬆️ GitHub Actions Results added - v3.3.3 Pipeline $(date +%Y-%m-%d\ %H:%M:%S)" || true
+          git push || true
+
           echo "✅ Results commit process completed"
-      
       - name: 🌐 Update Live Dashboard
         id: dashboard
-        if: success()
+        if: always()
         run: |
           echo "🌐 Live dashboard updated with v3.3.3 data"
           DASHBOARD_URL="https://docs.google.com/spreadsheets/d/${{ env.GOOGLE_SHEET_ID }}/edit"
