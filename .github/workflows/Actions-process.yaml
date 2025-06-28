@@ -1,0 +1,203 @@
+name: FactSet Process Group - Automated Processing
+on:
+  schedule:
+    # Run twice daily at 9:30 AM and 9:30 PM Taiwan time (UTC+8)
+    # 9:30 AM Taiwan = 1:30 AM UTC
+    # 9:30 PM Taiwan = 1:30 PM UTC
+    - cron: '30 1 * * *'   # 9:30 AM Taiwan time
+    - cron: '30 13 * * *'  # 9:30 PM Taiwan time
+  
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Process command to run'
+        required: false
+        default: 'process'
+        type: choice
+        options:
+          - process
+          - process-recent
+          - analyze-quality
+          - analyze-keywords
+          - keyword-summary
+          - validate-data
+          - stats
+      hours:
+        description: 'Hours for recent processing (process-recent only)'
+        required: false
+        default: '24'
+      no_upload:
+        description: 'Skip Google Sheets upload'
+        required: false
+        default: false
+        type: boolean
+      force_upload:
+        description: 'Force upload ignoring validation errors'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas python-dotenv gspread google-auth pyyaml
+        
+    - name: Create required directories
+      run: |
+        mkdir -p data/md
+        mkdir -p data/reports
+        mkdir -p data/quarantine
+        mkdir -p logs/process
+        
+    - name: Set up environment variables
+      env:
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+        GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+      run: |
+        echo "GOOGLE_SHEET_ID=$GOOGLE_SHEET_ID" >> .env
+        echo "GOOGLE_SHEETS_CREDENTIALS=$GOOGLE_SHEETS_CREDENTIALS" >> .env
+        
+    - name: Validate environment setup
+      run: |
+        echo "🔧 Validating Process Group environment..."
+        python process_group/process_cli.py validate
+        
+    - name: Show MD files statistics
+      run: |
+        echo "📊 Current MD files statistics..."
+        python process_group/process_cli.py stats
+        
+    - name: Run scheduled processing (automatic)
+      if: github.event_name == 'schedule'
+      run: |
+        echo "🚀 Running scheduled processing at $(date)"
+        python process_group/process_cli.py process
+        
+    - name: Run manual processing (workflow_dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        echo "🚀 Running manual processing: ${{ github.event.inputs.command }}"
+        
+        # Build command arguments
+        ARGS=""
+        if [ "${{ github.event.inputs.command }}" = "process-recent" ]; then
+          ARGS="--hours ${{ github.event.inputs.hours }}"
+        fi
+        
+        if [ "${{ github.event.inputs.no_upload }}" = "true" ]; then
+          ARGS="$ARGS --no-upload"
+        fi
+        
+        if [ "${{ github.event.inputs.force_upload }}" = "true" ]; then
+          ARGS="$ARGS --force-upload"
+        fi
+        
+        # Execute command
+        python process_group/process_cli.py ${{ github.event.inputs.command }} $ARGS
+        
+    - name: Data integrity validation (post-processing)
+      if: always()
+      run: |
+        echo "🔍 Running data integrity validation..."
+        python process_group/process_cli.py validate-data
+        
+    - name: Generate keyword analysis summary
+      if: success()
+      run: |
+        echo "📊 Generating keyword analysis summary..."
+        python process_group/process_cli.py keyword-summary --no-upload || echo "⚠️ Keyword analysis failed"
+        
+    - name: Commit generated reports
+      if: success()
+      run: |
+        echo "💾 Committing generated reports..."
+        
+        # Configure git (using same pattern as existing Actions.yaml)
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        # Add generated files
+        git add data/reports/*.csv || true
+        git add data/reports/*.json || true
+        git add data/reports/*_latest.* || true
+        
+        # Check if there are any changes to commit
+        if git diff --staged --quiet; then
+          echo "ℹ️ No processing changes to commit"
+        else
+          # Commit with simple message (matching original pattern)
+          git commit -m "📊 Process Group v3.6.0 Reports - $(date +%Y-%m-%d\ %H:%M:%S)" || true
+          git push || true
+          echo "✅ Processing results committed"
+        fi
+        
+    - name: Upload processing logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: process-logs-${{ github.run_number }}
+        path: |
+          logs/process/
+          data/reports/
+        retention-days: 7
+        
+    - name: Check for critical issues
+      if: always()
+      run: |
+        echo "🚨 Checking for critical validation issues..."
+        
+        # Check if validation report exists and has critical issues
+        if [ -f "data/reports/validation_results_latest.json" ]; then
+          critical_count=$(python -c "import json; data=json.load(open('data/reports/validation_results_latest.json','r',encoding='utf-8')); print(len(data.get('critical_issues',[])))" 2>/dev/null || echo "0")
+          echo "Critical issues found: $critical_count"
+          
+          if [ "$critical_count" -gt "0" ]; then
+            echo "🚨 CRITICAL: Found $critical_count critical validation issues!"
+            echo "Please check the validation report for details."
+            exit 1
+          fi
+        fi
+        
+    - name: Summary report
+      if: always()
+      run: |
+        echo "📋 Processing Summary Report"
+        echo "=========================="
+        echo "🕐 Run time: $(date)"
+        echo "🔄 Trigger: ${{ github.event_name }}"
+        
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "📝 Command: ${{ github.event.inputs.command }}"
+        else
+          echo "📝 Command: process (scheduled)"
+        fi
+        
+        echo ""
+        echo "📊 Final Statistics:"
+        python process_group/process_cli.py stats || echo "❌ Stats failed"
+        
+        echo ""
+        echo "📁 Generated Reports:"
+        ls -la data/reports/ | tail -10 || echo "No reports directory"
+        
+        echo ""
+        echo "📝 Git Status:"
+        git log --oneline -1 || echo "No recent commits"
+        
+        echo ""
+        echo "✅ Processing and commit completed successfully!"

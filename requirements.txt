@@ -23,6 +23,8 @@ python-dateutil>=2.8.2        # Enhanced date parsing
 setuptools>=68.0.0
 wheel>=0.41.0
 
+pyyaml
+google-api-python-client
 # Optional dependencies for enhanced functionality
 # Uncomment if needed for specific environments
 
