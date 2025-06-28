@@ -469,7 +469,7 @@ class ProcessCLI:
 
     # 原有功能保持不變
     def process_all_md_files(self, upload_sheets=True, **kwargs):
-        """處理所有 MD 檔案 - 主要功能"""
+        """處理所有 MD 檔案 - 🆕 增強版本統計"""
         print("\n🚀 開始處理所有 MD 檔案...")
         
         # 1. 掃描 MD 檔案
@@ -484,13 +484,32 @@ class ProcessCLI:
         # 2. 處理檔案
         processed_companies = self._process_md_file_list(md_files, **kwargs)
         
-        # 3. 生成正確的報告
+        # 3. 生成報告前的最終統計
         if processed_companies:
+            print(f"\n🎯 報告生成階段:")
+            
+            # 預先檢查有多少公司會被包含在報告中
+            if self.report_generator:
+                companies_for_report = [c for c in processed_companies 
+                                      if self.report_generator._should_include_in_report(c)]
+                
+                excluded_count = len(processed_companies) - len(companies_for_report)
+                
+                print(f"📊 處理結果摘要:")
+                print(f"   已處理公司: {len(processed_companies)} 家")
+                print(f"   將納入報告: {len(companies_for_report)} 家")
+                print(f"   因驗證失敗排除: {excluded_count} 家")
+                
+                if excluded_count > 0:
+                    print(f"   ✅ 成功過濾了 {excluded_count} 家有問題的公司")
+            
+            # 4. 生成和上傳報告
             self._generate_and_upload_reports_fixed(processed_companies, upload_sheets, 
                                                    force_upload=kwargs.get('force_upload', False))
-            print(f"✅ 處理完成: {len(processed_companies)} 家公司")
             
-            # 顯示驗證摘要
+            print(f"✅ 處理完成")
+            
+            # 顯示最終驗證摘要
             self._display_processing_validation_summary(processed_companies)
         else:
             print("❌ 沒有成功處理任何檔案")
@@ -498,7 +517,7 @@ class ProcessCLI:
         return processed_companies
 
     def _display_processing_validation_summary(self, processed_companies: List):
-        """顯示處理過程中的驗證摘要"""
+        """顯示處理過程中的驗證摘要 - 🆕 增強版本"""
         validation_passed = sum(1 for c in processed_companies if c.get('content_validation_passed', True))
         validation_failed = len(processed_companies) - validation_passed
         
@@ -507,15 +526,33 @@ class ProcessCLI:
             print(f"✅ 驗證通過: {validation_passed}")
             print(f"❌ 驗證失敗: {validation_failed}")
             
-            # 顯示驗證失敗的公司
+            # 🆕 詳細分析驗證失敗的原因
             failed_companies = [c for c in processed_companies if not c.get('content_validation_passed', True)]
             if failed_companies:
-                print(f"\n❌ 驗證失敗的公司:")
-                for company in failed_companies[:5]:  # 只顯示前5個
-                    print(f"  {company.get('company_name', 'Unknown')} ({company.get('company_code', 'Unknown')})")
+                print(f"\n❌ 驗證失敗的公司分析:")
+                
+                error_summary = {}
+                for company in failed_companies:
                     errors = company.get('validation_errors', [])
                     if errors:
-                        print(f"    錯誤: {errors[0][:60]}...")
+                        main_error = str(errors[0])
+                        if "不在觀察名單" in main_error:
+                            error_summary['不在觀察名單'] = error_summary.get('不在觀察名單', []) + [company]
+                        elif any(keyword in main_error for keyword in ['愛派司', '愛立信']):
+                            error_summary['公司名稱錯誤'] = error_summary.get('公司名稱錯誤', []) + [company]
+                        elif "觀察名單顯示應為" in main_error:
+                            error_summary['觀察名單名稱不符'] = error_summary.get('觀察名單名稱不符', []) + [company]
+                        else:
+                            error_summary['其他'] = error_summary.get('其他', []) + [company]
+                
+                for error_type, companies in error_summary.items():
+                    print(f"   {error_type} ({len(companies)} 家):")
+                    for company in companies[:3]:  # 只顯示前3個
+                        print(f"     - {company.get('company_name', 'Unknown')} ({company.get('company_code', 'Unknown')})")
+                    if len(companies) > 3:
+                        print(f"     - ... 還有 {len(companies) - 3} 家")
+                
+                print(f"\n💡 這些公司已自動排除，不會出現在報告和 Google Sheets 中")
 
     def process_recent_md_files(self, hours=24, upload_sheets=True, **kwargs):
         """處理最近 N 小時的 MD 檔案"""
@@ -724,17 +761,56 @@ class ProcessCLI:
             Path(directory).mkdir(parents=True, exist_ok=True)
 
     def _process_md_file_list(self, md_files, **kwargs):
-        """處理 MD 檔案清單 - 包含驗證資訊"""
+        """處理 MD 檔案清單 - 🆕 增強驗證日誌和統計"""
         processed_companies = []
+        validation_stats = {
+            'total_processed': 0,
+            'validation_passed': 0,
+            'validation_failed': 0,
+            'not_in_watchlist': 0,
+            'name_mismatch': 0,
+            'other_errors': 0
+        }
+        
+        print(f"\n📄 開始處理 {len(md_files)} 個 MD 檔案...")
         
         for i, md_file in enumerate(md_files, 1):
             try:
                 print(f"📄 處理 {i}/{len(md_files)}: {os.path.basename(md_file)}")
                 
                 file_info = self.md_scanner.get_file_info(md_file)
+                validation_stats['total_processed'] += 1
                 
                 if self.md_parser:
                     parsed_data = self.md_parser.parse_md_file(md_file)
+                    
+                    # 🆕 詳細的驗證狀態分析
+                    validation_passed = parsed_data.get('content_validation_passed', True)
+                    validation_errors = parsed_data.get('validation_errors', [])
+                    validation_result = parsed_data.get('validation_result', {})
+                    
+                    if validation_passed:
+                        validation_stats['validation_passed'] += 1
+                        status_icon = "✅"
+                        status_msg = "驗證通過"
+                    else:
+                        validation_stats['validation_failed'] += 1
+                        status_icon = "❌"
+                        
+                        # 分析失敗原因
+                        main_error = validation_errors[0] if validation_errors else "未知錯誤"
+                        if "不在觀察名單" in str(main_error):
+                            validation_stats['not_in_watchlist'] += 1
+                            status_msg = "不在觀察名單"
+                        elif any(keyword in str(main_error) for keyword in ['愛派司', '愛立信']):
+                            validation_stats['other_errors'] += 1
+                            status_msg = "公司名稱錯誤"
+                        elif "觀察名單顯示應為" in str(main_error):
+                            validation_stats['name_mismatch'] += 1
+                            status_msg = "觀察名單名稱不符"
+                        else:
+                            validation_stats['other_errors'] += 1
+                            status_msg = "其他驗證錯誤"
                     
                     if self.quality_analyzer:
                         quality_data = self.quality_analyzer.analyze(parsed_data)
@@ -756,30 +832,63 @@ class ProcessCLI:
                         }
                 else:
                     company_data = self._basic_process_md_file(md_file, file_info)
+                    validation_stats['validation_passed'] += 1  # 基本處理假設通過驗證
+                    status_icon = "✅"
+                    status_msg = "基本處理"
                 
                 processed_companies.append(company_data)
                 
-                # 顯示處理結果（包含驗證狀態）
+                # 🆕 詳細的處理結果顯示
                 company_name = company_data.get('company_name', 'Unknown')
                 company_code = company_data.get('company_code', 'Unknown')
                 quality_score = company_data.get('quality_score', 0)
                 quality_status = company_data.get('quality_status', '🔴 不足')
-                validation_passed = company_data.get('content_validation_passed', True)
                 
-                validation_icon = "✅" if validation_passed else "❌"
-                print(f"   {validation_icon} {company_name} ({company_code}) - 品質: {quality_score} {quality_status}")
+                print(f"   {status_icon} {company_name} ({company_code}) - 品質: {quality_score:.1f} {quality_status} - {status_msg}")
                 
-                # 如果驗證失敗，顯示原因
-                if not validation_passed:
-                    errors = company_data.get('validation_errors', [])
-                    if errors:
-                        print(f"      ⚠️ 驗證問題: {errors[0][:50]}...")
+                # 如果驗證失敗，顯示詳細原因
+                if not validation_passed and validation_errors:
+                    print(f"      🔍 驗證問題: {str(validation_errors[0])[:80]}...")
+                    
+                    # 如果是觀察名單問題，提供更多資訊
+                    if "不在觀察名單" in str(validation_errors[0]):
+                        print(f"      💡 此公司將被排除在最終報告之外")
                 
             except Exception as e:
                 print(f"   ❌ 處理失敗: {os.path.basename(md_file)} - {e}")
                 continue
         
+        # 🆕 處理完成後顯示詳細統計
+        self._display_processing_statistics(validation_stats)
+        
         return processed_companies
+
+    def _display_processing_statistics(self, validation_stats: Dict):
+        """🆕 顯示處理統計資訊"""
+        total = validation_stats['total_processed']
+        passed = validation_stats['validation_passed']
+        failed = validation_stats['validation_failed']
+        
+        print(f"\n📊 處理統計摘要:")
+        print(f"=" * 40)
+        print(f"📁 總處理檔案: {total}")
+        print(f"✅ 驗證通過: {passed} ({passed/total*100:.1f}%)")
+        print(f"❌ 驗證失敗: {failed} ({failed/total*100:.1f}%)")
+        
+        if failed > 0:
+            print(f"\n❌ 驗證失敗詳細分類:")
+            not_in_watchlist = validation_stats['not_in_watchlist']
+            name_mismatch = validation_stats['name_mismatch']
+            other_errors = validation_stats['other_errors']
+            
+            if not_in_watchlist > 0:
+                print(f"   🚫 不在觀察名單: {not_in_watchlist} 個")
+            if name_mismatch > 0:
+                print(f"   📝 觀察名單名稱不符: {name_mismatch} 個")
+            if other_errors > 0:
+                print(f"   ⚠️ 其他錯誤: {other_errors} 個")
+            
+            print(f"\n💡 這些驗證失敗的公司將不會出現在最終報告中")
 
     def _basic_process_md_file(self, md_file, file_info):
         """基本的 MD 檔案處理（當其他模組不可用時）"""

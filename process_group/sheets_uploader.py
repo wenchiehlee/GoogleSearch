@@ -49,7 +49,28 @@ class SheetsUploader:
             'max_validation_errors': 99999, # 實際上不限制
             'skip_not_block': True          # 跳過問題資料，不阻止上傳
         }
+    def _clean_stock_code(self, code):
 
+        if pd.isna(code) or code is None:
+            return ''
+        
+        code_str = str(code).strip()
+        
+        if code_str.startswith("'"):
+            code_str = code_str[1:]
+        
+        # 🔧 關鍵差異：返回整數而不是字符串
+        if code_str.isdigit() and len(code_str) == 4:
+            return int(code_str)  # 返回整數
+        
+        # 處理股票代號格式
+        if '-TW' in code_str:
+            parts = code_str.split('-TW')
+            if len(parts) == 2 and parts[0].isdigit() and len(parts[0]) == 4:
+                return f"{int(parts[0])}-TW"
+        
+        return code_str
+        
     def upload_reports(self, portfolio_df: pd.DataFrame, detailed_df: pd.DataFrame) -> bool:
         """主要上傳方法 - 🆕 加入上傳前驗證"""
         try:
@@ -312,16 +333,21 @@ class SheetsUploader:
         return str(value)
 
     def _ensure_json_compatible(self, value):
-        """🔧 確保值與 JSON 相容"""
+        """🔧 確保值與 JSON 相容 - 不添加引號"""
         if pd.isna(value) or value is None:
             return ''
         
         if isinstance(value, (int, float)):
             if math.isnan(value) or math.isinf(value):
                 return ''
+            return str(value)  # 直接轉為字符串，不加引號
         
-        # 轉換為字符串以確保 JSON 相容
-        return str(value) if value != '' else ''
+        # 如果是字符串，檢查是否以引號開頭並移除
+        str_value = str(value)
+        if str_value.startswith("'"):
+            str_value = str_value[1:]
+        
+        return str_value if str_value != '' else ''
 
     def test_connection(self) -> bool:
         """測試 Google Sheets 連線"""
@@ -377,7 +403,7 @@ class SheetsUploader:
             return False
 
     def _upload_portfolio_summary(self, portfolio_df: pd.DataFrame) -> bool:
-        """上傳投資組合摘要 - 🔧 修正 NaN 值處理"""
+        """上傳投資組合摘要 - 🔧 確保股票代號顯示為純數字"""
         try:
             # 嘗試找到或建立投資組合摘要工作表
             try:
@@ -389,24 +415,30 @@ class SheetsUploader:
             # 清空現有內容
             portfolio_worksheet.clear()
             
-            # 🔧 處理 NaN 值 - 轉換為 JSON 相容格式
+            # 🔧 清理 DataFrame，確保股票代號為純數字
             portfolio_df_clean = portfolio_df.copy()
             
             # 將 NaN 替換為空字符串
             portfolio_df_clean = portfolio_df_clean.fillna('')
             
+            # 🔧 特別處理股票代號欄位 - 移除引號，讓它自然顯示為數字
+            if '代號' in portfolio_df_clean.columns:
+                portfolio_df_clean['代號'] = portfolio_df_clean['代號'].apply(self._clean_stock_code)
+            
+            if '股票代號' in portfolio_df_clean.columns:
+                portfolio_df_clean['股票代號'] = portfolio_df_clean['股票代號'].apply(self._clean_stock_code)
+            
             # 確保數值欄位的格式正確
             numeric_columns = ['分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值', '品質評分']
             for col in numeric_columns:
                 if col in portfolio_df_clean.columns:
-                    # 將數值轉換為字符串，處理特殊值
                     portfolio_df_clean[col] = portfolio_df_clean[col].apply(self._format_numeric_value)
             
             # 準備資料
             headers = portfolio_df_clean.columns.tolist()
             data = portfolio_df_clean.values.tolist()
             
-            # 🔧 確保所有資料都是 JSON 相容的
+            # 🔧 確保所有資料都是乾淨的（移除意外的引號）
             data = [[self._ensure_json_compatible(cell) for cell in row] for row in data]
             
             # 上傳標題
@@ -417,6 +449,7 @@ class SheetsUploader:
                 portfolio_worksheet.update('A2', data)
             
             print("📊 投資組合摘要上傳完成")
+            print("✅ 股票代號將顯示為純數字（如：1122）")
             return True
             
         except Exception as e:
@@ -424,7 +457,7 @@ class SheetsUploader:
             return False
 
     def _upload_detailed_report(self, detailed_df: pd.DataFrame) -> bool:
-        """上傳詳細報告 - 🔧 修正 NaN 值處理"""
+        """上傳詳細報告 - 🔧 確保股票代號顯示為純數字"""
         try:
             # 嘗試找到或建立詳細報告工作表
             try:
@@ -436,11 +469,18 @@ class SheetsUploader:
             # 清空現有內容
             detailed_worksheet.clear()
             
-            # 🔧 處理 NaN 值 - 轉換為 JSON 相容格式
+            # 🔧 清理 DataFrame，確保股票代號為純數字
             detailed_df_clean = detailed_df.copy()
             
             # 將 NaN 替換為空字符串
             detailed_df_clean = detailed_df_clean.fillna('')
+            
+            # 🔧 特別處理股票代號欄位 - 移除引號，讓它自然顯示為數字
+            if '代號' in detailed_df_clean.columns:
+                detailed_df_clean['代號'] = detailed_df_clean['代號'].apply(self._clean_stock_code)
+            
+            if '股票代號' in detailed_df_clean.columns:
+                detailed_df_clean['股票代號'] = detailed_df_clean['股票代號'].apply(self._clean_stock_code)
             
             # 確保數值欄位的格式正確
             numeric_columns = [
@@ -457,7 +497,7 @@ class SheetsUploader:
             headers = detailed_df_clean.columns.tolist()
             data = detailed_df_clean.values.tolist()
             
-            # 🔧 確保所有資料都是 JSON 相容的
+            # 🔧 確保所有資料都是乾淨的（移除意外的引號）
             data = [[self._ensure_json_compatible(cell) for cell in row] for row in data]
             
             # 上傳標題
@@ -468,6 +508,7 @@ class SheetsUploader:
                 detailed_worksheet.update('A2', data)
             
             print("📊 詳細報告上傳完成")
+            print("✅ 股票代號將顯示為純數字（如：1122）")
             return True
             
         except Exception as e:

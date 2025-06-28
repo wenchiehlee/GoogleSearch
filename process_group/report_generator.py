@@ -94,18 +94,42 @@ class ReportGenerator:
         except Exception as e:
             print(f"❌ 生成詳細報告失敗: {e}")
             return pd.DataFrame(columns=self.detailed_report_columns)
-
+        
+    def _clean_stock_code_for_display(self, code):
+        """清理股票代號，確保顯示為純數字（無引號）"""
+        if pd.isna(code) or code is None or code == '':
+            return ''
+        
+        code_str = str(code).strip()
+        
+        # 移除任何現有的前導單引號
+        if code_str.startswith("'"):
+            code_str = code_str[1:]
+        
+        # 如果是純數字，直接返回（讓 Google Sheets 當作數字處理）
+        if code_str.isdigit():
+            return code_str
+        
+        return code_str
+    
     def generate_portfolio_summary(self, processed_companies: List[Dict], filter_invalid=True) -> pd.DataFrame:
-        """生成投資組合摘要 - 🆕 可選擇過濾無效資料"""
+        """生成投資組合摘要 - 🆕 使用最佳品質資料而非最新日期"""
         try:
-            # 🆕 先過濾無效資料
+            # 過濾邏輯保持不變...
             if filter_invalid:
+                original_count = len(processed_companies)
                 valid_companies = [c for c in processed_companies if self._should_include_in_report(c)]
-                print(f"📊 投資組合摘要：保留 {len(valid_companies)}/{len(processed_companies)} 筆有效資料")
+                filtered_count = original_count - len(valid_companies)
+                
+                print(f"📊 投資組合摘要過濾結果:")
+                print(f"   原始公司數: {original_count}")
+                print(f"   保留公司數: {len(valid_companies)}")
+                print(f"   過濾公司數: {filtered_count}")
             else:
                 valid_companies = processed_companies
+                print(f"📊 投資組合摘要：未啟用過濾，包含所有 {len(valid_companies)} 家公司")
             
-            # 按公司分組，取得每家公司的最新資料
+            # 按公司分組，取得每家公司的最佳品質資料
             company_summary = {}
             
             for company_data in valid_companies:
@@ -114,42 +138,63 @@ class ReportGenerator:
                 if company_code not in company_summary:
                     company_summary[company_code] = {
                         'files': [],
-                        'latest_data': None
+                        'best_quality_data': None  # 🔧 改名為 best_quality_data
                     }
                 
                 company_summary[company_code]['files'].append(company_data)
                 
-                # 更新最新資料
-                if (company_summary[company_code]['latest_data'] is None or
-                    self._is_more_recent_content_date_only(company_data, company_summary[company_code]['latest_data'])):
-                    company_summary[company_code]['latest_data'] = company_data
+                # 🔧 關鍵修改：選擇最佳品質資料而非最新日期
+                current_best = company_summary[company_code]['best_quality_data']
+                
+                if current_best is None:
+                    # 第一筆資料
+                    company_summary[company_code]['best_quality_data'] = company_data
+                else:
+                    # 比較品質分數，選擇更高的
+                    current_quality = company_data.get('quality_score', 0)
+                    best_quality = current_best.get('quality_score', 0)
+                    
+                    if current_quality > best_quality:
+                        company_summary[company_code]['best_quality_data'] = company_data
+                        print(f"🔄 {company_code} 更新最佳品質資料: {best_quality:.1f} → {current_quality:.1f}")
+                    elif current_quality == best_quality:
+                        # 品質相同時，選擇較新的日期
+                        if self._is_more_recent_content_date_only(company_data, current_best):
+                            company_summary[company_code]['best_quality_data'] = company_data
+                            print(f"🔄 {company_code} 品質相同({current_quality:.1f})，使用較新日期")
             
             # 生成摘要資料
             summary_rows = []
             
             for company_code, company_info in company_summary.items():
-                latest_data = company_info['latest_data']
+                best_data = company_info['best_quality_data']  # 🔧 使用最佳品質資料
                 all_files = company_info['files']
                 
-                best_content_date = self._get_content_date_only(latest_data)
+                # 顯示選擇的資料資訊
+                selected_date = self._get_content_date_only(best_data)
+                selected_quality = best_data.get('quality_score', 0)
+                print(f"📊 {company_code}: 選擇品質 {selected_quality:.1f} 的資料 (日期: {selected_date})")
                 
-                # 計算日期範圍（只考慮有 content_date 的檔案）
+                # 計算日期範圍（所有檔案的範圍，不影響選擇邏輯）
                 oldest_date, newest_date = self._calculate_date_range_content_date_only(all_files)
                 
+                # 🔧 使用最佳品質資料生成摘要
+                clean_code = self._clean_stock_code_for_display(company_code)
+                
                 summary_row = {
-                    '代號': company_code,
-                    '名稱': latest_data.get('company_name', 'Unknown'),
-                    '股票代號': f"{company_code}-TW",
-                    'MD最舊日期': oldest_date or best_content_date,
-                    'MD最新日期': newest_date or best_content_date,
+                    '代號': clean_code,
+                    '名稱': best_data.get('company_name', 'Unknown'),
+                    '股票代號': f"{clean_code}-TW",
+                    'MD最舊日期': oldest_date or selected_date,
+                    'MD最新日期': newest_date or selected_date,
                     'MD資料筆數': len(all_files),
-                    '分析師數量': latest_data.get('analyst_count', 0),
-                    '目標價': latest_data.get('target_price', ''),
-                    '2025EPS平均值': self._format_eps_value(latest_data.get('eps_2025_avg')),
-                    '2026EPS平均值': self._format_eps_value(latest_data.get('eps_2026_avg')),
-                    '2027EPS平均值': self._format_eps_value(latest_data.get('eps_2027_avg')),
-                    '品質評分': latest_data.get('quality_score', 0),
-                    '狀態': latest_data.get('quality_status', '🔴 不足'),
+                    '分析師數量': best_data.get('analyst_count', 0),        # 🔧 來自最佳品質資料
+                    '目標價': best_data.get('target_price', ''),           # 🔧 來自最佳品質資料
+                    '2025EPS平均值': self._format_eps_value(best_data.get('eps_2025_avg')),  # 🔧 來自最佳品質資料
+                    '2026EPS平均值': self._format_eps_value(best_data.get('eps_2026_avg')),  # 🔧 來自最佳品質資料
+                    '2027EPS平均值': self._format_eps_value(best_data.get('eps_2027_avg')),  # 🔧 來自最佳品質資料
+                    '品質評分': best_data.get('quality_score', 0),          # 🔧 來自最佳品質資料
+                    '狀態': best_data.get('quality_status', '🔴 不足'),      # 🔧 來自最佳品質資料
                     '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
                 
@@ -159,40 +204,72 @@ class ReportGenerator:
             df = pd.DataFrame(summary_rows, columns=self.portfolio_summary_columns)
             df = df.sort_values('代號')
             
+            print("✅ 投資組合摘要已使用最佳品質資料生成")
+            
             return df
             
         except Exception as e:
             print(f"❌ 生成投資組合摘要失敗: {e}")
             return pd.DataFrame(columns=self.portfolio_summary_columns)
 
+
     def _should_include_in_report(self, company_data: Dict[str, Any]) -> bool:
-        """🆕 判斷是否應該將此資料包含在報告中 - 只排除真正嚴重的問題"""
+        """🆕 判斷是否應該將此資料包含在報告中 - 嚴格觀察名單過濾"""
         
-        # 🚨 只有真正嚴重的驗證錯誤才排除
+        # 🚨 檢查嚴重的驗證錯誤
         validation_errors = company_data.get('validation_errors', [])
         
-        # 🆕 嚴重錯誤類型：
-        # 1. 愛派司/愛立信問題
-        # 2. 觀察名單不符問題
-        # 移除了對 "Oops, something went wrong" 的檢查 - 這很常見，不需要特別處理
+        # 🆕 **更新的嚴重錯誤類型** - 加入觀察名單相關錯誤
         critical_error_keywords = [
+            # 原有的愛派司/愛立信問題
             r'愛派司.*愛立信', 
             r'愛立信.*愛派司', 
             r'company_mismatch',
+            
+            # 觀察名單相關錯誤
             r'公司名稱不符觀察名單',  
-            r'觀察名單顯示應為'
+            r'觀察名單顯示應為',
+            
+            # 🆕 新增：不在觀察名單的錯誤
+            r'不在觀察名單中，不允許處理',
+            r'不在觀察名單中',
+            r'觀察名單未載入，無法驗證',
+            r'not_in_watchlist',
+            r'watchlist.*not.*found'
         ]
         
+        # 檢查是否有關鍵錯誤
         has_critical_error = any(
             any(re.search(keyword, str(error), re.IGNORECASE) for keyword in critical_error_keywords)
             for error in validation_errors
         )
         
         if has_critical_error:
-            print(f"🚨 排除嚴重驗證錯誤: {company_data.get('company_name', 'Unknown')} - {validation_errors[0][:50]}...")
+            # 確定錯誤類型以便記錄
+            error_type = "unknown"
+            main_error = str(validation_errors[0]) if validation_errors else ""
+            
+            if any(keyword in main_error for keyword in ['愛派司', '愛立信']):
+                error_type = "公司名稱錯誤"
+            elif "不在觀察名單" in main_error:
+                error_type = "不在觀察名單"
+            elif "觀察名單未載入" in main_error:
+                error_type = "觀察名單未載入"
+            elif "觀察名單顯示應為" in main_error:
+                error_type = "觀察名單名稱不符"
+            
+            print(f"🚨 排除嚴重驗證錯誤 ({error_type}): {company_data.get('company_name', 'Unknown')}({company_data.get('company_code', 'Unknown')}) - {main_error[:60]}...")
             return False
         
-        # 檢查基本資料完整性 - 更寬鬆的條件
+        # 🆕 額外檢查：驗證狀態
+        validation_result = company_data.get('validation_result', {})
+        if validation_result.get('overall_status') == 'error':
+            mismatch_details = validation_result.get('mismatch_details', {})
+            if mismatch_details.get('mismatch_type') == 'not_in_watchlist':
+                print(f"🚨 排除不在觀察名單的公司: {company_data.get('company_name', 'Unknown')}({company_data.get('company_code', 'Unknown')})")
+                return False
+        
+        # 檢查基本資料完整性
         company_code = company_data.get('company_code')
         company_name = company_data.get('company_name')
         
@@ -204,10 +281,22 @@ class ReportGenerator:
             print(f"📝 排除缺少公司名稱的資料: {company_code}")
             return False
         
-        # 🔧 移除過於嚴格的條件：
-        # - 不再因為品質評分低而排除
-        # - 不再因為內容短而排除
-        # - 不再因為一般驗證警告而排除
+        # 🆕 額外的觀察名單檢查（雙重保險）
+        # 如果有其他方式標記不在觀察名單的公司
+        if not company_data.get('content_validation_passed', True):
+            validation_warnings = company_data.get('validation_warnings', [])
+            validation_errors = company_data.get('validation_errors', [])
+            
+            # 檢查是否因為觀察名單問題而失敗
+            all_messages = validation_warnings + validation_errors
+            watchlist_issues = [
+                msg for msg in all_messages 
+                if any(keyword in str(msg) for keyword in ['觀察名單', '不在觀察名單', 'watchlist', 'not_in_watchlist'])
+            ]
+            
+            if watchlist_issues:
+                print(f"🚨 排除觀察名單問題: {company_data.get('company_name', 'Unknown')} - {watchlist_issues[0][:50]}...")
+                return False
         
         return True
 
