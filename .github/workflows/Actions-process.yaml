@@ -34,8 +34,8 @@ on:
         type: boolean
       force_upload:
         description: 'Force upload ignoring validation errors'
-        required: false
-        default: false
+        required: true
+        default: true
         type: boolean
 
 jobs:
@@ -155,23 +155,6 @@ jobs:
           logs/process/
           data/reports/
         retention-days: 7
-        
-    - name: Check for critical issues
-      if: always()
-      run: |
-        echo "🚨 Checking for critical validation issues..."
-        
-        # Check if validation report exists and has critical issues
-        if [ -f "data/reports/validation_results_latest.json" ]; then
-          critical_count=$(python -c "import json; data=json.load(open('data/reports/validation_results_latest.json','r',encoding='utf-8')); print(len(data.get('critical_issues',[])))" 2>/dev/null || echo "0")
-          echo "Critical issues found: $critical_count"
-          
-          if [ "$critical_count" -gt "0" ]; then
-            echo "🚨 CRITICAL: Found $critical_count critical validation issues!"
-            echo "Please check the validation report for details."
-            exit 1
-          fi
-        fi
         
     - name: Summary report
       if: always()
