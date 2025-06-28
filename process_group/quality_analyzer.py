@@ -45,20 +45,128 @@ class QualityAnalyzer:
             'revenue', 'earnings', 'profit', 'target', 'analyst'
         ]
 
+    def _adjust_score_for_validation(self, base_score: float, validation_status: str, 
+                                   validation_passed: bool, parsed_data: Dict) -> float:
+        """🆕 根據驗證結果調整品質分數"""
+        
+        if not validation_passed:
+            validation_errors = parsed_data.get('validation_errors', [])
+            
+            # 🚨 嚴重驗證失敗：公司完全不符
+            critical_keywords = [
+                '不在觀察名單', '完全不同的公司', '台股檔案.*美股', 
+                '愛派司.*愛立信', '檔案標示為.*但內容是'
+            ]
+            
+            has_critical_error = any(
+                any(re.search(keyword, str(error), re.IGNORECASE) for keyword in critical_keywords)
+                for error in validation_errors
+            )
+            
+            if has_critical_error:
+                # 🚨 完全不符的公司 → 分數設為 0
+                print(f"🚨 嚴重驗證錯誤：公司不符，品質分數 {base_score:.1f} → 0.0")
+                return 0.0
+            
+            elif validation_status == 'error':
+                # ❌ 一般驗證錯誤 → 分數上限 2.0
+                adjusted_score = min(base_score, 2.0)
+                print(f"❌ 驗證錯誤：品質分數 {base_score:.1f} → {adjusted_score:.1f}")
+                return adjusted_score
+        
+        elif validation_status == 'warning':
+            # ⚠️ 驗證警告 → 稍微降低分數
+            warning_count = len(parsed_data.get('validation_warnings', []))
+            penalty = min(warning_count * 0.5, 2.0)  # 每個警告扣 0.5 分，最多扣 2 分
+            adjusted_score = max(base_score - penalty, 0)
+            print(f"⚠️ 驗證警告：品質分數 {base_score:.1f} → {adjusted_score:.1f} (扣 {penalty} 分)")
+            return adjusted_score
+        
+        # ✅ 驗證通過 → 不調整分數
+        return base_score
+
+    def _get_adjustment_reason(self, validation_status: str, validation_passed: bool) -> str:
+        """🆕 取得分數調整原因"""
+        if not validation_passed:
+            if validation_status == 'error':
+                return "驗證失敗，調整為低分"
+            else:
+                return "驗證錯誤，限制分數上限"
+        elif validation_status == 'warning':
+            return "驗證警告，輕微扣分"
+        else:
+            return "驗證通過，無調整"
+
+    def _create_failed_validation_analysis(self, parsed_data: Dict, validation_errors: List) -> Dict:
+        """🆕 為驗證失敗的資料建立低分品質分析"""
+        main_error = str(validation_errors[0]) if validation_errors else "驗證失敗"
+        
+        return {
+            'quality_score': 0.0,
+            'quality_status': '🚨 驗證失敗',
+            'quality_category': 'insufficient',
+            'analysis_timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            
+            'detailed_analysis': {
+                'validation_failure': {
+                    'score': 0.0,
+                    'details': [f"❌ 嚴重驗證失敗: {main_error}"],
+                    'metrics': {'critical_validation_failure': True}
+                }
+            },
+            
+            'summary_metrics': {
+                'content_validation_passed': False,
+                'validation_error_count': len(validation_errors),
+                'critical_validation_failure': True
+            },
+            
+            'validation_summary': {
+                'validation_passed': False,
+                'validation_errors': validation_errors,
+                'has_validation_issues': True
+            },
+            
+            'score_adjustment': {
+                'base_score': 0.0,
+                'final_score': 0.0,
+                'adjustment_reason': "嚴重驗證失敗，內容與預期公司不符"
+            }
+        }
+    
     def analyze(self, parsed_data: Dict[str, Any]) -> Dict[str, Any]:
-        """主要分析方法 - 整合內容驗證"""
+        """主要分析方法 - 🆕 考慮驗證結果的品質評分"""
         try:
-            # 各維度分析
+            # 🔍 首先檢查驗證結果
+            validation_result = parsed_data.get('validation_result', {})
+            validation_status = validation_result.get('overall_status', 'valid')
+            validation_passed = parsed_data.get('content_validation_passed', True)
+            
+            # 🚨 關鍵修改：如果驗證嚴重失敗，直接返回低分
+            if not validation_passed and validation_status == 'error':
+                # 檢查是否為嚴重的公司不符問題
+                validation_errors = parsed_data.get('validation_errors', [])
+                critical_validation_failure = any(
+                    any(keyword in str(error) for keyword in [
+                        '不在觀察名單', '愛派司', '愛立信', '台股檔案', '美股', 
+                        '完全不同的公司', '檔案標示為', '但內容是'
+                    ]) for error in validation_errors
+                )
+                
+                if critical_validation_failure:
+                    print(f"🚨 驗證嚴重失敗，強制設定品質評分為 0")
+                    return self._create_failed_validation_analysis(parsed_data, validation_errors)
+            
+            # 原有的品質分析邏輯
             completeness_analysis = self._analyze_data_completeness(parsed_data)
             coverage_analysis = self._analyze_analyst_coverage(parsed_data)
             freshness_analysis = self._analyze_data_freshness(parsed_data)
             content_analysis = self._analyze_content_quality(parsed_data)
             consistency_analysis = self._analyze_data_consistency(parsed_data)
-            # 🆕 新增：內容驗證分析
             validation_analysis = self._analyze_content_validation(parsed_data)
             
-            # 計算加權總分
-            total_score = (
+            # 計算基礎品質分數
+            base_quality_score = (
                 completeness_analysis['score'] * self.QUALITY_WEIGHTS['data_completeness'] +
                 coverage_analysis['score'] * self.QUALITY_WEIGHTS['analyst_coverage'] +
                 freshness_analysis['score'] * self.QUALITY_WEIGHTS['data_freshness'] +
@@ -67,25 +175,27 @@ class QualityAnalyzer:
                 validation_analysis['score'] * self.QUALITY_WEIGHTS['content_validation']
             )
             
-            # 確保分數在 0-10 範圍內
-            quality_score = round(min(max(total_score, 0), 10), 1)
+            # 🔧 根據驗證狀態調整最終分數
+            final_quality_score = self._adjust_score_for_validation(
+                base_quality_score, validation_status, validation_passed, parsed_data
+            )
             
-            # 🆕 特殊處理：如果內容驗證嚴重失敗，直接降級
-            validation_result = parsed_data.get('validation_result', {})
-            if validation_result.get('overall_status') == 'error':
-                # 如果是嚴重的驗證錯誤（如愛派司/愛立信問題），直接設為低分
-                if any('愛立信' in str(error) for error in validation_result.get('errors', [])):
-                    quality_score = min(quality_score, 2.0)  # 強制降到不足級別
+            # 確保分數在 0-10 範圍內
+            final_quality_score = round(min(max(final_quality_score, 0), 10), 1)
             
             # 確定品質類別和狀態
-            quality_category = self._determine_quality_category_fixed(quality_score)
+            quality_category = self._determine_quality_category_fixed(final_quality_score)
             quality_status = self.QUALITY_INDICATORS[quality_category]
+            
+            # 🆕 如果是驗證失敗的低分，加上特殊標記
+            if final_quality_score <= 2.0 and not validation_passed:
+                quality_status = "🚨 驗證失敗"
             
             # 生成摘要指標
             summary_metrics = self._generate_summary_metrics(parsed_data)
             
             return {
-                'quality_score': quality_score,
+                'quality_score': final_quality_score,
                 'quality_status': quality_status,
                 'quality_category': quality_category,
                 'analysis_timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -96,17 +206,23 @@ class QualityAnalyzer:
                     'data_freshness': freshness_analysis,
                     'content_quality': content_analysis,
                     'data_consistency': consistency_analysis,
-                    'content_validation': validation_analysis  # 🆕 新增驗證分析
+                    'content_validation': validation_analysis
                 },
                 
                 'summary_metrics': summary_metrics,
                 
-                # 🆕 驗證狀態摘要
                 'validation_summary': {
-                    'validation_passed': parsed_data.get('content_validation_passed', True),
+                    'validation_passed': validation_passed,
                     'validation_warnings': parsed_data.get('validation_warnings', []),
                     'validation_errors': parsed_data.get('validation_errors', []),
                     'has_validation_issues': len(parsed_data.get('validation_errors', [])) > 0
+                },
+                
+                # 🆕 調整記錄
+                'score_adjustment': {
+                    'base_score': round(base_quality_score, 1),
+                    'final_score': final_quality_score,
+                    'adjustment_reason': self._get_adjustment_reason(validation_status, validation_passed)
                 }
             }
             
