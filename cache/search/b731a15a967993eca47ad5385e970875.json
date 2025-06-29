@@ -1,0 +1,23 @@
+{
+  "query": "test factset",
+  "cached_at": "2025-06-29T06:14:21.265163",
+  "data": {
+    "query_info": {
+      "original_query": "test factset",
+      "total_results": "19300",
+      "search_time": 0.250215,
+      "timestamp": "2025-06-29T06:14:21.265048"
+    },
+    "items": [
+      {
+        "title": "FactSet | Leading Financial Data, Market Analysis & Insights",
+        "snippet": "2025年6月13日 ... Test your ideas and discover new ... How did the earnings reported by these seven companies perform relative to analyst expectations and year-ago results?",
+        "url": "https://www.factset.com/",
+        "domain": "www.factset.com",
+        "relevance_score": 17,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

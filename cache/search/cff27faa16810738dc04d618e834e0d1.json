@@ -1,0 +1,77 @@
+{
+  "query": "中華電 factset",
+  "cached_at": "2025-06-29T06:14:25.348759",
+  "data": {
+    "query_info": {
+      "original_query": "中華電 factset",
+      "total_results": "7",
+      "search_time": 0.167622,
+      "timestamp": "2025-06-29T06:14:25.348592"
+    },
+    "items": [
+      {
+        "title": "JC 財經觀點",
+        "snippet": "2 天前 ... 地區表現方面，北美收入下降11%，歐洲、中東及非洲 (EMEA) 下降10%，大中華區下降 ... 近一個月台股科技類型ETF中，排名居冠的00952凱基 台灣AI50追蹤FactSet優選 ...",
+        "url": "https://www.facebook.com/JCInsightgroup/",
+        "domain": "www.facebook.com",
+        "relevance_score": 5,
+        "has_factset_content": true,
+        "has_financial_content": false
+      },
+      {
+        "title": "關稅戰升級、衰退疑慮高防禦型資產受青睞",
+        "snippet": "2025年3月19日 ... 每度售電盈餘(B-A). -0.5953. -0.2286. -1.0925. 稅前盈虧(億元). -97. -411. -1,977 ... 資料來源：LSEG，FactSet，Bloomberg，永豐投顧整理. 企業擔心關稅對業績造成 ...",
+        "url": "https://mma.sinopac.com/MMA7txt/sice/sice202504s.pdf",
+        "domain": "mma.sinopac.com",
+        "relevance_score": 4,
+        "has_factset_content": true,
+        "has_financial_content": false
+      },
+      {
+        "title": "2025年財富策略展望破浪前行：經濟破格增長的多元投資策略",
+        "snippet": "2024年12月23日 ... 資料來源：彭博及FactSet，截至2024年11月14日。 Page 5. 2025年財富策略展望. 股市：持續牛市下新舊領袖股交替. *投資產品: 並非銀行存款，不受政府及銀行擔保，並可能 ...",
+        "url": "https://www.citigold.com.hk/global_docs/mobile/investment/pdf/invest_insight_c.pdf",
+        "domain": "www.citigold.com.hk",
+        "relevance_score": 4,
+        "has_factset_content": true,
+        "has_financial_content": false
+      },
+      {
+        "title": "Palantir 財測超夯為何股價跌？估值、成長恐為因| TechNews 科技新報",
+        "snippet": "2025年5月6日 ... 與此同時，Palantir 2025年的本益成長比（price-earnings to growth ratio，又稱 ... 中華電5月營收月減2.8%. 財經. (2025年6月10日). 美債下半年發行量恐達1 兆美元 ...",
+        "url": "https://finance.technews.tw/2025/05/06/palantir-earnings-forecast-raised-why-is-its-stock-price-falling/",
+        "domain": "finance.technews.tw",
+        "relevance_score": 1,
+        "has_factset_content": false,
+        "has_financial_content": true
+      },
+      {
+        "title": "Study of KWEB, BABA and YINN – Part II | Timeless Investor",
+        "snippet": "2025年2月21日 ... ... price-to-earnings multiples and double-digit growth rates. While Tepper boasted that he's buying “everything” in China, he didn't name specific companies ...",
+        "url": "https://www.timelessinvestor.com/2025/02/21/study-of-baba-and-cweb-part-ii/",
+        "domain": "www.timelessinvestor.com",
+        "relevance_score": 1,
+        "has_factset_content": false,
+        "has_financial_content": true
+      },
+      {
+        "title": "證券櫃檯買賣中心",
+        "snippet": "3 天前 ... 櫃買中心是國內第一個彙整國內外重要綠色相關標章，並揭示上市櫃公司取得標章情形之平台，可作為金融機構及投資人進行投融資時參考資訊之重要來源。",
+        "url": "https://www.tpex.org.tw/",
+        "domain": "www.tpex.org.tw",
+        "relevance_score": 0,
+        "has_factset_content": false,
+        "has_financial_content": false
+      },
+      {
+        "title": "A-Z Databases",
+        "snippet": "2024年11月11日 ... Company financials, earning estimates, market data and stock quotes, Venture Capital/Private Equity data, press releases, transaction data, corporate filings, ...",
+        "url": "https://www.bc.edu/databases",
+        "domain": "www.bc.edu",
+        "relevance_score": 0,
+        "has_factset_content": false,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

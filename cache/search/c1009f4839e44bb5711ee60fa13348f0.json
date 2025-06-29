@@ -1,0 +1,41 @@
+{
+  "query": "\"中華電\" factset 目標價",
+  "cached_at": "2025-06-29T06:14:29.334457",
+  "data": {
+    "query_info": {
+      "original_query": "\"中華電\" factset 目標價",
+      "total_results": "3",
+      "search_time": 0.159215,
+      "timestamp": "2025-06-29T06:14:29.334350"
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：聯詠(3034-TW)EPS預估下修至33.32元 ...",
+        "snippet": "2024年11月7日 ... FactSet 最新調查：聯詠(3034-TW)EPS預估下修，預估EPS、預估營收、目標價 ... 鉅亨速報- Factset 最新調查：中華電(2412-TW)EPS預估下修至4.81元，預估目標價為 ...",
+        "url": "https://news.cnyes.com/news/id/5767959",
+        "domain": "news.cnyes.com",
+        "relevance_score": 19,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "Palantir 財測超夯為何股價跌？估值、成長恐為因| TechNews 科技新報",
+        "snippet": "2025年5月6日 ... ... 目標價至230 美元. 財經. (2025年6月27日). 一分鐘試算，醫療險+意外險保費. PR ... 中華電5月營收月減2.8%. 財經. (2025年6月10日). 美債下半年發行量恐達1 兆美元 ...",
+        "url": "https://finance.technews.tw/2025/05/06/palantir-earnings-forecast-raised-why-is-its-stock-price-falling/",
+        "domain": "finance.technews.tw",
+        "relevance_score": 2,
+        "has_factset_content": false,
+        "has_financial_content": true
+      },
+      {
+        "title": "巴菲特保留三成現金卻能創造20％超額報酬的秘密| 強基金fundhot",
+        "snippet": "2025年2月21日 ... 不會是中華電、中鋼、統一、西瓜金帶起來的。 E-2.投資科技型ETF、大盤（科技型指數）槓桿，不要投資個股（或期貨之槓桿），. 並搭配槓桿投資. 年輕時放大槓桿---年老時 ...",
+        "url": "https://fundhot.com/forum/ETF/%E5%B7%B4%E8%8F%B2%E7%89%B9%E4%BF%9D%E7%95%99%E4%B8%89%E6%88%90%E7%8F%BE%E9%87%91%E5%8D%BB%E8%83%BD%E5%89%B5%E9%80%A020%EF%BC%85%E8%B6%85%E9%A1%8D%E5%A0%B1%E9%85%AC%E7%9A%84%E7%A7%98%E5%AF%86/12838",
+        "domain": "fundhot.com",
+        "relevance_score": 1,
+        "has_factset_content": false,
+        "has_financial_content": false
+      }
+    ]
+  }
+}
