@@ -88,15 +88,13 @@ jobs:
     - name: Validate API Setup
       run: |
         echo "Validating API setup..."
-        cd search_group
-        python search_cli.py validate
+        python search_group/search_cli.py validate
         echo "API validation completed"
     
     - name: Pre-Search Status
       run: |
         echo "Pre-search status check..."
-        cd search_group
-        python search_cli.py status || echo "No previous search data found"
+        python search_group/search_cli.py status || echo "No previous search data found"
         echo ""
         echo "Search Configuration:"
         echo "  - Company Count: ${{ github.event.inputs.company_count || '2' }}"
@@ -108,7 +106,6 @@ jobs:
       id: search
       run: |
         echo "Starting daily Taiwan financial data search..."
-        cd search_group
         
         COMPANY_COUNT="${{ github.event.inputs.company_count || '2' }}"
         MIN_QUALITY="${{ github.event.inputs.min_quality || '7' }}"
@@ -125,10 +122,10 @@ jobs:
         
         if [ -n "$SPECIFIC_COMPANIES" ]; then
           echo "Searching specific companies: $SPECIFIC_COMPANIES"
-          python search_cli.py search --batch "$SPECIFIC_COMPANIES" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
+          python search_group/search_cli.py search --batch "$SPECIFIC_COMPANIES" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
         else
           echo "Searching all companies in watchlist"
-          python search_cli.py search --all --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
+          python search_group/search_cli.py search --all --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
         fi
         
         SEARCH_EXIT_CODE=$?
@@ -143,35 +140,34 @@ jobs:
     - name: Post-Search Analysis
       run: |
         echo "Post-search analysis..."
-        cd search_group
         
         echo ""
         echo "Final Status:"
-        python search_cli.py status
+        python search_group/search_cli.py status
         
         echo ""
         echo "Generated Files:"
-        if [ -d "../data/md" ]; then
-          MD_COUNT=$(find ../data/md -name "*.md" | wc -l)
+        if [ -d "data/md" ]; then
+          MD_COUNT=$(find data/md -name "*.md" | wc -l)
           echo "  - Total MD files: $MD_COUNT"
           
           if [ $MD_COUNT -gt 0 ]; then
             echo "  - Latest files:"
-            find ../data/md -name "*.md" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -5 | awk '{print "    - " $2}' || echo "    - (file listing unavailable)"
+            find data/md -name "*.md" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -5 | awk '{print "    - " $2}' || echo "    - (file listing unavailable)"
             
             echo ""
             echo "File Size Summary:"
-            du -sh ../data/md/ 2>/dev/null | awk '{print "  - Total size: " $1}' || echo "  - Size calculation unavailable"
+            du -sh data/md/ 2>/dev/null | awk '{print "  - Total size: " $1}' || echo "  - Size calculation unavailable"
           fi
         fi
         
         echo ""
         echo "Log Summary:"
-        if [ -d "../logs/search" ]; then
-          LOG_FILES=$(find ../logs/search -name "*.log" | wc -l)
+        if [ -d "logs/search" ]; then
+          LOG_FILES=$(find logs/search -name "*.log" | wc -l)
           echo "  - Log files: $LOG_FILES"
           
-          if find ../logs/search -name "*.log" -exec grep -l "ERROR\|CRITICAL" {} \; | head -1 >/dev/null 2>&1; then
+          if find logs/search -name "*.log" -exec grep -l "ERROR\|CRITICAL" {} \; | head -1 >/dev/null 2>&1; then
             echo "  - Recent errors found in logs"
           else
             echo "  - No critical errors in logs"
@@ -231,7 +227,7 @@ jobs:
     
     - name: Upload Search Results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: taiwan-financial-search-${{ github.run_number }}
         path: artifacts/
