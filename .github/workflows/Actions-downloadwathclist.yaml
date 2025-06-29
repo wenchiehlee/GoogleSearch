@@ -6,8 +6,8 @@ on:
       force_download:
         description: 'Force re-download even if file exists'
         type: boolean
-        default: false
-        required: false
+        default: true
+        required: true
   schedule:
     # Run daily at 01:30 UTC
     - cron: "30 1 * * *"
@@ -46,9 +46,9 @@ jobs:
           # Run download command
           if [ "${{ inputs.force_download }}" = "true" ]; then
             echo "🔄 Force download enabled"
-            python downloadwatchlist_group\download_cli.py download --force
+            python downloadwatchlist_group/download_cli.py download --force
           else
-            python downloadwatchlist_group\download_cli.py download
+            python downloadwatchlist_group/download_cli.py download
           fi
           
           # Check result and set outputs
@@ -68,7 +68,7 @@ jobs:
         if: always()
         run: |
           echo "📊 Download Status Report:"
-          python downloadwatchlist_group\download_cli.py status
+          python downloadwatchlist_group/download_cli.py status
       
       - name: 💾 Commit Changes
         id: commit
