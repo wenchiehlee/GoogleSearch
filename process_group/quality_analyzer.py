@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Quality Analyzer - FactSet Pipeline v3.5.0 (Enhanced with Content Validation)
-強化品質評分系統，整合內容驗證結果
+Quality Analyzer - FactSet Pipeline v3.5.1
+Forces quality score = 0 for all validation failures
 """
 
 import re
@@ -9,9 +9,9 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Tuple
 
 class QualityAnalyzer:
-    """品質分析器 - 強化驗證版本"""
+    """品質分析器 - 強制驗證失敗評分為 0"""
     
-    # 品質範圍定義 - 正確處理 8.9 分
+    # 品質範圍定義
     QUALITY_RANGES = {
         'complete': (9.0, 10.0),      # 🟢 完整 (9.0-10.0)
         'good': (8.0, 8.99),          # 🟡 良好 (8.0-8.99)
@@ -27,14 +27,14 @@ class QualityAnalyzer:
         'insufficient': '🔴 不足'
     }
     
-    # 🆕 更新評分權重 - 加入內容驗證
+    # 評分權重
     QUALITY_WEIGHTS = {
-        'data_completeness': 0.30,    # 資料完整性 30% (降低)
-        'analyst_coverage': 0.20,     # 分析師覆蓋 20% (降低)
-        'data_freshness': 0.15,       # 資料新鮮度 15% (降低)
-        'content_quality': 0.15,      # 內容品質 15% (降低)
-        'data_consistency': 0.05,     # 資料一致性 5% (保持)
-        'content_validation': 0.15    # 🆕 內容驗證 15% (新增)
+        'data_completeness': 0.30,    # 資料完整性 30%
+        'analyst_coverage': 0.20,     # 分析師覆蓋 20%
+        'data_freshness': 0.15,       # 資料新鮮度 15%
+        'content_quality': 0.15,      # 內容品質 15%
+        'data_consistency': 0.05,     # 資料一致性 5%
+        'content_validation': 0.15    # 內容驗證 15%
     }
     
     def __init__(self):
@@ -45,119 +45,26 @@ class QualityAnalyzer:
             'revenue', 'earnings', 'profit', 'target', 'analyst'
         ]
 
-    def _adjust_score_for_validation(self, base_score: float, validation_status: str, 
-                                   validation_passed: bool, parsed_data: Dict) -> float:
-        """🆕 根據驗證結果調整品質分數"""
-        
-        if not validation_passed:
-            validation_errors = parsed_data.get('validation_errors', [])
-            
-            # 🚨 嚴重驗證失敗：公司完全不符
-            critical_keywords = [
-                '不在觀察名單', '完全不同的公司', '台股檔案.*美股', 
-                '愛派司.*愛立信', '檔案標示為.*但內容是'
-            ]
-            
-            has_critical_error = any(
-                any(re.search(keyword, str(error), re.IGNORECASE) for keyword in critical_keywords)
-                for error in validation_errors
-            )
-            
-            if has_critical_error:
-                # 🚨 完全不符的公司 → 分數設為 0
-                print(f"🚨 嚴重驗證錯誤：公司不符，品質分數 {base_score:.1f} → 0.0")
-                return 0.0
-            
-            elif validation_status == 'error':
-                # ❌ 一般驗證錯誤 → 分數上限 2.0
-                adjusted_score = min(base_score, 2.0)
-                print(f"❌ 驗證錯誤：品質分數 {base_score:.1f} → {adjusted_score:.1f}")
-                return adjusted_score
-        
-        elif validation_status == 'warning':
-            # ⚠️ 驗證警告 → 稍微降低分數
-            warning_count = len(parsed_data.get('validation_warnings', []))
-            penalty = min(warning_count * 0.5, 2.0)  # 每個警告扣 0.5 分，最多扣 2 分
-            adjusted_score = max(base_score - penalty, 0)
-            print(f"⚠️ 驗證警告：品質分數 {base_score:.1f} → {adjusted_score:.1f} (扣 {penalty} 分)")
-            return adjusted_score
-        
-        # ✅ 驗證通過 → 不調整分數
-        return base_score
-
-    def _get_adjustment_reason(self, validation_status: str, validation_passed: bool) -> str:
-        """🆕 取得分數調整原因"""
-        if not validation_passed:
-            if validation_status == 'error':
-                return "驗證失敗，調整為低分"
-            else:
-                return "驗證錯誤，限制分數上限"
-        elif validation_status == 'warning':
-            return "驗證警告，輕微扣分"
-        else:
-            return "驗證通過，無調整"
-
-    def _create_failed_validation_analysis(self, parsed_data: Dict, validation_errors: List) -> Dict:
-        """🆕 為驗證失敗的資料建立低分品質分析"""
-        main_error = str(validation_errors[0]) if validation_errors else "驗證失敗"
-        
-        return {
-            'quality_score': 0.0,
-            'quality_status': '🚨 驗證失敗',
-            'quality_category': 'insufficient',
-            'analysis_timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            
-            'detailed_analysis': {
-                'validation_failure': {
-                    'score': 0.0,
-                    'details': [f"❌ 嚴重驗證失敗: {main_error}"],
-                    'metrics': {'critical_validation_failure': True}
-                }
-            },
-            
-            'summary_metrics': {
-                'content_validation_passed': False,
-                'validation_error_count': len(validation_errors),
-                'critical_validation_failure': True
-            },
-            
-            'validation_summary': {
-                'validation_passed': False,
-                'validation_errors': validation_errors,
-                'has_validation_issues': True
-            },
-            
-            'score_adjustment': {
-                'base_score': 0.0,
-                'final_score': 0.0,
-                'adjustment_reason': "嚴重驗證失敗，內容與預期公司不符"
-            }
-        }
-    
     def analyze(self, parsed_data: Dict[str, Any]) -> Dict[str, Any]:
-        """主要分析方法 - 🆕 考慮驗證結果的品質評分"""
+        """主要分析方法 - 檢查驗證失敗並強制 0 分"""
         try:
-            # 🔍 首先檢查驗證結果
+            company_code = parsed_data.get('company_code', '')
+            company_name = parsed_data.get('company_name', '')
+            
+            # 檢查驗證結果
             validation_result = parsed_data.get('validation_result', {})
             validation_status = validation_result.get('overall_status', 'valid')
             validation_passed = parsed_data.get('content_validation_passed', True)
             
-            # 🚨 關鍵修改：如果驗證嚴重失敗，直接返回低分
-            if not validation_passed and validation_status == 'error':
-                # 檢查是否為嚴重的公司不符問題
+            # 如果驗證失敗，直接返回 0 分
+            if not validation_passed or validation_status == 'error':
                 validation_errors = parsed_data.get('validation_errors', [])
-                critical_validation_failure = any(
-                    any(keyword in str(error) for keyword in [
-                        '不在觀察名單', '愛派司', '愛立信', '台股檔案', '美股', 
-                        '完全不同的公司', '檔案標示為', '但內容是'
-                    ]) for error in validation_errors
-                )
+                main_error = str(validation_errors[0]) if validation_errors else "驗證失敗"
                 
-                if critical_validation_failure:
-                    print(f"🚨 驗證嚴重失敗，強制設定品質評分為 0")
-                    return self._create_failed_validation_analysis(parsed_data, validation_errors)
+                print(f"❌ 驗證失敗強制 0 分: {company_code} ({company_name}) - {main_error[:50]}...")
+                return self._create_zero_score_analysis(company_code, company_name, main_error)
             
-            # 原有的品質分析邏輯
+            # 正常的品質分析邏輯
             completeness_analysis = self._analyze_data_completeness(parsed_data)
             coverage_analysis = self._analyze_analyst_coverage(parsed_data)
             freshness_analysis = self._analyze_data_freshness(parsed_data)
@@ -175,21 +82,12 @@ class QualityAnalyzer:
                 validation_analysis['score'] * self.QUALITY_WEIGHTS['content_validation']
             )
             
-            # 🔧 根據驗證狀態調整最終分數
-            final_quality_score = self._adjust_score_for_validation(
-                base_quality_score, validation_status, validation_passed, parsed_data
-            )
-            
             # 確保分數在 0-10 範圍內
-            final_quality_score = round(min(max(final_quality_score, 0), 10), 1)
+            final_quality_score = round(min(max(base_quality_score, 0), 10), 1)
             
             # 確定品質類別和狀態
             quality_category = self._determine_quality_category_fixed(final_quality_score)
             quality_status = self.QUALITY_INDICATORS[quality_category]
-            
-            # 🆕 如果是驗證失敗的低分，加上特殊標記
-            if final_quality_score <= 2.0 and not validation_passed:
-                quality_status = "🚨 驗證失敗"
             
             # 生成摘要指標
             summary_metrics = self._generate_summary_metrics(parsed_data)
@@ -218,11 +116,10 @@ class QualityAnalyzer:
                     'has_validation_issues': len(parsed_data.get('validation_errors', [])) > 0
                 },
                 
-                # 🆕 調整記錄
                 'score_adjustment': {
                     'base_score': round(base_quality_score, 1),
                     'final_score': final_quality_score,
-                    'adjustment_reason': self._get_adjustment_reason(validation_status, validation_passed)
+                    'adjustment_reason': "正常評分，無調整"
                 }
             }
             
@@ -230,8 +127,53 @@ class QualityAnalyzer:
             print(f"❌ 品質分析失敗: {e}")
             return self._create_empty_analysis(str(e))
 
+    def _create_zero_score_analysis(self, company_code: str, company_name: str, error_msg: str) -> Dict[str, Any]:
+        """建立強制 0 分的品質分析結果"""
+        return {
+            'quality_score': 0.0,
+            'quality_status': '❌ 驗證失敗',
+            'quality_category': 'insufficient',
+            'analysis_timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            
+            'detailed_analysis': {
+                'validation_failure': {
+                    'score': 0.0,
+                    'details': [f"❌ 驗證失敗: {error_msg}"],
+                    'metrics': {
+                        'validation_failure': True,
+                        'company_code': company_code,
+                        'company_name': company_name
+                    }
+                }
+            },
+            
+            'summary_metrics': {
+                'content_validation_passed': False,
+                'validation_error_count': 1,
+                'validation_failure': True,
+                'eps_data_available': False,
+                'target_price_available': False,
+                'analyst_count': 0,
+                'content_length': 0,
+                'financial_keywords_found': 0
+            },
+            
+            'validation_summary': {
+                'validation_passed': False,
+                'validation_errors': [error_msg],
+                'validation_warnings': [],
+                'has_validation_issues': True
+            },
+            
+            'score_adjustment': {
+                'base_score': 0.0,
+                'final_score': 0.0,
+                'adjustment_reason': f"驗證失敗強制 0 分: {error_msg[:50]}..."
+            }
+        }
+
     def _analyze_content_validation(self, data: Dict) -> Dict:
-        """🆕 分析內容驗證結果 (15% 權重)"""
+        """分析內容驗證結果 (15% 權重)"""
         score = 8.0  # 預設高分，有問題才扣分
         details = []
         metrics = {}
@@ -250,40 +192,18 @@ class QualityAnalyzer:
             score = 6.0
             details.append(f"🟡 內容驗證有警告 ({len(validation_warnings)} 項)")
         elif validation_status == 'error':
-            score = 1.0
+            score = 0.0  # 驗證錯誤直接 0 分
             details.append(f"❌ 內容驗證失敗 ({len(validation_errors)} 項錯誤)")
         else:
             score = 5.0
             details.append("⚠️ 內容驗證狀態未知")
         
-        # 🚨 特殊處理：愛派司/愛立信問題
-        has_company_mismatch = False
-        for error in validation_errors:
-            if '愛派司' in str(error) and '愛立信' in str(error):
-                score = 0.0  # 完全零分
-                has_company_mismatch = True
-                details.append("🚨 嚴重錯誤：公司資訊完全不符")
-                break
-        
-        # 根據信心分數調整
-        if validation_confidence < 5.0:
-            score = min(score, 3.0)
-            details.append(f"🔴 驗證信心度極低 ({validation_confidence})")
-        elif validation_confidence < 7.0:
-            score = min(score, 6.0)
-            details.append(f"🟠 驗證信心度較低 ({validation_confidence})")
-        
         # 檢查具體的驗證問題
-        if validation_result.get('ericsson_detected') and not has_company_mismatch:
-            score -= 2.0
-            details.append("⚠️ 偵測到愛立信相關內容")
-        
-        detected_regions = validation_result.get('detected_regions', [])
-        if 'taiwan_expected' in detected_regions:
-            us_codes = validation_result.get('detected_stock_codes', {}).get('us', [])
-            if us_codes:
-                score -= 1.5
-                details.append(f"🟠 台股檔案包含美股代號: {us_codes}")
+        for error in validation_errors:
+            if any(keyword in str(error) for keyword in ['公司名稱不符', '不在觀察名單']):
+                score = 0.0  # 關鍵問題直接 0 分
+                details.append("❌ 發現關鍵驗證問題")
+                break
         
         # 記錄驗證指標
         metrics.update({
@@ -291,8 +211,7 @@ class QualityAnalyzer:
             'validation_confidence': validation_confidence,
             'error_count': len(validation_errors),
             'warning_count': len(validation_warnings),
-            'has_company_mismatch': has_company_mismatch,
-            'ericsson_detected': validation_result.get('ericsson_detected', False)
+            'has_validation_failure': score == 0.0
         })
         
         return {
@@ -302,12 +221,11 @@ class QualityAnalyzer:
         }
 
     def _determine_quality_category_fixed(self, score: float) -> str:
-        """確定品質類別 - 正確處理邊界值"""
+        """確定品質類別"""
         for category, (min_score, max_score) in self.QUALITY_RANGES.items():
             if min_score <= score <= max_score:
                 return category
         
-        # 如果沒有匹配到，按照分數範圍判斷
         if score >= 9.0:
             return 'complete'
         elif score >= 8.0:
@@ -317,10 +235,8 @@ class QualityAnalyzer:
         else:
             return 'insufficient'
 
-    # 原有的分析方法保持基本不變，但可能會根據驗證結果調整
-
     def _analyze_data_completeness(self, data: Dict) -> Dict:
-        """分析資料完整性 (30% 權重，略降)"""
+        """分析資料完整性 (30% 權重)"""
         score = 0
         details = []
         metrics = {}
@@ -395,7 +311,7 @@ class QualityAnalyzer:
         }
 
     def _analyze_analyst_coverage(self, data: Dict) -> Dict:
-        """分析分析師覆蓋度 (20% 權重，略降)"""
+        """分析分析師覆蓋度 (20% 權重)"""
         score = 0
         details = []
         metrics = {}
@@ -451,7 +367,7 @@ class QualityAnalyzer:
         }
 
     def _analyze_data_freshness(self, data: Dict) -> Dict:
-        """分析資料新鮮度 (15% 權重，略降)"""
+        """分析資料新鮮度 (15% 權重)"""
         score = 0
         details = []
         metrics = {}
@@ -514,7 +430,7 @@ class QualityAnalyzer:
         }
 
     def _analyze_content_quality(self, data: Dict) -> Dict:
-        """分析內容品質 (15% 權重，略降)"""
+        """分析內容品質 (15% 權重)"""
         score = 0
         details = []
         metrics = {}
@@ -552,8 +468,6 @@ class QualityAnalyzer:
             score += 1
             details.append(f"🔴 財務關鍵字稀少 ({keyword_count})")
         
-        # 🔧 移除對 "Oops, something went wrong" 的檢查 - 這很常見，不需要特別處理
-        
         metrics['content_length'] = content_length
         metrics['keyword_count'] = keyword_count
         
@@ -564,7 +478,7 @@ class QualityAnalyzer:
         }
 
     def _analyze_data_consistency(self, data: Dict) -> Dict:
-        """分析資料一致性 (5% 權重，保持)"""
+        """分析資料一致性 (5% 權重)"""
         score = 8  # 預設高分，有問題才扣分
         details = []
         issues = []
@@ -609,14 +523,13 @@ class QualityAnalyzer:
         }
 
     def _generate_summary_metrics(self, data: Dict) -> Dict:
-        """生成摘要指標 - 包含驗證資訊"""
+        """生成摘要指標"""
         return {
             'eps_data_available': any(data.get(f'eps_{year}_avg') is not None for year in ['2025', '2026', '2027']),
             'target_price_available': data.get('target_price') is not None,
             'analyst_count': data.get('analyst_count', 0),
             'content_length': len(str(data.get('content', ''))),
             'financial_keywords_found': sum(1 for keyword in self.financial_keywords if keyword in str(data.get('content', '')).lower()),
-            # 🆕 驗證相關指標
             'content_validation_passed': data.get('content_validation_passed', True),
             'validation_error_count': len(data.get('validation_errors', [])),
             'validation_warning_count': len(data.get('validation_warnings', []))
@@ -642,76 +555,49 @@ class QualityAnalyzer:
 if __name__ == "__main__":
     analyzer = QualityAnalyzer()
     
-    print("=== 🔒 強化版品質分析器測試 (內容驗證) ===")
+    print("=== 品質分析器測試 (觀察名單驗證) ===")
     
-    # 測試愛派司 vs 愛立信問題的品質評分
-    test_data_error = {
-        'company_code': '6918',
-        'company_name': '愛派司',
-        'analyst_count': 18,
-        'target_price': 8.6,
-        'eps_2025_avg': 6.00,
-        'eps_2026_avg': None,
-        'eps_2027_avg': None,
-        'content': 'FactSet 愛立信(ERIC-US) 分析師預估...',
-        'content_date': '2025/6/19',
-        # 🆕 驗證結果 (模擬 md_parser 的輸出)
-        'validation_result': {
-            'overall_status': 'error',
-            'confidence_score': 0.0,
-            'errors': ['檔案標示為愛派司(6918)但內容包含愛立信相關資訊: [\'愛立信\', \'ERIC-US\']'],
-            'warnings': [],
-            'ericsson_detected': True,
-            'mismatch_details': {
-                'expected': {'company': '愛派司', 'code': '6918', 'region': 'TW'},
-                'detected': {'company': '愛立信', 'code': 'ERIC', 'region': 'US'}
-            }
+    # 測試已知問題公司
+    test_cases = [
+        # 驗證失敗
+        {
+            'company_code': '6462',
+            'company_name': 'ase',
+            'validation_errors': ['公司名稱不符觀察名單'],
+            'content_validation_passed': False
         },
-        'content_validation_passed': False,
-        'validation_errors': ['檔案標示為愛派司(6918)但內容包含愛立信相關資訊'],
-        'validation_warnings': []
-    }
-    
-    # 測試正常資料的品質評分
-    test_data_normal = {
-        'company_code': '2330',
-        'company_name': '台積電',
-        'analyst_count': 42,
-        'target_price': 650.5,
-        'eps_2025_avg': 46.00,
-        'eps_2026_avg': 52.00,
-        'eps_2027_avg': 58.00,
-        'content': 'FactSet 台積電 分析師預估...',
-        'content_date': '2025/6/24',
-        # 正常的驗證結果
-        'validation_result': {
-            'overall_status': 'valid',
-            'confidence_score': 10.0,
-            'errors': [],
-            'warnings': []
+        # 不在觀察名單
+        {
+            'company_code': '1122',
+            'company_name': '威剛',
+            'validation_errors': ['不在觀察名單中'],
+            'content_validation_passed': False
         },
-        'content_validation_passed': True,
-        'validation_errors': [],
-        'validation_warnings': []
-    }
+        # 正常公司
+        {
+            'company_code': '2330',
+            'company_name': '台積電',
+            'validation_errors': [],
+            'content_validation_passed': True,
+            'analyst_count': 42,
+            'target_price': 650.5,
+            'eps_2025_avg': 46.0
+        }
+    ]
     
-    print("測試 1: 愛派司/愛立信錯誤資料")
-    result_error = analyzer.analyze(test_data_error)
-    print(f"  品質評分: {result_error['quality_score']}")
-    print(f"  品質狀態: {result_error['quality_status']}")
-    print(f"  驗證通過: {result_error['validation_summary']['validation_passed']}")
-    print(f"  驗證錯誤: {len(result_error['validation_summary']['validation_errors'])}")
+    for i, test_data in enumerate(test_cases, 1):
+        print(f"\n測試 {i}: {test_data['company_code']} ({test_data['company_name']})")
+        result = analyzer.analyze(test_data)
+        score = result['quality_score']
+        status = result['quality_status']
+        print(f"   品質評分: {score} {status}")
+        
+        if test_data['company_code'] in ['6462', '1122']:
+            expected = "0.0 ❌ 驗證失敗"
+            actual = f"{score} {status}"
+            print(f"   預期: {expected}")
+            print(f"   實際: {actual}")
+            print(f"   結果: {'✅ 正確' if score == 0.0 else '❌ 錯誤'}")
     
-    print("\n測試 2: 正常台積電資料")
-    result_normal = analyzer.analyze(test_data_normal)
-    print(f"  品質評分: {result_normal['quality_score']}")
-    print(f"  品質狀態: {result_normal['quality_status']}")
-    print(f"  驗證通過: {result_normal['validation_summary']['validation_passed']}")
-    
-    print(f"\n✅ 預期結果:")
-    print(f"  愛派司錯誤: 評分 ≤ 2.0 (🔴 不足)")
-    print(f"  台積電正常: 評分 ≥ 8.0 (🟡/🟢)")
-    
-    print(f"\n🎉 測試完成!")
-    print(f"愛派司評分: {result_error['quality_score']} {'✅' if result_error['quality_score'] <= 2.0 else '❌'}")
-    print(f"台積電評分: {result_normal['quality_score']} {'✅' if result_normal['quality_score'] >= 8.0 else '❌'}")
+    print(f"\n✅ 品質分析器已啟動！")
+    print(f"❌ 所有驗證失敗的公司將被強制設定為 0 分")
