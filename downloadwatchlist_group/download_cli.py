@@ -1,6 +1,3 @@
-## 2. download_cli.py
-
-```python
 #!/usr/bin/env python3
 """
 download_cli.py - DownloadWatchlist CLI (v3.5.0)
