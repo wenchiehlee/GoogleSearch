@@ -1,4 +1,4 @@
-name: FactSet Process Group - Automated Processing
+name: Daily FactSet Process - Taiwan Financial Data
 on:
   schedule:
     # Run twice daily at 7:30 AM and 7:30 PM Taiwan time (UTC+8)

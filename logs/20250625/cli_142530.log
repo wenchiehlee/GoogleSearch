@@ -1,8 +1,0 @@
-2025-06-25 14:25:30.234 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
-2025-06-25 14:25:30.234 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_142530.log
-2025-06-25 14:25:30.335 [    INFO] factset_v332.cli - _create_stage_logger:286 - v3.3.2 stage logger initialized: cli
-2025-06-25 14:25:30.336 [   DEBUG] factset_v332.cli - _create_stage_logger:287 - Log file: logs/20250625/cli_142530.log
-2025-06-25 14:25:30.342 [    INFO] factset_v332.cli - execute_command:282 - Executing command: report
-2025-06-25 14:25:30.342 [   DEBUG] factset_v332.cli - execute_command:283 - Arguments: {'debug': False, 'command': 'report', 'format': 'github-summary', 'email': False, 'v333_metrics': False, 'quality_focused': False}
-2025-06-25 14:25:30.439 [   DEBUG] factset_v332.cli - _handle_github_output:1688 - GitHub output set: report_status=generated
-2025-06-25 14:25:30.439 [    INFO] factset_v332.cli - execute_command:315 - Command completed in 0.10s: success

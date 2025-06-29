@@ -242,9 +242,8 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
+        # Only commit MD files (no cache or logs)
         git add data/md/*.md || true
-        git add cache/search/*.json || true
-        git add logs/search/*.log || true
         
         if git diff --staged --quiet; then
           echo "No search changes to commit"

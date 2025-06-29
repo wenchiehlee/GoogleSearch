@@ -1,3 +1,0 @@
-2025-06-25 09:13:50.131 [    INFO] factset_v332.runner - _create_stage_logger:286 - v3.3.2 stage logger initialized: runner
-2025-06-25 09:13:50.131 [   DEBUG] factset_v332.runner - _create_stage_logger:287 - Log file: logs/20250625/runner_091350.log
-2025-06-25 09:13:50.131 [    INFO] factset_v332.runner - __init__:180 - StageRunner v3.3.2 initialized
