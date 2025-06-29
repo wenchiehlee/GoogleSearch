@@ -1,0 +1,128 @@
+name: Daily FactSet DownloadWatchlist - Taiwan Financial Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_download:
+        description: 'Force re-download even if file exists'
+        type: boolean
+        default: false
+        required: false
+  schedule:
+    # Run daily at 01:30 UTC
+    - cron: "30 1 * * *"
+
+jobs:
+  download-watchlist:
+    name: 📥 Download Watchlist CSV
+    runs-on: ubuntu-latest
+    outputs:
+      download_status: ${{ steps.download.outputs.status }}
+      file_size: ${{ steps.download.outputs.file_size }}
+      changes_detected: ${{ steps.commit.outputs.changes_detected }}
+    
+    steps:
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for change detection
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: 📦 Install Dependencies
+        run: |
+          pip install requests>=2.25.0
+          echo "✅ Dependencies installed"
+      
+      - name: 🎯 Download Watchlist v3.5.0
+        id: download
+        run: |
+          echo "🎯 Starting DownloadWatchlist v3.5.0..."
+          
+          # Run download command
+          if [ "${{ inputs.force_download }}" = "true" ]; then
+            echo "🔄 Force download enabled"
+            python downloadwatchlist_group\download_cli.py download --force
+          else
+            python downloadwatchlist_group\download_cli.py download
+          fi
+          
+          # Check result and set outputs
+          if [ -f "觀察名單.csv" ]; then
+            file_size=$(stat -c%s "觀察名單.csv")
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "file_size=$file_size" >> $GITHUB_OUTPUT
+            echo "✅ Download successful: $file_size bytes"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "file_size=0" >> $GITHUB_OUTPUT
+            echo "❌ Download failed"
+            exit 1
+          fi
+      
+      - name: 📊 Show Download Status
+        if: always()
+        run: |
+          echo "📊 Download Status Report:"
+          python downloadwatchlist_group\download_cli.py status
+      
+      - name: 💾 Commit Changes
+        id: commit
+        if: steps.download.outputs.status == 'success'
+        run: |
+          echo "💾 Checking for watchlist changes..."
+          
+          # Configure git (using GitHub Actions bot)
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Add the CSV file
+          git add 觀察名單.csv || true
+          
+          # Check if there are any changes to commit
+          if git diff --staged --quiet; then
+            echo "ℹ️ No watchlist changes to commit"
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          else
+            # Commit with timestamp
+            timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+            git commit -m "📥 DownloadWatchlist v3.5.0 - $timestamp" || true
+            git push || true
+            echo "✅ Watchlist updated and committed"
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          fi
+
+  # Summary job to show overall status
+  summary:
+    name: 📊 Execution Summary
+    needs: download-watchlist
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📊 Show Summary
+        run: |
+          echo "### 📥 DownloadWatchlist v3.5.0 Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Download Status | ${{ needs.download-watchlist.outputs.download_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| File Size | ${{ needs.download-watchlist.outputs.file_size }} bytes |" >> $GITHUB_STEP_SUMMARY
+          echo "| Changes Detected | ${{ needs.download-watchlist.outputs.changes_detected }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Execution Time | $(date) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.download-watchlist.outputs.download_status }}" = "success" ]; then
+            echo "✅ **Execution completed successfully**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Execution failed**" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Quick Links:**" >> $GITHUB_STEP_SUMMARY
+          echo "- [Watchlist File](觀察名單.csv)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Actions History](../../actions)" >> $GITHUB_STEP_SUMMARY

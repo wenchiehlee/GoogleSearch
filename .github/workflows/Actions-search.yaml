@@ -225,15 +225,6 @@ jobs:
         
         echo "Artifacts prepared"
     
-    - name: Upload Search Results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: taiwan-financial-search-${{ github.run_number }}
-        path: artifacts/
-        retention-days: 30
-        if-no-files-found: warn
-    
     - name: Commit generated search results
       if: success()
       run: |
