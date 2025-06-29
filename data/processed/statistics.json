@@ -1,27 +1,27 @@
 {
-  "generated_at": "2025-06-28T03:35:03.722930",
+  "generated_at": "2025-06-29T03:57:01.244314",
   "guideline_version": "3.3.3",
   "release_type": "final_integrated",
   "total_companies": 116,
   "companies_with_data": 116,
-  "total_md_files": 3069,
+  "total_md_files": 3073,
   "success_rate": 100.0,
   "performance_stats": {
-    "files_processed": 6138,
+    "files_processed": 6146,
     "batches_completed": 312,
     "memory_cleanups": 312,
-    "peak_memory_mb": 96.2578125
+    "peak_memory_mb": 96.05859375
   },
   "data_quality": {},
   "file_level_stats": {
-    "files_with_eps_data": 2123,
+    "files_with_eps_data": 2126,
     "files_with_target_price": 64,
-    "average_file_quality": 5.376018246985989,
+    "average_file_quality": 5.3742271396029935,
     "quality_distribution": {
-      "3": 846,
-      "4": 778,
+      "3": 847,
+      "4": 780,
       "9": 396,
-      "5": 329,
+      "5": 330,
       "10": 229,
       "6": 211,
       "8": 154,
@@ -33,15 +33,15 @@
     "companies_with_target_price": 24,
     "companies_with_analyst_data": 111,
     "average_quality_score": 7.827586206896552,
-    "average_files_per_company": 26.45689655172414
+    "average_files_per_company": 26.49137931034483
   },
   "memory_stats": {
-    "current_mb": 98.40625,
-    "peak_mb": 96.2578125,
+    "current_mb": 98.18359375,
+    "peak_mb": 96.05859375,
     "limit_mb": 2048,
     "cleanup_count": 312,
     "processing_stats": {
-      "files_processed": 6138,
+      "files_processed": 6146,
       "batches_completed": 312,
       "memory_cleanups": 312
     }
