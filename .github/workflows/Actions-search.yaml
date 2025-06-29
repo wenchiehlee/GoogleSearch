@@ -1,0 +1,279 @@
+name: Daily FactSet Search - Taiwan Financial Data
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
+    inputs:
+      company_count:
+        description: "Number of results per company"
+        required: false
+        default: "2"
+        type: string
+      min_quality:
+        description: "Minimum quality threshold"
+        required: false
+        default: "7"
+        type: string
+      specific_companies:
+        description: "Specific companies to search (comma-separated, leave empty for all)"
+        required: false
+        default: ""
+        type: string
+
+env:
+  SEARCH_RATE_LIMIT_PER_SECOND: "1.0"
+  SEARCH_DAILY_QUOTA: "500"
+  MIN_QUALITY_THRESHOLD: "7"
+  LOG_LEVEL: "INFO"
+
+jobs:
+  daily-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+    
+    - name: Setup Python Environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+        cache: "pip"
+    
+    - name: Install Dependencies
+      run: |
+        echo "Installing Python dependencies..."
+        pip install --upgrade pip
+        pip install google-api-python-client requests beautifulsoup4 python-dotenv
+        echo "Dependencies installed successfully"
+    
+    - name: Validate Required Files
+      run: |
+        echo "Checking required files..."
+        if [ ! -f "觀察名單.csv" ]; then
+          echo "觀察名單.csv not found!"
+          exit 1
+        fi
+        if [ ! -f "search_group/search_cli.py" ]; then
+          echo "search_cli.py not found!"
+          exit 1
+        fi
+        echo "Required files found"
+        COMPANY_COUNT=$(tail -n +2 觀察名單.csv | wc -l)
+        echo "Companies in watchlist: $COMPANY_COUNT"
+    
+    - name: Create Directory Structure
+      run: |
+        echo "Creating directory structure..."
+        mkdir -p data/md
+        mkdir -p cache/search
+        mkdir -p logs/search
+        echo "Directories created"
+    
+    - name: Setup Environment Variables
+      run: |
+        echo "Setting up environment variables..."
+        echo "GOOGLE_SEARCH_API_KEY=${{ secrets.GOOGLE_SEARCH_API_KEY }}" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID=${{ secrets.GOOGLE_SEARCH_CSE_ID }}" >> .env
+        echo "SEARCH_RATE_LIMIT_PER_SECOND=${{ env.SEARCH_RATE_LIMIT_PER_SECOND }}" >> .env
+        echo "SEARCH_DAILY_QUOTA=${{ env.SEARCH_DAILY_QUOTA }}" >> .env
+        echo "MIN_QUALITY_THRESHOLD=${{ env.MIN_QUALITY_THRESHOLD }}" >> .env
+        echo "LOG_LEVEL=${{ env.LOG_LEVEL }}" >> .env
+        echo "Environment configured"
+    
+    - name: Validate API Setup
+      run: |
+        echo "Validating API setup..."
+        cd search_group
+        python search_cli.py validate
+        echo "API validation completed"
+    
+    - name: Pre-Search Status
+      run: |
+        echo "Pre-search status check..."
+        cd search_group
+        python search_cli.py status || echo "No previous search data found"
+        echo ""
+        echo "Search Configuration:"
+        echo "  - Company Count: ${{ github.event.inputs.company_count || '2' }}"
+        echo "  - Min Quality: ${{ github.event.inputs.min_quality || '7' }}"
+        echo "  - Taiwan Time: $(TZ='Asia/Taipei' date)"
+        echo "  - UTC Time: $(date -u)"
+    
+    - name: Execute Daily Search
+      id: search
+      run: |
+        echo "Starting daily Taiwan financial data search..."
+        cd search_group
+        
+        COMPANY_COUNT="${{ github.event.inputs.company_count || '2' }}"
+        MIN_QUALITY="${{ github.event.inputs.min_quality || '7' }}"
+        SPECIFIC_COMPANIES="${{ github.event.inputs.specific_companies }}"
+        
+        echo "Search Parameters:"
+        echo "  - Count per company: $COMPANY_COUNT"
+        echo "  - Minimum quality: $MIN_QUALITY"
+        if [ -n "$SPECIFIC_COMPANIES" ]; then
+          echo "  - Specific companies: $SPECIFIC_COMPANIES"
+        else
+          echo "  - Target: All companies in watchlist"
+        fi
+        
+        if [ -n "$SPECIFIC_COMPANIES" ]; then
+          echo "Searching specific companies: $SPECIFIC_COMPANIES"
+          python search_cli.py search --batch "$SPECIFIC_COMPANIES" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
+        else
+          echo "Searching all companies in watchlist"
+          python search_cli.py search --all --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
+        fi
+        
+        SEARCH_EXIT_CODE=$?
+        echo "search_exit_code=$SEARCH_EXIT_CODE" >> $GITHUB_OUTPUT
+        
+        if [ $SEARCH_EXIT_CODE -eq 0 ]; then
+          echo "Search completed successfully"
+        else
+          echo "Search completed with warnings (exit code: $SEARCH_EXIT_CODE)"
+        fi
+    
+    - name: Post-Search Analysis
+      run: |
+        echo "Post-search analysis..."
+        cd search_group
+        
+        echo ""
+        echo "Final Status:"
+        python search_cli.py status
+        
+        echo ""
+        echo "Generated Files:"
+        if [ -d "../data/md" ]; then
+          MD_COUNT=$(find ../data/md -name "*.md" | wc -l)
+          echo "  - Total MD files: $MD_COUNT"
+          
+          if [ $MD_COUNT -gt 0 ]; then
+            echo "  - Latest files:"
+            find ../data/md -name "*.md" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -5 | awk '{print "    - " $2}' || echo "    - (file listing unavailable)"
+            
+            echo ""
+            echo "File Size Summary:"
+            du -sh ../data/md/ 2>/dev/null | awk '{print "  - Total size: " $1}' || echo "  - Size calculation unavailable"
+          fi
+        fi
+        
+        echo ""
+        echo "Log Summary:"
+        if [ -d "../logs/search" ]; then
+          LOG_FILES=$(find ../logs/search -name "*.log" | wc -l)
+          echo "  - Log files: $LOG_FILES"
+          
+          if find ../logs/search -name "*.log" -exec grep -l "ERROR\|CRITICAL" {} \; | head -1 >/dev/null 2>&1; then
+            echo "  - Recent errors found in logs"
+          else
+            echo "  - No critical errors in logs"
+          fi
+        fi
+    
+    - name: Prepare Artifacts
+      if: always()
+      run: |
+        echo "Preparing artifacts..."
+        
+        mkdir -p artifacts/search-results
+        mkdir -p artifacts/logs
+        mkdir -p artifacts/cache
+        
+        if [ -d "data/md" ] && [ "$(ls -A data/md 2>/dev/null)" ]; then
+          cp -r data/md/* artifacts/search-results/ 2>/dev/null || echo "No MD files to copy"
+        fi
+        
+        if [ -d "logs/search" ] && [ "$(ls -A logs/search 2>/dev/null)" ]; then
+          cp -r logs/search/* artifacts/logs/ 2>/dev/null || echo "No log files to copy"
+        fi
+        
+        if [ -d "cache/search" ]; then
+          find cache/search -name "*.json" -exec cp {} artifacts/cache/ \; 2>/dev/null || echo "No cache files to copy"
+        fi
+        
+        TAIWAN_TIME=$(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M:%S %Z')
+        UTC_TIME=$(date -u '+%Y-%m-%d %H:%M:%S %Z')
+        MD_FILES=$(find artifacts/search-results -name "*.md" 2>/dev/null | wc -l)
+        LOG_FILES=$(find artifacts/logs -name "*.log" 2>/dev/null | wc -l)
+        CACHE_FILES=$(find artifacts/cache -name "*.json" 2>/dev/null | wc -l)
+        TOTAL_SIZE=$(du -sh artifacts/ 2>/dev/null | awk '{print $1}')
+        
+        echo "Creating summary report..."
+        {
+          echo "FactSet Daily Search Summary"
+          echo "==========================="
+          echo "Search Date: $TAIWAN_TIME"
+          echo "Taiwan Time: $TAIWAN_TIME"
+          echo "UTC Time: $UTC_TIME"
+          echo ""
+          echo "Parameters:"
+          echo "- Company Count: ${{ github.event.inputs.company_count || '2' }}"
+          echo "- Min Quality: ${{ github.event.inputs.min_quality || '7' }}"
+          echo "- Search Exit Code: ${{ steps.search.outputs.search_exit_code }}"
+          echo ""
+          echo "Results:"
+          echo "- MD Files Generated: $MD_FILES"
+          echo "- Log Files: $LOG_FILES"
+          echo "- Cache Files: $CACHE_FILES"
+          echo ""
+          echo "Total Artifact Size: $TOTAL_SIZE"
+        } > artifacts/search-summary.txt
+        
+        echo "Artifacts prepared"
+    
+    - name: Upload Search Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: taiwan-financial-search-${{ github.run_number }}
+        path: artifacts/
+        retention-days: 30
+        if-no-files-found: warn
+    
+    - name: Commit generated search results
+      if: success()
+      run: |
+        echo "Committing generated search results..."
+        
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        git add data/md/*.md || true
+        git add cache/search/*.json || true
+        git add logs/search/*.log || true
+        
+        if git diff --staged --quiet; then
+          echo "No search changes to commit"
+        else
+          git commit -m "🔍 Search Group v3.5.0-pure-hash Results - $(date +%Y-%m-%d\ %H:%M:%S)" || true
+          git push || true
+          echo "Search results committed"
+        fi
+    
+    - name: Notify on Failure
+      if: failure()
+      run: |
+        echo "Search job failed!"
+        echo "Exit code: ${{ steps.search.outputs.search_exit_code }}"
+        echo "Please check the logs for details."
+    
+    - name: Success Summary
+      if: success()
+      run: |
+        echo "Daily Taiwan financial data search completed successfully!"
+        echo ""
+        echo "Summary:"
+        echo "  - Search time: $(TZ='Asia/Taipei' date '+%Y-%m-%d %H:%M %Z')"
+        echo "  - Files generated: $(find data/md -name "*.md" 2>/dev/null | wc -l)"
+        echo "  - Quality threshold: ${{ github.event.inputs.min_quality || '7' }}"
+        echo "  - Count per company: ${{ github.event.inputs.company_count || '2' }}"
+        echo ""
+        echo "Next scheduled run: Tomorrow at 2:30 AM Taiwan time"

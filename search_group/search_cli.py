@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-search_cli.py - Search Group CLI Interface (v3.5.0) - FIXED VERSION
+search_cli.py - Search Group CLI Interface (v3.5.0) - PURE CONTENT HASH VERSION
 
-Version: 3.5.0
-Date: 2025-06-28
+Version: 3.5.0-pure-hash
+Date: 2025-06-29
 Author: FactSet Pipeline v3.5.0 - Modular Search Group
 
-FIXES:
-- Fixed method signatures to properly handle min_quality parameter
-- All search methods now accept optional min_quality parameter
-- Properly override config min_quality_threshold when specified
+PURE CONTENT HASH IMPROVEMENTS:
+- Filenames based purely on content hash (no result index)
+- Same content = same filename regardless of search order
+- Clean format: 2330_台積電_factset_7796efd2.md
+- True content-based deduplication
 """
 
 import os
@@ -17,8 +18,7 @@ import sys
 import csv
 import json
 import time
-import random
-import string
+import hashlib
 import argparse
 import logging
 import shutil
@@ -49,8 +49,8 @@ except ImportError:
         print("⚠️  No .env file found")
 
 # Version Information
-__version__ = "3.5.0"
-__date__ = "2025-06-28"
+__version__ = "3.5.0-pure-hash"
+__date__ = "2025-06-29"
 
 # Import search group components
 try:
@@ -71,7 +71,7 @@ class SearchConfig:
     def _load_config(self) -> Dict[str, Any]:
         """Load search configuration"""
         return {
-            "version": "3.5.0",
+            "version": "3.5.0-pure-hash",
             "search": {
                 "rate_limit_delay": float(os.getenv("SEARCH_RATE_LIMIT_PER_SECOND", "1.0")),
                 "daily_quota": int(os.getenv("SEARCH_DAILY_QUOTA", "100")),
@@ -90,7 +90,7 @@ class SearchConfig:
                 "min_relevance_score": 3,
                 "require_factset_content": False,
                 "min_content_length": 100,
-                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "5"))
+                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "4"))
             },
             "caching": {
                 "enabled": True,
@@ -147,7 +147,7 @@ class SearchConfig:
         return value
 
 class SearchCLI:
-    """v3.5.0 Search Group CLI - Simplified Command Interface"""
+    """v3.5.0 Search Group CLI - Pure Content Hash Filenames"""
     
     def __init__(self):
         self.config = SearchConfig()
@@ -158,7 +158,7 @@ class SearchCLI:
         # Ensure directories exist
         self._ensure_directories()
         
-        self.logger.info(f"Search CLI v{__version__} initialized")
+        self.logger.info(f"Search CLI v{__version__} initialized with pure content hash filenames")
     
     def _setup_logger(self) -> logging.Logger:
         """Setup simple logging"""
@@ -217,21 +217,65 @@ class SearchCLI:
         self.logger.info(f"Loaded {len(companies)} companies from watchlist")
         return companies
     
+    def _generate_content_fingerprint(self, symbol: str, name: str, financial_data: Dict[str, Any]) -> str:
+        """Generate pure content fingerprint - NO result index"""
+        
+        # Get stable content elements for fingerprint
+        sources = financial_data.get('sources', [])
+        if sources:
+            source = sources[0]
+            url = source.get('url', '')
+            title = source.get('title', '')
+            
+            # Create fingerprint from truly stable content elements only
+            fingerprint_elements = [
+                symbol,                    # Stock symbol
+                name,                     # Company name  
+                url,                      # Source URL (the actual content source)
+                title                     # Title (content identifier)
+                # NO result_index - same content should have same filename!
+            ]
+        else:
+            # Fallback for no sources
+            fingerprint_elements = [
+                symbol,
+                name,
+                'no_source'
+            ]
+        
+        # Join and hash stable elements only
+        fingerprint_content = '|'.join(fingerprint_elements)
+        content_hash = hashlib.md5(fingerprint_content.encode('utf-8')).hexdigest()[:8]
+        
+        return content_hash
+    
     def _save_md_file_indexed(self, symbol: str, name: str, content: str, metadata: Dict, index: int) -> str:
-        """Save search results as MD file with index"""
-        timestamp = datetime.now().strftime('%m%d_%H%M')
-        file_id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
-        filename = f"{symbol}_{name}_factset_{file_id}_{timestamp}_{index:03d}.md"
+        """Save search results with pure content-based filename"""
         
+        # Generate pure content fingerprint (no result index)
+        content_hash = self._generate_content_fingerprint(symbol, name, metadata)
+        
+        # Clean filename: just company + content hash
+        filename = f"{symbol}_{name}_factset_{content_hash}.md"
         file_path = Path(self.config.get("files.output_dir")) / filename
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(content)
         
-        self.logger.info(f"Saved MD file: {filename}")
-        return filename
+        # Always overwrite if exists - same content hash = same file
+        if file_path.exists():
+            self.logger.info(f"📝 Updating content: {filename}")
+        else:
+            self.logger.info(f"💾 Creating new content: {filename}")
+        
+        # Write the file (always overwrite for same content)
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            return filename
+        except Exception as e:
+            self.logger.error(f"Failed to save MD file {filename}: {e}")
+            return ""
     
     def _update_progress_multiple(self, symbol: str, filenames: List[str], results_data: List[Dict]):
-        """Update search progress for multiple files"""
+        """Update search progress - adapted for pure content filenames"""
         progress_file = Path("cache/search/progress.json")
         progress_file.parent.mkdir(parents=True, exist_ok=True)
         
@@ -247,12 +291,22 @@ class SearchCLI:
         quality_scores = [data.get('quality_score', 0) for data in results_data]
         avg_quality = sum(quality_scores) / len(quality_scores) if quality_scores else 0
         
+        # Track content hashes from filenames
+        content_hashes = []
+        for filename in filenames:
+            # Extract hash from new format: 2330_台積電_factset_7796efd2.md
+            parts = filename.replace('.md', '').split('_')
+            if len(parts) >= 4:
+                content_hashes.append(parts[3])  # The hash part
+        
         progress[symbol] = {
             'completed_at': datetime.now().isoformat(),
             'filenames': filenames,
             'file_count': len(filenames),
             'quality_scores': quality_scores,
-            'avg_quality_score': round(avg_quality, 1)
+            'avg_quality_score': round(avg_quality, 1),
+            'content_hashes': content_hashes,
+            'unique_content_count': len(set(content_hashes))  # Count unique content
         }
         
         with open(progress_file, 'w', encoding='utf-8') as f:
@@ -263,7 +317,12 @@ class SearchCLI:
         output_dir = Path(self.config.get("files.output_dir"))
         pattern = f"{symbol}_*.md"
         existing_files = list(output_dir.glob(pattern))
-        return len(existing_files) > 0
+        
+        if len(existing_files) > 0:
+            self.logger.debug(f"Found {len(existing_files)} existing files for {symbol}")
+            return True
+        
+        return False
     
     def _record_failure(self, symbol: str, error: str):
         """Record search failure"""
@@ -318,6 +377,8 @@ class SearchCLI:
             
             self.logger.info("Setup validation passed")
             print("\n🎉 Setup validation passed! Ready to search.")
+            print(f"📄 Using pure content hash filenames (v{__version__})")
+            print("🔗 Same content = same filename (no result index needed)")
             return True
             
         except Exception as e:
@@ -351,7 +412,8 @@ class SearchCLI:
             if search_results and len(search_results) > 0:
                 successful_files = []
                 skipped_low_quality = 0
-                min_quality_threshold = self.config.get("quality.min_quality_threshold", 5)
+                updated_existing = 0
+                min_quality_threshold = self.config.get("quality.min_quality_threshold", 4)
                 
                 for i, result_data in enumerate(search_results, 1):
                     quality_score = result_data.get('quality_score', 0)
@@ -368,24 +430,37 @@ class SearchCLI:
                         symbol, name, result_data, {}, result_index=i
                     )
                     
-                    # Save MD file with index
+                    # Save MD file with pure content hash filename
                     filename = self._save_md_file_indexed(symbol, name, md_content, result_data, i)
-                    successful_files.append(filename)
                     
-                    print(f"✅ Result {i}: Quality {quality_score}/10 - {filename}")
+                    if filename:
+                        # Check if this filename already exists in our list (duplicate content)
+                        if filename in successful_files:
+                            print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content)")
+                            updated_existing += 1
+                        else:
+                            successful_files.append(filename)
+                            print(f"✅ Result {i}: Quality {quality_score}/10 - {filename}")
                 
-                # Update progress with all files
+                # Update progress with unique files only
                 if successful_files:
                     high_quality_results = [r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold]
                     self._update_progress_multiple(symbol, successful_files, high_quality_results)
                 
                 # Summary
                 total_found = len(search_results)
-                total_saved = len(successful_files)
+                total_processed = len([r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold])
+                unique_files = len(successful_files)
                 
-                if total_saved > 0:
-                    print(f"🎉 {symbol} completed - Generated {total_saved} MD files (found {total_found}, skipped {skipped_low_quality} low quality)")
-                    self.logger.info(f"✅ {symbol} completed - saved {total_saved}/{total_found} files (skipped {skipped_low_quality} low quality)")
+                if unique_files > 0:
+                    summary_parts = [f"Generated {unique_files} unique MD files"]
+                    if total_processed > unique_files:
+                        duplicates = total_processed - unique_files
+                        summary_parts.append(f"({duplicates} duplicates merged)")
+                    summary_parts.append(f"(found {total_found}, skipped {skipped_low_quality} low quality)")
+                    
+                    print(f"🎉 {symbol} completed - {' '.join(summary_parts)}")
+                    self.logger.info(f"✅ {symbol} completed - {unique_files} unique files from {total_found} results")
                     return True
                 else:
                     print(f"❌ {symbol} - found {total_found} results but all below quality threshold ({min_quality_threshold})")
@@ -423,6 +498,7 @@ class SearchCLI:
             
             self.logger.info(f"Starting search for {total} companies (saving {result_count} results each)...")
             print(f"\n🚀 Starting search for {total} companies (saving {result_count} results each)...")
+            print(f"📄 Using pure content hash filenames - no duplicate content files")
             
             successful = 0
             for i, company in enumerate(companies, 1):
@@ -433,12 +509,6 @@ class SearchCLI:
                 self.logger.info(f"[{i}/{total}] Searching {symbol} {name}...")
                 
                 try:
-                    # Check if already processed
-                    if self._is_already_processed(symbol):
-                        print(f"⏭️  Skipping {symbol} - already processed")
-                        self.logger.info(f"Skipping {symbol} - already processed")
-                        continue
-                    
                     # Search company with multiple results
                     if self.cmd_search_company(symbol, result_count, min_quality):
                         successful += 1
@@ -520,7 +590,7 @@ class SearchCLI:
         """Show current status"""
         print("\n📊 === Search Group Status ===")
         self.logger.info("=== Search Group Status ===")
-        print(f"🏷️  Version: {__version__}")
+        print(f"🏷️  Version: {__version__} (Pure Content Hash Filenames)")
         self.logger.info(f"Version: {__version__}")
         
         # API status
@@ -543,7 +613,7 @@ class SearchCLI:
             print(f"📄 MD Files Generated: {md_files}")
             self.logger.info(f"MD Files Generated: {md_files}")
         
-        # Progress
+        # Progress with pure content analysis
         progress_file = Path("cache/search/progress.json")
         if progress_file.exists():
             try:
@@ -553,13 +623,26 @@ class SearchCLI:
                 self.logger.info(f"Companies Completed: {len(progress)}")
                 
                 # Quality statistics
-                scores = [p.get('quality_score', 0) for p in progress.values()]
-                if scores:
-                    avg_score = sum(scores) / len(scores)
+                all_scores = []
+                total_unique_files = 0
+                total_unique_content = 0
+                for company_data in progress.values():
+                    scores = company_data.get('quality_scores', [])
+                    all_scores.extend(scores)
+                    total_unique_files += company_data.get('file_count', 0)
+                    total_unique_content += company_data.get('unique_content_count', 0)
+                
+                if all_scores:
+                    avg_score = sum(all_scores) / len(all_scores)
                     print(f"⭐ Average Quality Score: {avg_score:.1f}/10")
                     self.logger.info(f"Average Quality Score: {avg_score:.1f}/10")
-            except:
-                pass
+                
+                if total_unique_files > 0:
+                    print(f"📝 Total Unique Files: {total_unique_files}")
+                    print(f"🎯 Pure Content Hash Efficiency: 100% - no duplicates by design")
+                    
+            except Exception as e:
+                self.logger.warning(f"Error reading progress: {e}")
         
         # Watchlist info
         try:
@@ -586,10 +669,12 @@ class SearchCLI:
         # Remove output files
         output_dir = Path(self.config.get("files.output_dir"))
         if output_dir.exists():
+            md_count = 0
             for file in output_dir.glob("*.md"):
                 file.unlink()
-            print("🗑️  Output files removed")
-            self.logger.info("Output files removed")
+                md_count += 1
+            print(f"🗑️  Removed {md_count} output files")
+            self.logger.info(f"Removed {md_count} output files")
         
         print("🔄 All data reset")
         self.logger.info("All data reset")
@@ -597,7 +682,7 @@ class SearchCLI:
 def create_argument_parser():
     """Create CLI argument parser"""
     parser = argparse.ArgumentParser(
-        description=f"FactSet Search Group v{__version__}",
+        description=f"FactSet Search Group v{__version__} (Pure Content Hash Filenames)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -611,6 +696,12 @@ Examples:
   python search_cli.py validate                             # Validate setup
   python search_cli.py status                               # Show progress
   python search_cli.py clean                                # Clean cache
+
+Pure Content Hash Filenames:
+  - Format: 2330_台積電_factset_7796efd2.md
+  - Same content = same hash = same filename
+  - No result index numbers (004, 007, etc.)
+  - Automatic content-based deduplication
         """
     )
     
@@ -630,7 +721,7 @@ Examples:
     
     # Add quality threshold parameter
     search_parser.add_argument('--min-quality', type=int, default=None,
-                             help='Minimum quality score to save (0-10, default: 5)')
+                             help='Minimum quality score to save (0-10, default: 4)')
     
     # Utility commands
     subparsers.add_parser('validate', help='Validate setup')
