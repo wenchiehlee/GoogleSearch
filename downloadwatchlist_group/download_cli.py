@@ -27,7 +27,7 @@ class DownloadWatchlistCLI:
         self.version = "3.5.0"
         # Import downloader here to avoid circular imports
         try:
-            from downloader import SimpleDownloader
+            from download import SimpleDownloader
             self.downloader = SimpleDownloader()
         except ImportError:
             print("❌ Error: downloader.py not found")
