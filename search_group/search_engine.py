@@ -1,15 +1,15 @@
 """
-search_engine.py - Core Search Logic (v3.5.0) - COMPLETE REFINED VERSION
+search_engine.py - Core Search Logic (v3.5.0) - FIXED FOR COMPREHENSIVE PATTERN EXECUTION
 
-Version: 3.5.0-refined
-Date: 2025-06-28
+Version: 3.5.0-comprehensive
+Date: 2025-06-29
 Author: FactSet Pipeline v3.5.0 - Modular Search Group
 
-REFINEMENTS BASED ON SUCCESSFUL EXAMPLES:
-- Simplified search patterns focusing on proven success
-- cnyes.com prioritization for FactSet content
-- Realistic quality scoring for Taiwan financial data
-- Better content filtering and relevance scoring
+FIXES FOR COMPREHENSIVE SEARCH:
+- Removed early stopping logic to ensure ALL patterns execute
+- Lowered relevance thresholds to capture more results for quality scoring
+- Added debug logging to show pattern execution
+- KEPT ORIGINAL QUALITY SCORING LOGIC UNCHANGED
 """
 
 import re
@@ -21,7 +21,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
 from bs4 import BeautifulSoup
 
-__version__ = "3.5.0-refined"
+__version__ = "3.5.0-comprehensive"
 
 # REFINED search patterns based on successful content discovery
 REFINED_SEARCH_PATTERNS = {
@@ -161,10 +161,10 @@ ANALYST_COUNT_PATTERNS = [
 ]
 
 class RefinedQualityScorer:
-    """Refined quality assessment based on successful Taiwan examples"""
+    """ORIGINAL quality assessment - UNCHANGED"""
     
     def calculate_score(self, financial_data: Dict[str, Any]) -> int:
-        """Calculate quality score 0-10 with refined logic based on successful examples"""
+        """Calculate quality score 0-10 with refined logic based on successful examples - ORIGINAL LOGIC"""
         score = 0.0
         
         # 1. FactSet mention = automatic high score (35% weight)
@@ -282,7 +282,7 @@ class RefinedQualityScorer:
             return '⚫ 極差'
 
 class SearchEngine:
-    """v3.5.0 Core Search Logic - Refined for Taiwan Financial Data Discovery"""
+    """v3.5.0 Core Search Logic - FIXED for Comprehensive Pattern Execution"""
     
     def __init__(self, api_manager):
         self.api_manager = api_manager
@@ -290,6 +290,10 @@ class SearchEngine:
         self.search_priority_order = SEARCH_PRIORITY_ORDER
         self.quality_scorer = RefinedQualityScorer()
         self.logger = logging.getLogger('search_engine')
+        
+        # Track execution stats
+        self.last_patterns_executed = 0
+        self.last_api_calls = 0
     
     def search_company(self, symbol: str, name: str) -> Optional[Dict[str, Any]]:
         """Search single company for financial data (single result)"""
@@ -300,8 +304,8 @@ class SearchEngine:
             queries = self._build_refined_search_queries(symbol, name)
             self.logger.debug(f"Built {len(queries)} refined search queries")
             
-            # Execute refined search cascade
-            all_results = self._execute_refined_search_cascade(queries)
+            # Execute comprehensive search cascade
+            all_results = self._execute_comprehensive_search_cascade(queries)
             
             if not all_results:
                 self.logger.warning(f"No search results found for {symbol}")
@@ -310,7 +314,7 @@ class SearchEngine:
             # Extract financial data from results
             financial_data = self._extract_financial_data_from_results(all_results)
             
-            # Assess quality with refined scorer
+            # Assess quality with ORIGINAL scorer
             quality_score = self.quality_scorer.calculate_score(financial_data)
             financial_data['quality_score'] = quality_score
             
@@ -324,16 +328,16 @@ class SearchEngine:
             return None
     
     def search_company_multiple(self, symbol: str, name: str, result_count: str = '1') -> List[Dict[str, Any]]:
-        """Search single company and return multiple results"""
+        """Search single company and return multiple results - COMPREHENSIVE EXECUTION"""
         try:
-            self.logger.info(f"Starting search for {symbol} {name} (requesting {result_count} results)")
+            self.logger.info(f"Starting comprehensive search for {symbol} {name} (requesting {result_count} results)")
             
             # Build refined search queries
             queries = self._build_refined_search_queries(symbol, name)
             self.logger.debug(f"Built {len(queries)} refined search queries")
             
-            # Execute refined search cascade
-            all_results = self._execute_refined_search_cascade(queries)
+            # Execute comprehensive search cascade (ALL PATTERNS)
+            all_results = self._execute_comprehensive_search_cascade(queries)
             
             if not all_results:
                 self.logger.warning(f"No search results found for {symbol}")
@@ -357,7 +361,7 @@ class SearchEngine:
                 # Create individual result data
                 result_data = self._extract_financial_data_from_single_result(result)
                 
-                # Assess quality with refined scorer
+                # Assess quality with ORIGINAL scorer
                 quality_score = self.quality_scorer.calculate_score(result_data)
                 result_data['quality_score'] = quality_score
                 result_data['result_index'] = i + 1
@@ -365,7 +369,7 @@ class SearchEngine:
                 
                 processed_results.append(result_data)
             
-            self.logger.info(f"Processed {len(processed_results)} results for {symbol}")
+            self.logger.info(f"Processed {len(processed_results)} results for {symbol} (executed {self.last_patterns_executed} patterns)")
             return processed_results
             
         except Exception as e:
@@ -376,9 +380,13 @@ class SearchEngine:
         """Create refined search queries based on successful patterns"""
         queries = []
         
+        print(f"\n🔍 Building search queries for {symbol} {name}:")
+        print(f"📋 Available pattern groups: {list(self.search_patterns.keys())}")
+        
         # Execute in strict priority order
         for priority_group in self.search_priority_order:
             patterns = self.search_patterns[priority_group]
+            print(f"  📝 {priority_group}: {len(patterns)} patterns")
             
             for pattern in patterns:
                 query = pattern.format(symbol=symbol, name=name)
@@ -388,6 +396,8 @@ class SearchEngine:
                     'expected_content': self._get_expected_content_type(priority_group)
                 })
         
+        print(f"🎯 Total queries to execute: {len(queries)}")
+        self.last_patterns_executed = len(queries)
         return queries
     
     def _get_expected_content_type(self, priority_group: str) -> str:
@@ -401,10 +411,13 @@ class SearchEngine:
         }
         return mapping.get(priority_group, 'general')
     
-    def _execute_refined_search_cascade(self, queries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Execute search with refined cascade logic focusing on proven success"""
+    def _execute_comprehensive_search_cascade(self, queries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Execute search with comprehensive pattern execution - NO EARLY STOPPING"""
         all_results = []
         results_by_priority = {}
+        api_calls_made = 0
+        
+        print(f"\n🚀 Executing comprehensive search - ALL {len(queries)} patterns will run:")
         
         # Group queries by priority
         for query_info in queries:
@@ -412,52 +425,69 @@ class SearchEngine:
             if priority_group not in results_by_priority:
                 results_by_priority[priority_group] = []
         
-        # Execute in priority order with early stopping for high-quality content
+        # Execute in priority order - NO EARLY STOPPING
         for priority_group in self.search_priority_order:
             group_queries = [q for q in queries if q['priority_group'] == priority_group]
             
+            print(f"\n📋 Executing {len(group_queries)} {priority_group} patterns...")
             self.logger.debug(f"Executing {len(group_queries)} {priority_group} patterns")
             
             group_results = []
-            for query_info in group_queries:
+            for i, query_info in enumerate(group_queries, 1):
                 try:
                     query = query_info['query']
+                    print(f"  {i:2d}/{len(group_queries)} 🔍 {query}")
+                    
                     results = self.api_manager.search(query)
+                    api_calls_made += 1
                     
                     if results and 'items' in results:
-                        filtered = self._filter_for_quality_content(results['items'], priority_group)
+                        raw_count = len(results['items'])
+                        filtered = self._filter_for_quality_content_permissive(results['items'], priority_group)
+                        filtered_count = len(filtered)
+                        
+                        print(f"     → Found {raw_count} raw results, {filtered_count} after filter")
+                        
                         if filtered:
                             group_results.extend(filtered)
                             self.logger.debug(f"Query '{query}' found {len(filtered)} quality results")
-                            
+                    else:
+                        print(f"     → No results found")
+                        
                 except Exception as e:
+                    print(f"     → ERROR: {e}")
                     self.logger.warning(f"Query failed: {query_info['query']} - {e}")
                     continue
             
-            # Add group results
+            # Add group results - NO EARLY STOPPING CHECK
             if group_results:
                 # Remove duplicates within group
                 unique_group_results = self._remove_duplicate_results(group_results)
                 all_results.extend(unique_group_results)
                 results_by_priority[priority_group] = unique_group_results
                 
-                # Early stopping logic for high-priority groups
-                if priority_group == 'factset_direct' and len(unique_group_results) >= 3:
-                    self.logger.info(f"Found sufficient FactSet content, stopping early")
-                    break
-                elif priority_group == 'cnyes_factset' and len(unique_group_results) >= 5:
-                    self.logger.info(f"Found sufficient cnyes FactSet content, stopping early")
-                    break
+                print(f"✅ {priority_group} completed: {len(unique_group_results)} unique results")
+            else:
+                print(f"❌ {priority_group} completed: 0 results")
+            
+            # REMOVED: Early stopping logic - continue with ALL pattern groups
         
         # Final deduplication and sorting
         final_results = self._remove_duplicate_results(all_results)
         final_results.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
         
-        self.logger.info(f"Refined cascade completed with {len(final_results)} unique quality results")
+        self.last_api_calls = api_calls_made
+        
+        print(f"\n🎯 Comprehensive search completed:")
+        print(f"   📊 {len(queries)} patterns executed")
+        print(f"   📡 {api_calls_made} API calls made")
+        print(f"   📄 {len(final_results)} unique results found")
+        
+        self.logger.info(f"Comprehensive search completed with {len(final_results)} unique results from {len(queries)} patterns")
         return final_results
     
-    def _filter_for_quality_content(self, items: List[Dict], priority_group: str) -> List[Dict]:
-        """Filter search results for quality financial content"""
+    def _filter_for_quality_content_permissive(self, items: List[Dict], priority_group: str) -> List[Dict]:
+        """Filter search results with LOWERED thresholds to allow quality scoring"""
         quality_results = []
         
         for item in items:
@@ -509,16 +539,16 @@ class SearchEngine:
             if any(indicator in snippet for indicator in structure_indicators):
                 relevance_score += 5
             
-            # Set minimum relevance thresholds by priority group
+            # LOWERED minimum relevance thresholds to allow quality scoring
             min_thresholds = {
-                'factset_direct': 15,
-                'cnyes_factset': 12,
-                'eps_forecast': 10,
-                'analyst_consensus': 8,
-                'taiwan_financial_simple': 6
+                'factset_direct': 8,         # Lowered from 15
+                'cnyes_factset': 6,          # Lowered from 12
+                'eps_forecast': 4,           # Lowered from 10
+                'analyst_consensus': 3,      # Lowered from 8
+                'taiwan_financial_simple': 2 # Lowered from 6
             }
             
-            min_threshold = min_thresholds.get(priority_group, 5)
+            min_threshold = min_thresholds.get(priority_group, 2)
             
             if relevance_score >= min_threshold:
                 item['relevance_score'] = relevance_score
@@ -814,7 +844,7 @@ stock_code: {symbol}
 extracted_date: {datetime.now().isoformat()}
 search_query: {search_query}
 result_index: {result_index}
-version: v3.5.0-refined
+version: v3.5.0-comprehensive
 ---"""
         
         # Combine YAML header with content
@@ -874,16 +904,16 @@ stock_code: {symbol}
 extracted_date: {datetime.now().isoformat()}
 search_query: {search_query}
 result_index: {result_index}
-version: v3.5.0-refined
+version: v3.5.0-comprehensive
 ---"""
         
         content = f"""# {symbol} {name} - Financial Data (Result {result_index})
 
-Financial data extracted from search results.
+Financial data extracted from comprehensive search results.
 
 ## Search Information
 - **Search Query**: {search_query}
-- **Quality Score**: {quality_score}/10
+- **Quality Score**: {quality_score}/10 (ORIGINAL scoring logic)
 - **Total Sources**: {financial_data.get('total_sources', 0)}
 - **Result Index**: {result_index}
 - **Source Quality**: {financial_data.get('source_quality', 'unknown')}
@@ -897,5 +927,5 @@ Financial data extracted from search results.
         return yaml_header + "\n\n" + content
     
     def assess_data_quality(self, financial_data: Dict[str, Any]) -> int:
-        """Assess data quality on 0-10 scale"""
+        """Assess data quality on 0-10 scale using ORIGINAL logic"""
         return self.quality_scorer.calculate_score(financial_data)

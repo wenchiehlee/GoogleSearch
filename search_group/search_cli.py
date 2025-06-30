@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """
-search_cli.py - Search Group CLI Interface (v3.5.0) - PURE CONTENT HASH VERSION
+search_cli.py - Search Group CLI Interface (v3.5.0) - COMPREHENSIVE SEARCH FIXED
 
-Version: 3.5.0-pure-hash
+Version: 3.5.0-comprehensive-fixed
 Date: 2025-06-29
 Author: FactSet Pipeline v3.5.0 - Modular Search Group
 
-PURE CONTENT HASH IMPROVEMENTS:
+COMPREHENSIVE SEARCH FIXES:
 - Filenames based purely on content hash (no result index)
 - Same content = same filename regardless of search order
 - Clean format: 2330_台積電_factset_7796efd2.md
 - True content-based deduplication
+- Fixed early stopping and relevance thresholds for comprehensive search
+- Debug logging to see all pattern execution
+- ORIGINAL quality scoring logic preserved
 """
 
 import os
@@ -49,7 +52,7 @@ except ImportError:
         print("⚠️  No .env file found")
 
 # Version Information
-__version__ = "3.5.0-pure-hash"
+__version__ = "3.5.0-comprehensive-fixed"
 __date__ = "2025-06-29"
 
 # Import search group components
@@ -69,9 +72,9 @@ class SearchConfig:
         self._validate_config()
     
     def _load_config(self) -> Dict[str, Any]:
-        """Load search configuration"""
+        """Load search configuration with comprehensive search settings"""
         return {
-            "version": "3.5.0-pure-hash",
+            "version": "3.5.0-comprehensive-fixed",
             "search": {
                 "rate_limit_delay": float(os.getenv("SEARCH_RATE_LIMIT_PER_SECOND", "1.0")),
                 "daily_quota": int(os.getenv("SEARCH_DAILY_QUOTA", "100")),
@@ -80,17 +83,19 @@ class SearchConfig:
                 "language": "lang_zh-TW|lang_en",
                 "safe_search": "off",
                 "backoff_multiplier": 2.0,
-                "max_backoff_seconds": 300
+                "max_backoff_seconds": 300,
+                "enable_debug_logging": True,  # Enable debug logging
+                "comprehensive_search": True   # Disable early stopping
             },
             "api": {
                 "google_api_key": os.getenv("GOOGLE_SEARCH_API_KEY"),
                 "google_cse_id": os.getenv("GOOGLE_SEARCH_CSE_ID")
             },
             "quality": {
-                "min_relevance_score": 3,
+                "min_relevance_score": 2,  # Lowered from 3 for better capture
                 "require_factset_content": False,
                 "min_content_length": 100,
-                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "4"))
+                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "3"))  # Lowered from 4 for smaller companies
             },
             "caching": {
                 "enabled": True,
@@ -147,7 +152,7 @@ class SearchConfig:
         return value
 
 class SearchCLI:
-    """v3.5.0 Search Group CLI - Pure Content Hash Filenames"""
+    """v3.5.0 Search Group CLI - Pure Content Hash Filenames with Comprehensive Search"""
     
     def __init__(self):
         self.config = SearchConfig()
@@ -158,15 +163,15 @@ class SearchCLI:
         # Ensure directories exist
         self._ensure_directories()
         
-        self.logger.info(f"Search CLI v{__version__} initialized with pure content hash filenames")
+        self.logger.info(f"Search CLI v{__version__} initialized with comprehensive search and pure content hash filenames")
     
     def _setup_logger(self) -> logging.Logger:
-        """Setup simple logging"""
+        """Setup enhanced logging with debug support"""
         log_dir = Path(self.config.get("files.log_dir"))
         log_dir.mkdir(parents=True, exist_ok=True)
         
         logger = logging.getLogger('search_group')
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.DEBUG)  # Set to DEBUG for comprehensive logging
         logger.handlers.clear()
         
         # File handler
@@ -176,7 +181,7 @@ class SearchCLI:
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
         
-        # Console handler
+        # Console handler with enhanced formatting
         console_handler = logging.StreamHandler()
         console_formatter = logging.Formatter('%(levelname)s - %(message)s')
         console_handler.setFormatter(console_formatter)
@@ -306,7 +311,9 @@ class SearchCLI:
             'quality_scores': quality_scores,
             'avg_quality_score': round(avg_quality, 1),
             'content_hashes': content_hashes,
-            'unique_content_count': len(set(content_hashes))  # Count unique content
+            'unique_content_count': len(set(content_hashes)),  # Count unique content
+            'total_patterns_executed': getattr(self.search_engine, 'last_patterns_executed', 0),
+            'total_api_calls': getattr(self.search_engine, 'last_api_calls', 0)
         }
         
         with open(progress_file, 'w', encoding='utf-8') as f:
@@ -376,9 +383,11 @@ class SearchCLI:
             print("✅ All directories created")
             
             self.logger.info("Setup validation passed")
-            print("\n🎉 Setup validation passed! Ready to search.")
+            print("\n🎉 Setup validation passed! Ready for comprehensive search.")
             print(f"📄 Using pure content hash filenames (v{__version__})")
             print("🔗 Same content = same filename (no result index needed)")
+            print("🚀 Comprehensive search enabled - all patterns will execute")
+            print("🐛 Debug logging enabled - will show pattern execution details")
             return True
             
         except Exception as e:
@@ -387,7 +396,7 @@ class SearchCLI:
             return False
     
     def cmd_search_company(self, symbol: str, result_count: str = '1', min_quality: int = None) -> bool:
-        """Search specific company"""
+        """Search specific company with comprehensive pattern execution"""
         try:
             # Override config min quality if provided
             if min_quality is not None:
@@ -403,17 +412,21 @@ class SearchCLI:
                 return False
             
             name = company['name']
-            print(f"\n🔍 Searching {symbol} {name} (saving {result_count} results)...")
-            self.logger.info(f"Searching {symbol} {name} (saving {result_count} results)...")
+            min_quality_threshold = self.config.get("quality.min_quality_threshold", 3)
             
-            # Search company and get multiple results
+            print(f"\n🔍 Comprehensive Search: {symbol} {name}")
+            print(f"📊 Saving {result_count} results, min quality: {min_quality_threshold}")
+            print(f"🚀 All search patterns will execute (no early stopping)")
+            
+            self.logger.info(f"Starting comprehensive search for {symbol} {name} (saving {result_count} results, min quality {min_quality_threshold})")
+            
+            # Search company and get multiple results with comprehensive pattern execution
             search_results = self.search_engine.search_company_multiple(symbol, name, result_count)
             
             if search_results and len(search_results) > 0:
                 successful_files = []
                 skipped_low_quality = 0
                 updated_existing = 0
-                min_quality_threshold = self.config.get("quality.min_quality_threshold", 4)
                 
                 for i, result_data in enumerate(search_results, 1):
                     quality_score = result_data.get('quality_score', 0)
@@ -436,7 +449,7 @@ class SearchCLI:
                     if filename:
                         # Check if this filename already exists in our list (duplicate content)
                         if filename in successful_files:
-                            print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content)")
+                            print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content merged)")
                             updated_existing += 1
                         else:
                             successful_files.append(filename)
@@ -447,10 +460,14 @@ class SearchCLI:
                     high_quality_results = [r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold]
                     self._update_progress_multiple(symbol, successful_files, high_quality_results)
                 
-                # Summary
+                # Enhanced summary with pattern execution stats
                 total_found = len(search_results)
                 total_processed = len([r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold])
                 unique_files = len(successful_files)
+                
+                # Get execution stats from search engine
+                patterns_executed = getattr(self.search_engine, 'last_patterns_executed', 0)
+                api_calls_made = getattr(self.search_engine, 'last_api_calls', 0)
                 
                 if unique_files > 0:
                     summary_parts = [f"Generated {unique_files} unique MD files"]
@@ -460,15 +477,21 @@ class SearchCLI:
                     summary_parts.append(f"(found {total_found}, skipped {skipped_low_quality} low quality)")
                     
                     print(f"🎉 {symbol} completed - {' '.join(summary_parts)}")
-                    self.logger.info(f"✅ {symbol} completed - {unique_files} unique files from {total_found} results")
+                    print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
+                    self.logger.info(f"✅ {symbol} completed - {unique_files} unique files from {total_found} results ({patterns_executed} patterns, {api_calls_made} API calls)")
                     return True
                 else:
                     print(f"❌ {symbol} - found {total_found} results but all below quality threshold ({min_quality_threshold})")
-                    self.logger.warning(f"❌ {symbol} - {total_found} results found but all below quality threshold")
+                    print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
+                    print(f"💡 Suggestion: Try lower quality threshold (--min-quality 2 or 3)")
+                    self.logger.warning(f"❌ {symbol} - {total_found} results found but all below quality threshold ({patterns_executed} patterns executed)")
                     return False
             else:
+                patterns_executed = getattr(self.search_engine, 'last_patterns_executed', 0)
+                api_calls_made = getattr(self.search_engine, 'last_api_calls', 0)
                 print(f"❌ {symbol} - no financial data found")
-                self.logger.warning(f"❌ {symbol} - no financial data found")
+                print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
+                self.logger.warning(f"❌ {symbol} - no financial data found ({patterns_executed} patterns executed)")
                 return False
                 
         except Exception as e:
@@ -477,12 +500,14 @@ class SearchCLI:
             return False
     
     def cmd_search_batch(self, symbols: List[str], result_count: str = '1', min_quality: int = None) -> bool:
-        """Search company batch"""
-        print(f"\n🔍 Searching batch of {len(symbols)} companies (saving {result_count} results each)...")
-        self.logger.info(f"Searching batch of {len(symbols)} companies (saving {result_count} results each)...")
+        """Search company batch with comprehensive search"""
+        print(f"\n🔍 Comprehensive Batch Search: {len(symbols)} companies")
+        print(f"📊 Saving {result_count} results each, comprehensive pattern execution")
+        self.logger.info(f"Starting comprehensive batch search for {len(symbols)} companies (saving {result_count} results each)")
         
         successful = 0
-        for symbol in symbols:
+        for i, symbol in enumerate(symbols, 1):
+            print(f"\n[{i}/{len(symbols)}] Processing {symbol}...")
             if self.cmd_search_company(symbol, result_count, min_quality):
                 successful += 1
         
@@ -491,25 +516,28 @@ class SearchCLI:
         return successful > 0
     
     def cmd_search_all(self, result_count: str = '1', min_quality: int = None) -> bool:
-        """Search all companies in watchlist"""
+        """Search all companies in watchlist with comprehensive search"""
         try:
             companies = self._load_watchlist_csv()
             total = len(companies)
             
-            self.logger.info(f"Starting search for {total} companies (saving {result_count} results each)...")
-            print(f"\n🚀 Starting search for {total} companies (saving {result_count} results each)...")
-            print(f"📄 Using pure content hash filenames - no duplicate content files")
+            print(f"\n🚀 Comprehensive Search: ALL {total} companies")
+            print(f"📊 Saving {result_count} results each, all patterns execute")
+            print(f"📄 Pure content hash filenames - no duplicate content files")
+            print(f"🐛 Debug logging enabled - detailed pattern execution info")
+            
+            self.logger.info(f"Starting comprehensive search for {total} companies (saving {result_count} results each)...")
             
             successful = 0
             for i, company in enumerate(companies, 1):
                 symbol = company['symbol']
                 name = company['name']
                 
-                print(f"\n[{i}/{total}] 🔍 Searching {symbol} {name}...")
-                self.logger.info(f"[{i}/{total}] Searching {symbol} {name}...")
+                print(f"\n[{i}/{total}] 🔍 Comprehensive Search: {symbol} {name}...")
+                self.logger.info(f"[{i}/{total}] Starting comprehensive search for {symbol} {name}...")
                 
                 try:
-                    # Search company with multiple results
+                    # Search company with comprehensive pattern execution
                     if self.cmd_search_company(symbol, result_count, min_quality):
                         successful += 1
                     
@@ -523,8 +551,8 @@ class SearchCLI:
                     print(f"\n📊 Progress: {i}/{total} companies processed, {successful} successful")
                     self.logger.info(f"Progress: {i}/{total} companies processed, {successful} successful")
             
-            print(f"\n🎉 Search completed! {successful}/{total} companies successful")
-            self.logger.info(f"🎉 Search completed! {successful}/{total} companies successful")
+            print(f"\n🎉 Comprehensive search completed! {successful}/{total} companies successful")
+            self.logger.info(f"🎉 Comprehensive search completed! {successful}/{total} companies successful")
             return successful > 0
             
         except Exception as e:
@@ -533,9 +561,10 @@ class SearchCLI:
             return False
     
     def cmd_search_resume(self, result_count: str = '1', min_quality: int = None) -> bool:
-        """Resume interrupted search"""
-        print(f"\n🔄 Resuming search from where it left off (saving {result_count} results each)...")
-        self.logger.info(f"Resuming search from where it left off (saving {result_count} results each)...")
+        """Resume interrupted search with comprehensive pattern execution"""
+        print(f"\n🔄 Resuming comprehensive search from where it left off")
+        print(f"📊 Saving {result_count} results each, all patterns execute")
+        self.logger.info(f"Resuming comprehensive search from where it left off (saving {result_count} results each)")
         
         # Load progress to see what's already done
         progress_file = Path("cache/search/progress.json")
@@ -561,6 +590,7 @@ class SearchCLI:
             return True
         
         print(f"🚀 Resuming with {len(remaining)} remaining companies...")
+        print(f"🐛 Comprehensive search mode - all patterns will execute")
         self.logger.info(f"Resuming with {len(remaining)} remaining companies...")
         
         # Process remaining companies
@@ -569,11 +599,11 @@ class SearchCLI:
             symbol = company['symbol']
             name = company['name']
             
-            print(f"\n[{i}/{len(remaining)}] 🔍 Searching {symbol} {name}...")
-            self.logger.info(f"[{i}/{len(remaining)}] Searching {symbol} {name}...")
+            print(f"\n[{i}/{len(remaining)}] 🔍 Comprehensive Search: {symbol} {name}...")
+            self.logger.info(f"[{i}/{len(remaining)}] Starting comprehensive search for {symbol} {name}...")
             
             try:
-                # Search company with multiple results
+                # Search company with comprehensive pattern execution
                 if self.cmd_search_company(symbol, result_count, min_quality):
                     successful += 1
                 
@@ -587,10 +617,10 @@ class SearchCLI:
         return successful > 0
     
     def show_status(self):
-        """Show current status"""
+        """Show current status with comprehensive search info"""
         print("\n📊 === Search Group Status ===")
         self.logger.info("=== Search Group Status ===")
-        print(f"🏷️  Version: {__version__} (Pure Content Hash Filenames)")
+        print(f"🏷️  Version: {__version__} (Pure Content Hash + Comprehensive Search)")
         self.logger.info(f"Version: {__version__}")
         
         # API status
@@ -613,7 +643,7 @@ class SearchCLI:
             print(f"📄 MD Files Generated: {md_files}")
             self.logger.info(f"MD Files Generated: {md_files}")
         
-        # Progress with pure content analysis
+        # Progress with comprehensive search analysis
         progress_file = Path("cache/search/progress.json")
         if progress_file.exists():
             try:
@@ -626,11 +656,16 @@ class SearchCLI:
                 all_scores = []
                 total_unique_files = 0
                 total_unique_content = 0
+                total_patterns_executed = 0
+                total_api_calls = 0
+                
                 for company_data in progress.values():
                     scores = company_data.get('quality_scores', [])
                     all_scores.extend(scores)
                     total_unique_files += company_data.get('file_count', 0)
                     total_unique_content += company_data.get('unique_content_count', 0)
+                    total_patterns_executed += company_data.get('total_patterns_executed', 0)
+                    total_api_calls += company_data.get('total_api_calls', 0)
                 
                 if all_scores:
                     avg_score = sum(all_scores) / len(all_scores)
@@ -640,6 +675,13 @@ class SearchCLI:
                 if total_unique_files > 0:
                     print(f"📝 Total Unique Files: {total_unique_files}")
                     print(f"🎯 Pure Content Hash Efficiency: 100% - no duplicates by design")
+                    
+                if total_patterns_executed > 0:
+                    avg_patterns = total_patterns_executed / len(progress)
+                    avg_api_calls = total_api_calls / len(progress)
+                    print(f"🔍 Avg Patterns Executed: {avg_patterns:.1f}/company")
+                    print(f"📡 Avg API Calls: {avg_api_calls:.1f}/company")
+                    print(f"🚀 Comprehensive Search: Enabled")
                     
             except Exception as e:
                 self.logger.warning(f"Error reading progress: {e}")
@@ -682,38 +724,39 @@ class SearchCLI:
 def create_argument_parser():
     """Create CLI argument parser"""
     parser = argparse.ArgumentParser(
-        description=f"FactSet Search Group v{__version__} (Pure Content Hash Filenames)",
+        description=f"FactSet Search Group v{__version__} (Comprehensive Search + Pure Content Hash)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python search_cli.py search --all                         # Search all companies (1 result each)
-  python search_cli.py search --all --count 3               # Search all companies (3 results each)
-  python search_cli.py search --company 2330                # Search specific company (1 result)
-  python search_cli.py search --company 2330 --count all    # Search specific company (all results)
-  python search_cli.py search --batch 2330,2454,6505 --count 2  # Search batch (2 results each)
-  python search_cli.py search --resume --count all          # Resume interrupted search (all results)
+  python search_cli.py search --all                         # Search all companies (1 result each, ALL patterns)
+  python search_cli.py search --all --count 3               # Search all companies (3 results each, ALL patterns)
+  python search_cli.py search --company 8272                # Search specific company (1 result, ALL patterns)
+  python search_cli.py search --company 8272 --count all    # Search specific company (all results, ALL patterns)
+  python search_cli.py search --batch 2330,2454,8272 --count 2  # Search batch (2 results each, ALL patterns)
+  python search_cli.py search --resume --count all          # Resume interrupted search (all results, ALL patterns)
   
   python search_cli.py validate                             # Validate setup
   python search_cli.py status                               # Show progress
   python search_cli.py clean                                # Clean cache
 
-Pure Content Hash Filenames:
-  - Format: 2330_台積電_factset_7796efd2.md
-  - Same content = same hash = same filename
-  - No result index numbers (004, 007, etc.)
-  - Automatic content-based deduplication
+COMPREHENSIVE SEARCH FIXES:
+  - All query patterns will execute (no early stopping)
+  - Lowered relevance thresholds to capture more results
+  - Debug logging shows pattern execution details
+  - ORIGINAL quality scoring logic preserved
+  - Pure content hash filenames (no duplicates by design)
         """
     )
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
     # Search commands
-    search_parser = subparsers.add_parser('search', help='Search operations')
+    search_parser = subparsers.add_parser('search', help='Comprehensive search operations')
     search_group = search_parser.add_mutually_exclusive_group(required=True)
-    search_group.add_argument('--all', action='store_true', help='Search all companies')
-    search_group.add_argument('--company', help='Search specific company by symbol')
-    search_group.add_argument('--batch', help='Search batch (comma-separated symbols)')
-    search_group.add_argument('--resume', action='store_true', help='Resume interrupted search')
+    search_group.add_argument('--all', action='store_true', help='Search all companies (ALL patterns execute)')
+    search_group.add_argument('--company', help='Search specific company by symbol (ALL patterns execute)')
+    search_group.add_argument('--batch', help='Search batch (comma-separated symbols, ALL patterns execute)')
+    search_group.add_argument('--resume', action='store_true', help='Resume interrupted search (ALL patterns execute)')
     
     # Add count parameter for controlling number of results
     search_parser.add_argument('--count', default='1', 
@@ -721,7 +764,7 @@ Pure Content Hash Filenames:
     
     # Add quality threshold parameter
     search_parser.add_argument('--min-quality', type=int, default=None,
-                             help='Minimum quality score to save (0-10, default: 4)')
+                             help='Minimum quality score to save (0-10, default: 3, try 2 for smaller companies)')
     
     # Utility commands
     subparsers.add_parser('validate', help='Validate setup')
