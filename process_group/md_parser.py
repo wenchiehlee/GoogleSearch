@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-MD Parser - FactSet Pipeline v3.5.1
-Fixed validation against 觀察名單.csv with stricter checks
+MD Parser - FactSet Pipeline v3.6.1 (Refined)
+增強版 MD 檔案解析器，支援查詢模式提取和觀察名單驗證
+完全整合 v3.6.1 功能要求
 """
 
 import os
@@ -11,12 +12,29 @@ import pandas as pd
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 import statistics
+import json
 
 class MDParser:
     def __init__(self):
-        """初始化 MD 解析器 - v3.5.1 修正觀察名單驗證"""
+        """初始化 MD 解析器 - v3.6.1 增強版"""
         
-        # 原有的模式保持不變
+        self.version = "3.6.1"
+        
+        # 🆕 增強的 metadata 模式 - 支援查詢模式提取
+        self.metadata_patterns = {
+            'search_query': r'search_query:\s*(.+?)(?:\n|$)',
+            'keywords': r'keywords:\s*(.+?)(?:\n|$)',
+            'search_terms': r'search_terms:\s*(.+?)(?:\n|$)',
+            'query_pattern': r'query_pattern:\s*(.+?)(?:\n|$)',
+            'original_query': r'original_query:\s*(.+?)(?:\n|$)',
+            'company_code': r'company_code:\s*(.+?)(?:\n|$)',
+            'company_name': r'company_name:\s*(.+?)(?:\n|$)',
+            'data_source': r'data_source:\s*(.+?)(?:\n|$)',
+            'timestamp': r'timestamp:\s*(.+?)(?:\n|$)',
+            'extracted_date': r'extracted_date:\s*(.+?)(?:\n|$)'
+        }
+        
+        # 原有的日期和數據提取模式
         self.date_patterns = [
             r'\*\s*(\d{4})-(\d{1,2})-(\d{1,2})\s+\d{1,2}:\d{1,2}',
             r'\*\s*更新[：:]\s*(\d{4})-(\d{1,2})-(\d{1,2})\s+\d{1,2}:\d{1,2}',
@@ -55,11 +73,14 @@ class MDParser:
         ]
 
         # 🔧 載入觀察名單並進行嚴格驗證
-        self.watch_list_mapping = self._load_watch_list_mapping_strict()
+        self.watch_list_mapping = self._load_watch_list_mapping_enhanced()
         self.validation_enabled = len(self.watch_list_mapping) > 0
+        
+        print(f"🔧 MDParser v{self.version} 初始化完成")
+        print(f"📋 觀察名單驗證: {'啟用' if self.validation_enabled else '停用'} ({len(self.watch_list_mapping)} 家公司)")
 
-    def _load_watch_list_mapping_strict(self) -> Dict[str, str]:
-        """🔧 v3.5.1 嚴格載入觀察名單並驗證"""
+    def _load_watch_list_mapping_enhanced(self) -> Dict[str, str]:
+        """🆕 v3.6.1 增強的觀察名單載入"""
         mapping = {}
         
         possible_paths = [
@@ -67,7 +88,9 @@ class MDParser:
             '../觀察名單.csv',
             '../../觀察名單.csv',
             'data/觀察名單.csv',
-            '../data/觀察名單.csv'
+            '../data/觀察名單.csv',
+            'watchlist.csv',
+            '../watchlist.csv'
         ]
         
         for csv_path in possible_paths:
@@ -85,6 +108,9 @@ class MDParser:
                             print(f"✅ 成功使用 {encoding} 編碼讀取")
                             break
                         except UnicodeDecodeError:
+                            continue
+                        except Exception as e:
+                            print(f"⚠️ 使用 {encoding} 編碼讀取失敗: {e}")
                             continue
                     
                     if df is None:
@@ -144,7 +170,7 @@ class MDParser:
                     print(f"   成功率: {valid_count/total_rows*100:.1f}%")
                     
                     # 🔧 額外驗證：檢查是否有已知的測試公司
-                    self._validate_watch_list_content(mapping)
+                    self._validate_watch_list_content_enhanced(mapping)
                     
                     return mapping
                     
@@ -157,71 +183,8 @@ class MDParser:
         print("⚠️ 系統將在無驗證模式下運行")
         return {}
 
-    def _is_valid_company_code(self, code: str) -> bool:
-        """🔧 v3.5.1 嚴格驗證公司代號格式"""
-        if not code or code in ['nan', 'NaN', 'null', 'None', '']:
-            return False
-        
-        # 移除可能的引號和空白
-        clean_code = code.strip().strip('\'"')
-        
-        # 檢查是否為4位數字
-        if not (clean_code.isdigit() and len(clean_code) == 4):
-            return False
-        
-        # 檢查數字範圍（台股代號範圍）
-        code_num = int(clean_code)
-        if not (1000 <= code_num <= 9999):
-            return False
-        
-        return True
-
-    def _is_valid_company_name(self, name: str) -> bool:
-        """🔧 v3.5.1 嚴格驗證公司名稱"""
-        if not name or name in ['nan', 'NaN', 'null', 'None', '']:
-            return False
-        
-        # 移除空白字符
-        clean_name = name.strip()
-        
-        # 檢查長度
-        if len(clean_name) < 2 or len(clean_name) > 20:
-            return False
-        
-        # 檢查是否包含無效字符（過於嚴格的檢查可能需要調整）
-        invalid_chars = ['|', '\t', '\n', '\r']
-        if any(char in clean_name for char in invalid_chars):
-            return False
-        
-        return True
-
-    def _validate_watch_list_content(self, mapping: Dict[str, str]):
-        """🔧 v3.5.1 驗證觀察名單內容的合理性"""
-        if not mapping:
-            return
-        
-        # 檢查是否有常見的測試公司
-        test_companies = {
-            '2330': '台積電',
-            '2317': '鴻海',
-            '2454': '聯發科'
-        }
-        
-        found_test_companies = 0
-        for code, expected_name in test_companies.items():
-            if code in mapping:
-                actual_name = mapping[code]
-                if actual_name == expected_name:
-                    found_test_companies += 1
-                    print(f"✅ 找到測試公司: {code} - {actual_name}")
-                else:
-                    print(f"⚠️ 測試公司名稱不符: {code} - 期望:{expected_name}, 實際:{actual_name}")
-        
-        if found_test_companies == 0:
-            print("⚠️ 未找到任何已知測試公司，請檢查觀察名單內容")
-
     def parse_md_file(self, file_path: str) -> Dict[str, Any]:
-        """解析 MD 檔案並進行嚴格驗證"""
+        """🆕 v3.6.1 增強版 MD 檔案解析"""
         try:
             # 讀取檔案內容
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -232,11 +195,14 @@ class MDParser:
             company_code = file_info.get('company_code', '')
             company_name = file_info.get('company_name', '')
             
-            # 🔧 核心驗證：對照觀察名單 (嚴格模式)
-            validation_result = self._validate_against_watch_list_strict(company_code, company_name)
+            # 🆕 增強的 YAML front matter 解析
+            yaml_data = self._extract_yaml_frontmatter_enhanced(content)
             
-            # 解析 YAML front matter
-            yaml_data = self._extract_yaml_frontmatter(content)
+            # 🆕 查詢模式提取 (v3.6.1 核心功能)
+            search_keywords = self._extract_search_keywords_enhanced(content, yaml_data)
+            
+            # 🔧 核心驗證：對照觀察名單 (增強版)
+            validation_result = self._validate_against_watch_list_enhanced(company_code, company_name)
             
             # 原有功能：日期提取
             content_date = self._extract_content_date_bulletproof(content)
@@ -248,6 +214,9 @@ class MDParser:
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
             data_richness = self._calculate_data_richness(eps_stats, target_price, analyst_count)
+            
+            # 🆕 內容品質評估 (v3.6.1)
+            content_quality_metrics = self._assess_content_quality(content)
             
             # 組合結果
             result = {
@@ -276,10 +245,14 @@ class MDParser:
                 'has_analyst_info': analyst_count > 0,
                 'data_richness_score': data_richness,
                 
+                # 🆕 v3.6.1 增強功能
+                'search_keywords': search_keywords,  # 關鍵！查詢模式分析需要
+                'content_quality_metrics': content_quality_metrics,
+                
                 # YAML 資料
                 'yaml_data': yaml_data,
                 
-                # 🔧 嚴格驗證結果
+                # 🔧 增強版驗證結果
                 'validation_result': validation_result,
                 'content_validation_passed': validation_result['overall_status'] == 'valid',
                 'validation_warnings': validation_result.get('warnings', []),
@@ -292,25 +265,239 @@ class MDParser:
                 'parsed_at': datetime.now(),
                 
                 # 調試資訊
+                'parser_version': self.version,
                 'date_extraction_method': extraction_status,
-                'debug_info': self._get_debug_info(content, content_date)
+                'debug_info': self._get_debug_info_enhanced(content, content_date, search_keywords)
             }
             
             return result
             
         except Exception as e:
             print(f"❌ 解析檔案失敗 {file_path}: {e}")
-            return self._create_empty_result(file_path, str(e))
+            return self._create_empty_result_enhanced(file_path, str(e))
 
-    def _validate_against_watch_list_strict(self, company_code: str, company_name: str) -> Dict[str, Any]:
-        """🔧 v3.5.1 嚴格對照觀察名單進行驗證"""
+    def _extract_search_keywords_enhanced(self, content: str, yaml_data: Dict) -> List[str]:
+        """🆕 v3.6.1 增強的搜尋關鍵字提取"""
+        keywords = []
+        
+        try:
+            # 1. 從 YAML metadata 中提取
+            for field_name in ['search_query', 'keywords', 'search_terms', 'query_pattern', 'original_query']:
+                field_value = yaml_data.get(field_name, '')
+                if field_value and isinstance(field_value, str):
+                    # 清理和分割關鍵字
+                    cleaned_keywords = self._clean_and_split_keywords(field_value)
+                    keywords.extend(cleaned_keywords)
+            
+            # 2. 從內容的 metadata 中提取
+            if content.startswith('---'):
+                try:
+                    end_pos = content.find('---', 3)
+                    if end_pos != -1:
+                        yaml_content = content[3:end_pos].strip()
+                        
+                        # 使用正則表達式提取查詢相關欄位
+                        for field_name, pattern in self.metadata_patterns.items():
+                            matches = re.findall(pattern, yaml_content, re.MULTILINE | re.IGNORECASE)
+                            for match in matches:
+                                if match.strip():
+                                    cleaned_keywords = self._clean_and_split_keywords(match.strip())
+                                    keywords.extend(cleaned_keywords)
+                except Exception as e:
+                    print(f"⚠️ YAML metadata 解析失敗: {e}")
+            
+            # 3. 去重並過濾
+            unique_keywords = []
+            seen_keywords = set()
+            
+            for keyword in keywords:
+                keyword_lower = keyword.lower().strip()
+                if (keyword_lower not in seen_keywords and 
+                    self._is_valid_keyword(keyword_lower) and
+                    len(keyword_lower) >= 2):
+                    unique_keywords.append(keyword.strip())
+                    seen_keywords.add(keyword_lower)
+            
+            # 4. 按重要性排序
+            sorted_keywords = self._sort_keywords_by_importance(unique_keywords)
+            
+            return sorted_keywords[:20]  # 限制最多20個關鍵字
+            
+        except Exception as e:
+            print(f"⚠️ 搜尋關鍵字提取失敗: {e}")
+            return []
+
+    def _clean_and_split_keywords(self, text: str) -> List[str]:
+        """清理和分割關鍵字"""
+        if not text or not isinstance(text, str):
+            return []
+        
+        # 移除常見的搜尋運算符
+        cleaned = re.sub(r'[+\-"():]', ' ', text)
+        
+        # 分割關鍵字 (支援多種分隔符)
+        keywords = re.split(r'[,，;；\s]+', cleaned)
+        
+        # 清理每個關鍵字
+        cleaned_keywords = []
+        for keyword in keywords:
+            keyword = keyword.strip()
+            if keyword and len(keyword) >= 2:
+                cleaned_keywords.append(keyword)
+        
+        return cleaned_keywords
+
+    def _is_valid_keyword(self, keyword: str) -> bool:
+        """檢查是否為有效關鍵字"""
+        if not keyword or len(keyword) < 2:
+            return False
+        
+        # 停用詞列表
+        stop_words = {
+            '的', '和', '與', '或', '及', '在', '為', '是', '有', '此', '將', '會', '了', '就', '都',
+            'and', 'or', 'the', 'a', 'an', 'in', 'on', 'at', 'to', 'for', 'of', 'with'
+        }
+        
+        if keyword.lower() in stop_words:
+            return False
+        
+        # 檢查是否為純數字或符號
+        if keyword.isdigit() or not re.search(r'[a-zA-Z\u4e00-\u9fff]', keyword):
+            return False
+        
+        return True
+
+    def _sort_keywords_by_importance(self, keywords: List[str]) -> List[str]:
+        """按重要性排序關鍵字"""
+        def get_importance_score(keyword: str) -> int:
+            score = 0
+            keyword_lower = keyword.lower()
+            
+            # 高重要性關鍵字
+            high_importance = ['factset', 'eps', '目標價', '分析師', '預估', 'bloomberg', 'reuters']
+            if any(imp in keyword_lower for imp in high_importance):
+                score += 10
+            
+            # 中重要性關鍵字
+            medium_importance = ['財報', '營收', '獲利', '股價', '評等', 'analyst', 'forecast', 'estimate']
+            if any(imp in keyword_lower for imp in medium_importance):
+                score += 5
+            
+            # 公司名稱和代號
+            if re.search(r'\d{4}', keyword) or len(keyword) <= 4:
+                score += 8
+            
+            # 中文關鍵字稍微提高優先級
+            if re.search(r'[\u4e00-\u9fff]', keyword):
+                score += 2
+            
+            return score
+        
+        return sorted(keywords, key=get_importance_score, reverse=True)
+
+    def _assess_content_quality(self, content: str) -> Dict[str, Any]:
+        """🆕 v3.6.1 評估內容品質"""
+        metrics = {
+            'content_length': len(content),
+            'paragraph_count': len(content.split('\n\n')),
+            'line_count': len(content.split('\n')),
+            'chinese_char_ratio': 0,
+            'financial_keyword_count': 0,
+            'table_count': 0,
+            'number_count': 0,
+            'has_metadata': content.startswith('---'),
+            'structure_score': 0
+        }
+        
+        try:
+            # 中文字符比例
+            chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', content))
+            if metrics['content_length'] > 0:
+                metrics['chinese_char_ratio'] = round(chinese_chars / metrics['content_length'], 3)
+            
+            # 財務關鍵字計數
+            financial_keywords = [
+                'eps', '每股盈餘', '營收', '獲利', '淨利', '毛利', '目標價', '分析師', 
+                '預估', '評等', 'factset', 'bloomberg', '股價', '市值'
+            ]
+            for keyword in financial_keywords:
+                metrics['financial_keyword_count'] += len(re.findall(keyword, content, re.IGNORECASE))
+            
+            # 表格計數
+            metrics['table_count'] = content.count('|')
+            
+            # 數字計數
+            metrics['number_count'] = len(re.findall(r'\d+\.?\d*', content))
+            
+            # 結構評分 (0-10)
+            structure_score = 0
+            if metrics['has_metadata']:
+                structure_score += 3
+            if metrics['paragraph_count'] >= 3:
+                structure_score += 2
+            if metrics['table_count'] > 0:
+                structure_score += 2
+            if metrics['financial_keyword_count'] >= 5:
+                structure_score += 2
+            if metrics['content_length'] >= 1000:
+                structure_score += 1
+            
+            metrics['structure_score'] = min(structure_score, 10)
+            
+        except Exception as e:
+            print(f"⚠️ 內容品質評估失敗: {e}")
+        
+        return metrics
+
+    def _extract_yaml_frontmatter_enhanced(self, content: str) -> Dict[str, Any]:
+        """🆕 v3.6.1 增強的 YAML front matter 提取"""
+        try:
+            if content.startswith('---'):
+                end_pos = content.find('---', 3)
+                if end_pos != -1:
+                    yaml_content = content[3:end_pos].strip()
+                    
+                    # 嘗試使用 yaml 解析器
+                    try:
+                        yaml_data = yaml.safe_load(yaml_content) or {}
+                        
+                        # 額外清理和驗證
+                        cleaned_data = {}
+                        for key, value in yaml_data.items():
+                            if isinstance(value, str):
+                                cleaned_data[key] = value.strip()
+                            else:
+                                cleaned_data[key] = value
+                        
+                        return cleaned_data
+                        
+                    except yaml.YAMLError as e:
+                        print(f"⚠️ YAML 解析失敗，嘗試手動解析: {e}")
+                        
+                        # 手動解析關鍵欄位
+                        manual_data = {}
+                        for field_name, pattern in self.metadata_patterns.items():
+                            matches = re.findall(pattern, yaml_content, re.MULTILINE | re.IGNORECASE)
+                            if matches:
+                                manual_data[field_name] = matches[0].strip()
+                        
+                        return manual_data
+                        
+        except Exception as e:
+            print(f"⚠️ YAML frontmatter 提取失敗: {e}")
+        
+        return {}
+
+    def _validate_against_watch_list_enhanced(self, company_code: str, company_name: str) -> Dict[str, Any]:
+        """🆕 v3.6.1 增強的觀察名單驗證"""
         
         validation_result = {
             'overall_status': 'valid',
             'warnings': [],
             'errors': [],
             'confidence_score': 10.0,
-            'validation_method': 'strict'
+            'validation_method': 'enhanced_v3.6.1',
+            'detailed_checks': []
         }
         
         # 🔧 如果觀察名單未載入，記錄但不阻止處理
@@ -318,6 +505,7 @@ class MDParser:
             validation_result['warnings'].append("觀察名單未載入，跳過驗證")
             validation_result['confidence_score'] = 5.0
             validation_result['validation_method'] = 'disabled'
+            validation_result['detailed_checks'].append("驗證功能已停用")
             print(f"⚠️ 觀察名單驗證已停用: {company_code} - {company_name}")
             return validation_result
         
@@ -327,6 +515,7 @@ class MDParser:
             validation_result['confidence_score'] = 0.0
             error_msg = f"公司代號或名稱為空: 代號='{company_code}', 名稱='{company_name}'"
             validation_result['errors'].append(error_msg)
+            validation_result['detailed_checks'].append("輸入參數檢查失敗")
             print(f"❌ 參數錯誤: {error_msg}")
             return validation_result
         
@@ -335,45 +524,53 @@ class MDParser:
         clean_name = str(company_name).strip()
         
         # 🔧 檢查 1: 公司代號格式驗證
+        validation_result['detailed_checks'].append("檢查公司代號格式")
         if not self._is_valid_company_code(clean_code):
             validation_result['overall_status'] = 'error'
             validation_result['confidence_score'] = 0.0
             error_msg = f"公司代號格式無效: '{clean_code}'"
             validation_result['errors'].append(error_msg)
+            validation_result['detailed_checks'].append("公司代號格式檢查失敗")
             print(f"❌ 代號格式無效: {clean_code}")
             return validation_result
         
         # 🔧 檢查 2: 公司代號是否在觀察名單中
+        validation_result['detailed_checks'].append("檢查觀察名單包含狀態")
         if clean_code not in self.watch_list_mapping:
             validation_result['overall_status'] = 'error'
             validation_result['confidence_score'] = 0.0
             error_msg = f"代號{clean_code}不在觀察名單中，不允許處理"
             validation_result['errors'].append(error_msg)
+            validation_result['detailed_checks'].append("觀察名單包含檢查失敗")
             print(f"❌ 不在觀察名單: {clean_code}")
             
             # 🔧 額外信息：提供相似的代號建議
             similar_codes = self._find_similar_codes(clean_code)
             if similar_codes:
-                error_msg += f" (相似代號: {', '.join(similar_codes[:3])})"
-                validation_result['errors'][-1] = error_msg
+                suggestion_msg = f"相似代號建議: {', '.join(similar_codes[:3])}"
+                validation_result['warnings'].append(suggestion_msg)
+                validation_result['detailed_checks'].append(f"找到相似代號: {len(similar_codes)}個")
             
             return validation_result
         
-        # 🔧 檢查 3: 公司名稱是否與觀察名單一致 (嚴格比較)
+        # 🔧 檢查 3: 公司名稱是否與觀察名單一致 (增強比較)
+        validation_result['detailed_checks'].append("檢查公司名稱一致性")
         correct_name = self.watch_list_mapping[clean_code]
         
         # 🔧 多層次名稱比較
-        name_match = self._compare_company_names(clean_name, correct_name)
+        name_match = self._compare_company_names_enhanced(clean_name, correct_name)
         
         if not name_match['is_match']:
             validation_result['overall_status'] = 'error'
             validation_result['confidence_score'] = 0.0
             error_msg = f"公司名稱不符觀察名單：檔案為{clean_name}({clean_code})，觀察名單顯示應為{correct_name}({clean_code})"
             validation_result['errors'].append(error_msg)
+            validation_result['detailed_checks'].append("公司名稱一致性檢查失敗")
             
             # 🔧 額外信息：詳細的不匹配分析
             if name_match['details']:
                 validation_result['errors'].append(f"詳細比較: {name_match['details']}")
+                validation_result['detailed_checks'].append(f"名稱比較詳情: {name_match['match_type']}")
             
             print(f"❌ 名稱不符: {clean_code}")
             print(f"   檔案名稱: '{clean_name}'")
@@ -384,49 +581,31 @@ class MDParser:
         
         # 🔧 檢查通過
         validation_result['confidence_score'] = name_match['confidence_score']
+        validation_result['detailed_checks'].append(f"所有檢查通過，名稱匹配類型: {name_match['match_type']}")
+        
         if name_match['confidence_score'] < 10.0:
             validation_result['warnings'].append(f"名稱匹配度: {name_match['confidence_score']}/10")
         
         print(f"✅ 驗證通過: {clean_code} - {clean_name} (信心度: {name_match['confidence_score']})")
         return validation_result
 
-    def _find_similar_codes(self, target_code: str) -> List[str]:
-        """🔧 尋找相似的公司代號"""
-        if not self.watch_list_mapping:
-            return []
-        
-        similar_codes = []
-        target_num = None
-        
-        try:
-            target_num = int(target_code)
-        except ValueError:
-            return similar_codes
-        
-        for code in self.watch_list_mapping.keys():
-            try:
-                code_num = int(code)
-                # 尋找數值相近的代號
-                if abs(code_num - target_num) <= 10:
-                    similar_codes.append(code)
-            except ValueError:
-                continue
-        
-        return sorted(similar_codes)
-
-    def _compare_company_names(self, name1: str, name2: str) -> Dict[str, Any]:
-        """🔧 v3.5.1 多層次公司名稱比較"""
+    def _compare_company_names_enhanced(self, name1: str, name2: str) -> Dict[str, Any]:
+        """🆕 v3.6.1 增強的公司名稱比較"""
         comparison_result = {
             'is_match': False,
             'confidence_score': 0.0,
-            'details': ''
+            'details': '',
+            'match_type': 'no_match'
         }
         
         # 層次 1: 完全匹配
         if name1 == name2:
-            comparison_result['is_match'] = True
-            comparison_result['confidence_score'] = 10.0
-            comparison_result['details'] = '完全匹配'
+            comparison_result.update({
+                'is_match': True,
+                'confidence_score': 10.0,
+                'details': '完全匹配',
+                'match_type': 'exact_match'
+            })
             return comparison_result
         
         # 層次 2: 移除空白後匹配
@@ -434,9 +613,12 @@ class MDParser:
         clean_name2 = re.sub(r'\s+', '', name2)
         
         if clean_name1 == clean_name2:
-            comparison_result['is_match'] = True
-            comparison_result['confidence_score'] = 9.5
-            comparison_result['details'] = '移除空白後匹配'
+            comparison_result.update({
+                'is_match': True,
+                'confidence_score': 9.5,
+                'details': '移除空白後匹配',
+                'match_type': 'whitespace_normalized'
+            })
             return comparison_result
         
         # 層次 3: 移除常見後綴詞後匹配
@@ -452,23 +634,249 @@ class MDParser:
         core_name2 = remove_suffixes(clean_name2)
         
         if core_name1 == core_name2:
-            comparison_result['is_match'] = True
-            comparison_result['confidence_score'] = 9.0
-            comparison_result['details'] = '移除後綴詞後匹配'
+            comparison_result.update({
+                'is_match': True,
+                'confidence_score': 9.0,
+                'details': '移除後綴詞後匹配',
+                'match_type': 'suffix_removed'
+            })
             return comparison_result
         
-        # 層次 4: 模糊匹配 (字符包含關係)
+        # 層次 4: 部分包含匹配
         if core_name1 in core_name2 or core_name2 in core_name1:
-            comparison_result['is_match'] = True
-            comparison_result['confidence_score'] = 7.0
-            comparison_result['details'] = f'部分包含匹配: "{core_name1}" vs "{core_name2}"'
+            comparison_result.update({
+                'is_match': True,
+                'confidence_score': 7.0,
+                'details': f'部分包含匹配: "{core_name1}" vs "{core_name2}"',
+                'match_type': 'partial_contain'
+            })
+            return comparison_result
+        
+        # 層次 5: 編輯距離匹配 (新增)
+        similarity = self._calculate_string_similarity(core_name1, core_name2)
+        if similarity >= 0.8:  # 80% 相似度
+            comparison_result.update({
+                'is_match': True,
+                'confidence_score': round(similarity * 6, 1),  # 最高6分
+                'details': f'高相似度匹配: {similarity:.2f}',
+                'match_type': 'high_similarity'
+            })
             return comparison_result
         
         # 不匹配
-        comparison_result['details'] = f'完全不匹配: "{name1}" vs "{name2}"'
+        comparison_result.update({
+            'details': f'完全不匹配: "{name1}" vs "{name2}" (相似度: {similarity:.2f})',
+            'match_type': 'no_match'
+        })
         return comparison_result
 
-    # 原有方法保持不變 (除了少量調整)
+    def _calculate_string_similarity(self, str1: str, str2: str) -> float:
+        """計算字符串相似度 (簡化版編輯距離)"""
+        try:
+            if not str1 or not str2:
+                return 0.0
+            
+            if str1 == str2:
+                return 1.0
+            
+            # 簡化的相似度計算
+            longer = str1 if len(str1) > len(str2) else str2
+            shorter = str2 if len(str1) > len(str2) else str1
+            
+            # 計算共同字符
+            common_chars = sum(1 for char in shorter if char in longer)
+            similarity = common_chars / len(longer)
+            
+            return similarity
+            
+        except Exception:
+            return 0.0
+
+    def _get_debug_info_enhanced(self, content: str, extracted_date: Optional[str], 
+                                search_keywords: List[str]) -> Dict[str, Any]:
+        """🆕 v3.6.1 增強的調試資訊"""
+        return {
+            'content_preview': content[:200] + "..." if len(content) > 200 else content,
+            'extracted_date': extracted_date,
+            'yaml_detected': content.startswith('---'),
+            'content_length': len(content),
+            'search_keywords_count': len(search_keywords),
+            'search_keywords_preview': search_keywords[:5],
+            'watch_list_loaded': self.validation_enabled,
+            'watch_list_size': len(self.watch_list_mapping),
+            'parser_version': self.version,
+            'content_structure': {
+                'has_metadata': content.startswith('---'),
+                'paragraph_count': len(content.split('\n\n')),
+                'line_count': len(content.split('\n')),
+                'chinese_detected': bool(re.search(r'[\u4e00-\u9fff]', content))
+            }
+        }
+
+    def _create_empty_result_enhanced(self, file_path: str, error_msg: str) -> Dict[str, Any]:
+        """🆕 v3.6.1 增強的空結果建立"""
+        file_info = self._extract_file_info(file_path)
+        
+        return {
+            'filename': os.path.basename(file_path),
+            'company_code': file_info.get('company_code'),
+            'company_name': file_info.get('company_name'),
+            'data_source': file_info.get('data_source'),
+            'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)) if os.path.exists(file_path) else None,
+            'content_date': None,
+            'eps_2025_high': None, 'eps_2025_low': None, 'eps_2025_avg': None,
+            'eps_2026_high': None, 'eps_2026_low': None, 'eps_2026_avg': None,
+            'eps_2027_high': None, 'eps_2027_low': None, 'eps_2027_avg': None,
+            'target_price': None,
+            'analyst_count': 0,
+            'has_eps_data': False,
+            'has_target_price': False,
+            'has_analyst_info': False,
+            'data_richness_score': 0.0,
+            'search_keywords': [],  # 重要！
+            'content_quality_metrics': {},
+            'yaml_data': {},
+            'content': '',
+            'content_length': 0,
+            'parsed_at': datetime.now(),
+            'parser_version': self.version,
+            'error': error_msg,
+            'date_extraction_method': 'error',
+            'validation_result': {
+                'overall_status': 'error', 
+                'errors': [error_msg],
+                'validation_method': 'error_state'
+            },
+            'content_validation_passed': False,
+            'validation_warnings': [],
+            'validation_errors': [error_msg],
+            'validation_enabled': self.validation_enabled
+        }
+
+    # 保留原有的私有方法 (略微調整以支援增強功能)
+    def _is_valid_company_code(self, code: str) -> bool:
+        """驗證公司代號格式"""
+        if not code or code in ['nan', 'NaN', 'null', 'None', '', 'NULL']:
+            return False
+        
+        clean_code = code.strip().strip('\'"')
+        
+        if not clean_code.isdigit():
+            return False
+            
+        if len(clean_code) != 4:
+            return False
+        
+        try:
+            code_num = int(clean_code)
+            if not (1000 <= code_num <= 9999):
+                return False
+        except ValueError:
+            return False
+        
+        return True
+
+    def _is_valid_company_name(self, name: str) -> bool:
+        """驗證公司名稱"""
+        if not name or name in ['nan', 'NaN', 'null', 'None', '', 'NULL']:
+            return False
+        
+        clean_name = name.strip()
+        
+        if len(clean_name) < 1 or len(clean_name) > 30:
+            return False
+        
+        invalid_chars = ['|', '\t', '\n', '\r', '\x00']
+        if any(char in clean_name for char in invalid_chars):
+            return False
+        
+        return True
+
+    def _find_similar_codes(self, target_code: str) -> List[str]:
+        """尋找相似的公司代號"""
+        if not self.watch_list_mapping:
+            return []
+        
+        similar_codes = []
+        target_num = None
+        
+        try:
+            target_num = int(target_code)
+        except ValueError:
+            return similar_codes
+        
+        for code in self.watch_list_mapping.keys():
+            try:
+                code_num = int(code)
+                if abs(code_num - target_num) <= 10:
+                    similar_codes.append(code)
+            except ValueError:
+                continue
+        
+        return sorted(similar_codes)
+
+    def _validate_watch_list_content_enhanced(self, mapping: Dict[str, str]):
+        """🆕 v3.6.1 增強的觀察名單內容驗證"""
+        if not mapping:
+            return
+        
+        # 檢查是否有常見的測試公司
+        test_companies = {
+            '2330': '台積電',
+            '2317': '鴻海', 
+            '2454': '聯發科',
+            '2882': '國泰金',
+            '2412': '中華電'
+        }
+        
+        found_test_companies = 0
+        for code, expected_name in test_companies.items():
+            if code in mapping:
+                actual_name = mapping[code]
+                name_match = self._compare_company_names_enhanced(actual_name, expected_name)
+                if name_match['is_match']:
+                    found_test_companies += 1
+                    print(f"✅ 找到測試公司: {code} - {actual_name} (匹配類型: {name_match['match_type']})")
+                else:
+                    print(f"⚠️ 測試公司名稱不符: {code} - 期望:{expected_name}, 實際:{actual_name}")
+        
+        # 統計分析
+        code_ranges = self._analyze_code_ranges(mapping)
+        print(f"📊 觀察名單代號分布: {code_ranges}")
+        
+        if found_test_companies == 0:
+            print("⚠️ 未找到任何已知測試公司，請檢查觀察名單內容")
+        else:
+            print(f"✅ 找到 {found_test_companies}/{len(test_companies)} 個測試公司")
+
+    def _analyze_code_ranges(self, mapping: Dict[str, str]) -> Dict[str, int]:
+        """分析公司代號範圍分布"""
+        ranges = {
+            '1000-1999': 0,
+            '2000-2999': 0, 
+            '3000-3999': 0,
+            '4000-4999': 0,
+            '5000-5999': 0,
+            '6000-6999': 0,
+            '7000-7999': 0,
+            '8000-8999': 0,
+            '9000-9999': 0
+        }
+        
+        for code in mapping.keys():
+            try:
+                code_num = int(code)
+                range_key = f"{(code_num // 1000) * 1000}-{(code_num // 1000) * 1000 + 999}"
+                if range_key in ranges:
+                    ranges[range_key] += 1
+            except ValueError:
+                continue
+        
+        return ranges
+
+    # 保留原有方法 (略作調整以支援新功能)
+    # [原有的所有其他方法保持不變，只是確保與新功能相容]
+    
     def _extract_content_date_bulletproof(self, content: str) -> Optional[str]:
         """絕對防彈的日期提取 - 排除 YAML frontmatter"""
         actual_content = self._get_content_without_yaml(content)
@@ -517,6 +925,7 @@ class MDParser:
             pass
         return content
 
+    # [其他原有方法保持不變...]
     def _validate_date(self, year: str, month: str, day: str) -> bool:
         """驗證日期的合理性"""
         try:
@@ -573,17 +982,6 @@ class MDParser:
         
         return confidence
 
-    def _get_debug_info(self, content: str, extracted_date: Optional[str]) -> Dict[str, Any]:
-        """生成調試資訊"""
-        return {
-            'content_preview': content[:200] + "..." if len(content) > 200 else content,
-            'extracted_date': extracted_date,
-            'yaml_detected': content.startswith('---'),
-            'content_length': len(content),
-            'watch_list_loaded': self.validation_enabled,
-            'watch_list_size': len(self.watch_list_mapping)
-        }
-
     def _extract_file_info(self, file_path: str) -> Dict[str, Any]:
         """從檔案路徑提取基本資訊"""
         filename = os.path.basename(file_path)
@@ -609,18 +1007,6 @@ class MDParser:
                 result['data_source'] = parts[2]
         
         return result
-
-    def _extract_yaml_frontmatter(self, content: str) -> Dict[str, Any]:
-        """提取 YAML front matter"""
-        try:
-            if content.startswith('---'):
-                end_pos = content.find('---', 3)
-                if end_pos != -1:
-                    yaml_content = content[3:end_pos].strip()
-                    return yaml.safe_load(yaml_content) or {}
-        except:
-            pass
-        return {}
 
     def _extract_eps_data(self, content: str) -> Dict[str, List[float]]:
         """提取 EPS 資料"""
@@ -737,50 +1123,17 @@ class MDParser:
         
         return round(min(score, 10), 2)
 
-    def _create_empty_result(self, file_path: str, error_msg: str) -> Dict[str, Any]:
-        """建立空的解析結果"""
-        file_info = self._extract_file_info(file_path)
-        
-        return {
-            'filename': os.path.basename(file_path),
-            'company_code': file_info.get('company_code'),
-            'company_name': file_info.get('company_name'),
-            'data_source': file_info.get('data_source'),
-            'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)) if os.path.exists(file_path) else None,
-            'content_date': None,
-            'eps_2025_high': None, 'eps_2025_low': None, 'eps_2025_avg': None,
-            'eps_2026_high': None, 'eps_2026_low': None, 'eps_2026_avg': None,
-            'eps_2027_high': None, 'eps_2027_low': None, 'eps_2027_avg': None,
-            'target_price': None,
-            'analyst_count': 0,
-            'has_eps_data': False,
-            'has_target_price': False,
-            'has_analyst_info': False,
-            'data_richness_score': 0.0,
-            'yaml_data': {},
-            'content': '',
-            'content_length': 0,
-            'parsed_at': datetime.now(),
-            'error': error_msg,
-            'date_extraction_method': 'error',
-            'validation_result': {'overall_status': 'error', 'errors': [error_msg]},
-            'content_validation_passed': False,
-            'validation_warnings': [],
-            'validation_errors': [error_msg],
-            'validation_enabled': self.validation_enabled
-        }
-
 
 # 測試功能
 if __name__ == "__main__":
     parser = MDParser()
     
-    print("=== MD Parser v3.5.1 測試 (修正觀察名單驗證) ===")
+    print(f"=== MD Parser v{parser.version} 測試 (增強版觀察名單驗證和查詢模式提取) ===")
     print(f"📋 觀察名單載入: {len(parser.watch_list_mapping)} 家公司")
     print(f"🔧 驗證功能: {'啟用' if parser.validation_enabled else '停用'}")
     
     if parser.validation_enabled:
-        # 測試驗證邏輯
+        # 測試增強版驗證邏輯
         test_cases = [
             ('6462', 'ase'),      # 錯誤名稱
             ('6811', 'fubon'),    # 錯誤名稱  
@@ -789,13 +1142,16 @@ if __name__ == "__main__":
             ('2330', '台積電')     # 正常公司 (如果在觀察名單中)
         ]
         
-        print(f"\n🧪 驗證測試:")
+        print(f"\n🧪 增強版驗證測試:")
         for code, name in test_cases:
-            result = parser._validate_against_watch_list_strict(code, name)
+            result = parser._validate_against_watch_list_enhanced(code, name)
             status = result['overall_status']
             errors = len(result.get('errors', []))
             confidence = result.get('confidence_score', 0)
-            print(f"  {code} ({name}): {status} - 信心度:{confidence} - 錯誤:{errors}")
+            method = result.get('validation_method', 'unknown')
+            checks = len(result.get('detailed_checks', []))
+            
+            print(f"  {code} ({name}): {status} - 信心度:{confidence} - 方法:{method} - 檢查:{checks} - 錯誤:{errors}")
             
             if errors > 0:
                 for error in result.get('errors', [])[:1]:  # 只顯示第一個錯誤
@@ -803,5 +1159,26 @@ if __name__ == "__main__":
     else:
         print("⚠️ 觀察名單驗證已停用")
     
-    print(f"\n✅ v3.5.1 修正版觀察名單驗證系統已啟動！")
-    print(f"🔧 主要修正: 嚴格名稱比較、格式驗證、錯誤處理")
+    # 測試查詢模式提取
+    print(f"\n🧪 查詢模式提取測試:")
+    test_content = '''---
+search_query: 台積電 2330 factset eps 預估
+keywords: 半導體, 晶圓代工, 台積電, factset
+original_query: "台積電" factset 分析師 目標價
+---
+
+台積電第三季財報分析...
+'''
+    
+    test_yaml = {
+        'search_query': '神盾 6462 factset 生物辨識',
+        'keywords': '神盾, factset, 指紋辨識'
+    }
+    
+    keywords = parser._extract_search_keywords_enhanced(test_content, test_yaml)
+    print(f"   提取的關鍵字: {keywords}")
+    print(f"   關鍵字數量: {len(keywords)}")
+    
+    print(f"\n✅ v{parser.version} 增強版 MD Parser 已啟動！")
+    print(f"🆕 新功能: 增強觀察名單驗證、查詢模式提取、內容品質評估")
+    print(f"🔧 主要修正: 多層次名稱比較、相似度計算、詳細驗證日誌")
