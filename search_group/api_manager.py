@@ -1,16 +1,16 @@
 """
-api_manager.py - API Management & Rate Limiting (v3.5.0)
+api_manager.py - API Management & Rate Limiting with Key Rotation (v3.5.1)
 
-Version: 3.5.0
-Date: 2025-06-28
-Author: FactSet Pipeline v3.5.0 - Modular Search Group
+Version: 3.5.1
+Date: 2025-07-01
+Author: FactSet Pipeline v3.5.1 - Enhanced with API Key Rotation
 
-v3.5.0 API MANAGEMENT:
-- Google Search API integration
-- Intelligent rate limiting and backoff
-- Error handling and quotas
-- Search result caching
-- Performance monitoring
+v3.5.1 ENHANCEMENTS:
+- Multiple Google Search API key support (up to 7 keys)
+- Automatic key rotation on quota exceeded (429 errors)
+- Enhanced error handling and recovery
+- Key status tracking and monitoring
+- Intelligent fallback and retry logic
 """
 
 import os
@@ -20,7 +20,7 @@ import hashlib
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any, Union, Tuple
 
 try:
     from googleapiclient.discovery import build
@@ -31,18 +31,124 @@ except ImportError:
     # Create a placeholder for type hints
     HttpError = Exception
 
-__version__ = "3.5.0"
+__version__ = "3.5.1"
 
 class QuotaExceededException(Exception):
     """Google API quota exceeded"""
+    pass
+
+class AllKeysExhaustedException(Exception):
+    """All available API keys have been exhausted"""
     pass
 
 class SearchAPIException(Exception):
     """General search API error"""
     pass
 
+class APIKeyManager:
+    """Manages multiple Google API keys and automatic rotation"""
+    
+    def __init__(self, api_keys: List[str], cse_ids: List[str]):
+        self.api_keys = api_keys
+        self.cse_ids = cse_ids
+        self.current_key_index = 0
+        self.exhausted_keys = set()
+        self.key_stats = {}
+        
+        # Initialize stats for each key
+        for i, key in enumerate(api_keys):
+            self.key_stats[i] = {
+                'calls_made': 0,
+                'quota_exceeded_at': None,
+                'last_used': None,
+                'total_errors': 0,
+                'is_exhausted': False
+            }
+        
+        self.logger = logging.getLogger('api_key_manager')
+        self.logger.info(f"API Key Manager initialized with {len(api_keys)} keys")
+        
+        # Validate we have at least one key
+        if not api_keys or not any(key.strip() for key in api_keys):
+            raise ValueError("At least one valid API key is required")
+    
+    def get_current_credentials(self) -> Tuple[str, str]:
+        """Get current API key and CSE ID"""
+        if self.current_key_index >= len(self.api_keys):
+            raise AllKeysExhaustedException("All API keys have been exhausted")
+        
+        api_key = self.api_keys[self.current_key_index]
+        cse_id = self.cse_ids[self.current_key_index] if self.current_key_index < len(self.cse_ids) else self.cse_ids[0]
+        
+        return api_key, cse_id
+    
+    def mark_key_exhausted(self, error_details: str = ""):
+        """Mark current key as exhausted and rotate to next"""
+        self.exhausted_keys.add(self.current_key_index)
+        self.key_stats[self.current_key_index].update({
+            'quota_exceeded_at': datetime.now().isoformat(),
+            'is_exhausted': True,
+            'total_errors': self.key_stats[self.current_key_index]['total_errors'] + 1
+        })
+        
+        old_index = self.current_key_index
+        self.logger.warning(f"Key {old_index + 1} exhausted: {error_details}")
+        
+        # Find next available key
+        available_keys = [i for i in range(len(self.api_keys)) if i not in self.exhausted_keys]
+        
+        if not available_keys:
+            self.logger.error("All API keys have been exhausted!")
+            raise AllKeysExhaustedException(
+                f"All {len(self.api_keys)} API keys have exceeded their quota. "
+                f"Please wait for quota reset or add more keys."
+            )
+        
+        self.current_key_index = available_keys[0]
+        self.logger.info(f"Rotated from key {old_index + 1} to key {self.current_key_index + 1}")
+        self.logger.info(f"Remaining keys: {len(available_keys)}")
+    
+    def record_successful_call(self):
+        """Record a successful API call"""
+        self.key_stats[self.current_key_index].update({
+            'calls_made': self.key_stats[self.current_key_index]['calls_made'] + 1,
+            'last_used': datetime.now().isoformat()
+        })
+    
+    def record_error(self):
+        """Record an API error"""
+        self.key_stats[self.current_key_index]['total_errors'] += 1
+    
+    def get_status_summary(self) -> Dict[str, Any]:
+        """Get comprehensive status of all API keys"""
+        available_keys = len(self.api_keys) - len(self.exhausted_keys)
+        
+        summary = {
+            'total_keys': len(self.api_keys),
+            'available_keys': available_keys,
+            'exhausted_keys': len(self.exhausted_keys),
+            'current_key_index': self.current_key_index + 1,  # Human readable (1-based)
+            'key_details': []
+        }
+        
+        for i, key in enumerate(self.api_keys):
+            stats = self.key_stats[i]
+            key_summary = {
+                'key_number': i + 1,
+                'api_key_preview': f"{key[:10]}...{key[-4:]}" if len(key) > 14 else key,
+                'calls_made': stats['calls_made'],
+                'total_errors': stats['total_errors'],
+                'is_exhausted': stats['is_exhausted'],
+                'is_current': i == self.current_key_index,
+                'quota_exceeded_at': stats['quota_exceeded_at'],
+                'last_used': stats['last_used']
+            }
+            summary['key_details'].append(key_summary)
+        
+        return summary
+
 class RateLimiter:
-    """Intelligent rate limiting for Google Search API"""
+    """Intelligent rate limiting for Google Search API with key rotation support"""
     
     def __init__(self, calls_per_second: float = 1.0, calls_per_day: int = 100):
         self.calls_per_second = calls_per_second
@@ -73,17 +179,7 @@ class RateLimiter:
             self._reset_daily_counter()
             self.logger.info("Daily quota reset")
         
-        # Check daily quota
-        if self.daily_calls >= self.calls_per_day:
-            remaining_time = self.daily_reset_time - now
-            hours = int(remaining_time // 3600)
-            minutes = int((remaining_time % 3600) // 60)
-            raise QuotaExceededException(
-                f"Daily quota of {self.calls_per_day} calls exceeded. "
-                f"Resets in {hours}h {minutes}m"
-            )
-        
-        # Check rate limiting
+        # Check rate limiting (but not daily quota - let key rotation handle that)
         time_since_last = now - self.last_call_time
         min_interval = 1.0 / self.calls_per_second
         
@@ -95,8 +191,8 @@ class RateLimiter:
         self.last_call_time = time.time()
         self.daily_calls += 1
         
-        remaining_quota = self.calls_per_day - self.daily_calls
-        self.logger.debug(f"API call #{self.daily_calls}, {remaining_quota} remaining today")
+        # Log progress but don't enforce daily limit (key rotation handles this)
+        self.logger.debug(f"API call #{self.daily_calls}")
 
 class SearchCache:
     """Simple file-based search result cache"""
@@ -189,7 +285,7 @@ class SearchCache:
             self.logger.warning(f"Cache clear error: {e}")
 
 class APIStats:
-    """Track API usage statistics"""
+    """Track API usage statistics with key rotation support"""
     
     def __init__(self):
         self.stats = {
@@ -198,6 +294,7 @@ class APIStats:
             'cache_misses': 0,
             'errors': 0,
             'quota_exceeded': 0,
+            'key_rotations': 0,
             'start_time': datetime.now().isoformat(),
             'last_call_time': None,
             'successful_calls': 0,
@@ -233,6 +330,11 @@ class APIStats:
             
         self.logger.warning(f"API error recorded: {error}")
     
+    def record_key_rotation(self):
+        """Record key rotation event"""
+        self.stats['key_rotations'] += 1
+        self.logger.info("Key rotation recorded")
+    
     def get_summary(self) -> Dict[str, Any]:
         """Get statistics summary"""
         total_requests = self.stats['total_calls'] + self.stats['cache_hits']
@@ -249,6 +351,7 @@ class APIStats:
             'success_rate': f"{success_rate:.1f}%",
             'errors': self.stats['errors'],
             'quota_exceeded': self.stats['quota_exceeded'],
+            'key_rotations': self.stats['key_rotations'],
             'uptime': self._calculate_uptime()
         }
     
@@ -259,15 +362,22 @@ class APIStats:
         return str(uptime).split('.')[0]  # Remove microseconds
 
 class APIManager:
-    """v3.5.0 Google Search API Management - Simplified & Robust"""
+    """v3.5.1 Google Search API Management with Automatic Key Rotation"""
     
     def __init__(self, config):
+        # Initialize logger FIRST before any operations that might use it
+        self.logger = logging.getLogger('api_manager')
+        
         self.config = config
-        self.api_key = config.get('api.google_api_key')
-        self.cse_id = config.get('api.google_cse_id')
+        
+        # Load multiple API keys and CSE IDs
+        api_keys, cse_ids = self._load_multiple_credentials()
+        
+        # Initialize key manager
+        self.key_manager = APIKeyManager(api_keys, cse_ids)
         
         # Initialize components
-        rate_limit = 1.0 / config.get('search.rate_limit_delay', 1.0)  # Convert delay to calls per second
+        rate_limit = 1.0 / config.get('search.rate_limit_delay', 1.0)
         daily_quota = config.get('search.daily_quota', 100)
         self.rate_limiter = RateLimiter(rate_limit, daily_quota)
         
@@ -277,21 +387,55 @@ class APIManager:
         
         self.stats = APIStats()
         
-        self.logger = logging.getLogger('api_manager')
-        
         # Validate API access
         if not GOOGLE_API_AVAILABLE:
             raise ImportError("Google API client not available. Install with: pip install google-api-python-client")
         
-        if not self.api_key or not self.cse_id:
-            raise ValueError("Google API key and CSE ID required")
+        self.logger.info(f"API Manager v{__version__} initialized with {len(api_keys)} API keys")
+    
+    def _load_multiple_credentials(self) -> Tuple[List[str], List[str]]:
+        """Load multiple API keys and CSE IDs from config"""
+        api_keys = []
+        cse_ids = []
         
-        self.logger.info(f"API Manager v{__version__} initialized")
+        # Load primary credentials
+        primary_key = self.config.get('api.google_api_key')
+        primary_cse = self.config.get('api.google_cse_id')
+        
+        if primary_key and primary_key.strip():
+            api_keys.append(primary_key.strip())
+            if primary_cse and primary_cse.strip():
+                cse_ids.append(primary_cse.strip())
+        
+        # Load additional keys (1-6)
+        for i in range(1, 7):
+            key = self.config.get(f'api.google_api_key{i}')
+            cse = self.config.get(f'api.google_cse_id{i}')
+            
+            if key and key.strip():
+                api_keys.append(key.strip())
+                if cse and cse.strip():
+                    cse_ids.append(cse.strip())
+        
+        # Ensure we have at least one CSE ID (can reuse if needed)
+        if not cse_ids and primary_cse:
+            cse_ids.append(primary_cse.strip())
+        
+        # Validate we have credentials
+        if not api_keys:
+            raise ValueError("No valid Google API keys found. Check your environment variables.")
+        
+        if not cse_ids:
+            raise ValueError("No valid Google CSE IDs found. Check your environment variables.")
+        
+        # Use print instead of logger since logger isn't initialized yet
+        print(f"✅ Loaded {len(api_keys)} API keys and {len(cse_ids)} CSE IDs for rotation")
+        return api_keys, cse_ids
     
     def validate_api_access(self) -> bool:
         """Validate API credentials"""
         try:
-            self.logger.info("Validating API access...")
+            self.logger.info("Validating API access with key rotation support...")
             
             # Test with a simple query
             test_result = self.search("test factset", num_results=1)
@@ -310,9 +454,12 @@ class APIManager:
     def get_api_status(self) -> str:
         """Get current API status"""
         summary = self.stats.get_summary()
+        key_status = self.key_manager.get_status_summary()
         
-        if summary['quota_exceeded'] > 0:
-            return "quota_exceeded"
+        if key_status['available_keys'] == 0:
+            return "all_keys_exhausted"
+        elif summary['quota_exceeded'] > 0:
+            return "quota_managed"  # We have key rotation to handle this
         elif summary['errors'] > summary['api_calls'] * 0.5 and summary['api_calls'] > 0:
             return "error_prone"
         elif summary['api_calls'] > 0:
@@ -321,14 +468,14 @@ class APIManager:
             return "ready"
     
     def search(self, query: str, num_results: int = 10) -> Optional[Dict[str, Any]]:
-        """Execute Google Custom Search with full protection"""
+        """Execute Google Custom Search with automatic key rotation"""
         
         # Check cache first (if enabled)
         if self.cache:
             cached_result = self.cache.get(query)
             if cached_result:
                 self.stats.record_cache_hit()
-                return cached_result.get('data', cached_result)  # Handle both old and new cache format
+                return cached_result.get('data', cached_result)
         
         # Optimize query for better results
         optimized_query = self._optimize_query(query)
@@ -341,65 +488,108 @@ class APIManager:
             self.stats.record_error(e)
             raise
         
-        try:
-            # Execute actual API call
-            service = build('customsearch', 'v1', developerKey=self.api_key)
-            
-            search_params = {
-                'q': optimized_query,
-                'cx': self.cse_id,
-                'num': min(num_results, 10),  # Google API max is 10
-                'dateRestrict': self.config.get('search.date_restrict', 'y1'),
-                'lr': self.config.get('search.language', 'lang_zh-TW|lang_en'),
-                'safe': self.config.get('search.safe_search', 'off'),
-                'fields': 'items(title,snippet,link,displayLink),searchInformation(totalResults,searchTime)'
-            }
-            
-            self.logger.debug(f"Executing search with params: {search_params}")
-            
-            result = service.cse().list(**search_params).execute()
-            
-            # Process results
-            processed_result = self._process_search_result(result, query)
-            
-            # Cache result (if enabled)
-            if self.cache:
-                self.cache.set(query, processed_result)
-            
-            # Record stats
-            items_count = len(processed_result.get('items', []))
-            self.stats.record_api_call(items_count)
-            
-            self.logger.info(f"Search completed: {items_count} results for '{query[:50]}...'")
-            
-            return processed_result
-            
-        except Exception as e:
-            self.stats.record_error(e)
-            
-            # Check if it's an HttpError (only if Google API is available)
-            if GOOGLE_API_AVAILABLE and hasattr(e, 'resp'):
-                if e.resp.status == 429 or 'quotaExceeded' in str(e):
-                    raise QuotaExceededException(f"Google API quota exceeded: {e}")
-                elif 'rateLimitExceeded' in str(e):
-                    self.logger.warning(f"Rate limit exceeded: {e}")
-                    self._handle_rate_limit_exceeded(e)
-                    # Retry once after backoff
-                    return self.search(query, num_results)
+        # Retry logic with automatic key rotation
+        max_retries = min(3, self.key_manager.get_status_summary()['available_keys'])
+        
+        for attempt in range(max_retries):
+            try:
+                # Get current credentials
+                api_key, cse_id = self.key_manager.get_current_credentials()
+                
+                # Execute API call
+                service = build('customsearch', 'v1', developerKey=api_key)
+                
+                search_params = {
+                    'q': optimized_query,
+                    'cx': cse_id,
+                    'num': min(num_results, 10),
+                    'dateRestrict': self.config.get('search.date_restrict', 'y1'),
+                    'lr': self.config.get('search.language', 'lang_zh-TW|lang_en'),
+                    'safe': self.config.get('search.safe_search', 'off'),
+                    'fields': 'items(title,snippet,link,displayLink),searchInformation(totalResults,searchTime)'
+                }
+                
+                self.logger.debug(f"Executing search with key {self.key_manager.current_key_index + 1}: {search_params}")
+                
+                result = service.cse().list(**search_params).execute()
+                
+                # Process results
+                processed_result = self._process_search_result(result, query)
+                
+                # Record successful call
+                self.key_manager.record_successful_call()
+                
+                # Cache result (if enabled)
+                if self.cache:
+                    self.cache.set(query, processed_result)
+                
+                # Record stats
+                items_count = len(processed_result.get('items', []))
+                self.stats.record_api_call(items_count)
+                
+                current_key = self.key_manager.current_key_index + 1
+                self.logger.info(f"Search completed with key {current_key}: {items_count} results for '{query[:50]}...'")
+                
+                return processed_result
+                
+            except Exception as e:
+                self.stats.record_error(e)
+                self.key_manager.record_error()
+                
+                # Check if it's a quota exceeded error (429)
+                if GOOGLE_API_AVAILABLE and hasattr(e, 'resp'):
+                    if (e.resp.status == 429 or 
+                        'quotaExceeded' in str(e) or 
+                        'Quota exceeded' in str(e)):
+                        
+                        self.logger.warning(f"Quota exceeded on key {self.key_manager.current_key_index + 1}, attempting rotation...")
+                        
+                        try:
+                            # Mark current key as exhausted and rotate
+                            self.key_manager.mark_key_exhausted(str(e))
+                            self.stats.record_key_rotation()
+                            
+                            # Continue to next attempt with new key
+                            self.logger.info(f"Retrying with key {self.key_manager.current_key_index + 1} (attempt {attempt + 1}/{max_retries})")
+                            continue
+                            
+                        except AllKeysExhaustedException as all_keys_error:
+                            self.logger.error("All API keys exhausted!")
+                            raise QuotaExceededException(str(all_keys_error))
+                    
+                    elif 'rateLimitExceeded' in str(e):
+                        self.logger.warning(f"Rate limit exceeded: {e}")
+                        self._handle_rate_limit_exceeded(e)
+                        # Retry with same key after backoff
+                        continue
+                    else:
+                        # Other API error
+                        if attempt == max_retries - 1:  # Last attempt
+                            raise SearchAPIException(f"Search API error: {e}")
+                        else:
+                            self.logger.warning(f"API error on attempt {attempt + 1}: {e}")
+                            continue
                 else:
-                    raise SearchAPIException(f"Search API error: {e}")
-            else:
-                # Handle as general exception if not HttpError
-                if 'quota' in str(e).lower() or 'rate' in str(e).lower():
-                    raise QuotaExceededException(f"API limit exceeded: {e}")
-                else:
-                    raise SearchAPIException(f"Unexpected search error: {e}")
+                    # Handle as general exception
+                    if 'quota' in str(e).lower() or 'rate' in str(e).lower():
+                        if attempt == max_retries - 1:
+                            raise QuotaExceededException(f"API limit exceeded: {e}")
+                        else:
+                            continue
+                    else:
+                        if attempt == max_retries - 1:
+                            raise SearchAPIException(f"Unexpected search error: {e}")
+                        else:
+                            continue
+        
+        # If we get here, all retries failed
+        raise SearchAPIException(f"Search failed after {max_retries} attempts")
     
     def batch_search(self, queries: List[str]) -> List[Dict[str, Any]]:
-        """Execute multiple searches with rate limiting"""
+        """Execute multiple searches with key rotation support"""
         results = []
         
-        self.logger.info(f"Starting batch search for {len(queries)} queries")
+        self.logger.info(f"Starting batch search for {len(queries)} queries with key rotation")
         
         for i, query in enumerate(queries, 1):
             try:
@@ -407,8 +597,11 @@ class APIManager:
                 result = self.search(query)
                 results.append(result)
                 
+            except AllKeysExhaustedException:
+                self.logger.error(f"All keys exhausted at query {i}/{len(queries)}")
+                break
             except QuotaExceededException:
-                self.logger.warning(f"Quota exceeded at query {i}/{len(queries)}")
+                self.logger.warning(f"Quota management failed at query {i}/{len(queries)}")
                 break
             except Exception as e:
                 self.logger.warning(f"Query {i} failed: {e}")
@@ -418,6 +611,10 @@ class APIManager:
         self.logger.info(f"Batch search completed: {successful}/{len(queries)} successful")
         
         return results
+    
+    def get_key_status(self) -> Dict[str, Any]:
+        """Get comprehensive key status"""
+        return self.key_manager.get_status_summary()
     
     def _optimize_query(self, query: str) -> str:
         """Optimize query for better FactSet results"""
@@ -447,7 +644,8 @@ class APIManager:
                 'original_query': original_query,
                 'total_results': raw_result.get('searchInformation', {}).get('totalResults', '0'),
                 'search_time': raw_result.get('searchInformation', {}).get('searchTime', 0),
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now().isoformat(),
+                'api_key_used': self.key_manager.current_key_index + 1
             },
             'items': []
         }
@@ -470,10 +668,11 @@ class APIManager:
         # Sort by relevance score (highest first)
         processed['items'].sort(key=lambda x: x['relevance_score'], reverse=True)
         
-        # Log top results for debugging
+        # Log top result for debugging
         if processed['items']:
             top_result = processed['items'][0]
-            self.logger.debug(f"Top result: score={top_result['relevance_score']}, "
+            current_key = self.key_manager.current_key_index + 1
+            self.logger.debug(f"Top result (key {current_key}): score={top_result['relevance_score']}, "
                             f"domain={top_result['domain']}, title={top_result['title'][:50]}...")
         
         return processed
