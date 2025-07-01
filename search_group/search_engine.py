@@ -1,15 +1,16 @@
 """
-search_engine.py - Core Search Logic (v3.5.0) - FIXED FOR COMPREHENSIVE PATTERN EXECUTION
+search_engine.py - Core Search Logic (v3.5.0) - COMPLETE WITH CONTENT VALIDATION FIX
 
-Version: 3.5.0-comprehensive
-Date: 2025-06-29
+Version: 3.5.0-validation-fixed-complete
+Date: 2025-07-01
 Author: FactSet Pipeline v3.5.0 - Modular Search Group
 
-FIXES FOR COMPREHENSIVE SEARCH:
-- Removed early stopping logic to ensure ALL patterns execute
-- Lowered relevance thresholds to capture more results for quality scoring
-- Added debug logging to show pattern execution
-- KEPT ORIGINAL QUALITY SCORING LOGIC UNCHANGED
+COMPLETE CONTENT VALIDATION FIX:
+- Fixed validation patterns to properly detect wrong companies like 聯亞(3081)
+- Enhanced regex patterns for comprehensive company detection
+- Proper quality score override (0) for invalid content
+- Detailed logging and validation metadata
+- All original quality scoring logic preserved
 """
 
 import re
@@ -21,7 +22,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
 from bs4 import BeautifulSoup
 
-__version__ = "3.5.0-comprehensive"
+__version__ = "3.5.0-validation-fixed-complete"
 
 # REFINED search patterns based on successful content discovery
 REFINED_SEARCH_PATTERNS = {
@@ -160,11 +161,209 @@ ANALYST_COUNT_PATTERNS = [
     r'(\d+).*?家券商'
 ]
 
-class RefinedQualityScorer:
-    """ORIGINAL quality assessment - UNCHANGED"""
+class CompanyContentValidator:
+    """Validates that search result content actually matches the target company - FIXED VERSION"""
     
-    def calculate_score(self, financial_data: Dict[str, Any]) -> int:
-        """Calculate quality score 0-10 with refined logic based on successful examples - ORIGINAL LOGIC"""
+    def __init__(self):
+        self.logger = logging.getLogger('content_validator')
+    
+    def validate_content_matches_company(self, target_symbol: str, target_name: str, financial_data: Dict[str, Any]) -> Tuple[bool, str]:
+        """
+        Validate that the content actually matches the target company - COMPREHENSIVE FIX
+        
+        Returns:
+            Tuple[bool, str]: (is_valid, reason)
+        """
+        try:
+            # Get all content sources
+            sources = financial_data.get('sources', [])
+            if not sources:
+                return False, "No sources to validate"
+            
+            all_content = ""
+            
+            for source in sources:
+                title = source.get('title', '')
+                snippet = source.get('snippet', '')
+                content = f"{title} {snippet}"
+                all_content += content + " "
+            
+            # STEP 1: Check for wrong companies in content (MOST IMPORTANT)
+            wrong_companies = self._find_wrong_companies_in_content(target_symbol, target_name, all_content)
+            
+            # Debug logging
+            self.logger.debug(f"Content validation for {target_symbol}:")
+            self.logger.debug(f"  Content preview: {all_content[:200]}...")
+            self.logger.debug(f"  Wrong companies found: {wrong_companies}")
+            
+            # If we find ANY wrong company mentions, validation fails immediately
+            if wrong_companies:
+                reason = f"Content mentions wrong companies: {', '.join(wrong_companies)}"
+                self.logger.warning(f"❌ Content validation failed for {target_symbol}: {reason}")
+                return False, reason
+            
+            # STEP 2: Check if content mentions the target company at all
+            target_mentions = self._find_target_company_mentions(target_symbol, target_name, all_content)
+            
+            # Debug logging
+            self.logger.debug(f"  Target mentions found: {target_mentions}")
+            
+            # If content doesn't mention target company, validation fails
+            if not target_mentions:
+                reason = f"Content does not mention target company {target_symbol} {target_name}"
+                self.logger.warning(f"❌ Content validation failed for {target_symbol}: {reason}")
+                return False, reason
+            
+            # STEP 3: Both checks passed - validation successful
+            self.logger.info(f"✅ Content validation passed for {target_symbol}: mentions target company, no wrong companies")
+            return True, f"Valid content about {target_symbol}"
+            
+        except Exception as e:
+            self.logger.error(f"Content validation error for {target_symbol}: {e}")
+            return False, f"Validation error: {e}"
+    
+    def _find_wrong_companies_in_content(self, target_symbol: str, target_name: str, content: str) -> List[str]:
+        """Find mentions of wrong companies in content - COMPREHENSIVE FIXED VERSION"""
+        wrong_companies = []
+        
+        # Pattern 1: Find company names with stock codes: 公司名稱(NNNN-TW)
+        # This catches: 聯亞(3081-TW), 樺漢(6414-TW), etc.
+        pattern_with_tw = r'([^(]*?)\((\d{4})-TW\)'
+        matches_tw = re.findall(pattern_with_tw, content)
+        
+        self.logger.debug(f"  Pattern 1 (Company(NNNN-TW)): {matches_tw}")
+        
+        for company_name, stock_code in matches_tw:
+            company_name = company_name.strip()
+            if stock_code != target_symbol:
+                wrong_companies.append(f"{company_name}({stock_code})")
+        
+        # Pattern 2: Find company names with stock codes: 公司名稱(NNNN) - without -TW
+        # This catches: 聯亞(3081), 樺漢(6414), etc.
+        pattern_without_tw = r'([^(]*?)\((\d{4})\)'
+        matches_without_tw = re.findall(pattern_without_tw, content)
+        
+        self.logger.debug(f"  Pattern 2 (Company(NNNN)): {matches_without_tw}")
+        
+        for company_name, stock_code in matches_without_tw:
+            company_name = company_name.strip()
+            # Only add if it's a 4-digit code and not the target, and not already found with -TW
+            if (stock_code != target_symbol and 
+                len(stock_code) == 4 and 
+                not any(stock_code in wc for wc in wrong_companies)):
+                wrong_companies.append(f"{company_name}({stock_code})")
+        
+        # Pattern 3: Find standalone stock codes: NNNN-TW
+        # This catches standalone: 3081-TW, 6414-TW, etc.
+        standalone_pattern_tw = r'(\d{4})-TW'
+        standalone_matches_tw = re.findall(standalone_pattern_tw, content)
+        
+        self.logger.debug(f"  Pattern 3 (NNNN-TW standalone): {standalone_matches_tw}")
+        
+        for stock_code in standalone_matches_tw:
+            if stock_code != target_symbol:
+                # Check if already captured in company(code) format
+                already_found = any(stock_code in wc for wc in wrong_companies)
+                if not already_found:
+                    wrong_companies.append(f"Unknown({stock_code})")
+        
+        # Pattern 4: Be careful with standalone 4-digit numbers to avoid false positives
+        # Only flag as potential stock codes if in financial context
+        standalone_digits = r'\b(\d{4})\b'
+        digit_matches = re.findall(standalone_digits, content)
+        
+        for digits in digit_matches:
+            # Only consider as stock code if:
+            # 1. Not the target symbol
+            # 2. Not already found in other patterns  
+            # 3. Not obviously a year (2020-2030 range)
+            # 4. Appears in financial context
+            if (digits != target_symbol and 
+                not any(digits in wc for wc in wrong_companies) and
+                not (2020 <= int(digits) <= 2030)):
+                
+                # Check if it appears in a financial context
+                digit_pos = content.find(digits)
+                context = content[max(0, digit_pos-30):digit_pos+30] if digit_pos >= 0 else ""
+                
+                # Only flag if it has financial context indicators
+                if any(term in context for term in ['股', '公司', '營收', '股價', '投資', '股票', '上市', '台股', 'TW']):
+                    # Additional check: avoid common non-stock numbers
+                    if not re.search(r'\d+\.\d+|元|億|萬|%|月|年|日|時|分', context):
+                        wrong_companies.append(f"PossibleStock({digits})")
+        
+        self.logger.debug(f"  Final wrong companies detected: {wrong_companies}")
+        return wrong_companies
+    
+    def _find_target_company_mentions(self, target_symbol: str, target_name: str, content: str) -> List[str]:
+        """Find mentions of the target company in content - ENHANCED VERSION"""
+        mentions = []
+        
+        # Look for target symbol in various formats
+        if target_symbol in content:
+            mentions.append(f"symbol_{target_symbol}")
+        
+        # Look for target name
+        if target_name in content:
+            mentions.append(f"name_{target_name}")
+        
+        # Look for target symbol with -TW format
+        if f"{target_symbol}-TW" in content:
+            mentions.append(f"formatted_{target_symbol}-TW")
+        
+        # Look for target company in (NNNN) format
+        if f"({target_symbol})" in content:
+            mentions.append(f"parenthesis_{target_symbol}")
+        
+        # Look for target company in (NNNN-TW) format  
+        if f"({target_symbol}-TW)" in content:
+            mentions.append(f"parenthesis_{target_symbol}-TW")
+        
+        # Look for company name with target symbol: 公司名稱(NNNN)
+        target_with_name_pattern = rf'{re.escape(target_name)}\s*\(\s*{target_symbol}\s*\)'
+        if re.search(target_with_name_pattern, content):
+            mentions.append(f"name_with_symbol_{target_name}({target_symbol})")
+        
+        # Look for company name with target symbol -TW: 公司名稱(NNNN-TW)
+        target_with_name_tw_pattern = rf'{re.escape(target_name)}\s*\(\s*{target_symbol}-TW\s*\)'
+        if re.search(target_with_name_tw_pattern, content):
+            mentions.append(f"name_with_symbol_tw_{target_name}({target_symbol}-TW)")
+        
+        return mentions
+
+class RefinedQualityScorer:
+    """ORIGINAL quality assessment with added company content validation - COMPLETE"""
+    
+    def __init__(self):
+        self.validator = CompanyContentValidator()
+        self.logger = logging.getLogger('quality_scorer')
+    
+    def calculate_score(self, financial_data: Dict[str, Any], target_symbol: str = None, target_name: str = None) -> int:
+        """Calculate quality score 0-10 with company content validation - FIXED"""
+        
+        # FIRST: Validate that content actually matches the target company
+        if target_symbol and target_name:
+            is_valid, validation_reason = self.validator.validate_content_matches_company(
+                target_symbol, target_name, financial_data
+            )
+            
+            if not is_valid:
+                self.logger.warning(f"❌ Content validation failed for {target_symbol}: {validation_reason}")
+                # Set validation info in financial_data for debugging
+                financial_data['content_validation'] = {
+                    'is_valid': False,
+                    'reason': validation_reason,
+                    'score_override': 0
+                }
+                return 0  # Invalid content = score 0
+            else:
+                self.logger.info(f"✅ Content validation passed for {target_symbol}: {validation_reason}")
+                financial_data['content_validation'] = {
+                    'is_valid': True,
+                    'reason': validation_reason
+                }
+        
+        # SECOND: Apply ORIGINAL quality scoring logic (completely unchanged)
         score = 0.0
         
         # 1. FactSet mention = automatic high score (35% weight)
@@ -266,7 +465,16 @@ class RefinedQualityScorer:
         
         score += bonus
         
-        return min(10, max(0, int(score)))
+        final_score = min(10, max(0, int(score)))
+        
+        # Log validation and scoring results
+        validation_info = financial_data.get('content_validation', {})
+        if validation_info.get('is_valid', True):
+            self.logger.info(f"✅ Quality score for {target_symbol}: {final_score}/10 (content validated)")
+        else:
+            self.logger.warning(f"❌ Quality score for {target_symbol}: {final_score}/10 (content validation failed)")
+        
+        return final_score
     
     def get_quality_indicator(self, score: int) -> str:
         """Get quality indicator for score"""
@@ -282,7 +490,7 @@ class RefinedQualityScorer:
             return '⚫ 極差'
 
 class SearchEngine:
-    """v3.5.0 Core Search Logic - FIXED for Comprehensive Pattern Execution"""
+    """v3.5.0 Core Search Logic - COMPLETE WITH CONTENT VALIDATION FIX"""
     
     def __init__(self, api_manager):
         self.api_manager = api_manager
@@ -314,8 +522,8 @@ class SearchEngine:
             # Extract financial data from results
             financial_data = self._extract_financial_data_from_results(all_results)
             
-            # Assess quality with ORIGINAL scorer
-            quality_score = self.quality_scorer.calculate_score(financial_data)
+            # Assess quality with ORIGINAL scorer + validation
+            quality_score = self.quality_scorer.calculate_score(financial_data, symbol, name)
             financial_data['quality_score'] = quality_score
             
             quality_indicator = self.quality_scorer.get_quality_indicator(quality_score)
@@ -328,7 +536,7 @@ class SearchEngine:
             return None
     
     def search_company_multiple(self, symbol: str, name: str, result_count: str = '1') -> List[Dict[str, Any]]:
-        """Search single company and return multiple results - COMPREHENSIVE EXECUTION"""
+        """Search single company and return multiple results - WITH VALIDATION"""
         try:
             self.logger.info(f"Starting comprehensive search for {symbol} {name} (requesting {result_count} results)")
             
@@ -355,17 +563,22 @@ class SearchEngine:
             # Take top results up to max_results
             selected_results = all_results[:max_results]
             
-            # Process each result separately
+            # Process each result separately WITH VALIDATION
             processed_results = []
             for i, result in enumerate(selected_results):
                 # Create individual result data
                 result_data = self._extract_financial_data_from_single_result(result)
                 
-                # Assess quality with ORIGINAL scorer
-                quality_score = self.quality_scorer.calculate_score(result_data)
+                # Assess quality with ORIGINAL scorer + VALIDATION
+                quality_score = self.quality_scorer.calculate_score(result_data, symbol, name)
                 result_data['quality_score'] = quality_score
                 result_data['result_index'] = i + 1
                 result_data['total_requested'] = max_results
+                
+                # Log validation results
+                validation_info = result_data.get('content_validation', {})
+                if not validation_info.get('is_valid', True):
+                    self.logger.warning(f"Result {i+1} for {symbol}: INVALID CONTENT - {validation_info.get('reason', 'unknown')}")
                 
                 processed_results.append(result_data)
             
@@ -397,6 +610,7 @@ class SearchEngine:
                 })
         
         print(f"🎯 Total queries to execute: {len(queries)}")
+        print(f"🛡️  Content validation: ENABLED - will verify results match {symbol}")
         self.last_patterns_executed = len(queries)
         return queries
     
@@ -482,6 +696,7 @@ class SearchEngine:
         print(f"   📊 {len(queries)} patterns executed")
         print(f"   📡 {api_calls_made} API calls made")
         print(f"   📄 {len(final_results)} unique results found")
+        print(f"   🛡️  Content validation will check each result")
         
         self.logger.info(f"Comprehensive search completed with {len(final_results)} unique results from {len(queries)} patterns")
         return final_results
@@ -808,7 +1023,7 @@ class SearchEngine:
         return None
     
     def generate_md_content(self, symbol: str, name: str, financial_data: Dict[str, Any], metadata: Dict[str, Any], result_index: int = 1) -> str:
-        """Generate MD file content in v3.3.x format (YAML + raw content)"""
+        """Generate MD file content in v3.5.0 format (YAML + raw content) with validation info"""
         
         # Get the source for content
         sources = financial_data.get('sources', [])
@@ -829,12 +1044,13 @@ class SearchEngine:
         # Calculate quality score
         quality_score = financial_data.get('quality_score', 0)
         
-        # Generate search query for metadata
-        search_query = f"{name} {symbol} factset EPS 預估"
-        if result_index > 1:
-            search_query += f" result_{result_index}"
+        # Get validation info
+        validation_info = financial_data.get('content_validation', {})
         
-        # Create YAML header
+        # Generate search query for metadata (actual pattern used, NO result suffix)
+        search_query = f"{name} {symbol} factset EPS 預估"
+        
+        # Create YAML header with validation info
         yaml_header = f"""---
 url: {url}
 title: {title}
@@ -844,11 +1060,21 @@ stock_code: {symbol}
 extracted_date: {datetime.now().isoformat()}
 search_query: {search_query}
 result_index: {result_index}
-version: v3.5.0-comprehensive
+content_validation: {json.dumps(validation_info, ensure_ascii=False)}
+version: v3.5.0-validation-fixed-complete
 ---"""
         
-        # Combine YAML header with content
-        md_content = yaml_header + "\n\n" + full_content
+        # Add validation warning if content is invalid
+        validation_warning = ""
+        if not validation_info.get('is_valid', True):
+            validation_warning = f"""
+⚠️ **CONTENT VALIDATION WARNING**: {validation_info.get('reason', 'Unknown validation issue')}
+This content may be about a different company than {symbol} {name}.
+
+"""
+        
+        # Combine YAML header with validation warning and content
+        md_content = yaml_header + "\n\n" + validation_warning + full_content
         
         return md_content
     
@@ -892,8 +1118,9 @@ version: v3.5.0-comprehensive
         """Generate MD file when no content is available"""
         quality_score = financial_data.get('quality_score', 0)
         search_query = f"{name} {symbol} factset EPS 預估"
-        if result_index > 1:
-            search_query += f" result_{result_index}"
+        
+        # Get validation info
+        validation_info = financial_data.get('content_validation', {})
         
         yaml_header = f"""---
 url: 
@@ -904,19 +1131,31 @@ stock_code: {symbol}
 extracted_date: {datetime.now().isoformat()}
 search_query: {search_query}
 result_index: {result_index}
-version: v3.5.0-comprehensive
+content_validation: {json.dumps(validation_info, ensure_ascii=False)}
+version: v3.5.0-validation-fixed-complete
 ---"""
+        
+        # Add validation warning if content is invalid
+        validation_warning = ""
+        if not validation_info.get('is_valid', True):
+            validation_warning = f"""
+⚠️ **CONTENT VALIDATION WARNING**: {validation_info.get('reason', 'Unknown validation issue')}
+This content may be about a different company than {symbol} {name}.
+
+"""
         
         content = f"""# {symbol} {name} - Financial Data (Result {result_index})
 
-Financial data extracted from comprehensive search results.
+{validation_warning}
+Financial data extracted from comprehensive search results with content validation.
 
 ## Search Information
 - **Search Query**: {search_query}
-- **Quality Score**: {quality_score}/10 (ORIGINAL scoring logic)
+- **Quality Score**: {quality_score}/10 (ORIGINAL scoring + validation)
 - **Total Sources**: {financial_data.get('total_sources', 0)}
 - **Result Index**: {result_index}
 - **Source Quality**: {financial_data.get('source_quality', 'unknown')}
+- **Content Validation**: {validation_info}
 
 ## Extracted Financial Data
 ```json
@@ -926,6 +1165,6 @@ Financial data extracted from comprehensive search results.
         
         return yaml_header + "\n\n" + content
     
-    def assess_data_quality(self, financial_data: Dict[str, Any]) -> int:
-        """Assess data quality on 0-10 scale using ORIGINAL logic"""
-        return self.quality_scorer.calculate_score(financial_data)
+    def assess_data_quality(self, financial_data: Dict[str, Any], symbol: str = None, name: str = None) -> int:
+        """Assess data quality on 0-10 scale using ORIGINAL logic + validation"""
+        return self.quality_scorer.calculate_score(financial_data, symbol, name)

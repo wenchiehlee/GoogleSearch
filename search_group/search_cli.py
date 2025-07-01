@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 """
-search_cli.py - Search Group CLI Interface (v3.5.0) - COMPREHENSIVE SEARCH FIXED
+search_cli.py - Search Group CLI Interface (v3.5.0) - COMPLETE WITH CONTENT VALIDATION
 
-Version: 3.5.0-comprehensive-fixed
-Date: 2025-06-29
+Version: 3.5.0-validation-fixed-complete
+Date: 2025-07-01
 Author: FactSet Pipeline v3.5.0 - Modular Search Group
 
-COMPREHENSIVE SEARCH FIXES:
-- Filenames based purely on content hash (no result index)
-- Same content = same filename regardless of search order
-- Clean format: 2330_台積電_factset_7796efd2.md
-- True content-based deduplication
-- Fixed early stopping and relevance thresholds for comprehensive search
-- Debug logging to see all pattern execution
-- ORIGINAL quality scoring logic preserved
+COMPLETE CONTENT VALIDATION SUPPORT:
+- Enhanced logging and reporting for validation results
+- Quality score = 0 for invalid content (wrong company)
+- Pure content hash filenames with validation metadata
+- Improved status reporting with validation statistics
+- Support for comprehensive search with validation
 """
 
 import os
@@ -52,8 +50,8 @@ except ImportError:
         print("⚠️  No .env file found")
 
 # Version Information
-__version__ = "3.5.0-comprehensive-fixed"
-__date__ = "2025-06-29"
+__version__ = "3.5.0-validation-fixed-complete"
+__date__ = "2025-07-01"
 
 # Import search group components
 try:
@@ -65,16 +63,16 @@ except ImportError as e:
     sys.exit(1)
 
 class SearchConfig:
-    """Configuration management for search group"""
+    """Configuration management for search group with validation"""
     
     def __init__(self):
         self.config = self._load_config()
         self._validate_config()
     
     def _load_config(self) -> Dict[str, Any]:
-        """Load search configuration with comprehensive search settings"""
+        """Load search configuration with comprehensive validation features"""
         return {
-            "version": "3.5.0-comprehensive-fixed",
+            "version": "3.5.0-validation-fixed-complete",
             "search": {
                 "rate_limit_delay": float(os.getenv("SEARCH_RATE_LIMIT_PER_SECOND", "1.0")),
                 "daily_quota": int(os.getenv("SEARCH_DAILY_QUOTA", "100")),
@@ -85,7 +83,8 @@ class SearchConfig:
                 "backoff_multiplier": 2.0,
                 "max_backoff_seconds": 300,
                 "enable_debug_logging": True,  # Enable debug logging
-                "comprehensive_search": True   # Disable early stopping
+                "comprehensive_search": True,   # Disable early stopping
+                "content_validation": True     # Enable content validation
             },
             "api": {
                 "google_api_key": os.getenv("GOOGLE_SEARCH_API_KEY"),
@@ -95,7 +94,14 @@ class SearchConfig:
                 "min_relevance_score": 2,  # Lowered from 3 for better capture
                 "require_factset_content": False,
                 "min_content_length": 100,
-                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "3"))  # Lowered from 4 for smaller companies
+                "min_quality_threshold": int(os.getenv("MIN_QUALITY_THRESHOLD", "3"))  # Invalid content = 0 regardless
+            },
+            "validation": {
+                "enabled": True,
+                "strict_company_matching": True,
+                "allow_cross_company_content": False,
+                "log_validation_details": True,
+                "enhanced_patterns": True
             },
             "caching": {
                 "enabled": True,
@@ -124,6 +130,8 @@ class SearchConfig:
         
         print(f"🔑 API Key: {'✅ Found' if api_key else '❌ Missing'}")
         print(f"🔍 CSE ID: {'✅ Found' if cse_id else '❌ Missing'}")
+        print(f"🛡️  Content Validation: {'✅ Enabled' if self.config['validation']['enabled'] else '❌ Disabled'}")
+        print(f"🚀 Comprehensive Search: {'✅ Enabled' if self.config['search']['comprehensive_search'] else '❌ Disabled'}")
         
         if not api_key:
             errors.append("GOOGLE_SEARCH_API_KEY not found in environment")
@@ -152,7 +160,7 @@ class SearchConfig:
         return value
 
 class SearchCLI:
-    """v3.5.0 Search Group CLI - Pure Content Hash Filenames with Comprehensive Search"""
+    """v3.5.0 Search Group CLI - Pure Content Hash Filenames with Complete Content Validation"""
     
     def __init__(self):
         self.config = SearchConfig()
@@ -163,7 +171,7 @@ class SearchCLI:
         # Ensure directories exist
         self._ensure_directories()
         
-        self.logger.info(f"Search CLI v{__version__} initialized with comprehensive search and pure content hash filenames")
+        self.logger.info(f"Search CLI v{__version__} initialized with complete content validation and pure content hash filenames")
     
     def _setup_logger(self) -> logging.Logger:
         """Setup enhanced logging with debug support"""
@@ -255,7 +263,7 @@ class SearchCLI:
         return content_hash
     
     def _save_md_file_indexed(self, symbol: str, name: str, content: str, metadata: Dict, index: int) -> str:
-        """Save search results with pure content-based filename"""
+        """Save search results with pure content-based filename and validation awareness"""
         
         # Generate pure content fingerprint (no result index)
         content_hash = self._generate_content_fingerprint(symbol, name, metadata)
@@ -264,11 +272,22 @@ class SearchCLI:
         filename = f"{symbol}_{name}_factset_{content_hash}.md"
         file_path = Path(self.config.get("files.output_dir")) / filename
         
-        # Always overwrite if exists - same content hash = same file
+        # Check validation status from metadata
+        validation_info = metadata.get('content_validation', {})
+        is_valid_content = validation_info.get('is_valid', True)
+        quality_score = metadata.get('quality_score', 0)
+        
+        # Enhanced logging based on validation status and quality
         if file_path.exists():
-            self.logger.info(f"📝 Updating content: {filename}")
+            if is_valid_content:
+                self.logger.info(f"📝 Updating VALID content: {filename} (Q:{quality_score}/10)")
+            else:
+                self.logger.warning(f"⚠️  Updating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
         else:
-            self.logger.info(f"💾 Creating new content: {filename}")
+            if is_valid_content:
+                self.logger.info(f"💾 Creating VALID content: {filename} (Q:{quality_score}/10)")
+            else:
+                self.logger.warning(f"⚠️  Creating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
         
         # Write the file (always overwrite for same content)
         try:
@@ -280,7 +299,7 @@ class SearchCLI:
             return ""
     
     def _update_progress_multiple(self, symbol: str, filenames: List[str], results_data: List[Dict]):
-        """Update search progress - adapted for pure content filenames"""
+        """Update search progress - adapted for pure content filenames with comprehensive validation"""
         progress_file = Path("cache/search/progress.json")
         progress_file.parent.mkdir(parents=True, exist_ok=True)
         
@@ -304,6 +323,27 @@ class SearchCLI:
             if len(parts) >= 4:
                 content_hashes.append(parts[3])  # The hash part
         
+        # Track comprehensive validation statistics
+        validation_stats = {
+            'valid_content': 0,
+            'invalid_content': 0,
+            'validation_reasons': [],
+            'quality_scores_valid': [],
+            'quality_scores_invalid': []
+        }
+        
+        for data in results_data:
+            validation_info = data.get('content_validation', {})
+            quality_score = data.get('quality_score', 0)
+            
+            if validation_info.get('is_valid', True):
+                validation_stats['valid_content'] += 1
+                validation_stats['quality_scores_valid'].append(quality_score)
+            else:
+                validation_stats['invalid_content'] += 1
+                validation_stats['quality_scores_invalid'].append(quality_score)
+                validation_stats['validation_reasons'].append(validation_info.get('reason', 'Unknown'))
+        
         progress[symbol] = {
             'completed_at': datetime.now().isoformat(),
             'filenames': filenames,
@@ -312,8 +352,10 @@ class SearchCLI:
             'avg_quality_score': round(avg_quality, 1),
             'content_hashes': content_hashes,
             'unique_content_count': len(set(content_hashes)),  # Count unique content
+            'validation_stats': validation_stats,
             'total_patterns_executed': getattr(self.search_engine, 'last_patterns_executed', 0),
-            'total_api_calls': getattr(self.search_engine, 'last_api_calls', 0)
+            'total_api_calls': getattr(self.search_engine, 'last_api_calls', 0),
+            'version': __version__
         }
         
         with open(progress_file, 'w', encoding='utf-8') as f:
@@ -332,7 +374,7 @@ class SearchCLI:
         return False
     
     def _record_failure(self, symbol: str, error: str):
-        """Record search failure"""
+        """Record search failure with validation context"""
         failures_file = Path("cache/search/failures.json")
         failures_file.parent.mkdir(parents=True, exist_ok=True)
         
@@ -346,7 +388,8 @@ class SearchCLI:
         
         failures[symbol] = {
             'failed_at': datetime.now().isoformat(),
-            'error': error
+            'error': error,
+            'version': __version__
         }
         
         with open(failures_file, 'w', encoding='utf-8') as f:
@@ -383,10 +426,12 @@ class SearchCLI:
             print("✅ All directories created")
             
             self.logger.info("Setup validation passed")
-            print("\n🎉 Setup validation passed! Ready for comprehensive search.")
+            print("\n🎉 Setup validation passed! Ready for comprehensive search with content validation.")
             print(f"📄 Using pure content hash filenames (v{__version__})")
             print("🔗 Same content = same filename (no result index needed)")
             print("🚀 Comprehensive search enabled - all patterns will execute")
+            print("🛡️  Content validation enabled - invalid content gets score 0")
+            print("🔍 Enhanced validation patterns - detects 聯亞(3081), 樺漢(6414), etc.")
             print("🐛 Debug logging enabled - will show pattern execution details")
             return True
             
@@ -396,7 +441,7 @@ class SearchCLI:
             return False
     
     def cmd_search_company(self, symbol: str, result_count: str = '1', min_quality: int = None) -> bool:
-        """Search specific company with comprehensive pattern execution"""
+        """Search specific company with comprehensive pattern execution and enhanced content validation"""
         try:
             # Override config min quality if provided
             if min_quality is not None:
@@ -417,8 +462,10 @@ class SearchCLI:
             print(f"\n🔍 Comprehensive Search: {symbol} {name}")
             print(f"📊 Saving {result_count} results, min quality: {min_quality_threshold}")
             print(f"🚀 All search patterns will execute (no early stopping)")
+            print(f"🛡️  Enhanced content validation enabled - detects wrong companies")
+            print(f"⚠️  Invalid content (wrong companies) automatically gets score 0")
             
-            self.logger.info(f"Starting comprehensive search for {symbol} {name} (saving {result_count} results, min quality {min_quality_threshold})")
+            self.logger.info(f"Starting comprehensive search with enhanced validation for {symbol} {name} (saving {result_count} results, min quality {min_quality_threshold})")
             
             # Search company and get multiple results with comprehensive pattern execution
             search_results = self.search_engine.search_company_multiple(symbol, name, result_count)
@@ -426,16 +473,25 @@ class SearchCLI:
             if search_results and len(search_results) > 0:
                 successful_files = []
                 skipped_low_quality = 0
+                skipped_invalid_content = 0
                 updated_existing = 0
                 
                 for i, result_data in enumerate(search_results, 1):
                     quality_score = result_data.get('quality_score', 0)
+                    validation_info = result_data.get('content_validation', {})
+                    is_valid_content = validation_info.get('is_valid', True)
                     
                     # Check quality threshold
                     if quality_score < min_quality_threshold:
-                        print(f"⏭️  Result {i}: Quality {quality_score}/10 - Skipped (below threshold {min_quality_threshold})")
-                        self.logger.info(f"Skipped result {i} for {symbol}: quality {quality_score} below threshold {min_quality_threshold}")
-                        skipped_low_quality += 1
+                        if not is_valid_content:
+                            invalid_reason = validation_info.get('reason', 'Unknown validation issue')
+                            print(f"❌ Result {i}: Quality {quality_score}/10 - INVALID CONTENT: {invalid_reason}")
+                            skipped_invalid_content += 1
+                        else:
+                            print(f"⏭️  Result {i}: Quality {quality_score}/10 - Skipped (below threshold {min_quality_threshold})")
+                            skipped_low_quality += 1
+                        
+                        self.logger.info(f"Skipped result {i} for {symbol}: quality {quality_score} below threshold {min_quality_threshold}, valid={is_valid_content}")
                         continue
                     
                     # Generate MD content for this result
@@ -449,18 +505,25 @@ class SearchCLI:
                     if filename:
                         # Check if this filename already exists in our list (duplicate content)
                         if filename in successful_files:
-                            print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content merged)")
+                            if is_valid_content:
+                                print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content merged)")
+                            else:
+                                print(f"⚠️  Result {i}: Quality {quality_score}/10 - {filename} (INVALID content, duplicate merged)")
                             updated_existing += 1
                         else:
                             successful_files.append(filename)
-                            print(f"✅ Result {i}: Quality {quality_score}/10 - {filename}")
+                            if is_valid_content:
+                                print(f"✅ Result {i}: Quality {quality_score}/10 - {filename}")
+                            else:
+                                invalid_reason = validation_info.get('reason', 'Unknown')
+                                print(f"⚠️  Result {i}: Quality {quality_score}/10 - {filename} (INVALID: {invalid_reason})")
                 
                 # Update progress with unique files only
                 if successful_files:
                     high_quality_results = [r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold]
                     self._update_progress_multiple(symbol, successful_files, high_quality_results)
                 
-                # Enhanced summary with pattern execution stats
+                # Enhanced summary with pattern execution stats and validation info
                 total_found = len(search_results)
                 total_processed = len([r for r in search_results if r.get('quality_score', 0) >= min_quality_threshold])
                 unique_files = len(successful_files)
@@ -474,17 +537,31 @@ class SearchCLI:
                     if total_processed > unique_files:
                         duplicates = total_processed - unique_files
                         summary_parts.append(f"({duplicates} duplicates merged)")
-                    summary_parts.append(f"(found {total_found}, skipped {skipped_low_quality} low quality)")
+                    
+                    skip_details = []
+                    if skipped_low_quality > 0:
+                        skip_details.append(f"{skipped_low_quality} low quality")
+                    if skipped_invalid_content > 0:
+                        skip_details.append(f"{skipped_invalid_content} invalid content")
+                    
+                    if skip_details:
+                        summary_parts.append(f"(found {total_found}, skipped {' + '.join(skip_details)})")
+                    else:
+                        summary_parts.append(f"(found {total_found})")
                     
                     print(f"🎉 {symbol} completed - {' '.join(summary_parts)}")
                     print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
-                    self.logger.info(f"✅ {symbol} completed - {unique_files} unique files from {total_found} results ({patterns_executed} patterns, {api_calls_made} API calls)")
+                    print(f"🛡️  Validation: {total_found - skipped_invalid_content} valid, {skipped_invalid_content} invalid content")
+                    self.logger.info(f"✅ {symbol} completed - {unique_files} unique files from {total_found} results ({patterns_executed} patterns, {api_calls_made} API calls, {skipped_invalid_content} invalid)")
                     return True
                 else:
-                    print(f"❌ {symbol} - found {total_found} results but all below quality threshold ({min_quality_threshold})")
+                    validation_msg = f", {skipped_invalid_content} invalid content" if skipped_invalid_content > 0 else ""
+                    print(f"❌ {symbol} - found {total_found} results but all below quality threshold ({min_quality_threshold}){validation_msg}")
                     print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
                     print(f"💡 Suggestion: Try lower quality threshold (--min-quality 2 or 3)")
-                    self.logger.warning(f"❌ {symbol} - {total_found} results found but all below quality threshold ({patterns_executed} patterns executed)")
+                    if skipped_invalid_content > 0:
+                        print(f"⚠️  Content validation found {skipped_invalid_content} results about wrong companies")
+                    self.logger.warning(f"❌ {symbol} - {total_found} results found but all below quality threshold ({patterns_executed} patterns executed, {skipped_invalid_content} invalid)")
                     return False
             else:
                 patterns_executed = getattr(self.search_engine, 'last_patterns_executed', 0)
@@ -500,10 +577,11 @@ class SearchCLI:
             return False
     
     def cmd_search_batch(self, symbols: List[str], result_count: str = '1', min_quality: int = None) -> bool:
-        """Search company batch with comprehensive search"""
+        """Search company batch with comprehensive search and enhanced validation"""
         print(f"\n🔍 Comprehensive Batch Search: {len(symbols)} companies")
         print(f"📊 Saving {result_count} results each, comprehensive pattern execution")
-        self.logger.info(f"Starting comprehensive batch search for {len(symbols)} companies (saving {result_count} results each)")
+        print(f"🛡️  Enhanced content validation enabled for all companies")
+        self.logger.info(f"Starting comprehensive batch search with enhanced validation for {len(symbols)} companies (saving {result_count} results each)")
         
         successful = 0
         for i, symbol in enumerate(symbols, 1):
@@ -516,7 +594,7 @@ class SearchCLI:
         return successful > 0
     
     def cmd_search_all(self, result_count: str = '1', min_quality: int = None) -> bool:
-        """Search all companies in watchlist with comprehensive search"""
+        """Search all companies in watchlist with comprehensive search and enhanced validation"""
         try:
             companies = self._load_watchlist_csv()
             total = len(companies)
@@ -524,9 +602,11 @@ class SearchCLI:
             print(f"\n🚀 Comprehensive Search: ALL {total} companies")
             print(f"📊 Saving {result_count} results each, all patterns execute")
             print(f"📄 Pure content hash filenames - no duplicate content files")
+            print(f"🛡️  Enhanced content validation enabled - detects wrong companies like 聯亞(3081)")
+            print(f"⚠️  Invalid content automatically gets score 0")
             print(f"🐛 Debug logging enabled - detailed pattern execution info")
             
-            self.logger.info(f"Starting comprehensive search for {total} companies (saving {result_count} results each)...")
+            self.logger.info(f"Starting comprehensive search with enhanced validation for {total} companies (saving {result_count} results each)...")
             
             successful = 0
             for i, company in enumerate(companies, 1):
@@ -534,10 +614,10 @@ class SearchCLI:
                 name = company['name']
                 
                 print(f"\n[{i}/{total}] 🔍 Comprehensive Search: {symbol} {name}...")
-                self.logger.info(f"[{i}/{total}] Starting comprehensive search for {symbol} {name}...")
+                self.logger.info(f"[{i}/{total}] Starting comprehensive search with enhanced validation for {symbol} {name}...")
                 
                 try:
-                    # Search company with comprehensive pattern execution
+                    # Search company with comprehensive pattern execution and validation
                     if self.cmd_search_company(symbol, result_count, min_quality):
                         successful += 1
                     
@@ -551,8 +631,8 @@ class SearchCLI:
                     print(f"\n📊 Progress: {i}/{total} companies processed, {successful} successful")
                     self.logger.info(f"Progress: {i}/{total} companies processed, {successful} successful")
             
-            print(f"\n🎉 Comprehensive search completed! {successful}/{total} companies successful")
-            self.logger.info(f"🎉 Comprehensive search completed! {successful}/{total} companies successful")
+            print(f"\n🎉 Comprehensive search with enhanced validation completed! {successful}/{total} companies successful")
+            self.logger.info(f"🎉 Comprehensive search with enhanced validation completed! {successful}/{total} companies successful")
             return successful > 0
             
         except Exception as e:
@@ -561,10 +641,11 @@ class SearchCLI:
             return False
     
     def cmd_search_resume(self, result_count: str = '1', min_quality: int = None) -> bool:
-        """Resume interrupted search with comprehensive pattern execution"""
+        """Resume interrupted search with comprehensive pattern execution and enhanced validation"""
         print(f"\n🔄 Resuming comprehensive search from where it left off")
         print(f"📊 Saving {result_count} results each, all patterns execute")
-        self.logger.info(f"Resuming comprehensive search from where it left off (saving {result_count} results each)")
+        print(f"🛡️  Enhanced content validation enabled for all companies")
+        self.logger.info(f"Resuming comprehensive search with enhanced validation from where it left off (saving {result_count} results each)")
         
         # Load progress to see what's already done
         progress_file = Path("cache/search/progress.json")
@@ -590,7 +671,7 @@ class SearchCLI:
             return True
         
         print(f"🚀 Resuming with {len(remaining)} remaining companies...")
-        print(f"🐛 Comprehensive search mode - all patterns will execute")
+        print(f"🛡️  Comprehensive search mode with enhanced content validation")
         self.logger.info(f"Resuming with {len(remaining)} remaining companies...")
         
         # Process remaining companies
@@ -600,10 +681,10 @@ class SearchCLI:
             name = company['name']
             
             print(f"\n[{i}/{len(remaining)}] 🔍 Comprehensive Search: {symbol} {name}...")
-            self.logger.info(f"[{i}/{len(remaining)}] Starting comprehensive search for {symbol} {name}...")
+            self.logger.info(f"[{i}/{len(remaining)}] Starting comprehensive search with enhanced validation for {symbol} {name}...")
             
             try:
-                # Search company with comprehensive pattern execution
+                # Search company with comprehensive pattern execution and validation
                 if self.cmd_search_company(symbol, result_count, min_quality):
                     successful += 1
                 
@@ -612,15 +693,15 @@ class SearchCLI:
                 self.logger.error(f"❌ {symbol} failed: {e}")
                 self._record_failure(symbol, str(e))
         
-        print(f"\n🎉 Resume completed! {successful}/{len(remaining)} companies successful")
-        self.logger.info(f"🎉 Resume completed! {successful}/{len(remaining)} companies successful")
+        print(f"\n🎉 Resume with enhanced validation completed! {successful}/{len(remaining)} companies successful")
+        self.logger.info(f"🎉 Resume with enhanced validation completed! {successful}/{len(remaining)} companies successful")
         return successful > 0
     
     def show_status(self):
-        """Show current status with comprehensive search info"""
+        """Show current status with comprehensive search and enhanced validation info"""
         print("\n📊 === Search Group Status ===")
         self.logger.info("=== Search Group Status ===")
-        print(f"🏷️  Version: {__version__} (Pure Content Hash + Comprehensive Search)")
+        print(f"🏷️  Version: {__version__} (Pure Content Hash + Comprehensive Search + Enhanced Content Validation)")
         self.logger.info(f"Version: {__version__}")
         
         # API status
@@ -643,7 +724,7 @@ class SearchCLI:
             print(f"📄 MD Files Generated: {md_files}")
             self.logger.info(f"MD Files Generated: {md_files}")
         
-        # Progress with comprehensive search analysis
+        # Progress with comprehensive search and enhanced validation analysis
         progress_file = Path("cache/search/progress.json")
         if progress_file.exists():
             try:
@@ -658,6 +739,9 @@ class SearchCLI:
                 total_unique_content = 0
                 total_patterns_executed = 0
                 total_api_calls = 0
+                total_valid_content = 0
+                total_invalid_content = 0
+                all_validation_reasons = []
                 
                 for company_data in progress.values():
                     scores = company_data.get('quality_scores', [])
@@ -666,10 +750,16 @@ class SearchCLI:
                     total_unique_content += company_data.get('unique_content_count', 0)
                     total_patterns_executed += company_data.get('total_patterns_executed', 0)
                     total_api_calls += company_data.get('total_api_calls', 0)
+                    
+                    # Enhanced validation statistics
+                    validation_stats = company_data.get('validation_stats', {})
+                    total_valid_content += validation_stats.get('valid_content', 0)
+                    total_invalid_content += validation_stats.get('invalid_content', 0)
+                    all_validation_reasons.extend(validation_stats.get('validation_reasons', []))
                 
                 if all_scores:
                     avg_score = sum(all_scores) / len(all_scores)
-                    print(f"⭐ Average Quality Score: {avg_score:.1f}/10")
+                    print(f"⭐ Average Quality Score: {avg_score:.1f}/10 (with enhanced validation filtering)")
                     self.logger.info(f"Average Quality Score: {avg_score:.1f}/10")
                 
                 if total_unique_files > 0:
@@ -682,6 +772,25 @@ class SearchCLI:
                     print(f"🔍 Avg Patterns Executed: {avg_patterns:.1f}/company")
                     print(f"📡 Avg API Calls: {avg_api_calls:.1f}/company")
                     print(f"🚀 Comprehensive Search: Enabled")
+                    
+                # Enhanced validation statistics
+                if total_valid_content + total_invalid_content > 0:
+                    validation_rate = (total_valid_content / (total_valid_content + total_invalid_content)) * 100
+                    print(f"🛡️  Enhanced Content Validation: {validation_rate:.1f}% valid content")
+                    print(f"✅ Valid Content: {total_valid_content}")
+                    print(f"❌ Invalid Content: {total_invalid_content}")
+                    
+                    if total_invalid_content > 0:
+                        print(f"⚠️  Invalid content automatically gets score 0")
+                        
+                        # Show most common validation failure reasons
+                        if all_validation_reasons:
+                            from collections import Counter
+                            reason_counts = Counter(all_validation_reasons)
+                            top_reasons = reason_counts.most_common(3)
+                            print(f"🔍 Top validation failures:")
+                            for reason, count in top_reasons:
+                                print(f"   - {reason} ({count} cases)")
                     
             except Exception as e:
                 self.logger.warning(f"Error reading progress: {e}")
@@ -724,39 +833,40 @@ class SearchCLI:
 def create_argument_parser():
     """Create CLI argument parser"""
     parser = argparse.ArgumentParser(
-        description=f"FactSet Search Group v{__version__} (Comprehensive Search + Pure Content Hash)",
+        description=f"FactSet Search Group v{__version__} (Comprehensive Search + Pure Content Hash + Enhanced Content Validation)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python search_cli.py search --all                         # Search all companies (1 result each, ALL patterns)
-  python search_cli.py search --all --count 3               # Search all companies (3 results each, ALL patterns)
-  python search_cli.py search --company 8272                # Search specific company (1 result, ALL patterns)
-  python search_cli.py search --company 8272 --count all    # Search specific company (all results, ALL patterns)
-  python search_cli.py search --batch 2330,2454,8272 --count 2  # Search batch (2 results each, ALL patterns)
-  python search_cli.py search --resume --count all          # Resume interrupted search (all results, ALL patterns)
+  python search_cli.py search --all                         # Search all companies (1 result each, ALL patterns, enhanced validation)
+  python search_cli.py search --all --count 3               # Search all companies (3 results each, ALL patterns, enhanced validation)
+  python search_cli.py search --company 2354                # Search specific company (1 result, ALL patterns, enhanced validation)
+  python search_cli.py search --company 2354 --count all    # Search specific company (all results, ALL patterns, enhanced validation)
+  python search_cli.py search --batch 2330,2454,2354 --count 2  # Search batch (2 results each, ALL patterns, enhanced validation)
+  python search_cli.py search --resume --count all          # Resume interrupted search (all results, ALL patterns, enhanced validation)
   
   python search_cli.py validate                             # Validate setup
-  python search_cli.py status                               # Show progress
+  python search_cli.py status                               # Show progress with validation stats
   python search_cli.py clean                                # Clean cache
 
-COMPREHENSIVE SEARCH FIXES:
-  - All query patterns will execute (no early stopping)
-  - Lowered relevance thresholds to capture more results
-  - Debug logging shows pattern execution details
-  - ORIGINAL quality scoring logic preserved
-  - Pure content hash filenames (no duplicates by design)
+ENHANCED CONTENT VALIDATION FEATURES:
+  - Detects wrong companies like 聯亞(3081) in 2354 search results
+  - Quality score = 0 for content about wrong companies
+  - Enhanced regex patterns for comprehensive company detection  
+  - Detailed validation logging and metadata
+  - Pure content hash filenames with validation info
+  - All original quality scoring logic preserved
         """
     )
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
     # Search commands
-    search_parser = subparsers.add_parser('search', help='Comprehensive search operations')
+    search_parser = subparsers.add_parser('search', help='Comprehensive search operations with enhanced content validation')
     search_group = search_parser.add_mutually_exclusive_group(required=True)
-    search_group.add_argument('--all', action='store_true', help='Search all companies (ALL patterns execute)')
-    search_group.add_argument('--company', help='Search specific company by symbol (ALL patterns execute)')
-    search_group.add_argument('--batch', help='Search batch (comma-separated symbols, ALL patterns execute)')
-    search_group.add_argument('--resume', action='store_true', help='Resume interrupted search (ALL patterns execute)')
+    search_group.add_argument('--all', action='store_true', help='Search all companies (ALL patterns execute, enhanced validation enabled)')
+    search_group.add_argument('--company', help='Search specific company by symbol (ALL patterns execute, enhanced validation enabled)')
+    search_group.add_argument('--batch', help='Search batch (comma-separated symbols, ALL patterns execute, enhanced validation enabled)')
+    search_group.add_argument('--resume', action='store_true', help='Resume interrupted search (ALL patterns execute, enhanced validation enabled)')
     
     # Add count parameter for controlling number of results
     search_parser.add_argument('--count', default='1', 
@@ -764,11 +874,11 @@ COMPREHENSIVE SEARCH FIXES:
     
     # Add quality threshold parameter
     search_parser.add_argument('--min-quality', type=int, default=None,
-                             help='Minimum quality score to save (0-10, default: 3, try 2 for smaller companies)')
+                             help='Minimum quality score to save (0-10, default: 3, invalid content always gets 0)')
     
     # Utility commands
     subparsers.add_parser('validate', help='Validate setup')
-    subparsers.add_parser('status', help='Show status')
+    subparsers.add_parser('status', help='Show status with validation statistics')
     subparsers.add_parser('clean', help='Clean cache')
     subparsers.add_parser('reset', help='Reset all data')
     
