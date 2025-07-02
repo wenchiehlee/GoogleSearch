@@ -21,7 +21,6 @@ on:
           - analyze-quality
           - analyze-keywords
           - keyword-summary
-          - validate-data
           - stats
       hours:
         description: 'Hours for recent processing (process-recent only)'
@@ -109,12 +108,6 @@ jobs:
         
         # Execute command
         python process_group/process_cli.py ${{ github.event.inputs.command }} $ARGS
-        
-    - name: Data integrity validation (post-processing)
-      if: always()
-      run: |
-        echo "🔍 Running data integrity validation..."
-        python process_group/process_cli.py validate-data
         
     - name: Generate keyword analysis summary
       if: success()
