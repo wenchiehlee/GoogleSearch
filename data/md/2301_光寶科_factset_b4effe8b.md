@@ -4,7 +4,7 @@ title: 鉅亨速報- Factset 最新調查：光寶科(2301-TW)EPS預估上修至
 quality_score: 8
 company: 光寶科
 stock_code: 2301
-extracted_date: 2025-08-01T18:51:43.598350
+extracted_date: 2025-08-02T18:49:23.652665
 search_query: 光寶科 2301 factset EPS 預估
 result_index: 1
 content_validation: {"is_valid": true, "reason": "Valid content about 2301"}
