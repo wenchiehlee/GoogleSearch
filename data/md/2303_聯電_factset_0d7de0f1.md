@@ -4,9 +4,9 @@ title: 鉅亨速報- Factset 最新調查：聯電(2303-TW)EPS預估下修至3.2
 quality_score: 9
 company: 聯電
 stock_code: 2303
-extracted_date: 2025-08-12T18:52:08.571563
+extracted_date: 2025-08-13T18:49:48.456690
 search_query: 聯電 2303 factset EPS 預估
-result_index: 1
+result_index: 2
 content_validation: {"is_valid": true, "reason": "Valid content about 2303"}
 version: v3.5.0-validation-fixed-complete
 ---
