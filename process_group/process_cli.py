@@ -1,1346 +1,971 @@
 #!/usr/bin/env python3
 """
-FactSet Pipeline v3.6.1 - Process CLI (Complete Implementation)
-處理群組的命令列介面 - 完整的觀察名單統計和分析功能
+Process CLI - FactSet Pipeline v3.6.1
+命令列介面用於處理MD檔案、分析和清理功能
+完整版包含所有v3.6.1功能
 """
 
-import sys
 import os
-import re
+import sys
 import argparse
 import json
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Any
+from datetime import datetime
+from typing import Dict, Any, List, Optional
 
-# 🔧 載入環境變數
-try:
-    from dotenv import load_dotenv
-    # 載入 .env 檔案 - 嘗試多個路徑
-    env_paths = [
-        '.env',
-        '../.env', 
-        '../../.env',
-        os.path.join(os.path.dirname(__file__), '.env'),
-        os.path.join(os.path.dirname(__file__), '../.env')
-    ]
-    
-    env_loaded = False
-    for env_path in env_paths:
-        if os.path.exists(env_path):
-            load_dotenv(env_path)
-            print(f"✅ 載入環境變數: {env_path}")
-            env_loaded = True
-            break
-    
-    if not env_loaded:
-        print("⚠️ 未找到 .env 檔案，使用系統環境變數")
-
-except ImportError:
-    print("⚠️ python-dotenv 未安裝，使用系統環境變數")
-
-# 添加當前目錄到 Python 路徑
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-# 導入組件
+# 導入Process Group模組
 try:
     from md_scanner import MDScanner
-    print("✅ MDScanner 已載入")
+    MD_SCANNER_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ MDScanner 載入失敗: {e}")
-    MDScanner = None
+    print(f"⚠️ MD掃描功能不可用: {e}")
+    MD_SCANNER_AVAILABLE = False
 
 try:
     from md_parser import MDParser
-    print("✅ MDParser 已載入")
+    MD_PARSER_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ MDParser 載入失敗: {e}")
-    MDParser = None
+    print(f"⚠️ MD解析功能不可用: {e}")
+    MD_PARSER_AVAILABLE = False
 
 try:
     from quality_analyzer import QualityAnalyzer
-    print("✅ QualityAnalyzer 已載入")
+    QUALITY_ANALYZER_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ QualityAnalyzer 載入失敗: {e}")
-    QualityAnalyzer = None
+    print(f"⚠️ 品質分析功能不可用: {e}")
+    QUALITY_ANALYZER_AVAILABLE = False
 
 try:
     from keyword_analyzer import KeywordAnalyzer
-    print("✅ KeywordAnalyzer 已載入")
+    KEYWORD_ANALYZER_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ KeywordAnalyzer 載入失敗: {e}")
-    KeywordAnalyzer = None
+    print(f"⚠️ 關鍵字分析功能不可用: {e}")
+    KEYWORD_ANALYZER_AVAILABLE = False
 
 try:
     from watchlist_analyzer import WatchlistAnalyzer
-    print("✅ WatchlistAnalyzer v3.6.1 已載入")
+    WATCHLIST_ANALYZER_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ WatchlistAnalyzer 載入失敗: {e}")
-    WatchlistAnalyzer = None
+    print(f"⚠️ 觀察名單分析功能不可用: {e}")
+    WATCHLIST_ANALYZER_AVAILABLE = False
 
 try:
     from report_generator import ReportGenerator
-    print("✅ ReportGenerator 已載入")
+    REPORT_GENERATOR_AVAILABLE = True
 except ImportError as e:
-    print(f"❌ ReportGenerator 載入失敗: {e}")
-    ReportGenerator = None
+    print(f"⚠️ 報告生成功能不可用: {e}")
+    REPORT_GENERATOR_AVAILABLE = False
 
 try:
     from sheets_uploader import SheetsUploader
-    print("✅ SheetsUploader 已載入")
+    SHEETS_UPLOADER_AVAILABLE = True
 except ImportError as e:
-    print(f"⚠️ SheetsUploader 載入失敗: {e}")
-    SheetsUploader = None
+    print(f"⚠️ Google Sheets上傳功能不可用: {e}")
+    SHEETS_UPLOADER_AVAILABLE = False
+
+try:
+    from md_cleaner import MDFileCleanupManager
+    MD_CLEANER_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️ MD清理功能不可用: {e}")
+    MD_CLEANER_AVAILABLE = False
 
 
 class ProcessCLI:
-    """處理命令列介面 - v3.6.1 完整實現"""
+    """
+    Process CLI v3.6.1 - FactSet Pipeline 命令列介面
+    支援MD檔案處理、分析、清理等完整功能
+    """
     
     def __init__(self):
-        print("🔧 初始化 ProcessCLI v3.6.1...")
+        self.version = "3.6.1"
         
-        # 核心組件 - MDScanner 是必須的
-        if MDScanner:
-            self.md_scanner = MDScanner()
-            print("✅ MDScanner 已初始化")
+        # 初始化MD掃描器 (必需)
+        if MD_SCANNER_AVAILABLE:
+            try:
+                self.md_scanner = MDScanner()
+                print(f"✅ MD掃描器初始化成功 (v{self.md_scanner.version})")
+            except Exception as e:
+                print(f"❌ MD掃描器初始化失敗: {e}")
+                self.md_scanner = None
         else:
-            raise ImportError("MDScanner 是必須的組件")
+            self.md_scanner = None
         
-        # 初始化其他組件
+        # 初始化可選模組 (graceful degradation)
         self.md_parser = None
-        self.quality_analyzer = None  
+        self.quality_analyzer = None
         self.keyword_analyzer = None
         self.watchlist_analyzer = None
         self.report_generator = None
         self.sheets_uploader = None
+        self.md_cleaner = None
         
-        self._init_components()
-        self._ensure_output_directories()
+        self._init_optional_components()
+        
+        print(f"🔧 Process CLI v{self.version} 初始化完成")
     
-    def _init_components(self):
-        """初始化所有可用組件"""
-        # MD Parser
-        if MDParser:
+    def _init_optional_components(self):
+        """初始化可選組件"""
+        
+        # MD解析器
+        if MD_PARSER_AVAILABLE:
             try:
                 self.md_parser = MDParser()
-                validation_status = "啟用" if self.md_parser.validation_enabled else "停用"
-                watch_list_size = len(self.md_parser.watch_list_mapping)
-                print(f"✅ MDParser 已初始化 - 觀察名單驗證: {validation_status} ({watch_list_size} 家公司)")
+                print(f"✅ MD解析器初始化成功 (v{self.md_parser.version})")
             except Exception as e:
-                print(f"❌ MDParser 初始化失敗: {e}")
+                print(f"⚠️ MD解析器初始化失敗: {e}")
         
-        # Quality Analyzer
-        if QualityAnalyzer:
+        # 品質分析器
+        if QUALITY_ANALYZER_AVAILABLE:
             try:
                 self.quality_analyzer = QualityAnalyzer()
-                print("✅ QualityAnalyzer 已初始化")
+                print(f"✅ 品質分析器初始化成功")
             except Exception as e:
-                print(f"❌ QualityAnalyzer 初始化失敗: {e}")
+                print(f"⚠️ 品質分析器初始化失敗: {e}")
         
-        # Keyword Analyzer
-        if KeywordAnalyzer:
+        # 關鍵字分析器 (v3.6.1升級)
+        if KEYWORD_ANALYZER_AVAILABLE:
             try:
                 self.keyword_analyzer = KeywordAnalyzer()
-                print("✅ KeywordAnalyzer 已初始化")
+                print(f"✅ 關鍵字分析器初始化成功")
             except Exception as e:
-                print(f"❌ KeywordAnalyzer 初始化失敗: {e}")
-                self.keyword_analyzer = None
+                print(f"⚠️ 關鍵字分析器初始化失敗: {e}")
         
-        # Watchlist Analyzer v3.6.1
-        if WatchlistAnalyzer:
+        # 觀察名單分析器 (v3.6.1新增)
+        if WATCHLIST_ANALYZER_AVAILABLE:
             try:
                 self.watchlist_analyzer = WatchlistAnalyzer()
-                watchlist_status = "啟用" if self.watchlist_analyzer.validation_enabled else "停用"
-                watchlist_size = len(self.watchlist_analyzer.watchlist_mapping)
-                print(f"✅ WatchlistAnalyzer v3.6.1 已初始化 - 觀察名單分析: {watchlist_status} ({watchlist_size} 家公司)")
+                print(f"✅ 觀察名單分析器初始化成功")
             except Exception as e:
-                print(f"❌ WatchlistAnalyzer 初始化失敗: {e}")
-                self.watchlist_analyzer = None
+                print(f"⚠️ 觀察名單分析器初始化失敗: {e}")
         
-        # Report Generator
-        if ReportGenerator:
+        # 報告生成器
+        if REPORT_GENERATOR_AVAILABLE:
             try:
                 self.report_generator = ReportGenerator()
-                print("✅ ReportGenerator 已初始化")
+                print(f"✅ 報告生成器初始化成功")
             except Exception as e:
-                print(f"❌ ReportGenerator 初始化失敗: {e}")
-                self.report_generator = None
+                print(f"⚠️ 報告生成器初始化失敗: {e}")
         
-        # Sheets Uploader
-        if SheetsUploader:
+        # Google Sheets上傳器
+        if SHEETS_UPLOADER_AVAILABLE:
             try:
                 self.sheets_uploader = SheetsUploader()
-                print("✅ SheetsUploader 已初始化")
+                print(f"✅ Google Sheets上傳器初始化成功")
             except Exception as e:
-                print(f"⚠️ SheetsUploader 初始化失敗: {e}")
-                self.sheets_uploader = None
-
-    def process_all_md_files(self, upload_sheets=True, **kwargs):
-        """🔧 v3.6.1 處理所有 MD 檔案 - 新增觀察名單分析"""
-        print("\n🚀 開始處理所有 MD 檔案 v3.6.1...")
+                print(f"⚠️ Google Sheets上傳器初始化失敗: {e}")
         
-        # 檢查觀察名單狀態
-        if self.md_parser:
-            validation_status = "啟用" if self.md_parser.validation_enabled else "停用"
-            watch_list_size = len(self.md_parser.watch_list_mapping)
-            print(f"📋 觀察名單驗證: {validation_status} ({watch_list_size} 家公司)")
-        
-        if self.watchlist_analyzer:
-            watchlist_analysis_status = "啟用" if self.watchlist_analyzer.validation_enabled else "停用"
-            watchlist_size = len(self.watchlist_analyzer.watchlist_mapping)
-            print(f"📊 觀察名單分析: {watchlist_analysis_status} ({watchlist_size} 家公司)")
-        
-        # 掃描 MD 檔案
-        md_files = self.md_scanner.scan_all_md_files()
-        print(f"📁 發現 {len(md_files)} 個 MD 檔案")
-        
-        if not md_files:
-            print("❌ 沒有找到任何 MD 檔案")
-            print("💡 請先執行搜尋群組來生成 MD 檔案")
-            return []
-        
-        # 處理檔案
-        processed_companies = self._process_md_file_list_v361(md_files, **kwargs)
-        
-        # 生成報告前的最終統計
-        if processed_companies:
-            print(f"\n🎯 報告生成階段 v3.6.1:")
-            
-            # 預先檢查有多少公司會被包含在報告中
-            if self.report_generator:
-                companies_for_report = [c for c in processed_companies 
-                                      if self.report_generator._should_include_in_report_v351(c)]
-                
-                excluded_count = len(processed_companies) - len(companies_for_report)
-                
-                print(f"📊 處理結果摘要:")
-                print(f"   已處理公司: {len(processed_companies)} 家")
-                print(f"   將納入報告: {len(companies_for_report)} 家")
-                print(f"   因驗證失敗排除: {excluded_count} 家")
-                
-                if excluded_count > 0:
-                    print(f"   ✅ 成功過濾了 {excluded_count} 家有問題的公司")
-            
-            # 生成和上傳報告 (包含觀察名單報告)
-            self._generate_and_upload_reports_v361(processed_companies, upload_sheets, 
-                                                   force_upload=kwargs.get('force_upload', False))
-            
-            print(f"✅ 處理完成")
-            
-            # 顯示最終驗證摘要
-            self._display_processing_validation_summary_v361(processed_companies)
-        else:
-            print("❌ 沒有成功處理任何檔案")
-        
-        return processed_companies
-
-    def process_recent_files(self, hours=24, upload_sheets=True, **kwargs):
-        """🔧 v3.6.1 處理最近的 MD 檔案"""
-        print(f"\n🚀 處理最近 {hours} 小時的 MD 檔案 v3.6.1...")
-        
-        recent_files = self.md_scanner.scan_recent_files(hours)
-        print(f"📁 發現 {len(recent_files)} 個最近的 MD 檔案")
-        
-        if not recent_files:
-            print(f"❌ 最近 {hours} 小時內沒有 MD 檔案")
-            return []
-        
-        # 處理最近的檔案
-        processed_companies = self._process_md_file_list_v361(recent_files, **kwargs)
-        
-        if processed_companies:
-            # 生成和上傳報告
-            self._generate_and_upload_reports_v361(processed_companies, upload_sheets,
-                                                   force_upload=kwargs.get('force_upload', False))
-            
-            print(f"✅ 最近檔案處理完成")
-        
-        return processed_companies
-
-    def process_single_company(self, company_code, upload_sheets=True, **kwargs):
-        """🔧 v3.6.1 處理單一公司"""
-        print(f"\n🚀 處理單一公司: {company_code} v3.6.1...")
-        
-        company_files = self.md_scanner.find_company_files(company_code)
-        print(f"📁 發現公司 {company_code} 的 {len(company_files)} 個 MD 檔案")
-        
-        if not company_files:
-            print(f"❌ 沒有找到公司 {company_code} 的 MD 檔案")
-            return []
-        
-        # 處理公司檔案
-        processed_companies = self._process_md_file_list_v361(company_files, **kwargs)
-        
-        if processed_companies:
-            # 生成和上傳報告
-            self._generate_and_upload_reports_v361(processed_companies, upload_sheets,
-                                                   force_upload=kwargs.get('force_upload', False))
-            
-            print(f"✅ 公司 {company_code} 處理完成")
-        
-        return processed_companies
-
-    def analyze_quality_only(self, **kwargs):
-        """🔧 v3.6.1 只進行品質分析"""
-        print("\n📊 執行品質分析 v3.6.1...")
-        
-        md_files = self.md_scanner.scan_all_md_files()
-        
-        if not md_files:
-            print("❌ 沒有找到 MD 檔案")
-            return {}
-        
-        processed_companies = []
-        quality_stats = {
-            'total_files': len(md_files),
-            'processed_files': 0,
-            'quality_distribution': {'excellent': 0, 'good': 0, 'partial': 0, 'insufficient': 0},
-            'validation_stats': {'passed': 0, 'failed': 0, 'disabled': 0}
-        }
-        
-        print(f"📊 分析 {len(md_files)} 個 MD 檔案的品質")
-        
-        for md_file in md_files:
+        # MD清理管理器 (v3.6.1新增)
+        if MD_CLEANER_AVAILABLE:
             try:
-                if self.md_parser and self.quality_analyzer:
-                    parsed_data = self.md_parser.parse_md_file(md_file)
-                    quality_data = self.quality_analyzer.analyze(parsed_data)
-                    
-                    company_data = {**parsed_data, **quality_data}
-                    processed_companies.append(company_data)
-                    
-                    # 統計品質分布
-                    quality_category = quality_data.get('quality_category', 'insufficient')
-                    quality_stats['quality_distribution'][quality_category] += 1
-                    
-                    # 統計驗證狀態
-                    if parsed_data.get('content_validation_passed', True):
-                        quality_stats['validation_stats']['passed'] += 1
-                    elif parsed_data.get('validation_result', {}).get('validation_method') == 'disabled':
-                        quality_stats['validation_stats']['disabled'] += 1
-                    else:
-                        quality_stats['validation_stats']['failed'] += 1
-                    
-                    quality_stats['processed_files'] += 1
-                
+                self.md_cleaner = MDFileCleanupManager()
+                print(f"✅ MD清理功能已啟用 (v{self.md_cleaner.version})")
             except Exception as e:
-                print(f"❌ 分析失敗: {os.path.basename(md_file)} - {e}")
-                continue
+                print(f"⚠️ MD清理管理器初始化失敗: {e}")
+    
+    def process_all_md_files(self, upload_sheets=True):
+        """處理所有MD檔案 - v3.6.1完整版"""
+        if not self.md_scanner:
+            print("❌ MD掃描器不可用")
+            return False
         
-        # 顯示品質分析結果
-        self._display_quality_analysis_results(quality_stats)
-        
-        # 儲存品質分析結果
-        self._save_quality_analysis(quality_stats, processed_companies)
-        
-        print(f"✅ 品質分析完成: {quality_stats['processed_files']}/{quality_stats['total_files']} 成功")
-        return quality_stats
-
-    def analyze_keywords_only(self, min_usage=1, **kwargs):
-        """🔧 v3.6.1 只進行關鍵字分析"""
-        print(f"\n📊 執行關鍵字分析 v3.6.1 (最小使用次數: {min_usage})...")
-        
-        if not self.keyword_analyzer:
-            print("❌ KeywordAnalyzer 未載入，無法進行關鍵字分析")
-            return {}
-        
-        md_files = self.md_scanner.scan_all_md_files()
-        
-        if not md_files:
-            print("❌ 沒有找到 MD 檔案")
-            return {}
-        
-        print(f"📊 分析 {len(md_files)} 個 MD 檔案的關鍵字使用情況")
-        
-        # 處理檔案以提取關鍵字
-        processed_companies = []
-        success_count = 0
-        
-        for md_file in md_files:
-            try:
-                file_info = self.md_scanner.get_file_info(md_file)
-                
-                if self.md_parser and self.quality_analyzer:
-                    parsed_data = self.md_parser.parse_md_file(md_file)
-                    quality_data = self.quality_analyzer.analyze(parsed_data)
-                    
-                    company_data = {
-                        **parsed_data,
-                        **quality_data,
-                        'processed_at': datetime.now()
-                    }
-                else:
-                    company_data = self._basic_process_md_file(md_file, file_info)
-                
-                processed_companies.append(company_data)
-                success_count += 1
-                
-            except Exception as e:
-                print(f"❌ 處理失敗: {os.path.basename(md_file)} - {e}")
-                continue
-        
-        # 執行關鍵字分析
-        keyword_analysis = self.keyword_analyzer.analyze_all_keywords(processed_companies)
-        
-        # 過濾低使用率關鍵字
-        if min_usage > 1:
-            keyword_analysis = self.keyword_analyzer.filter_keywords_by_usage(
-                keyword_analysis, min_usage
-            )
-        
-        # 儲存關鍵字分析結果
-        self._save_keyword_analysis(keyword_analysis)
-        self._display_keyword_summary(keyword_analysis, min_usage)
-        
-        print(f"✅ 關鍵字分析完成: {success_count}/{len(md_files)} 成功")
-        return keyword_analysis
-
-    def analyze_watchlist_only(self, **kwargs):
-        """🆕 v3.6.1 只進行觀察名單分析"""
-        print("\n📊 執行觀察名單分析 v3.6.1...")
-        
-        if not self.watchlist_analyzer:
-            print("❌ WatchlistAnalyzer 未載入，無法進行觀察名單分析")
-            return {}
-        
-        md_files = self.md_scanner.scan_all_md_files()
-        
-        if not md_files:
-            print("❌ 沒有找到 MD 檔案")
-            return {}
-        
-        print(f"📊 分析 {len(md_files)} 個 MD 檔案的觀察名單覆蓋情況")
-        
-        # 處理檔案
-        processed_companies = []
-        success_count = 0
-        
-        for md_file in md_files:
-            try:
-                file_info = self.md_scanner.get_file_info(md_file)
-                
-                if self.md_parser and self.quality_analyzer:
-                    parsed_data = self.md_parser.parse_md_file(md_file)
-                    quality_data = self.quality_analyzer.analyze(parsed_data)
-                    
-                    company_data = {
-                        **parsed_data,
-                        **quality_data,
-                        'processed_at': datetime.now()
-                    }
-                else:
-                    company_data = self._basic_process_md_file(md_file, file_info)
-                
-                processed_companies.append(company_data)
-                success_count += 1
-                
-            except Exception as e:
-                print(f"❌ 處理失敗: {os.path.basename(md_file)} - {e}")
-                continue
-        
-        # 執行觀察名單分析
-        watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
-        
-        # 儲存分析結果
-        self._save_watchlist_analysis(watchlist_analysis)
-        self._display_watchlist_summary(watchlist_analysis)
-        
-        print(f"✅ 觀察名單分析完成: {success_count}/{len(md_files)} 成功")
-        return watchlist_analysis
-
-    def generate_keyword_summary(self, upload_sheets=True, min_usage=1, **kwargs):
-        """🔧 v3.6.1 生成關鍵字統計報告"""
-        print(f"\n📊 生成關鍵字統計報告 v3.6.1...")
-        
-        if not self.keyword_analyzer:
-            print("❌ KeywordAnalyzer 未載入，無法生成關鍵字報告")
-            return {}, ""
-        
-        # 先執行關鍵字分析
-        keyword_analysis = self.analyze_keywords_only(min_usage=min_usage, **kwargs)
-        
-        if not keyword_analysis:
-            print("❌ 關鍵字分析失敗")
-            return {}, ""
-        
-        # 生成關鍵字報告
-        if self.report_generator:
-            keyword_summary = self.report_generator.generate_keyword_summary(keyword_analysis)
-            
-            # 儲存 CSV
-            csv_path = self.report_generator.save_keyword_summary(keyword_summary)
-            
-            # 上傳 (可選)
-            if upload_sheets and self.sheets_uploader:
-                try:
-                    self.sheets_uploader._upload_keyword_summary(keyword_summary)
-                    print("☁️ 關鍵字報告已上傳到 Google Sheets")
-                except Exception as e:
-                    print(f"⚠️ Google Sheets 上傳失敗: {e}")
-            
-            # 顯示統計摘要
-            self._display_keyword_generation_summary(keyword_analysis, min_usage)
-            
-            return keyword_analysis, csv_path
-        else:
-            print("❌ ReportGenerator 未載入，無法生成報告")
-            return keyword_analysis, ""
-
-    def generate_watchlist_summary(self, upload_sheets=True, include_missing=False, **kwargs):
-        """🆕 v3.6.1 生成觀察名單統計報告"""
-        print(f"\n📊 生成觀察名單統計報告 v3.6.1...")
-        
-        if not self.watchlist_analyzer:
-            print("❌ WatchlistAnalyzer 未載入，無法生成觀察名單報告")
-            return {}, ""
-        
-        # 掃描檔案
-        md_files = self.md_scanner.scan_all_md_files()
-        print(f"📁 掃描到 {len(md_files)} 個 MD 檔案")
-        
-        # 解析檔案
-        processed_companies = []
-        for md_file in md_files:
-            try:
-                parsed_data = self.md_parser.parse_md_file(md_file) if self.md_parser else {}
-                quality_data = self.quality_analyzer.analyze(parsed_data) if self.quality_analyzer else {}
-                company_data = {**parsed_data, **quality_data}
-                processed_companies.append(company_data)
-            except Exception as e:
-                print(f"⚠️ 處理檔案失敗: {os.path.basename(md_file)} - {e}")
-                continue
-        
-        print(f"📊 成功處理 {len(processed_companies)} 個檔案")
-        
-        # 觀察名單分析
-        watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
-        
-        # 生成觀察名單報告
-        if self.report_generator:
-            watchlist_summary = self.report_generator.generate_watchlist_summary(watchlist_analysis)
-            
-            # 可選：包含缺失公司資訊
-            if include_missing:
-                print("📋 包含缺失公司資訊...")
-                missing_companies = self.watchlist_analyzer.generate_missing_companies_report(processed_companies)
-                watchlist_summary = self._append_missing_companies(watchlist_summary, missing_companies)
-            
-            # 儲存 CSV
-            csv_path = self.report_generator.save_watchlist_summary(watchlist_summary)
-            
-            # 上傳 (可選)
-            if upload_sheets and self.sheets_uploader:
-                try:
-                    self.sheets_uploader._upload_watchlist_summary(watchlist_summary)
-                    print("☁️ 觀察名單報告已上傳到 Google Sheets")
-                except Exception as e:
-                    print(f"⚠️ Google Sheets 上傳失敗: {e}")
-            
-            # 顯示統計摘要
-            missing_count = len(missing_companies) if include_missing else 0
-            self._display_watchlist_generation_summary(watchlist_analysis, missing_count)
-            
-            return watchlist_analysis, csv_path
-        else:
-            print("❌ ReportGenerator 未載入，無法生成報告")
-            return watchlist_analysis, ""
-
-    def show_stats(self, **kwargs):
-        """🔧 v3.6.1 顯示統計資訊"""
-        print("\n📊 系統統計資訊 v3.6.1")
-        print("=" * 50)
-        
-        # MD 檔案統計
         try:
-            stats = self.md_scanner.get_stats()
-            print(f"📁 MD 檔案統計:")
-            print(f"   總檔案數: {stats['total_files']}")
-            print(f"   最近 24h: {stats['recent_files_24h']}")
-            print(f"   公司數量: {stats['unique_companies']}")
-            print(f"   總大小: {stats['total_size_mb']} MB")
+            print(f"🔄 開始處理所有MD檔案...")
             
-            if stats['oldest_file']:
-                print(f"   最舊檔案: {os.path.basename(stats['oldest_file'])}")
-            if stats['newest_file']:
-                print(f"   最新檔案: {os.path.basename(stats['newest_file'])}")
-        except Exception as e:
-            print(f"❌ MD 檔案統計失敗: {e}")
-        
-        # 觀察名單統計
-        if self.md_parser and self.md_parser.validation_enabled:
-            watch_list_size = len(self.md_parser.watch_list_mapping)
-            print(f"\n📋 觀察名單統計:")
-            print(f"   觀察名單公司數: {watch_list_size}")
-            print(f"   驗證狀態: 啟用")
-        else:
-            print(f"\n📋 觀察名單統計:")
-            print(f"   驗證狀態: 停用")
-        
-        # 觀察名單分析統計 (v3.6.1)
-        if self.watchlist_analyzer and self.watchlist_analyzer.validation_enabled:
-            watchlist_analysis_size = len(self.watchlist_analyzer.watchlist_mapping)
-            print(f"\n📊 觀察名單分析統計 (v3.6.1):")
-            print(f"   分析範圍公司數: {watchlist_analysis_size}")
-            print(f"   分析狀態: 啟用")
-        else:
-            print(f"\n📊 觀察名單分析統計 (v3.6.1):")
-            print(f"   分析狀態: 停用")
-        
-        # 按公司檔案數量排序
-        try:
-            if stats['companies_with_files']:
-                sorted_companies = sorted(stats['companies_with_files'].items(), 
-                                        key=lambda x: x[1], reverse=True)
-                print(f"\n📊 檔案最多的前 10 家公司:")
-                for company, count in sorted_companies[:10]:
-                    print(f"   {company}: {count} 個檔案")
-        except Exception as e:
-            print(f"⚠️ 公司檔案統計顯示失敗: {e}")
-        
-        # 組件狀態
-        print(f"\n🔧 組件狀態:")
-        components = [
-            ('MD Scanner', self.md_scanner is not None),
-            ('MD Parser', self.md_parser is not None),
-            ('Quality Analyzer', self.quality_analyzer is not None),
-            ('Keyword Analyzer', self.keyword_analyzer is not None),
-            ('Watchlist Analyzer', self.watchlist_analyzer is not None),
-            ('Report Generator', self.report_generator is not None),
-            ('Sheets Uploader', self.sheets_uploader is not None)
-        ]
-        
-        for name, status in components:
-            status_icon = "✅" if status else "❌"
-            print(f"   {name}: {status_icon}")
-
-    def validate_setup(self, **kwargs):
-        """🔧 v3.6.1 驗證處理環境設定 - 包含觀察名單分析檢查"""
-        print("\n🔧 驗證處理環境設定 v3.6.1")
-        print("=" * 50)
-        
-        validation_results = {}
-        
-        # 檢查 MD 目錄
-        try:
+            # 1. 掃描檔案
             md_files = self.md_scanner.scan_all_md_files()
-            validation_results['md_scanner'] = {
-                'status': '✅ 正常',
-                'details': f'找到 {len(md_files)} 個 MD 檔案'
-            }
-        except Exception as e:
-            validation_results['md_scanner'] = {
-                'status': '❌ 錯誤',
-                'details': str(e)
-            }
-        
-        # 檢查觀察名單載入狀態
-        if self.md_parser:
-            validation_enabled = self.md_parser.validation_enabled
-            watch_list_size = len(self.md_parser.watch_list_mapping)
+            if not md_files:
+                print("📁 未找到MD檔案")
+                return True
             
-            if validation_enabled:
-                validation_results['watch_list'] = {
-                    'status': '✅ 已載入',
-                    'details': f'觀察名單包含 {watch_list_size} 家公司'
-                }
-            else:
-                validation_results['watch_list'] = {
-                    'status': '⚠️ 未載入',
-                    'details': '觀察名單檔案無法載入或為空，驗證功能已停用'
-                }
-        else:
-            validation_results['watch_list'] = {
-                'status': '❌ 無法檢查',
-                'details': 'MD Parser 未載入'
-            }
-        
-        # 檢查觀察名單分析器
-        if self.watchlist_analyzer:
-            watchlist_analysis_enabled = self.watchlist_analyzer.validation_enabled
-            watchlist_size = len(self.watchlist_analyzer.watchlist_mapping)
+            print(f"📄 找到 {len(md_files)} 個MD檔案")
             
-            if watchlist_analysis_enabled:
-                validation_results['watchlist_analyzer'] = {
-                    'status': '✅ 已載入',
-                    'details': f'觀察名單分析器包含 {watchlist_size} 家公司'
-                }
-            else:
-                validation_results['watchlist_analyzer'] = {
-                    'status': '⚠️ 未載入',
-                    'details': '觀察名單分析器無法載入觀察名單檔案'
-                }
-        else:
-            validation_results['watchlist_analyzer'] = {
-                'status': '❌ 未載入',
-                'details': 'WatchlistAnalyzer 模組未載入'
-            }
-        
-        # 檢查其他組件
-        components = [
-            ('md_parser', self.md_parser),
-            ('quality_analyzer', self.quality_analyzer),
-            ('keyword_analyzer', self.keyword_analyzer),
-            ('report_generator', self.report_generator),
-            ('sheets_uploader', self.sheets_uploader)
-        ]
-        
-        for name, component in components:
-            if component:
+            # 2. 解析每個檔案
+            processed_companies = []
+            parse_errors = 0
+            
+            for i, md_file in enumerate(md_files, 1):
                 try:
-                    if hasattr(component, 'test_connection'):
-                        result = component.test_connection()
-                        validation_results[name] = {
-                            'status': '✅ 正常' if result else '⚠️ 警告',
-                            'details': '連線測試成功' if result else '連線測試失敗'
-                        }
+                    print(f"📖 處理 {i}/{len(md_files)}: {os.path.basename(md_file)}")
+                    
+                    if self.md_parser:
+                        parsed_data = self.md_parser.parse_md_file(md_file)
                     else:
-                        validation_results[name] = {
-                            'status': '✅ 已載入',
-                            'details': '模組已成功載入'
-                        }
-                except Exception as e:
-                    validation_results[name] = {
-                        'status': '❌ 錯誤',
-                        'details': str(e)
-                    }
-            else:
-                validation_results[name] = {
-                    'status': '⚠️ 未載入',
-                    'details': '模組未安裝或載入失敗'
-                }
-        
-        # 顯示結果
-        for component, result in validation_results.items():
-            print(f"{component:18}: {result['status']} - {result['details']}")
-        
-        return validation_results
-
-    # 私有輔助方法
-    def _process_md_file_list_v361(self, md_files, **kwargs):
-        """🔧 v3.6.1 處理 MD 檔案清單 - 包含觀察名單分析統計"""
-        processed_companies = []
-        validation_stats = {
-            'total_processed': 0,
-            'validation_passed': 0,
-            'validation_failed': 0,
-            'validation_disabled': 0,
-            'not_in_watchlist': 0,
-            'name_mismatch': 0,
-            'invalid_format': 0,
-            'other_errors': 0
-        }
-        
-        print(f"\n📄 開始處理 {len(md_files)} 個 MD 檔案...")
-        
-        for i, md_file in enumerate(md_files, 1):
-            try:
-                print(f"📄 處理 {i}/{len(md_files)}: {os.path.basename(md_file)}")
-                
-                file_info = self.md_scanner.get_file_info(md_file)
-                validation_stats['total_processed'] += 1
-                
-                if self.md_parser:
-                    parsed_data = self.md_parser.parse_md_file(md_file)
+                        # 簡化解析
+                        parsed_data = self._simple_parse_md_file(md_file)
                     
-                    # 詳細的驗證狀態分析
-                    validation_result = parsed_data.get('validation_result', {})
-                    validation_status = validation_result.get('overall_status', 'unknown')
-                    validation_method = validation_result.get('validation_method', 'unknown')
-                    validation_errors = parsed_data.get('validation_errors', [])
-                    
-                    # 統計驗證狀態
-                    if validation_method == 'disabled':
-                        validation_stats['validation_disabled'] += 1
-                        status_icon = "⚠️"
-                        status_msg = "驗證停用 (觀察名單未載入)"
-                        validation_passed = True
-                        
-                    elif validation_status == 'valid':
-                        validation_stats['validation_passed'] += 1
-                        status_icon = "✅"
-                        status_msg = "驗證通過"
-                        validation_passed = True
-                        
-                    elif validation_status == 'error':
-                        validation_stats['validation_failed'] += 1
-                        status_icon = "❌"
-                        validation_passed = False
-                        
-                        # 分析失敗原因
-                        main_error = validation_errors[0] if validation_errors else "未知錯誤"
-                        main_error_str = str(main_error)
-                        
-                        if "不在觀察名單中" in main_error_str:
-                            validation_stats['not_in_watchlist'] += 1
-                            status_msg = "不在觀察名單"
-                        elif "公司名稱不符觀察名單" in main_error_str or "觀察名單顯示應為" in main_error_str:
-                            validation_stats['name_mismatch'] += 1
-                            status_msg = "觀察名單名稱不符"
-                        elif "公司代號格式無效" in main_error_str or "參數錯誤" in main_error_str:
-                            validation_stats['invalid_format'] += 1
-                            status_msg = "格式無效"
-                        else:
-                            validation_stats['other_errors'] += 1
-                            status_msg = "其他驗證錯誤"
-                    
-                    else:
-                        validation_stats['validation_failed'] += 1
-                        status_icon = "❓"
-                        status_msg = "未知驗證狀態"
-                        validation_passed = False
-                    
-                    # 更新 parsed_data 的驗證狀態
-                    parsed_data['content_validation_passed'] = validation_passed
-                    
+                    # 品質分析
                     if self.quality_analyzer:
                         quality_data = self.quality_analyzer.analyze(parsed_data)
-                        
-                        company_data = {
-                            **parsed_data,
-                            'quality_score': quality_data.get('quality_score', 0),
-                            'quality_status': quality_data.get('quality_status', '🔴 不足'),
-                            'quality_category': quality_data.get('quality_category', 'insufficient'),
-                            'processed_at': datetime.now()
-                        }
-                    else:
-                        company_data = {
-                            **parsed_data,
-                            'quality_score': parsed_data.get('data_richness_score', 0),
-                            'quality_status': self._get_quality_status(parsed_data.get('data_richness_score', 0)),
-                            'quality_category': 'partial',
-                            'processed_at': datetime.now()
-                        }
-                else:
-                    company_data = self._basic_process_md_file(md_file, file_info)
-                    validation_stats['validation_passed'] += 1
-                    status_icon = "✅"
-                    status_msg = "基本處理"
-                
-                processed_companies.append(company_data)
-                
-                # 詳細的處理結果顯示
-                company_name = company_data.get('company_name', 'Unknown')
-                company_code = company_data.get('company_code', 'Unknown')
-                quality_score = company_data.get('quality_score', 0)
-                quality_status = company_data.get('quality_status', '🔴 不足')
-                
-                print(f"   {status_icon} {company_name} ({company_code}) - 品質: {quality_score:.1f} {quality_status} - {status_msg}")
-                
-                # 如果驗證失敗，顯示詳細原因
-                if not validation_passed and validation_errors:
-                    error_preview = str(validation_errors[0])[:80]
-                    print(f"      🔍 驗證問題: {error_preview}...")
+                        parsed_data.update(quality_data)
                     
-                    if "不在觀察名單" in error_preview:
-                        print(f"      💡 此公司將被排除在最終報告之外")
-                
-            except Exception as e:
-                print(f"   ❌ 處理失敗: {os.path.basename(md_file)} - {e}")
-                continue
-        
-        # 處理完成後顯示詳細統計
-        self._display_processing_statistics_v361(validation_stats)
-        
-        return processed_companies
-
-    def _generate_and_upload_reports_v361(self, processed_companies, upload_sheets=True, force_upload=False):
-        """🆕 v3.6.1 生成報告並上傳 - 包含觀察名單報告"""
-        try:
+                    processed_companies.append(parsed_data)
+                    
+                except Exception as e:
+                    print(f"⚠️ 處理檔案失敗 {os.path.basename(md_file)}: {e}")
+                    parse_errors += 1
+            
+            print(f"✅ 處理完成: {len(processed_companies)} 成功, {parse_errors} 失敗")
+            
+            # 3. 關鍵字分析 (v3.6.1升級)
+            pattern_analysis = None
+            if self.keyword_analyzer:
+                print(f"🔍 執行查詢模式分析...")
+                pattern_analysis = self.keyword_analyzer.analyze_query_patterns(processed_companies)
+            
+            # 4. 觀察名單分析 (v3.6.1新增)
+            watchlist_analysis = None
+            if self.watchlist_analyzer:
+                print(f"📋 執行觀察名單分析...")
+                watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
+            
+            # 5. 生成報告
             if self.report_generator:
-                print("📊 使用 ReportGenerator v3.6.1 生成報告...")
-                
-                # 生成標準報告
+                print(f"📊 生成報告...")
                 portfolio_summary = self.report_generator.generate_portfolio_summary(processed_companies)
                 detailed_report = self.report_generator.generate_detailed_report(processed_companies)
                 
-                # 生成關鍵字報告
-                keyword_summary = None
-                if self.keyword_analyzer:
-                    try:
-                        keyword_analysis = self.keyword_analyzer.analyze_all_keywords(processed_companies)
-                        keyword_summary = self.report_generator.generate_keyword_summary(keyword_analysis)
-                        print("📊 關鍵字報告已生成")
-                    except Exception as e:
-                        print(f"⚠️ 關鍵字報告生成失敗: {e}")
+                pattern_summary = None
+                if pattern_analysis:
+                    pattern_summary = self.report_generator.generate_keyword_summary(pattern_analysis)
                 
-                # 生成觀察名單報告
                 watchlist_summary = None
-                if self.watchlist_analyzer:
-                    try:
-                        watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
-                        watchlist_summary = self.report_generator.generate_watchlist_summary(watchlist_analysis)
-                        print("📊 觀察名單報告已生成")
-                    except Exception as e:
-                        print(f"⚠️ 觀察名單報告生成失敗: {e}")
+                if watchlist_analysis:
+                    watchlist_summary = self.report_generator.generate_watchlist_summary(watchlist_analysis)
                 
                 # 儲存報告
-                saved_files = self.report_generator.save_all_reports(
-                    portfolio_summary, detailed_report, keyword_summary, watchlist_summary
+                saved_reports = self.report_generator.save_all_reports(
+                    portfolio_summary, detailed_report, pattern_summary, watchlist_summary
                 )
                 
-                if saved_files:
-                    print("📁 報告已成功儲存:")
-                    for report_type, file_path in saved_files.items():
-                        if 'latest' in report_type:
-                            print(f"   ✅ {report_type}: {file_path}")
+                for report_name, file_path in saved_reports.items():
+                    print(f"💾 {report_name} 已儲存: {file_path}")
                 
-                # 生成統計報告
-                try:
-                    statistics = self.report_generator.generate_statistics_report(processed_companies)
-                    stats_file = self.report_generator.save_statistics_report(statistics)
-                    if stats_file:
-                        print(f"   📊 統計報告: {stats_file}")
-                except Exception as e:
-                    print(f"   ⚠️ 統計報告生成失敗: {e}")
-                
-                # 上傳到 Google Sheets
+                # 6. 上傳 (可選)
                 if upload_sheets and self.sheets_uploader:
-                    try:
-                        print("☁️ 上傳到 Google Sheets v3.6.1...")
-                        
-                        if force_upload:
-                            print("⚠️ 強制上傳模式：忽略驗證錯誤")
-                        
-                        success = self.sheets_uploader.upload_all_reports(
-                            portfolio_summary, detailed_report, keyword_summary, watchlist_summary
-                        )
-                        
-                        if success:
-                            print("   ✅ Google Sheets 上傳成功 (包含觀察名單工作表)")
-                        else:
-                            print("   ❌ Google Sheets 上傳失敗")
-                    except Exception as e:
-                        print(f"   ❌ Google Sheets 上傳錯誤: {e}")
-                
-            else:
-                print("❌ ReportGenerator 未載入，無法生成標準報告")
-                self._generate_minimal_reports(processed_companies)
-        
+                    print(f"☁️ 上傳到Google Sheets...")
+                    upload_success = self.sheets_uploader.upload_all_reports(
+                        portfolio_summary, detailed_report, pattern_summary, watchlist_summary
+                    )
+                    if upload_success:
+                        print(f"✅ Google Sheets上傳成功")
+                    else:
+                        print(f"⚠️ Google Sheets上傳失敗")
+            
+            return True
+            
         except Exception as e:
-            print(f"❌ 報告生成或上傳失敗: {e}")
-
-    # 輔助顯示和儲存方法
-    def _display_quality_analysis_results(self, quality_stats):
-        """顯示品質分析結果"""
-        print(f"\n📊 品質分析結果:")
-        print(f"=" * 40)
-        print(f"📁 處理統計: {quality_stats['processed_files']}/{quality_stats['total_files']}")
+            print(f"❌ 處理MD檔案失敗: {e}")
+            return False
+    
+    def process_recent_md_files(self, hours=24, upload_sheets=True):
+        """處理最近的MD檔案"""
+        if not self.md_scanner:
+            print("❌ MD掃描器不可用")
+            return False
         
-        print(f"\n📊 品質分布:")
-        dist = quality_stats['quality_distribution']
-        for category, count in dist.items():
-            category_name = {
-                'excellent': '🟢 優秀 (9-10分)',
-                'good': '🟡 良好 (8-9分)',
-                'partial': '🟠 部分 (3-8分)',
-                'insufficient': '🔴 不足 (0-3分)'
-            }.get(category, category)
-            print(f"   {category_name}: {count}")
-        
-        print(f"\n📊 驗證統計:")
-        validation = quality_stats['validation_stats']
-        print(f"   ✅ 驗證通過: {validation['passed']}")
-        print(f"   ❌ 驗證失敗: {validation['failed']}")
-        print(f"   ⚠️ 驗證停用: {validation['disabled']}")
-
-    def _save_quality_analysis(self, quality_stats, processed_companies):
-        """儲存品質分析結果"""
-        output_file = "data/reports/quality_analysis.json"
-        
-        analysis_data = {
-            'timestamp': datetime.now().isoformat(),
-            'version': '3.6.1',
-            'analysis_type': 'quality_only',
-            'statistics': quality_stats,
-            'company_count': len(processed_companies)
-        }
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(analysis_data, f, ensure_ascii=False, indent=2, default=str)
-        
-        print(f"📁 品質分析結果已儲存: {output_file}")
-
-    def _display_keyword_summary(self, keyword_analysis, min_usage):
-        """顯示關鍵字分析摘要"""
-        if 'error' in keyword_analysis:
-            print(f"❌ 關鍵字分析失敗: {keyword_analysis['error']}")
-            return
-        
-        keyword_stats = keyword_analysis.get('keyword_stats', {})
-        
-        print(f"\n📊 關鍵字分析摘要 (最小使用次數: {min_usage}):")
-        print(f"有效關鍵字數量: {len(keyword_stats)}")
-        
-        # 顯示效果最好的關鍵字
-        top_keywords = sorted(keyword_stats.items(), 
-                            key=lambda x: x[1]['avg_quality_score'], reverse=True)[:10]
-        
-        print(f"效果最好的關鍵字:")
-        for keyword, stats in top_keywords:
-            print(f"  {keyword}: 平均分數 {stats['avg_quality_score']:.1f} (使用 {stats['usage_count']} 次)")
-
-    def _save_keyword_analysis(self, keyword_analysis):
-        """儲存關鍵字分析結果"""
-        output_file = "data/reports/keyword_analysis.json"
-        
-        analysis_data = {
-            'timestamp': datetime.now().isoformat(),
-            'version': '3.6.1',
-            'analysis_type': 'keyword_analysis',
-            'results': keyword_analysis
-        }
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(analysis_data, f, ensure_ascii=False, indent=2, default=str)
-        
-        print(f"📁 關鍵字分析結果已儲存: {output_file}")
-
-    def _save_watchlist_analysis(self, watchlist_analysis):
-        """儲存觀察名單分析結果"""
-        output_file = "data/reports/watchlist_analysis.json"
-        
-        analysis_data = {
-            'timestamp': datetime.now().isoformat(),
-            'version': '3.6.1',
-            'analysis_type': 'watchlist_coverage',
-            'results': watchlist_analysis
-        }
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(analysis_data, f, ensure_ascii=False, indent=2, default=str)
-        
-        print(f"📁 觀察名單分析結果已儲存: {output_file}")
-
-    def _display_watchlist_summary(self, watchlist_analysis):
-        """顯示觀察名單分析摘要"""
-        if 'error' in watchlist_analysis:
-            print(f"❌ 觀察名單分析失敗: {watchlist_analysis['error']}")
-            return
-        
-        total_companies = watchlist_analysis['total_watchlist_companies']
-        companies_with_files = watchlist_analysis['companies_with_md_files']
-        coverage_rate = watchlist_analysis['coverage_rate']
-        success_rate = watchlist_analysis['success_rate']
-        
-        print("\n📊 觀察名單分析摘要:")
-        print(f"觀察名單總公司數: {total_companies}")
-        print(f"有MD檔案公司數: {companies_with_files}")
-        print(f"覆蓋率: {coverage_rate}%")
-        print(f"成功處理率: {success_rate}%")
-        
-        # 顯示狀態分佈
-        status_summary = watchlist_analysis['company_status_summary']
-        print("公司狀態分佈:")
-        for status, count in status_summary.items():
-            status_name = {
-                'processed': '已處理',
-                'not_found': '未找到MD檔案',
-                'validation_failed': '驗證失敗',
-                'low_quality': '品質過低',
-                'multiple_files': '多個檔案'
-            }.get(status, status)
-            print(f"  {status_name}: {count} 家")
-
-    def _append_missing_companies(self, watchlist_summary, missing_companies):
-        """將缺失公司資訊附加到觀察名單報告"""
-        import pandas as pd
-        
-        # 準備缺失公司資料
-        missing_data = []
-        for company in missing_companies:
-            missing_data.append({
-                '公司代號': company['company_code'],
-                '公司名稱': company['company_name'],
-                'MD檔案數量': 0,
-                '處理狀態': '❌ 缺失MD檔案',
-                '平均品質評分': 0.0,
-                '最高品質評分': 0.0,
-                '搜尋關鍵字數量': len(company.get('suggested_keywords', [])),
-                '主要關鍵字': ', '.join(company.get('suggested_keywords', [])[:3]),
-                '關鍵字平均品質': 0.0,
-                '最新檔案日期': '',
-                '驗證狀態': '❌ 無資料',
-                '更新日期': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            })
-        
-        missing_df = pd.DataFrame(missing_data)
-        
-        # 合併現有報告和缺失公司資料
-        if not missing_df.empty:
-            # 確保欄位一致
-            common_columns = list(set(watchlist_summary.columns) & set(missing_df.columns))
-            combined_df = pd.concat([
-                watchlist_summary[common_columns],
-                missing_df[common_columns]
-            ], ignore_index=True)
+        try:
+            print(f"🔄 處理最近 {hours} 小時的MD檔案...")
             
-            print(f"📋 已附加 {len(missing_companies)} 家缺失公司到觀察名單報告")
-            return combined_df
-        
-        return watchlist_summary
-
-    def _display_keyword_generation_summary(self, keyword_analysis, min_usage):
-        """顯示關鍵字報告生成摘要"""
-        keyword_stats = keyword_analysis.get('keyword_stats', {})
-        
-        print(f"\n📊 關鍵字報告生成摘要:")
-        print(f"=" * 40)
-        print(f"📊 關鍵字統計 (最小使用: {min_usage} 次):")
-        print(f"   有效關鍵字: {len(keyword_stats)}")
-        
-        if keyword_stats:
-            # 統計分類
-            categories = {}
-            for keyword, stats in keyword_stats.items():
-                category = stats.get('category', 'other')
-                categories[category] = categories.get(category, 0) + 1
+            recent_files = self.md_scanner.scan_recent_files(hours)
+            if not recent_files:
+                print(f"📁 最近 {hours} 小時內未找到新檔案")
+                return True
             
-            print(f"📊 關鍵字分類:")
-            for category, count in categories.items():
-                print(f"   {category}: {count}")
-
-    def _display_watchlist_generation_summary(self, watchlist_analysis, missing_count=0):
-        """顯示觀察名單報告生成摘要"""
-        total_companies = watchlist_analysis.get('total_watchlist_companies', 0)
-        companies_with_files = watchlist_analysis.get('companies_with_md_files', 0)
-        companies_processed = watchlist_analysis.get('companies_processed_successfully', 0)
-        coverage_rate = watchlist_analysis.get('coverage_rate', 0)
-        success_rate = watchlist_analysis.get('success_rate', 0)
-        
-        print(f"\n📊 觀察名單報告生成摘要:")
-        print(f"=" * 40)
-        print(f"📋 觀察名單總公司數: {total_companies}")
-        print(f"📁 有MD檔案公司數: {companies_with_files}")
-        print(f"✅ 成功處理公司數: {companies_processed}")
-        print(f"📊 覆蓋率: {coverage_rate}%")
-        print(f"🎯 成功率: {success_rate}%")
-        
-        if missing_count > 0:
-            print(f"❌ 缺失公司數: {missing_count}")
-
-    def _ensure_output_directories(self):
-        """確保輸出目錄存在"""
-        directories = [
-            "data/reports",
-            "data/quarantine",
-            "data/quarantine/watch_list_issues",
-            "logs/process"
-        ]
-        
-        for directory in directories:
-            Path(directory).mkdir(parents=True, exist_ok=True)
-
-    def _display_processing_statistics_v361(self, validation_stats: Dict):
-        """顯示處理統計資訊"""
-        total = validation_stats['total_processed']
-        passed = validation_stats['validation_passed']
-        failed = validation_stats['validation_failed']
-        disabled = validation_stats['validation_disabled']
-        
-        print(f"\n📊 處理統計摘要 v3.6.1:")
-        print(f"=" * 40)
-        print(f"📁 總處理檔案: {total}")
-        print(f"✅ 驗證通過: {passed} ({passed/total*100:.1f}%)")
-        print(f"❌ 驗證失敗: {failed} ({failed/total*100:.1f}%)")
-        print(f"⚠️ 驗證停用: {disabled} ({disabled/total*100:.1f}%)")
-        
-        if failed > 0:
-            print(f"\n❌ 驗證失敗詳細分類:")
-            not_in_watchlist = validation_stats['not_in_watchlist']
-            name_mismatch = validation_stats['name_mismatch']
-            invalid_format = validation_stats['invalid_format']
-            other_errors = validation_stats['other_errors']
+            print(f"📄 找到 {len(recent_files)} 個最近檔案")
             
-            if not_in_watchlist > 0:
-                print(f"   🚫 不在觀察名單: {not_in_watchlist} 個")
-            if name_mismatch > 0:
-                print(f"   📝 觀察名單名稱不符: {name_mismatch} 個")
-            if invalid_format > 0:
-                print(f"   📋 格式無效: {invalid_format} 個")
-            if other_errors > 0:
-                print(f"   ⚠️ 其他錯誤: {other_errors} 個")
+            # 使用相同的處理邏輯，但只處理最近檔案
+            # 這裡可以重用 process_all_md_files 的邏輯
+            return self._process_file_list(recent_files, upload_sheets)
             
-            print(f"\n💡 這些驗證失敗的公司將不會出現在最終報告中")
-
-    def _display_processing_validation_summary_v361(self, processed_companies: List):
-        """顯示處理過程中的驗證摘要"""
-        validation_passed = sum(1 for c in processed_companies if c.get('content_validation_passed', True))
-        validation_failed = len(processed_companies) - validation_passed
-        validation_disabled = sum(1 for c in processed_companies 
-                                if c.get('validation_result', {}).get('validation_method') == 'disabled')
+        except Exception as e:
+            print(f"❌ 處理最近檔案失敗: {e}")
+            return False
+    
+    def process_single_company(self, company_code, upload_sheets=True):
+        """處理單一公司"""
+        if not self.md_scanner:
+            print("❌ MD掃描器不可用")
+            return False
         
-        if validation_failed > 0 or validation_disabled > 0:
-            print(f"\n⚠️ 最終驗證摘要 v3.6.1:")
-            print(f"✅ 驗證通過: {validation_passed}")
-            print(f"❌ 驗證失敗: {validation_failed}")
-            print(f"⚠️ 驗證停用: {validation_disabled}")
-
-    def _basic_process_md_file(self, md_file, file_info):
-        """基本的 MD 檔案處理（當其他模組不可用時）"""
-        with open(md_file, 'r', encoding='utf-8') as f:
-            content = f.read()
+        try:
+            print(f"🔄 處理公司 {company_code}...")
+            
+            company_files = self.md_scanner.find_company_files(company_code)
+            if not company_files:
+                print(f"📁 未找到公司 {company_code} 的檔案")
+                return False
+            
+            print(f"📄 找到 {len(company_files)} 個檔案")
+            
+            return self._process_file_list(company_files, upload_sheets)
+            
+        except Exception as e:
+            print(f"❌ 處理單一公司失敗: {e}")
+            return False
+    
+    def analyze_quality(self):
+        """品質分析"""
+        if not self.md_scanner:
+            print("❌ MD掃描器不可用")
+            return False
         
-        basic_score = self._calculate_basic_quality_score(file_info)
+        try:
+            print(f"📊 執行品質分析...")
+            
+            md_files = self.md_scanner.scan_all_md_files()
+            if not md_files:
+                print("📁 未找到MD檔案")
+                return True
+            
+            processed_companies = []
+            for md_file in md_files:
+                try:
+                    if self.md_parser:
+                        parsed_data = self.md_parser.parse_md_file(md_file)
+                    else:
+                        parsed_data = self._simple_parse_md_file(md_file)
+                    
+                    if self.quality_analyzer:
+                        quality_data = self.quality_analyzer.analyze(parsed_data)
+                        parsed_data.update(quality_data)
+                    
+                    processed_companies.append(parsed_data)
+                    
+                except Exception as e:
+                    print(f"⚠️ 分析檔案失敗: {os.path.basename(md_file)}: {e}")
+            
+            # 顯示品質統計
+            if processed_companies:
+                quality_scores = [c.get('quality_score', 0) for c in processed_companies if c.get('quality_score')]
+                if quality_scores:
+                    avg_quality = sum(quality_scores) / len(quality_scores)
+                    print(f"📈 平均品質評分: {avg_quality:.2f}")
+                    print(f"📊 高品質檔案 (>8): {len([s for s in quality_scores if s > 8])}")
+                    print(f"📊 中等品質檔案 (5-8): {len([s for s in quality_scores if 5 <= s <= 8])}")
+                    print(f"📊 低品質檔案 (<5): {len([s for s in quality_scores if s < 5])}")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 品質分析失敗: {e}")
+            return False
+    
+    def analyze_keywords(self):
+        """查詢模式分析 (v3.6.1升級)"""
+        if not self.keyword_analyzer:
+            print("❌ 關鍵字分析器不可用")
+            return False
         
-        company_data = {
-            **file_info,
-            'content': content,
-            'content_length': len(content),
-            'quality_score': basic_score,
-            'quality_status': self._get_quality_status(basic_score),
-            'quality_category': 'partial',
-            'processed_at': datetime.now(),
-            'processing_method': 'basic',
-            'content_validation_passed': True,
-            'validation_errors': [],
-            'validation_warnings': []
+        try:
+            print(f"🔍 執行查詢模式分析...")
+            
+            # 先獲取處理過的公司資料
+            processed_companies = self._get_processed_companies()
+            if not processed_companies:
+                print("📁 無處理過的公司資料")
+                return False
+            
+            # 執行查詢模式分析
+            pattern_analysis = self.keyword_analyzer.analyze_query_patterns(processed_companies)
+            
+            # 顯示分析結果
+            if pattern_analysis:
+                print(f"📊 查詢模式統計:")
+                patterns = pattern_analysis.get('pattern_statistics', {})
+                print(f"   總模式數: {patterns.get('total_patterns', 0)}")
+                print(f"   有效模式數: {patterns.get('valid_patterns', 0)}")
+                print(f"   平均使用次數: {patterns.get('average_usage', 0):.1f}")
+                
+                # 顯示熱門模式
+                top_patterns = pattern_analysis.get('top_patterns', [])
+                print(f"📈 熱門查詢模式:")
+                for i, (pattern, count) in enumerate(top_patterns[:5], 1):
+                    print(f"   {i}. {pattern}: {count} 次")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 查詢模式分析失敗: {e}")
+            return False
+    
+    def analyze_watchlist(self):
+        """觀察名單分析 (v3.6.1新增)"""
+        if not self.watchlist_analyzer:
+            print("❌ 觀察名單分析器不可用")
+            return False
+        
+        try:
+            print(f"📋 執行觀察名單分析...")
+            
+            # 先獲取處理過的公司資料
+            processed_companies = self._get_processed_companies()
+            if not processed_companies:
+                print("📁 無處理過的公司資料")
+                return False
+            
+            # 執行觀察名單分析
+            watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
+            
+            # 顯示分析結果
+            if watchlist_analysis:
+                print(f"📊 觀察名單覆蓋統計:")
+                print(f"   總觀察名單公司: {watchlist_analysis.get('total_watchlist_companies', 0)}")
+                print(f"   有MD檔案公司: {watchlist_analysis.get('companies_with_md_files', 0)}")
+                print(f"   成功處理公司: {watchlist_analysis.get('companies_processed_successfully', 0)}")
+                print(f"   覆蓋率: {watchlist_analysis.get('coverage_rate', 0):.1f}%")
+                print(f"   成功率: {watchlist_analysis.get('success_rate', 0):.1f}%")
+                
+                # 顯示狀態統計
+                status_summary = watchlist_analysis.get('company_status_summary', {})
+                print(f"📈 處理狀態分布:")
+                for status, count in status_summary.items():
+                    print(f"   {status}: {count} 家公司")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 觀察名單分析失敗: {e}")
+            return False
+    
+    def generate_keyword_summary(self, upload_sheets=True, min_usage=1):
+        """生成查詢模式統計報告 (v3.6.1升級)"""
+        if not self.keyword_analyzer or not self.report_generator:
+            print("❌ 關鍵字分析或報告生成功能不可用")
+            return False
+        
+        try:
+            print(f"📊 生成查詢模式統計報告...")
+            
+            processed_companies = self._get_processed_companies()
+            if not processed_companies:
+                return False
+            
+            # 執行分析
+            pattern_analysis = self.keyword_analyzer.analyze_query_patterns(processed_companies)
+            
+            # 生成報告
+            pattern_summary = self.report_generator.generate_keyword_summary(pattern_analysis)
+            
+            # 儲存報告
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"query-pattern-summary_{timestamp}.csv"
+            filepath = os.path.join("data/reports", filename)
+            
+            os.makedirs("data/reports", exist_ok=True)
+            pattern_summary.to_csv(filepath, index=False, encoding='utf-8-sig')
+            print(f"💾 查詢模式報告已儲存: {filename}")
+            
+            # 上傳到Sheets
+            if upload_sheets and self.sheets_uploader:
+                upload_success = self.sheets_uploader._upload_keyword_summary(pattern_summary)
+                if upload_success:
+                    print(f"☁️ 已上傳到Google Sheets")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 生成查詢模式報告失敗: {e}")
+            return False
+    
+    def generate_watchlist_summary(self, upload_sheets=True, include_missing=False):
+        """生成觀察名單統計報告 (v3.6.1新增)"""
+        if not self.watchlist_analyzer or not self.report_generator:
+            print("❌ 觀察名單分析或報告生成功能不可用")
+            return False
+        
+        try:
+            print(f"📋 生成觀察名單統計報告...")
+            
+            processed_companies = self._get_processed_companies()
+            if not processed_companies:
+                return False
+            
+            # 執行分析
+            watchlist_analysis = self.watchlist_analyzer.analyze_watchlist_coverage(processed_companies)
+            
+            # 生成報告
+            watchlist_summary = self.report_generator.generate_watchlist_summary(watchlist_analysis)
+            
+            # 儲存報告
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"watchlist-summary_{timestamp}.csv"
+            filepath = os.path.join("data/reports", filename)
+            
+            os.makedirs("data/reports", exist_ok=True)
+            watchlist_summary.to_csv(filepath, index=False, encoding='utf-8-sig')
+            print(f"💾 觀察名單報告已儲存: {filename}")
+            
+            # 上傳到Sheets
+            if upload_sheets and self.sheets_uploader:
+                upload_success = self.sheets_uploader._upload_watchlist_summary(watchlist_summary)
+                if upload_success:
+                    print(f"☁️ 已上傳到Google Sheets")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 生成觀察名單報告失敗: {e}")
+            return False
+    
+    # MD檔案清理功能 (v3.6.1新增)
+    
+    def cleanup_md_files(self, days=90, quality_threshold=8, dry_run=True, 
+                        create_backup=True, force=False, generate_report=True):
+        """MD檔案清理命令 - 基於財務數據發布日期"""
+        if not self.md_cleaner:
+            print("❌ MD清理功能不可用")
+            return False
+        
+        try:
+            print(f"🧹 開始MD檔案清理...")
+            print(f"   保留期限: {days} 天")
+            print(f"   質量閾值: {quality_threshold}")
+            print(f"   模式: {'預覽' if dry_run else '實際執行'}")
+            
+            # 掃描MD檔案
+            md_files = self.md_cleaner.scan_md_files()
+            if not md_files:
+                print("📁 未找到MD檔案")
+                return True
+            
+            # 生成清理計劃
+            plan = self.md_cleaner.analyze_files_for_cleanup(
+                md_files, 
+                retention_days=days, 
+                quality_threshold=quality_threshold
+            )
+            
+            # 安全檢查
+            if not plan.safety_checks_passed and not force and not dry_run:
+                print(f"\n⚠️ 安全檢查未通過，清理計劃存在風險:")
+                for warning in plan.warnings:
+                    print(f"   - {warning}")
+                print(f"\n💡 選項:")
+                print(f"   1. 使用 --dry-run 預覽詳細資訊")
+                print(f"   2. 使用 --force 強制執行")
+                print(f"   3. 調整 --days 或 --quality-threshold 參數")
+                return False
+            
+            # 執行清理
+            result = self.md_cleaner.execute_cleanup(
+                plan, 
+                dry_run=dry_run, 
+                create_backup=create_backup
+            )
+            
+            # 生成報告
+            if generate_report:
+                report = self.md_cleaner.generate_cleanup_report(md_files, plan, result)
+                self._save_cleanup_report(report, dry_run)
+            
+            return result.files_deleted > 0 or dry_run
+            
+        except Exception as e:
+            print(f"❌ MD檔案清理失敗: {e}")
+            return False
+    
+    def show_md_cleanup_preview(self, days=90, quality_threshold=8, show_details=False):
+        """顯示MD檔案清理預覽"""
+        if not self.md_cleaner:
+            print("❌ MD清理功能不可用")
+            return False
+        
+        try:
+            print(f"🔍 MD檔案清理預覽 (保留期: {days}天, 質量閾值: {quality_threshold})")
+            
+            # 掃描和分析檔案
+            md_files = self.md_cleaner.scan_md_files()
+            if not md_files:
+                print("📁 未找到MD檔案")
+                return True
+            
+            plan = self.md_cleaner.analyze_files_for_cleanup(
+                md_files, retention_days=days, quality_threshold=quality_threshold
+            )
+            
+            # 顯示詳細預覽
+            print(f"\n📋 清理計劃詳情:")
+            print(f"   📄 總檔案數: {plan.total_files}")
+            print(f"   🗑️  刪除候選: {len(plan.deletion_candidates)}")
+            print(f"   💾 保留檔案: {len(plan.preserved_files)}")
+            print(f"   ❓ 無日期檔案: {len(plan.no_date_files)}")
+            print(f"   💽 預估節省: {self.md_cleaner._format_size(plan.estimated_space_saved)}")
+            
+            # 顯示刪除候選詳情
+            if plan.deletion_candidates and show_details:
+                print(f"\n🗑️  刪除候選檔案清單:")
+                for i, file_info in enumerate(plan.deletion_candidates):
+                    date_str = file_info.md_date.strftime('%Y-%m-%d') if file_info.md_date else '無日期'
+                    quality_str = f"(Q:{file_info.quality_score:.1f})" if file_info.quality_score else "(無評分)"
+                    size_str = self.md_cleaner._format_size(file_info.file_size)
+                    print(f"   {i+1:3d}. {file_info.filename}")
+                    print(f"        日期: {date_str} | 年齡: {file_info.age_days}天 | 大小: {size_str} {quality_str}")
+                    print(f"        原因: {file_info.preservation_reason}")
+            
+            # 安全檢查結果
+            if plan.safety_checks_passed:
+                print(f"\n✅ 安全檢查通過，可以執行清理")
+            else:
+                print(f"\n⚠️  安全檢查警告:")
+                for warning in plan.warnings:
+                    print(f"   - {warning}")
+                print(f"\n💡 建議使用 --force 參數強制執行或調整參數")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 預覽生成失敗: {e}")
+            return False
+    
+    def analyze_md_files(self):
+        """分析MD檔案狀態"""
+        if not self.md_cleaner:
+            print("❌ MD清理功能不可用")
+            return False
+        
+        try:
+            print(f"📊 分析MD檔案狀態...")
+            
+            # 獲取統計資訊
+            stats = self.md_cleaner.get_statistics()
+            
+            print(f"\n📋 MD檔案目錄統計:")
+            print(f"   📁 目錄: {self.md_cleaner.md_dir}")
+            print(f"   📄 總檔案數: {stats['total_files']}")
+            print(f"   💾 總大小: {stats.get('total_size_formatted', '0 B')}")
+            print(f"   📅 日期提取成功率: {stats.get('date_extraction_success_rate', 0):.1f}%")
+            print(f"   🔧 解析器可用: {'是' if stats.get('parser_available', False) else '否'}")
+            
+            if stats.get('age_statistics'):
+                age_stats = stats['age_statistics']
+                print(f"\n📈 年齡統計:")
+                print(f"   平均年齡: {age_stats.get('average_age_days', 0):.1f} 天")
+                print(f"   中位數年齡: {age_stats.get('median_age_days', 0):.1f} 天")
+                print(f"   最舊檔案: {age_stats.get('oldest_file_days', 0)} 天")
+                print(f"   最新檔案: {age_stats.get('newest_file_days', 0)} 天")
+            
+            if stats.get('quality_statistics'):
+                quality_stats = stats['quality_statistics']
+                print(f"\n⭐ 質量統計:")
+                print(f"   平均質量: {quality_stats.get('average_quality', 0):.1f}")
+                print(f"   最高質量: {quality_stats.get('highest_quality', 0):.1f}")
+                print(f"   最低質量: {quality_stats.get('lowest_quality', 0):.1f}")
+            
+            # 年齡分布
+            if stats.get('age_distribution'):
+                print(f"\n📊 年齡分布:")
+                for age_group, count in stats['age_distribution'].items():
+                    print(f"   {age_group}: {count} 檔案")
+            
+            # 質量分布
+            if stats.get('quality_distribution'):
+                print(f"\n🏆 質量分布:")
+                for quality_group, count in stats['quality_distribution'].items():
+                    print(f"   {quality_group}: {count} 檔案")
+            
+            # 熱門公司
+            if stats.get('top_companies'):
+                print(f"\n🏢 檔案數最多的公司 (Top 5):")
+                for i, (company, count) in enumerate(list(stats['top_companies'].items())[:5]):
+                    print(f"   {i+1}. {company}: {count} 檔案")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ MD檔案分析失敗: {e}")
+            return False
+    
+    def show_statistics(self):
+        """顯示統計資訊"""
+        if not self.md_scanner:
+            print("❌ MD掃描器不可用")
+            return False
+        
+        try:
+            print(f"📊 Process CLI v{self.version} 統計資訊")
+            
+            # MD掃描器統計
+            stats = self.md_scanner.get_stats()
+            print(f"\n📄 MD檔案統計:")
+            print(f"   總檔案數: {stats['total_files']}")
+            print(f"   最近24h: {stats['recent_files_24h']}")
+            print(f"   公司數量: {stats['unique_companies']}")
+            
+            if 'file_size_stats' in stats:
+                size_stats = stats['file_size_stats']
+                print(f"   總大小: {size_stats.get('total_size_mb', 0)} MB")
+                print(f"   平均大小: {size_stats.get('average_size_kb', 0)} KB")
+            
+            # 組件狀態
+            print(f"\n🔧 組件狀態:")
+            print(f"   MD掃描器: {'✅' if self.md_scanner else '❌'}")
+            print(f"   MD解析器: {'✅' if self.md_parser else '❌'}")
+            print(f"   品質分析器: {'✅' if self.quality_analyzer else '❌'}")
+            print(f"   關鍵字分析器: {'✅' if self.keyword_analyzer else '❌'}")
+            print(f"   觀察名單分析器: {'✅' if self.watchlist_analyzer else '❌'}")
+            print(f"   報告生成器: {'✅' if self.report_generator else '❌'}")
+            print(f"   Google Sheets上傳: {'✅' if self.sheets_uploader else '❌'}")
+            print(f"   MD清理功能: {'✅' if self.md_cleaner else '❌'}")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 統計資訊獲取失敗: {e}")
+            return False
+    
+    def validate_setup(self):
+        """驗證環境設定"""
+        try:
+            print(f"🔍 驗證 Process CLI v{self.version} 環境設定...")
+            
+            validation_results = {}
+            
+            # 驗證MD掃描器
+            if self.md_scanner:
+                md_files = self.md_scanner.scan_all_md_files()
+                validation_results['md_scanner'] = f"✅ 找到 {len(md_files)} 個檔案"
+            else:
+                validation_results['md_scanner'] = "❌ MD掃描器不可用"
+            
+            # 驗證其他組件
+            validation_results['md_parser'] = "✅ MD解析器已載入" if self.md_parser else "❌ MD解析器不可用"
+            validation_results['quality_analyzer'] = "✅ 品質分析器已載入" if self.quality_analyzer else "❌ 品質分析器不可用"
+            validation_results['keyword_analyzer'] = "✅ 關鍵字分析器已載入" if self.keyword_analyzer else "❌ 關鍵字分析器不可用"
+            validation_results['watchlist_analyzer'] = "✅ 觀察名單分析器已載入" if self.watchlist_analyzer else "❌ 觀察名單分析器不可用"
+            validation_results['report_generator'] = "✅ 報告生成器已載入" if self.report_generator else "❌ 報告生成器不可用"
+            validation_results['sheets_uploader'] = "✅ Google Sheets上傳器已載入" if self.sheets_uploader else "❌ Google Sheets上傳器不可用"
+            validation_results['md_cleaner'] = "✅ MD清理功能已載入" if self.md_cleaner else "❌ MD清理功能不可用"
+            
+            # 顯示驗證結果
+            print(f"\n📋 驗證結果:")
+            for component, status in validation_results.items():
+                print(f"   {component}: {status}")
+            
+            # 檢查觀察名單
+            if self.watchlist_analyzer:
+                watchlist_size = len(self.watchlist_analyzer.watchlist_mapping)
+                print(f"\n📋 觀察名單: 載入 {watchlist_size} 家公司")
+            
+            # 檢查目錄結構
+            directories = ['data', 'data/md', 'data/reports']
+            print(f"\n📁 目錄結構:")
+            for directory in directories:
+                exists = os.path.exists(directory)
+                print(f"   {directory}: {'✅' if exists else '❌'}")
+                if not exists:
+                    os.makedirs(directory, exist_ok=True)
+                    print(f"      已創建目錄: {directory}")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ 環境驗證失敗: {e}")
+            return False
+    
+    # 輔助方法
+    
+    def _process_file_list(self, file_list, upload_sheets=True):
+        """處理指定的檔案清單"""
+        processed_companies = []
+        
+        for md_file in file_list:
+            try:
+                if self.md_parser:
+                    parsed_data = self.md_parser.parse_md_file(md_file)
+                else:
+                    parsed_data = self._simple_parse_md_file(md_file)
+                
+                if self.quality_analyzer:
+                    quality_data = self.quality_analyzer.analyze(parsed_data)
+                    parsed_data.update(quality_data)
+                
+                processed_companies.append(parsed_data)
+                
+            except Exception as e:
+                print(f"⚠️ 處理檔案失敗: {os.path.basename(md_file)}: {e}")
+        
+        # 生成和上傳報告
+        if processed_companies and self.report_generator:
+            portfolio_summary = self.report_generator.generate_portfolio_summary(processed_companies)
+            detailed_report = self.report_generator.generate_detailed_report(processed_companies)
+            
+            if upload_sheets and self.sheets_uploader:
+                self.sheets_uploader.upload_all_reports(portfolio_summary, detailed_report)
+        
+        return len(processed_companies) > 0
+    
+    def _simple_parse_md_file(self, file_path):
+        """簡化的MD檔案解析 (當MD解析器不可用時)"""
+        filename = os.path.basename(file_path)
+        parts = filename.replace('.md', '').split('_')
+        
+        return {
+            'filename': filename,
+            'company_code': parts[0] if len(parts) >= 1 else 'Unknown',
+            'company_name': parts[1] if len(parts) >= 2 else 'Unknown',
+            'data_source': parts[2] if len(parts) >= 3 else 'Unknown',
+            'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)),
+            'search_keywords': [],
+            'quality_score': 5.0,  # 預設分數
+            'has_eps_data': False,
+            'has_target_price': False,
+            'has_analyst_info': False
         }
+    
+    def _get_processed_companies(self):
+        """獲取處理過的公司資料"""
+        if not self.md_scanner:
+            return []
         
-        return company_data
-
-    def _calculate_basic_quality_score(self, file_info):
-        """基於檔案資訊計算基本品質評分"""
-        score = 0
+        md_files = self.md_scanner.scan_all_md_files()
+        processed_companies = []
         
-        file_size = file_info.get('file_size', 0)
-        if file_size > 5000:
-            score += 3
-        elif file_size > 2000:
-            score += 2
-        elif file_size > 500:
-            score += 1
+        for md_file in md_files:
+            try:
+                if self.md_parser:
+                    parsed_data = self.md_parser.parse_md_file(md_file)
+                else:
+                    parsed_data = self._simple_parse_md_file(md_file)
+                
+                if self.quality_analyzer:
+                    quality_data = self.quality_analyzer.analyze(parsed_data)
+                    parsed_data.update(quality_data)
+                
+                processed_companies.append(parsed_data)
+                
+            except Exception as e:
+                continue
         
-        if file_info.get('company_code', 'Unknown') != 'Unknown':
-            score += 2
-        if file_info.get('company_name', 'Unknown') != 'Unknown':
-            score += 2
-        
-        source = file_info.get('data_source', 'Unknown').lower()
-        if 'factset' in source:
-            score += 3
-        elif source in ['yahoo', 'reuters', 'bloomberg']:
-            score += 2
-        elif source != 'unknown':
-            score += 1
-        
-        return min(10, max(0, score))
-
-    def _get_quality_status(self, score):
-        """根據評分取得品質狀態"""
-        if score >= 9:
-            return "🟢 完整"
-        elif score >= 8:
-            return "🟡 良好"
-        elif score >= 3:
-            return "🟠 部分"
-        else:
-            return "🔴 不足"
-
-    def _generate_minimal_reports(self, processed_companies):
-        """生成最小化報告（當 ReportGenerator 不可用時）"""
-        import pandas as pd
-        
-        print("📄 生成最小化報告...")
-        
-        summary_data = []
-        for company in processed_companies:
-            summary_data.append({
-                '代號': company.get('company_code', ''),
-                '名稱': company.get('company_name', ''),
-                '品質評分': company.get('quality_score', 0),
-                '狀態': company.get('quality_status', ''),
-                '驗證通過': company.get('content_validation_passed', True),
-                '處理時間': company.get('processed_at', '')
-            })
-        
-        df = pd.DataFrame(summary_data)
-        emergency_file = "data/reports/emergency_summary.csv"
-        df.to_csv(emergency_file, index=False, encoding='utf-8-sig')
-        print(f"📁 緊急報告已儲存: {emergency_file}")
+        return processed_companies
+    
+    def _save_cleanup_report(self, report: Dict[str, Any], dry_run: bool):
+        """儲存清理報告"""
+        try:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            mode = "preview" if dry_run else "execution"
+            
+            # 確保報告目錄存在
+            reports_dir = "data/reports"
+            os.makedirs(reports_dir, exist_ok=True)
+            
+            # 儲存JSON報告
+            report_filename = f"md_cleanup_{mode}_{timestamp}.json"
+            report_path = os.path.join(reports_dir, report_filename)
+            
+            with open(report_path, 'w', encoding='utf-8') as f:
+                json.dump(report, f, ensure_ascii=False, indent=2)
+            
+            # 儲存最新版本
+            latest_path = os.path.join(reports_dir, f"md_cleanup_{mode}_latest.json")
+            with open(latest_path, 'w', encoding='utf-8') as f:
+                json.dump(report, f, ensure_ascii=False, indent=2)
+            
+            print(f"📄 清理報告已儲存: {report_filename}")
+            
+        except Exception as e:
+            print(f"⚠️ 報告儲存失敗: {e}")
 
 
 def main():
-    """主程式入口"""
-    parser = argparse.ArgumentParser(description='FactSet 處理系統 v3.6.1 (完整實現)')
+    """主程式入口點"""
+    parser = argparse.ArgumentParser(description='FactSet 處理系統 v3.6.1 (含MD檔案清理)')
     parser.add_argument('command', choices=[
         'process',            # 處理所有 MD 檔案
         'process-recent',     # 處理最近的 MD 檔案
         'process-single',     # 處理單一公司
         'analyze-quality',    # 品質分析
-        'analyze-keywords',   # 關鍵字分析
+        'analyze-keywords',   # 查詢模式分析
         'analyze-watchlist',  # 觀察名單分析
-        'keyword-summary',    # 關鍵字統計報告
+        'keyword-summary',    # 查詢模式統計報告
         'watchlist-summary',  # 觀察名單統計報告
+        'cleanup',           # MD檔案清理
+        'cleanup-preview',   # MD檔案清理預覽
+        'analyze-md',        # MD檔案狀態分析
         'stats',             # 顯示統計資訊
         'validate'           # 驗證環境設定
     ])
-    parser.add_argument('--company', help='單一公司代號 (用於 process-single)')
-    parser.add_argument('--hours', type=int, default=24, help='最近小時數 (用於 process-recent)')
-    parser.add_argument('--no-upload', action='store_true', help='不上傳到 Google Sheets')
+    
+    # 現有參數
+    parser.add_argument('--company', help='公司代號')
+    parser.add_argument('--hours', type=int, default=24, help='小時數')
+    parser.add_argument('--no-upload', action='store_true', help='不上傳到 Sheets')
     parser.add_argument('--force-upload', action='store_true', help='強制上傳，忽略驗證錯誤')
-    parser.add_argument('--min-usage', type=int, default=1, help='關鍵字最小使用次數')
-    parser.add_argument('--include-missing', action='store_true', help='包含缺失公司資訊 (用於 watchlist-summary)')
+    parser.add_argument('--min-usage', type=int, default=1, help='查詢模式最小使用次數')
+    parser.add_argument('--include-missing', action='store_true', help='包含缺失公司資訊')
     parser.add_argument('--dry-run', action='store_true', help='預覽模式，不實際執行')
+    
+    # 新增清理相關參數
+    parser.add_argument('--days', type=int, default=90, help='MD檔案保留天數 (預設: 90)')
+    parser.add_argument('--quality-threshold', type=float, default=8, help='高質量檔案延長保留閾值 (預設: 8)')
+    parser.add_argument('--no-backup', action='store_true', help='清理時不創建備份')
+    parser.add_argument('--force', action='store_true', help='強制執行清理，忽略安全檢查')
+    parser.add_argument('--show-details', action='store_true', help='顯示詳細的檔案清單')
+    parser.add_argument('--no-report', action='store_true', help='不生成清理報告')
     
     args = parser.parse_args()
     
-    # 建立 CLI 實例
-    try:
-        cli = ProcessCLI()
-    except Exception as e:
-        print(f"❌ ProcessCLI 初始化失敗: {e}")
-        sys.exit(1)
+    # 創建CLI實例
+    cli = ProcessCLI()
+    success = False
     
-    # 預覽模式
-    if args.dry_run:
-        print("🔍 預覽模式：顯示將要執行的操作")
-        print(f"命令: {args.command}")
-        print(f"參數: {vars(args)}")
-        return
-    
-    # 執行對應命令
     try:
+        # 命令處理
         if args.command == 'process':
-            cli.process_all_md_files(upload_sheets=not args.no_upload, force_upload=args.force_upload)
-        
+            success = cli.process_all_md_files(upload_sheets=not args.no_upload)
         elif args.command == 'process-recent':
-            cli.process_recent_files(hours=args.hours, upload_sheets=not args.no_upload, force_upload=args.force_upload)
-            
+            success = cli.process_recent_md_files(hours=args.hours, upload_sheets=not args.no_upload)
         elif args.command == 'process-single':
             if not args.company:
-                print("❌ 請提供 --company 參數")
-                sys.exit(1)
-            cli.process_single_company(args.company, upload_sheets=not args.no_upload, force_upload=args.force_upload)
-        
+                print("❌ 處理單一公司需要指定 --company 參數")
+                success = False
+            else:
+                success = cli.process_single_company(args.company, upload_sheets=not args.no_upload)
         elif args.command == 'analyze-quality':
-            cli.analyze_quality_only()
-        
+            success = cli.analyze_quality()
         elif args.command == 'analyze-keywords':
-            cli.analyze_keywords_only(min_usage=args.min_usage)
-        
+            success = cli.analyze_keywords()
         elif args.command == 'analyze-watchlist':
-            cli.analyze_watchlist_only()
-        
+            success = cli.analyze_watchlist()
         elif args.command == 'keyword-summary':
-            cli.generate_keyword_summary(upload_sheets=not args.no_upload, min_usage=args.min_usage)
-        
+            success = cli.generate_keyword_summary(upload_sheets=not args.no_upload, min_usage=args.min_usage)
         elif args.command == 'watchlist-summary':
-            cli.generate_watchlist_summary(upload_sheets=not args.no_upload, include_missing=args.include_missing)
-        
+            success = cli.generate_watchlist_summary(upload_sheets=not args.no_upload, include_missing=args.include_missing)
+        elif args.command == 'cleanup':
+            success = cli.cleanup_md_files(
+                days=args.days,
+                quality_threshold=args.quality_threshold,
+                dry_run=args.dry_run,
+                create_backup=not args.no_backup,
+                force=args.force,
+                generate_report=not args.no_report
+            )
+        elif args.command == 'cleanup-preview':
+            success = cli.show_md_cleanup_preview(
+                days=args.days,
+                quality_threshold=args.quality_threshold,
+                show_details=args.show_details
+            )
+        elif args.command == 'analyze-md':
+            success = cli.analyze_md_files()
         elif args.command == 'stats':
-            cli.show_stats()
-        
+            success = cli.show_statistics()
         elif args.command == 'validate':
-            cli.validate_setup()
+            success = cli.validate_setup()
+        else:
+            print(f"❌ 未知命令: {args.command}")
+            success = False
     
     except KeyboardInterrupt:
-        print("\n⏹️ 使用者中斷操作")
-        sys.exit(0)
+        print(f"\n⚠️ 用戶中斷操作")
+        success = False
     except Exception as e:
-        print(f"❌ 執行錯誤: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
+        print(f"❌ 執行失敗: {e}")
+        success = False
+    
+    # 退出程式碼
+    exit_code = 0 if success else 1
+    print(f"\n🏁 執行完成 (退出碼: {exit_code})")
+    exit(exit_code)
 
 
 if __name__ == "__main__":
