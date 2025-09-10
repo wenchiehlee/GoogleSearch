@@ -55,15 +55,15 @@ class WatchlistAnalyzer:
         }
 
     def _load_watchlist(self) -> Dict[str, str]:
-        """載入觀察名單.csv - 增強版本"""
+        """載入StockID_TWSE_TPEX.csv - 增強版本"""
         mapping = {}
         
         possible_paths = [
-            '觀察名單.csv',
-            '../觀察名單.csv',
-            '../../觀察名單.csv',
-            'data/觀察名單.csv',
-            '../data/觀察名單.csv',
+            'StockID_TWSE_TPEX.csv',
+            '../StockID_TWSE_TPEX.csv',
+            '../../StockID_TWSE_TPEX.csv',
+            'data/StockID_TWSE_TPEX.csv',
+            '../data/StockID_TWSE_TPEX.csv',
             'watchlist.csv',
             '../watchlist.csv'
         ]
@@ -144,7 +144,7 @@ class WatchlistAnalyzer:
                     continue
         
         print("❌ 所有觀察名單載入嘗試均失敗")
-        print("💡 請確保觀察名單.csv檔案存在且格式正確")
+        print("💡 請確保StockID_TWSE_TPEX.csv檔案存在且格式正確")
         return {}
 
     def _validate_watchlist_quality(self, mapping: Dict[str, str]):

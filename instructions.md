@@ -17,7 +17,7 @@
 ### Communication Pattern
 
 ```
-Input: 觀察名單.csv (116+ Taiwan companies)
+Input: StockID_TWSE_TPEX.csv (116+ Taiwan companies)
     ↓
 ┌─────────────────────────────────┐
 │ Search Group (v3.5.1)          │ 
@@ -72,7 +72,7 @@ data/
 └── cache/                 # Search caching and progress
 
 # Required input file
-觀察名單.csv              # Must be in project root (代號,名稱 format)
+StockID_TWSE_TPEX.csv              # Must be in project root (代號,名稱 format)
 ```
 
 ### 3. Dependencies Installation
@@ -172,7 +172,7 @@ version: v3.5.1                                     # Version tracking
 | No MD files generated | Process Group shows "Found 0 MD files" | Run Search Group first |
 | Search quota exhausted | Search Group API errors | Add more API keys to .env |
 | Invalid MD format | Process Group parsing errors | Check Search Group version compatibility |
-| Missing watchlist | Process Group validation warnings | Ensure `觀察名單.csv` in project root |
+| Missing watchlist | Process Group validation warnings | Ensure `StockID_TWSE_TPEX.csv` in project root |
 
 ### System Validation
 
@@ -257,7 +257,7 @@ python sheets_uploader.py --test-connection
 # Solution: Add more keys to .env and restart Search Group
 
 # Issue: "觀察名單未載入"
-# Solution: Ensure 觀察名單.csv is in project root with correct format
+# Solution: Ensure StockID_TWSE_TPEX.csv is in project root with correct format
 
 # Issue: "No MD files found"  
 # Solution: Run Search Group first to generate MD files

@@ -125,7 +125,7 @@ class SearchConfig:
                 "max_cache_size_mb": 100
             },
             "files": {
-                "watchlist_path": "觀察名單.csv",
+                "watchlist_path": "StockID_TWSE_TPEX.csv",
                 "output_dir": "data/md/",
                 "cache_dir": "cache/search/",
                 "log_dir": "logs/search/"
@@ -255,11 +255,11 @@ class SearchCLI:
                 Path(directory).mkdir(parents=True, exist_ok=True)
     
     def _load_watchlist_csv(self) -> List[Dict[str, str]]:
-        """Load 觀察名單.csv with validation"""
+        """Load StockID_TWSE_TPEX.csv with validation"""
         csv_path = self.config.get("files.watchlist_path")
         
         if not os.path.exists(csv_path):
-            raise FileNotFoundError(f"觀察名單.csv not found at {csv_path}")
+            raise FileNotFoundError(f"StockID_TWSE_TPEX.csv not found at {csv_path}")
         
         companies = []
         with open(csv_path, 'r', encoding='utf-8') as f:

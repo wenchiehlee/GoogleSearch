@@ -84,11 +84,11 @@ class MDParser:
         mapping = {}
         
         possible_paths = [
-            '觀察名單.csv',
-            '../觀察名單.csv',
-            '../../觀察名單.csv',
-            'data/觀察名單.csv',
-            '../data/觀察名單.csv',
+            'StockID_TWSE_TPEX.csv',
+            '../StockID_TWSE_TPEX.csv',
+            '../../StockID_TWSE_TPEX.csv',
+            'data/StockID_TWSE_TPEX.csv',
+            '../data/StockID_TWSE_TPEX.csv',
             'watchlist.csv',
             '../watchlist.csv'
         ]

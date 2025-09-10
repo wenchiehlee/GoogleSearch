@@ -12,7 +12,7 @@
 
 **v3.6.1 新功能** (相對於 v3.6.0): 
 - ✅ 新增觀察名單處理統計報告 (`watchlist-summary.csv`)
-- ✅ 觀察名單.csv 為基礎的統計分析 (MD檔案數量、平均品質評分)
+- ✅ StockID_TWSE_TPEX.csv 為基礎的統計分析 (MD檔案數量、平均品質評分)
 - ✅ 標準化查詢模式分析 (`{name} {symbol}` 格式，對應 REFINED_SEARCH_PATTERNS)
 - ✅ 查詢模式效果評估與觀察名單公司的關聯分析
 - ✅ 觀察名單覆蓋率和處理狀態統計
@@ -274,7 +274,7 @@ class KeywordAnalyzer:
 ### 4. Watchlist Analyzer (`watchlist_analyzer.py`) - ~500 行 (v3.6.1 新增)
 
 #### 職責
-- 載入和解析觀察名單.csv
+- 載入和解析StockID_TWSE_TPEX.csv
 - 統計每家觀察名單公司的MD檔案處理狀態
 - 分析觀察名單公司的搜尋關鍵字模式
 - 計算觀察名單覆蓋率和處理效果
@@ -768,7 +768,7 @@ python process_cli.py process --force-upload
 - [ ] 查詢模式 Google Sheets 上傳
 
 ### ✅ 觀察名單分析功能 (v3.6.1 新增)
-- [ ] 載入觀察名單.csv檔案
+- [ ] 載入StockID_TWSE_TPEX.csv檔案
 - [ ] 計算觀察名單覆蓋率統計
 - [ ] 分析每家公司的處理狀態
 - [ ] 統計每家公司的MD檔案數量
@@ -782,7 +782,7 @@ python process_cli.py process --force-upload
 
 ### ✅ 必須處理的錯誤
 - [ ] 模組載入失敗 (graceful degradation)
-- [ ] 觀察名單.csv 載入失敗 (降級運行)
+- [ ] StockID_TWSE_TPEX.csv 載入失敗 (降級運行)
 - [ ] 檔案不存在或格式錯誤
 - [ ] Metadata 解析失敗
 - [ ] 查詢模式提取失敗
@@ -831,11 +831,11 @@ python process_cli.py stats
 ```
 
 ### 2. 錯誤訊息解讀
-- `❌ 觀察名單未載入` → 檢查 `觀察名單.csv` 檔案是否存在
+- `❌ 觀察名單未載入` → 檢查 `StockID_TWSE_TPEX.csv` 檔案是否存在
 - `🚫 不在觀察名單` → 此公司不在觀察名單中，已自動排除
 - `⚠️ 驗證停用` → 觀察名單功能停用，但系統正常運行
 - `❌ Google Sheets 連線失敗` → 檢查環境變數設定
 
 ---
 
-**v3.6.1 Process Group 總結**: 在 v3.6.0 關鍵字分析基礎上，升級為標準化查詢模式分析器，新增了完整的觀察名單處理統計功能。查詢模式分析器能識別和標準化 REFINED_SEARCH_PATTERNS 中定義的搜尋模式，將其轉換為 `{name} {symbol}` 格式並進行效果分析。觀察名單分析器基於觀察名單.csv統計每家公司的MD檔案處理狀態、品質評分、搜尋關鍵字模式等，提供觀察名單覆蓋率分析，幫助了解哪些公司已處理、哪些缺失，以及各公司的處理效果，為系統優化和公司覆蓋策略提供數據支撐。
+**v3.6.1 Process Group 總結**: 在 v3.6.0 關鍵字分析基礎上，升級為標準化查詢模式分析器，新增了完整的觀察名單處理統計功能。查詢模式分析器能識別和標準化 REFINED_SEARCH_PATTERNS 中定義的搜尋模式，將其轉換為 `{name} {symbol}` 格式並進行效果分析。觀察名單分析器基於StockID_TWSE_TPEX.csv統計每家公司的MD檔案處理狀態、品質評分、搜尋關鍵字模式等，提供觀察名單覆蓋率分析，幫助了解哪些公司已處理、哪些缺失，以及各公司的處理效果，為系統優化和公司覆蓋策略提供數據支撐。

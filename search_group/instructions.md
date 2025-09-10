@@ -31,7 +31,7 @@ Key Improvements in v3.5.1:           New Benefits:
 ```
 Stage 1: Search Group (This Implementation)        Stage 2: Process Group (Future)
 ┌─────────────────────────────────────────────┐    ┌─────────────────────────────────────┐
-│ 📥 觀察名單.csv (116+ Taiwan stocks)          │    │ 📁 data/md/*.md (Validated files)  │
+│ 📥 StockID_TWSE_TPEX.csv (116+ Taiwan stocks)          │    │ 📁 data/md/*.md (Validated files)  │
 │          ↓                                  │    │          ↓                         │
 │ 🔍 Enhanced Search Group + Key Rotation    │    │ 📊 Process Group                   │
 │   ├─ search_cli.py (rotation support)      │    │   ├─ process_cli.py                │
@@ -49,7 +49,7 @@ Stage 1: Search Group (This Implementation)        Stage 2: Process Group (Futur
 1. **Python 3.8+** installed
 2. **Multiple Google Search API Keys** (1-7 keys for quota rotation)
 3. **Custom Search Engine ID(s)**
-4. **觀察名單.csv** file with Taiwan stock symbols
+4. **StockID_TWSE_TPEX.csv** file with Taiwan stock symbols
 
 ### ⚡ 5-Minute Setup with Key Rotation
 
@@ -137,7 +137,7 @@ cache/
 ├── search/                    # Search cache and progress with rotation stats
 logs/
 ├── search/                    # Enhanced logs with key rotation details
-觀察名單.csv                    # Watchlist (root folder)
+StockID_TWSE_TPEX.csv                    # Watchlist (root folder)
 .env                           # Environment variables (multiple keys supported)
 ```
 
@@ -326,7 +326,7 @@ LOG_LEVEL=INFO
 
 ## 📁 File Formats & Data Structures
 
-### 📥 Input Format: 觀察名單.csv (Unchanged)
+### 📥 Input Format: StockID_TWSE_TPEX.csv (Unchanged)
 
 ```csv
 代號,名稱
@@ -654,7 +654,7 @@ python search_cli.py status
 ## 🎯 Success Criteria & Quality Metrics (Enhanced)
 
 ### 📊 Functional Requirements (Enhanced)
-- ✅ Process 116+ Taiwan stock companies from 觀察名單.csv
+- ✅ Process 116+ Taiwan stock companies from StockID_TWSE_TPEX.csv
 - ✅ Generate pure content hash filenames (perfect deduplication)
 - ✅ Achieve 4+ quality scores for 70%+ of Taiwan financial content
 - ✅ Support Taiwan financial sites (cnyes.com, statementdog.com, etc.)

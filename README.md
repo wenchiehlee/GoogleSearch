@@ -16,7 +16,7 @@
 ```
 Stage 1: Search Group (v3.5.1)          Stage 2: Process Group (v3.6.1)
 ┌─────────────────────────────────────┐    ┌──────────────────────────────────┐
-│ 📥 觀察名單.csv (116+ Taiwan stocks) │    │ 📁 data/md/*.md (Validated files) │
+│ 📥 StockID_TWSE_TPEX.csv (116+ Taiwan stocks) │    │ 📁 data/md/*.md (Validated files) │
 │          ↓                          │    │          ↓                       │
 │ 🔍 Enhanced Search + Key Rotation   │    │ 📊 Analysis & Report Generation  │
 │   ├─ API Key Rotation (up to 7)     │    │   ├─ Quality Analysis            │
@@ -39,7 +39,7 @@ Stage 1: Search Group (v3.5.1)          Stage 2: Process Group (v3.6.1)
 
 #### Process Group (v3.6.1)
 - **📋 Query Pattern Analysis**: Analyze search effectiveness with REFINED_SEARCH_PATTERNS
-- **📊 Watchlist Management**: Complete coverage analysis of 觀察名單.csv companies
+- **📊 Watchlist Management**: Complete coverage analysis of StockID_TWSE_TPEX.csv companies
 - **📈 Quality Scoring**: Standardized 0-10 quality scoring with visual indicators
 - **📁 Multiple Report Types**: Portfolio, detailed, query pattern, and watchlist reports
 - **☁️ Google Sheets Integration**: Automated upload with formatted worksheets
@@ -126,7 +126,7 @@ FactSet-Pipeline/
 │   ├── md/                          # Generated MD files (Search → Process)
 │   ├── reports/                     # Generated CSV reports
 │   └── cache/                       # Search cache and progress
-├── 觀察名單.csv                      # Input watchlist (116+ companies)
+├── StockID_TWSE_TPEX.csv                      # Input watchlist (116+ companies)
 ├── requirements.txt                  # Python dependencies
 ├── .env.example                     # Environment variables template
 └── README.md                        # This file
@@ -213,7 +213,7 @@ python search_cli.py status
 - **Pattern Categories**: FactSet direct, cnyes.com, EPS forecast, analyst consensus
 
 ### Watchlist Management
-- **Coverage Analysis**: Track processing status of all 觀察名單.csv companies
+- **Coverage Analysis**: Track processing status of all StockID_TWSE_TPEX.csv companies
 - **Status Categories**: Processed, not found, validation failed, low quality, multiple files
 - **Missing Company Reports**: Identify companies needing search attention
 - **Quality Statistics**: Average scores, distribution analysis per company
@@ -298,7 +298,7 @@ python search_cli.py validate  # Test all keys
 python process_cli.py validate  # Check all components
 
 # Missing watchlist
-# Ensure 觀察名單.csv exists in root directory
+# Ensure StockID_TWSE_TPEX.csv exists in root directory
 
 # Google Sheets connection
 # Check GOOGLE_SHEETS_CREDENTIALS in .env
@@ -311,7 +311,7 @@ python process_cli.py validate  # Check all components
 | 429 Quota Exceeded | Add more API keys to .env file |
 | Wrong Company Content | Content validation automatically filters these |
 | Missing MD Files | Run Search Group first to generate files |
-| Watchlist Not Found | Place 觀察名單.csv in project root |
+| Watchlist Not Found | Place StockID_TWSE_TPEX.csv in project root |
 | Sheets Upload Failed | Verify Google Sheets credentials |
 
 ## 📈 Performance Metrics

@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-09-09T21:55:18.321910",
+  "cleaner_version": "3.6.1",
+  "configuration": {
+    "md_directory": "C:\\Users\\WJLEE\\SynologyDrive\\NAS\\github.com\\GoogleSearch\\data\\md",
+    "retention_days": 90,
+    "quality_threshold": 8,
+    "aggressive_deletion": true
+  },
+  "analysis": {
+    "total_files": 1521,
+    "deletion_candidates": 874,
+    "preserved_files": 647,
+    "no_date_files": 313,
+    "estimated_space_saved": 6266753,
+    "safety_checks_passed": true,
+    "warnings": [],
+    "errors": []
+  },
+  "execution": {
+    "dry_run": false,
+    "files_deleted": 874,
+    "files_backed_up": 874,
+    "space_freed": 6266753,
+    "execution_time": 2.761726,
+    "backup_location": "C:\\Users\\WJLEE\\SynologyDrive\\NAS\\github.com\\data\\archive\\cleanup_backup_20250909_215515",
+    "errors": []
+  },
+  "file_details": {
+    "by_age_group": {
+      "0-30天": 1,
+      "31-60天": 18,
+      "61-90天": 272,
+      "91-180天": 731,
+      "181-365天": 98,
+      "365天以上": 88,
+      "無日期": 313
+    },
+    "by_quality_score": {
+      "優秀(9-10)": 480,
+      "良好(7-8)": 479,
+      "普通(4-6)": 517,
+      "較差(1-3)": 45,
+      "無評分": 0
+    },
+    "by_company": {
+      "3231_緯創": 57,
+      "2330_台積電": 56,
+      "2376_技嘉": 56,
+      "2353_宏碁": 54,
+      "2301_光寶科": 53,
+      "2382_廣達": 53,
+      "2308_台達電": 52,
+      "2377_微星": 46,
+      "2474_可成": 43,
+      "2359_所羅門": 39
+    }
+  }
+}

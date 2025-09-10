@@ -54,8 +54,8 @@ jobs:
     - name: Validate Required Files
       run: |
         echo "Checking required files..."
-        if [ ! -f "觀察名單.csv" ]; then
-          echo "觀察名單.csv not found!"
+        if [ ! -f "StockID_TWSE_TPEX.csv" ]; then
+          echo "StockID_TWSE_TPEX.csv not found!"
           exit 1
         fi
         if [ ! -f "search_group/search_cli.py" ]; then
@@ -63,7 +63,7 @@ jobs:
           exit 1
         fi
         echo "Required files found"
-        COMPANY_COUNT=$(tail -n +2 觀察名單.csv | wc -l)
+        COMPANY_COUNT=$(tail -n +2 StockID_TWSE_TPEX.csv | wc -l)
         echo "Companies in watchlist: $COMPANY_COUNT"
     
     - name: Create Directory Structure
