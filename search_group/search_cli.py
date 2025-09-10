@@ -11,6 +11,8 @@ ENHANCED API KEY ROTATION SUPPORT:
 - Automatic key rotation on quota exceeded
 - Enhanced status reporting with key information
 - Improved error handling and recovery
+
+FIXED: SearchEngine initialization to include config parameter
 """
 
 import os
@@ -46,7 +48,7 @@ except ImportError:
                     os.environ[key.strip()] = value
         print("✅ Loaded environment variables manually")
     else:
-        print("⚠️  No .env file found")
+        print("⚠️ No .env file found")
 
 # Version Information
 __version__ = "3.5.1"
@@ -190,7 +192,7 @@ class SearchConfig:
         if len(api_keys) > 1:
             print(f"🎉 Key rotation enabled with {len(api_keys)} keys!")
         else:
-            print("⚠️  Single key mode - no rotation available")
+            print("⚠️ Single key mode - no rotation available")
     
     def get(self, key: str, default=None):
         """Get config value with dot notation"""
@@ -209,7 +211,8 @@ class SearchCLI:
     def __init__(self):
         self.config = SearchConfig()
         self.api_manager = APIManager(self.config)
-        self.search_engine = SearchEngine(self.api_manager)
+        # FIXED: Pass both api_manager and config to SearchEngine
+        self.search_engine = SearchEngine(self.api_manager, self.config)
         self.logger = self._setup_logger()
         
         # Ensure directories exist
@@ -325,12 +328,12 @@ class SearchCLI:
             if is_valid_content:
                 self.logger.info(f"📝 Updating VALID content: {filename} (Q:{quality_score}/10)")
             else:
-                self.logger.warning(f"⚠️  Updating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
+                self.logger.warning(f"⚠️ Updating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
         else:
             if is_valid_content:
                 self.logger.info(f"💾 Creating VALID content: {filename} (Q:{quality_score}/10)")
             else:
-                self.logger.warning(f"⚠️  Creating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
+                self.logger.warning(f"⚠️ Creating INVALID content: {filename} (Q:{quality_score}/10) - {validation_info.get('reason', 'unknown')}")
         
         # Write the file (always overwrite for same content)
         try:
@@ -493,12 +496,12 @@ class SearchCLI:
             
             self.logger.info("Setup validation passed with key rotation support")
             print(f"\n🎉 Setup validation passed! Ready for search with API key rotation.")
-            print(f"📄 Using pure content hash filenames (v{__version__})")
+            print(f"🔄 Using pure content hash filenames (v{__version__})")
             print("🔗 Same content = same filename (no result index needed)")
             print("🚀 Comprehensive search enabled - all patterns will execute")
             print("🛡️  Content validation enabled - invalid content gets score 0")
             print("🔄 API key rotation enabled - automatic quota management")
-            print("🐛 Debug logging enabled - will show pattern execution details")
+            print("🛠️ Debug logging enabled - will show pattern execution details")
             return True
             
         except Exception as e:
@@ -538,7 +541,7 @@ class SearchCLI:
             self.logger.info(f"Starting comprehensive search with key rotation for {symbol} {name} (saving {result_count} results, min quality {min_quality_threshold})")
             
             # Search company and get multiple results
-            search_results = self.search_engine.search_company_multiple(symbol, name, result_count)
+            search_results = self.search_engine.search_comprehensive(symbol, name, result_count, min_quality_threshold)
             
             if search_results and len(search_results) > 0:
                 successful_files = []
@@ -558,35 +561,33 @@ class SearchCLI:
                             print(f"❌ Result {i}: Quality {quality_score}/10 - INVALID CONTENT: {invalid_reason}")
                             skipped_invalid_content += 1
                         else:
-                            print(f"⏭️  Result {i}: Quality {quality_score}/10 - Skipped (below threshold {min_quality_threshold})")
+                            print(f"⭐ Result {i}: Quality {quality_score}/10 - Skipped (below threshold {min_quality_threshold})")
                             skipped_low_quality += 1
                         
                         self.logger.info(f"Skipped result {i} for {symbol}: quality {quality_score} below threshold {min_quality_threshold}, valid={is_valid_content}")
                         continue
                     
                     # Generate MD content for this result
-                    md_content = self.search_engine.generate_md_content(
-                        symbol, name, result_data, {}, result_index=i
-                    )
+                    filename, md_content = self.search_engine.generate_md_file_with_md_date(result_data, i)
                     
                     # Save MD file with pure content hash filename
-                    filename = self._save_md_file_indexed(symbol, name, md_content, result_data, i)
+                    saved_filename = self._save_md_file_indexed(symbol, name, md_content, result_data, i)
                     
-                    if filename:
+                    if saved_filename:
                         # Check if this filename already exists in our list (duplicate content)
-                        if filename in successful_files:
+                        if saved_filename in successful_files:
                             if is_valid_content:
-                                print(f"🔄 Result {i}: Quality {quality_score}/10 - {filename} (duplicate content merged)")
+                                print(f"🔄 Result {i}: Quality {quality_score}/10 - {saved_filename} (duplicate content merged)")
                             else:
-                                print(f"⚠️  Result {i}: Quality {quality_score}/10 - {filename} (INVALID content, duplicate merged)")
+                                print(f"⚠️ Result {i}: Quality {quality_score}/10 - {saved_filename} (INVALID content, duplicate merged)")
                             updated_existing += 1
                         else:
-                            successful_files.append(filename)
+                            successful_files.append(saved_filename)
                             if is_valid_content:
-                                print(f"✅ Result {i}: Quality {quality_score}/10 - {filename}")
+                                print(f"✅ Result {i}: Quality {quality_score}/10 - {saved_filename}")
                             else:
                                 invalid_reason = validation_info.get('reason', 'Unknown')
-                                print(f"⚠️  Result {i}: Quality {quality_score}/10 - {filename} (INVALID: {invalid_reason})")
+                                print(f"⚠️ Result {i}: Quality {quality_score}/10 - {saved_filename} (INVALID: {invalid_reason})")
                 
                 # Update progress with unique files only
                 if successful_files:
@@ -689,7 +690,7 @@ class SearchCLI:
             print(f"\n🚀 Comprehensive Search with Key Rotation: ALL {total} companies")
             print(f"📊 Saving {result_count} results each, all patterns execute")
             print(f"🔑 Starting with API Key #{key_status['current_key_index']} ({key_status['available_keys']} available)")
-            print(f"📄 Pure content hash filenames - no duplicate content files")
+            print(f"🔄 Pure content hash filenames - no duplicate content files")
             print(f"🛡️  Enhanced content validation enabled - detects wrong companies")
             print(f"⚠️  Invalid content automatically gets score 0")
             print(f"🔄 Automatic key rotation on quota exceeded")
@@ -890,14 +891,14 @@ class SearchCLI:
                     avg_score = sum(all_scores) / len(all_scores)
                     print(f"⭐ Average Quality Score: {avg_score:.1f}/10 (with validation filtering)")
                 
-                print(f"📝 Total Unique Files: {total_unique_files}")
+                print(f"📁 Total Unique Files: {total_unique_files}")
                 print(f"🎯 Pure Content Hash Efficiency: 100% - no duplicates by design")
                 
                 if total_patterns_executed > 0:
                     avg_patterns = total_patterns_executed / len(progress)
                     avg_api_calls = total_api_calls / len(progress)
                     avg_rotations = total_key_rotations / len(progress)
-                    print(f"🔍 Avg Patterns Executed: {avg_patterns:.1f}/company")
+                    print(f"📍 Avg Patterns Executed: {avg_patterns:.1f}/company")
                     print(f"📡 Avg API Calls: {avg_api_calls:.1f}/company")
                     print(f"🔄 Avg Key Rotations: {avg_rotations:.1f}/company")
                 
@@ -1049,7 +1050,7 @@ def main():
             return 1
             
     except KeyboardInterrupt:
-        print("\n⚠️  Search interrupted by user")
+        print("\n⚠️ Search interrupted by user")
         return 130
     except Exception as e:
         print(f"❌ Error: {e}")

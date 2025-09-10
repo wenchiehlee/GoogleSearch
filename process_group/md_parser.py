@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-MD Parser - FactSet Pipeline v3.6.1 (Refined)
-增強版 MD 檔案解析器，支援查詢模式提取和觀察名單驗證
+MD Parser - FactSet Pipeline v3.6.1 (Modified)
+增強版 MD 檔案解析器，對缺少內容日期的檔案給予低品質評分
 完全整合 v3.6.1 功能要求
 """
 
@@ -18,9 +18,9 @@ class MDParser:
     def __init__(self):
         """初始化 MD 解析器 - v3.6.1 增強版"""
         
-        self.version = "3.6.1"
+        self.version = "3.6.1-modified"
         
-        # 🆕 增強的 metadata 模式 - 支援查詢模式提取
+        # 增強的 metadata 模式 - 支援查詢模式提取
         self.metadata_patterns = {
             'search_query': r'search_query:\s*(.+?)(?:\n|$)',
             'keywords': r'keywords:\s*(.+?)(?:\n|$)',
@@ -72,15 +72,15 @@ class MDParser:
             r'(\d+)\s*analysts?',
         ]
 
-        # 🔧 載入觀察名單並進行嚴格驗證
+        # 載入觀察名單並進行嚴格驗證
         self.watch_list_mapping = self._load_watch_list_mapping_enhanced()
         self.validation_enabled = len(self.watch_list_mapping) > 0
         
-        print(f"🔧 MDParser v{self.version} 初始化完成")
-        print(f"📋 觀察名單驗證: {'啟用' if self.validation_enabled else '停用'} ({len(self.watch_list_mapping)} 家公司)")
+        print(f"MDParser v{self.version} 初始化完成")
+        print(f"觀察名單驗證: {'啟用' if self.validation_enabled else '停用'} ({len(self.watch_list_mapping)} 家公司)")
 
     def _load_watch_list_mapping_enhanced(self) -> Dict[str, str]:
-        """🆕 v3.6.1 增強的觀察名單載入"""
+        """v3.6.1 增強的觀察名單載入"""
         mapping = {}
         
         possible_paths = [
@@ -96,28 +96,28 @@ class MDParser:
         for csv_path in possible_paths:
             if os.path.exists(csv_path):
                 try:
-                    print(f"🔍 嘗試載入觀察名單: {csv_path}")
+                    print(f"嘗試載入觀察名單: {csv_path}")
                     
-                    # 🔧 使用多種編碼嘗試讀取
+                    # 使用多種編碼嘗試讀取
                     encodings = ['utf-8', 'utf-8-sig', 'big5', 'gbk', 'cp950']
                     df = None
                     
                     for encoding in encodings:
                         try:
                             df = pd.read_csv(csv_path, header=None, names=['code', 'name'], encoding=encoding)
-                            print(f"✅ 成功使用 {encoding} 編碼讀取")
+                            print(f"成功使用 {encoding} 編碼讀取")
                             break
                         except UnicodeDecodeError:
                             continue
                         except Exception as e:
-                            print(f"⚠️ 使用 {encoding} 編碼讀取失敗: {e}")
+                            print(f"使用 {encoding} 編碼讀取失敗: {e}")
                             continue
                     
                     if df is None:
-                        print(f"❌ 無法使用任何編碼讀取 {csv_path}")
+                        print(f"無法使用任何編碼讀取 {csv_path}")
                         continue
                     
-                    # 🔧 嚴格驗證和清理數據
+                    # 嚴格驗證和清理數據
                     valid_count = 0
                     invalid_count = 0
                     duplicate_count = 0
@@ -128,21 +128,21 @@ class MDParser:
                             code = str(row['code']).strip()
                             name = str(row['name']).strip()
                             
-                            # 🔧 嚴格驗證公司代號格式
+                            # 嚴格驗證公司代號格式
                             if not self._is_valid_company_code(code):
-                                print(f"⚠️ 無效公司代號格式: '{code}' (第{idx+1}行)")
+                                print(f"無效公司代號格式: '{code}' (第{idx+1}行)")
                                 invalid_count += 1
                                 continue
                             
-                            # 🔧 驗證公司名稱
+                            # 驗證公司名稱
                             if not self._is_valid_company_name(name):
-                                print(f"⚠️ 無效公司名稱: '{name}' (代號: {code}, 第{idx+1}行)")
+                                print(f"無效公司名稱: '{name}' (代號: {code}, 第{idx+1}行)")
                                 invalid_count += 1
                                 continue
                             
-                            # 🔧 檢查重複代號
+                            # 檢查重複代號
                             if code in mapping:
-                                print(f"⚠️ 重複公司代號: {code} - 原有: {mapping[code]}, 新的: {name}")
+                                print(f"重複公司代號: {code} - 原有: {mapping[code]}, 新的: {name}")
                                 duplicate_count += 1
                                 continue
                             
@@ -151,17 +151,17 @@ class MDParser:
                             valid_count += 1
                             
                         except Exception as e:
-                            print(f"❌ 處理第{idx+1}行時發生錯誤: {e}")
+                            print(f"處理第{idx+1}行時發生錯誤: {e}")
                             invalid_count += 1
                             continue
                     
-                    # 🔧 驗證載入結果
+                    # 驗證載入結果
                     total_rows = len(df)
                     if valid_count == 0:
-                        print(f"❌ 觀察名單無有效數據: {csv_path}")
+                        print(f"觀察名單無有效數據: {csv_path}")
                         continue
                     
-                    print(f"📊 觀察名單載入統計:")
+                    print(f"觀察名單載入統計:")
                     print(f"   檔案: {csv_path}")
                     print(f"   總行數: {total_rows}")
                     print(f"   有效數據: {valid_count}")
@@ -169,22 +169,22 @@ class MDParser:
                     print(f"   重複數據: {duplicate_count}")
                     print(f"   成功率: {valid_count/total_rows*100:.1f}%")
                     
-                    # 🔧 額外驗證：檢查是否有已知的測試公司
+                    # 額外驗證：檢查是否有已知的測試公司
                     self._validate_watch_list_content_enhanced(mapping)
                     
                     return mapping
                     
                 except Exception as e:
-                    print(f"❌ 讀取觀察名單失敗 {csv_path}: {e}")
+                    print(f"讀取觀察名單失敗 {csv_path}: {e}")
                     continue
         
-        # 🔧 如果觀察名單載入失敗，返回空字典但不停止系統
-        print("❌ 所有觀察名單載入嘗試均失敗")
-        print("⚠️ 系統將在無驗證模式下運行")
+        # 如果觀察名單載入失敗，返回空字典但不停止系統
+        print("所有觀察名單載入嘗試均失敗")
+        print("系統將在無驗證模式下運行")
         return {}
 
     def parse_md_file(self, file_path: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強版 MD 檔案解析"""
+        """v3.6.1 增強版 MD 檔案解析"""
         try:
             # 讀取檔案內容
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -195,13 +195,13 @@ class MDParser:
             company_code = file_info.get('company_code', '')
             company_name = file_info.get('company_name', '')
             
-            # 🆕 增強的 YAML front matter 解析
+            # 增強的 YAML front matter 解析
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
             
-            # 🆕 查詢模式提取 (v3.6.1 核心功能)
+            # 查詢模式提取 (v3.6.1 核心功能)
             search_keywords = self._extract_search_keywords_enhanced(content, yaml_data)
             
-            # 🔧 核心驗證：對照觀察名單 (增強版)
+            # 核心驗證：對照觀察名單 (增強版)
             validation_result = self._validate_against_watch_list_enhanced(company_code, company_name)
             
             # 原有功能：日期提取
@@ -213,9 +213,11 @@ class MDParser:
             eps_stats = self._calculate_eps_statistics(eps_data)
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
-            data_richness = self._calculate_data_richness(eps_stats, target_price, analyst_count)
             
-            # 🆕 內容品質評估 (v3.6.1)
+            # MODIFIED: Enhanced data richness calculation with content date penalty
+            data_richness = self._calculate_data_richness_enhanced(eps_stats, target_price, analyst_count, content_date)
+            
+            # 內容品質評估 (v3.6.1)
             content_quality_metrics = self._assess_content_quality(content)
             
             # 組合結果
@@ -244,15 +246,16 @@ class MDParser:
                 'has_target_price': target_price is not None,
                 'has_analyst_info': analyst_count > 0,
                 'data_richness_score': data_richness,
+                'quality_score': data_richness,  # For backwards compatibility
                 
-                # 🆕 v3.6.1 增強功能
-                'search_keywords': search_keywords,  # 關鍵！查詢模式分析需要
+                # v3.6.1 增強功能
+                'search_keywords': search_keywords,  # 關鍵：查詢模式分析需要
                 'content_quality_metrics': content_quality_metrics,
                 
                 # YAML 資料
                 'yaml_data': yaml_data,
                 
-                # 🔧 增強版驗證結果
+                # 增強版驗證結果
                 'validation_result': validation_result,
                 'content_validation_passed': validation_result['overall_status'] == 'valid',
                 'validation_warnings': validation_result.get('warnings', []),
@@ -273,11 +276,47 @@ class MDParser:
             return result
             
         except Exception as e:
-            print(f"❌ 解析檔案失敗 {file_path}: {e}")
+            print(f"解析檔案失敗 {file_path}: {e}")
             return self._create_empty_result_enhanced(file_path, str(e))
 
+    def _calculate_data_richness_enhanced(self, eps_stats: Dict, target_price: Optional[float], 
+                                        analyst_count: int, content_date: str) -> float:
+        """MODIFIED: 計算資料豐富度分數 (0-10) - 對缺少內容日期進行嚴重懲罰"""
+        
+        # CRITICAL: Content date availability check
+        if not content_date or content_date.strip() == "":
+            # Missing content date = severe quality penalty but not exclusion
+            print(f"⚠️  缺少內容日期，品質評分限制為1分 (財務資訊需要發布日期才有效)")
+            return 1.0  # Maximum score of 1 for files without content date
+        
+        # Content date available - proceed with normal scoring
+        score = 3.0  # Base score for having content date
+        
+        # EPS data scoring (reduced weight to accommodate base score)
+        eps_years = ['2025', '2026', '2027']
+        eps_available = sum(1 for year in eps_years if eps_stats.get(f'eps_{year}_avg') is not None)
+        score += (eps_available / len(eps_years)) * 4  # Reduced from 6 to 4
+        
+        # Target price scoring
+        if target_price is not None:
+            score += 2
+        
+        # Analyst count scoring
+        if analyst_count > 0:
+            if analyst_count >= 20:
+                score += 1
+            elif analyst_count >= 10:
+                score += 0.75
+            elif analyst_count >= 5:
+                score += 0.5
+            else:
+                score += 0.25
+        
+        return round(min(score, 10), 2)
+
+    # Keep all other existing methods unchanged
     def _extract_search_keywords_enhanced(self, content: str, yaml_data: Dict) -> List[str]:
-        """🆕 v3.6.1 增強的搜尋關鍵字提取"""
+        """v3.6.1 增強的搜尋關鍵字提取"""
         keywords = []
         
         try:
@@ -304,7 +343,7 @@ class MDParser:
                                     cleaned_keywords = self._clean_and_split_keywords(match.strip())
                                     keywords.extend(cleaned_keywords)
                 except Exception as e:
-                    print(f"⚠️ YAML metadata 解析失敗: {e}")
+                    print(f"YAML metadata 解析失敗: {e}")
             
             # 3. 去重並過濾
             unique_keywords = []
@@ -324,7 +363,7 @@ class MDParser:
             return sorted_keywords[:20]  # 限制最多20個關鍵字
             
         except Exception as e:
-            print(f"⚠️ 搜尋關鍵字提取失敗: {e}")
+            print(f"搜尋關鍵字提取失敗: {e}")
             return []
 
     def _clean_and_split_keywords(self, text: str) -> List[str]:
@@ -396,7 +435,7 @@ class MDParser:
         return sorted(keywords, key=get_importance_score, reverse=True)
 
     def _assess_content_quality(self, content: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 評估內容品質"""
+        """v3.6.1 評估內容品質"""
         metrics = {
             'content_length': len(content),
             'paragraph_count': len(content.split('\n\n')),
@@ -445,12 +484,13 @@ class MDParser:
             metrics['structure_score'] = min(structure_score, 10)
             
         except Exception as e:
-            print(f"⚠️ 內容品質評估失敗: {e}")
+            print(f"內容品質評估失敗: {e}")
         
         return metrics
 
+    # Include all other existing methods (unchanged)
     def _extract_yaml_frontmatter_enhanced(self, content: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強的 YAML front matter 提取"""
+        """v3.6.1 增強的 YAML front matter 提取"""
         try:
             if content.startswith('---'):
                 end_pos = content.find('---', 3)
@@ -472,7 +512,7 @@ class MDParser:
                         return cleaned_data
                         
                     except yaml.YAMLError as e:
-                        print(f"⚠️ YAML 解析失敗，嘗試手動解析: {e}")
+                        print(f"YAML 解析失敗，嘗試手動解析: {e}")
                         
                         # 手動解析關鍵欄位
                         manual_data = {}
@@ -484,12 +524,12 @@ class MDParser:
                         return manual_data
                         
         except Exception as e:
-            print(f"⚠️ YAML frontmatter 提取失敗: {e}")
+            print(f"YAML frontmatter 提取失敗: {e}")
         
         return {}
 
     def _validate_against_watch_list_enhanced(self, company_code: str, company_name: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強的觀察名單驗證"""
+        """v3.6.1 增強的觀察名單驗證"""
         
         validation_result = {
             'overall_status': 'valid',
@@ -500,30 +540,30 @@ class MDParser:
             'detailed_checks': []
         }
         
-        # 🔧 如果觀察名單未載入，記錄但不阻止處理
+        # 如果觀察名單未載入，記錄但不阻止處理
         if not self.validation_enabled:
             validation_result['warnings'].append("觀察名單未載入，跳過驗證")
             validation_result['confidence_score'] = 5.0
             validation_result['validation_method'] = 'disabled'
             validation_result['detailed_checks'].append("驗證功能已停用")
-            print(f"⚠️ 觀察名單驗證已停用: {company_code} - {company_name}")
+            print(f"觀察名單驗證已停用: {company_code} - {company_name}")
             return validation_result
         
-        # 🔧 嚴格檢查輸入參數
+        # 嚴格檢查輸入參數
         if not company_code or not company_name:
             validation_result['overall_status'] = 'error'
             validation_result['confidence_score'] = 0.0
             error_msg = f"公司代號或名稱為空: 代號='{company_code}', 名稱='{company_name}'"
             validation_result['errors'].append(error_msg)
             validation_result['detailed_checks'].append("輸入參數檢查失敗")
-            print(f"❌ 參數錯誤: {error_msg}")
+            print(f"參數錯誤: {error_msg}")
             return validation_result
         
-        # 🔧 清理輸入數據
+        # 清理輸入數據
         clean_code = str(company_code).strip().strip('\'"')
         clean_name = str(company_name).strip()
         
-        # 🔧 檢查 1: 公司代號格式驗證
+        # 檢查 1: 公司代號格式驗證
         validation_result['detailed_checks'].append("檢查公司代號格式")
         if not self._is_valid_company_code(clean_code):
             validation_result['overall_status'] = 'error'
@@ -531,10 +571,10 @@ class MDParser:
             error_msg = f"公司代號格式無效: '{clean_code}'"
             validation_result['errors'].append(error_msg)
             validation_result['detailed_checks'].append("公司代號格式檢查失敗")
-            print(f"❌ 代號格式無效: {clean_code}")
+            print(f"代號格式無效: {clean_code}")
             return validation_result
         
-        # 🔧 檢查 2: 公司代號是否在觀察名單中
+        # 檢查 2: 公司代號是否在觀察名單中
         validation_result['detailed_checks'].append("檢查觀察名單包含狀態")
         if clean_code not in self.watch_list_mapping:
             validation_result['overall_status'] = 'error'
@@ -542,9 +582,9 @@ class MDParser:
             error_msg = f"代號{clean_code}不在觀察名單中，不允許處理"
             validation_result['errors'].append(error_msg)
             validation_result['detailed_checks'].append("觀察名單包含檢查失敗")
-            print(f"❌ 不在觀察名單: {clean_code}")
+            print(f"不在觀察名單: {clean_code}")
             
-            # 🔧 額外信息：提供相似的代號建議
+            # 額外信息：提供相似的代號建議
             similar_codes = self._find_similar_codes(clean_code)
             if similar_codes:
                 suggestion_msg = f"相似代號建議: {', '.join(similar_codes[:3])}"
@@ -553,11 +593,11 @@ class MDParser:
             
             return validation_result
         
-        # 🔧 檢查 3: 公司名稱是否與觀察名單一致 (增強比較)
+        # 檢查 3: 公司名稱是否與觀察名單一致 (增強比較)
         validation_result['detailed_checks'].append("檢查公司名稱一致性")
         correct_name = self.watch_list_mapping[clean_code]
         
-        # 🔧 多層次名稱比較
+        # 多層次名稱比較
         name_match = self._compare_company_names_enhanced(clean_name, correct_name)
         
         if not name_match['is_match']:
@@ -567,30 +607,30 @@ class MDParser:
             validation_result['errors'].append(error_msg)
             validation_result['detailed_checks'].append("公司名稱一致性檢查失敗")
             
-            # 🔧 額外信息：詳細的不匹配分析
+            # 額外信息：詳細的不匹配分析
             if name_match['details']:
                 validation_result['errors'].append(f"詳細比較: {name_match['details']}")
                 validation_result['detailed_checks'].append(f"名稱比較詳情: {name_match['match_type']}")
             
-            print(f"❌ 名稱不符: {clean_code}")
+            print(f"名稱不符: {clean_code}")
             print(f"   檔案名稱: '{clean_name}'")
             print(f"   觀察名單: '{correct_name}'")
             print(f"   比較詳情: {name_match['details']}")
             
             return validation_result
         
-        # 🔧 檢查通過
+        # 檢查通過
         validation_result['confidence_score'] = name_match['confidence_score']
         validation_result['detailed_checks'].append(f"所有檢查通過，名稱匹配類型: {name_match['match_type']}")
         
         if name_match['confidence_score'] < 10.0:
             validation_result['warnings'].append(f"名稱匹配度: {name_match['confidence_score']}/10")
         
-        print(f"✅ 驗證通過: {clean_code} - {clean_name} (信心度: {name_match['confidence_score']})")
+        print(f"驗證通過: {clean_code} - {clean_name} (信心度: {name_match['confidence_score']})")
         return validation_result
 
     def _compare_company_names_enhanced(self, name1: str, name2: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強的公司名稱比較"""
+        """v3.6.1 增強的公司名稱比較"""
         comparison_result = {
             'is_match': False,
             'confidence_score': 0.0,
@@ -692,68 +732,7 @@ class MDParser:
         except Exception:
             return 0.0
 
-    def _get_debug_info_enhanced(self, content: str, extracted_date: Optional[str], 
-                                search_keywords: List[str]) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強的調試資訊"""
-        return {
-            'content_preview': content[:200] + "..." if len(content) > 200 else content,
-            'extracted_date': extracted_date,
-            'yaml_detected': content.startswith('---'),
-            'content_length': len(content),
-            'search_keywords_count': len(search_keywords),
-            'search_keywords_preview': search_keywords[:5],
-            'watch_list_loaded': self.validation_enabled,
-            'watch_list_size': len(self.watch_list_mapping),
-            'parser_version': self.version,
-            'content_structure': {
-                'has_metadata': content.startswith('---'),
-                'paragraph_count': len(content.split('\n\n')),
-                'line_count': len(content.split('\n')),
-                'chinese_detected': bool(re.search(r'[\u4e00-\u9fff]', content))
-            }
-        }
-
-    def _create_empty_result_enhanced(self, file_path: str, error_msg: str) -> Dict[str, Any]:
-        """🆕 v3.6.1 增強的空結果建立"""
-        file_info = self._extract_file_info(file_path)
-        
-        return {
-            'filename': os.path.basename(file_path),
-            'company_code': file_info.get('company_code'),
-            'company_name': file_info.get('company_name'),
-            'data_source': file_info.get('data_source'),
-            'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)) if os.path.exists(file_path) else None,
-            'content_date': None,
-            'eps_2025_high': None, 'eps_2025_low': None, 'eps_2025_avg': None,
-            'eps_2026_high': None, 'eps_2026_low': None, 'eps_2026_avg': None,
-            'eps_2027_high': None, 'eps_2027_low': None, 'eps_2027_avg': None,
-            'target_price': None,
-            'analyst_count': 0,
-            'has_eps_data': False,
-            'has_target_price': False,
-            'has_analyst_info': False,
-            'data_richness_score': 0.0,
-            'search_keywords': [],  # 重要！
-            'content_quality_metrics': {},
-            'yaml_data': {},
-            'content': '',
-            'content_length': 0,
-            'parsed_at': datetime.now(),
-            'parser_version': self.version,
-            'error': error_msg,
-            'date_extraction_method': 'error',
-            'validation_result': {
-                'overall_status': 'error', 
-                'errors': [error_msg],
-                'validation_method': 'error_state'
-            },
-            'content_validation_passed': False,
-            'validation_warnings': [],
-            'validation_errors': [error_msg],
-            'validation_enabled': self.validation_enabled
-        }
-
-    # 保留原有的私有方法 (略微調整以支援增強功能)
+    # Include all other existing helper methods unchanged
     def _is_valid_company_code(self, code: str) -> bool:
         """驗證公司代號格式"""
         if not code or code in ['nan', 'NaN', 'null', 'None', '', 'NULL']:
@@ -816,7 +795,7 @@ class MDParser:
         return sorted(similar_codes)
 
     def _validate_watch_list_content_enhanced(self, mapping: Dict[str, str]):
-        """🆕 v3.6.1 增強的觀察名單內容驗證"""
+        """v3.6.1 增強的觀察名單內容驗證"""
         if not mapping:
             return
         
@@ -836,18 +815,18 @@ class MDParser:
                 name_match = self._compare_company_names_enhanced(actual_name, expected_name)
                 if name_match['is_match']:
                     found_test_companies += 1
-                    print(f"✅ 找到測試公司: {code} - {actual_name} (匹配類型: {name_match['match_type']})")
+                    print(f"找到測試公司: {code} - {actual_name} (匹配類型: {name_match['match_type']})")
                 else:
-                    print(f"⚠️ 測試公司名稱不符: {code} - 期望:{expected_name}, 實際:{actual_name}")
+                    print(f"測試公司名稱不符: {code} - 期望:{expected_name}, 實際:{actual_name}")
         
         # 統計分析
         code_ranges = self._analyze_code_ranges(mapping)
-        print(f"📊 觀察名單代號分布: {code_ranges}")
+        print(f"觀察名單代號分布: {code_ranges}")
         
         if found_test_companies == 0:
-            print("⚠️ 未找到任何已知測試公司，請檢查觀察名單內容")
+            print("未找到任何已知測試公司，請檢查觀察名單內容")
         else:
-            print(f"✅ 找到 {found_test_companies}/{len(test_companies)} 個測試公司")
+            print(f"找到 {found_test_companies}/{len(test_companies)} 個測試公司")
 
     def _analyze_code_ranges(self, mapping: Dict[str, str]) -> Dict[str, int]:
         """分析公司代號範圍分布"""
@@ -874,9 +853,7 @@ class MDParser:
         
         return ranges
 
-    # 保留原有方法 (略作調整以支援新功能)
-    # [原有的所有其他方法保持不變，只是確保與新功能相容]
-    
+    # Keep all other existing methods unchanged
     def _extract_content_date_bulletproof(self, content: str) -> Optional[str]:
         """絕對防彈的日期提取 - 排除 YAML frontmatter"""
         actual_content = self._get_content_without_yaml(content)
@@ -925,7 +902,6 @@ class MDParser:
             pass
         return content
 
-    # [其他原有方法保持不變...]
     def _validate_date(self, year: str, month: str, day: str) -> bool:
         """驗證日期的合理性"""
         try:
@@ -1100,37 +1076,76 @@ class MDParser:
         
         return result
 
-    def _calculate_data_richness(self, eps_stats: Dict, target_price: Optional[float], analyst_count: int) -> float:
-        """計算資料豐富度分數 (0-10)"""
-        score = 0
+    def _get_debug_info_enhanced(self, content: str, extracted_date: Optional[str], 
+                                search_keywords: List[str]) -> Dict[str, Any]:
+        """v3.6.1 增強的調試資訊"""
+        return {
+            'content_preview': content[:200] + "..." if len(content) > 200 else content,
+            'extracted_date': extracted_date,
+            'yaml_detected': content.startswith('---'),
+            'content_length': len(content),
+            'search_keywords_count': len(search_keywords),
+            'search_keywords_preview': search_keywords[:5],
+            'watch_list_loaded': self.validation_enabled,
+            'watch_list_size': len(self.watch_list_mapping),
+            'parser_version': self.version,
+            'content_structure': {
+                'has_metadata': content.startswith('---'),
+                'paragraph_count': len(content.split('\n\n')),
+                'line_count': len(content.split('\n')),
+                'chinese_detected': bool(re.search(r'[\u4e00-\u9fff]', content))
+            }
+        }
+
+    def _create_empty_result_enhanced(self, file_path: str, error_msg: str) -> Dict[str, Any]:
+        """v3.6.1 增強的空結果建立"""
+        file_info = self._extract_file_info(file_path)
         
-        eps_years = ['2025', '2026', '2027']
-        eps_available = sum(1 for year in eps_years if eps_stats.get(f'eps_{year}_avg') is not None)
-        score += (eps_available / len(eps_years)) * 6
-        
-        if target_price is not None:
-            score += 2
-        
-        if analyst_count > 0:
-            if analyst_count >= 20:
-                score += 2
-            elif analyst_count >= 10:
-                score += 1.5
-            elif analyst_count >= 5:
-                score += 1
-            else:
-                score += 0.5
-        
-        return round(min(score, 10), 2)
+        return {
+            'filename': os.path.basename(file_path),
+            'company_code': file_info.get('company_code'),
+            'company_name': file_info.get('company_name'),
+            'data_source': file_info.get('data_source'),
+            'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)) if os.path.exists(file_path) else None,
+            'content_date': None,
+            'eps_2025_high': None, 'eps_2025_low': None, 'eps_2025_avg': None,
+            'eps_2026_high': None, 'eps_2026_low': None, 'eps_2026_avg': None,
+            'eps_2027_high': None, 'eps_2027_low': None, 'eps_2027_avg': None,
+            'target_price': None,
+            'analyst_count': 0,
+            'has_eps_data': False,
+            'has_target_price': False,
+            'has_analyst_info': False,
+            'data_richness_score': 1.0,  # MODIFIED: Low score for error cases
+            'quality_score': 1.0,        # MODIFIED: Low score for error cases
+            'search_keywords': [],  # 重要！
+            'content_quality_metrics': {},
+            'yaml_data': {},
+            'content': '',
+            'content_length': 0,
+            'parsed_at': datetime.now(),
+            'parser_version': self.version,
+            'error': error_msg,
+            'date_extraction_method': 'error',
+            'validation_result': {
+                'overall_status': 'error', 
+                'errors': [error_msg],
+                'validation_method': 'error_state'
+            },
+            'content_validation_passed': False,
+            'validation_warnings': [],
+            'validation_errors': [error_msg],
+            'validation_enabled': self.validation_enabled
+        }
 
 
 # 測試功能
 if __name__ == "__main__":
     parser = MDParser()
     
-    print(f"=== MD Parser v{parser.version} 測試 (增強版觀察名單驗證和查詢模式提取) ===")
-    print(f"📋 觀察名單載入: {len(parser.watch_list_mapping)} 家公司")
-    print(f"🔧 驗證功能: {'啟用' if parser.validation_enabled else '停用'}")
+    print(f"=== MD Parser v{parser.version} 測試 (增強版品質評分) ===")
+    print(f"觀察名單載入: {len(parser.watch_list_mapping)} 家公司")
+    print(f"驗證功能: {'啟用' if parser.validation_enabled else '停用'}")
     
     if parser.validation_enabled:
         # 測試增強版驗證邏輯
@@ -1142,7 +1157,7 @@ if __name__ == "__main__":
             ('2330', '台積電')     # 正常公司 (如果在觀察名單中)
         ]
         
-        print(f"\n🧪 增強版驗證測試:")
+        print(f"\n測試增強版驗證:")
         for code, name in test_cases:
             result = parser._validate_against_watch_list_enhanced(code, name)
             status = result['overall_status']
@@ -1155,12 +1170,12 @@ if __name__ == "__main__":
             
             if errors > 0:
                 for error in result.get('errors', [])[:1]:  # 只顯示第一個錯誤
-                    print(f"    ❌ {error}")
+                    print(f"    {error}")
     else:
-        print("⚠️ 觀察名單驗證已停用")
+        print("觀察名單驗證已停用")
     
     # 測試查詢模式提取
-    print(f"\n🧪 查詢模式提取測試:")
+    print(f"\n測試查詢模式提取:")
     test_content = '''---
 search_query: 台積電 2330 factset eps 預估
 keywords: 半導體, 晶圓代工, 台積電, factset
@@ -1179,6 +1194,20 @@ original_query: "台積電" factset 分析師 目標價
     print(f"   提取的關鍵字: {keywords}")
     print(f"   關鍵字數量: {len(keywords)}")
     
-    print(f"\n✅ v{parser.version} 增強版 MD Parser 已啟動！")
-    print(f"🆕 新功能: 增強觀察名單驗證、查詢模式提取、內容品質評估")
-    print(f"🔧 主要修正: 多層次名稱比較、相似度計算、詳細驗證日誌")
+    # 測試品質評分 (缺少內容日期)
+    print(f"\n測試品質評分 - 缺少內容日期:")
+    eps_stats = {'eps_2025_avg': 50.0, 'eps_2026_avg': 55.0, 'eps_2027_avg': None}
+    target_price = 600.0
+    analyst_count = 25
+    
+    # 有內容日期的情況
+    quality_with_date = parser._calculate_data_richness_enhanced(eps_stats, target_price, analyst_count, "2025/06/24")
+    print(f"   有內容日期: {quality_with_date}")
+    
+    # 缺少內容日期的情況
+    quality_without_date = parser._calculate_data_richness_enhanced(eps_stats, target_price, analyst_count, "")
+    print(f"   缺少內容日期: {quality_without_date}")
+    
+    print(f"\nv{parser.version} 增強版 MD Parser 已啟動！")
+    print(f"新功能: 對缺少內容日期的檔案給予低品質評分 (≤1分)")
+    print(f"主要修正: 增強品質評分邏輯，確保財務資訊有效性")
