@@ -377,13 +377,19 @@ class ProcessCLI:
             pattern_summary = None
             if keyword_analysis:
                 pattern_summary = self.report_generator.generate_keyword_summary(keyword_analysis)
-                print(f"✅ 查詢模式報告: {len(pattern_summary)} 個模式")
-            
+                if pattern_summary is not None:
+                    print(f"✅ 查詢模式報告: {len(pattern_summary)} 個模式")
+                else:
+                    print("⚠️ 查詢模式報告生成失敗")
+
             # Watchlist Summary (v3.6.1)
             watchlist_summary = None
             if watchlist_analysis:
                 watchlist_summary = self.report_generator.generate_watchlist_summary(watchlist_analysis)
-                print(f"✅ 觀察名單報告: {len(watchlist_summary)} 家公司")
+                if watchlist_summary is not None:
+                    print(f"✅ 觀察名單報告: {len(watchlist_summary)} 家公司")
+                else:
+                    print("⚠️ 觀察名單報告生成失敗")
             
             # 6. 儲存報告
             saved_files = self.report_generator.save_all_reports(
@@ -395,7 +401,7 @@ class ProcessCLI:
             
             # 7. 生成統計報告
             statistics = self.report_generator.generate_statistics_report(processed_companies)
-            stats_file = self.report_generator.save_statistics_report(statistics)
+            # stats_file = self.report_generator.save_statistics_report(statistics)
             
             # 8. 上傳到 Google Sheets (如果可用且要求)
             if upload_sheets and self.sheets_uploader:
