@@ -386,9 +386,11 @@ class ProcessCLI:
                 print(f"✅ 觀察名單報告: {len(watchlist_summary)} 家公司")
             
             # 6. 儲存報告
-            print("💾 儲存報告...")
             saved_files = self.report_generator.save_all_reports(
-                portfolio_summary, detailed_report, pattern_summary, watchlist_summary
+                portfolio_summary, 
+                detailed_report, 
+                pattern_summary if pattern_summary is not None else None,
+                watchlist_summary if watchlist_summary is not None else None
             )
             
             # 7. 生成統計報告
