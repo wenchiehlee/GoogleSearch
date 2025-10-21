@@ -1,14 +1,14 @@
 
 # FactSet Pipeline v3.6.1 - CSV 報告使用指南
-生成時間: 2025-09-15 11:31:33
-時間戳: 20250915_113133
+生成時間: 2025-10-21 11:33:56
+時間戳: 20251021_113356
 
 ## 📁 生成的檔案清單
 
 ### 主要報告檔案
-- portfolio: `portfolio_summary_20250915_113133.csv`
-- detailed: `detailed_report_20250915_113133.csv`
-- validation: `validation_summary_20250915_113133.csv`
+- portfolio: `portfolio_summary_20251021_113356.csv`
+- detailed: `detailed_report_20251021_113356.csv`
+- validation: `validation_summary_20251021_113356.csv`
 
 
 ### 最新版本檔案 (無時間戳)
