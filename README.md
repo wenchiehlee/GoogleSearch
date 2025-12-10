@@ -14,6 +14,14 @@
 ### 🏗️ Two-Stage Architecture
 
 ```
+Stage 0: Watchlist Update (Daily 18:00 UTC)
+┌─────────────────────────────────────┐
+│ 📥 Actions-update-lists.yaml        │
+│   └─ Get觀察名單.py                 │
+│      ├─ StockID_TWSE_TPEX.csv       │
+│      └─ StockID_TWSE_TPEX_focus.csv │
+└─────────────────────────────────────┘
+             ↓
 Stage 1: Search Group (v3.5.1)          Stage 2: Process Group (v3.6.1)
 ┌─────────────────────────────────────┐    ┌──────────────────────────────────┐
 │ 📥 StockID_TWSE_TPEX.csv (116+ Taiwan stocks) │    │ 📁 data/md/*.md (Validated files) │
@@ -126,7 +134,12 @@ FactSet-Pipeline/
 │   ├── md/                          # Generated MD files (Search → Process)
 │   ├── reports/                     # Generated CSV reports
 │   └── cache/                       # Search cache and progress
-├── StockID_TWSE_TPEX.csv                      # Input watchlist (116+ companies)
+*   **Input CSV (`StockID_TWSE_TPEX.csv` & `StockID_TWSE_TPEX_focus.csv`):**
+    ```csv
+    代號,名稱
+    2301,光寶科
+    ...
+    ```
 ├── requirements.txt                  # Python dependencies
 ├── .env.example                     # Environment variables template
 └── README.md                        # This file
