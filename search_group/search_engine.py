@@ -183,7 +183,7 @@ class SearchEngine:
                                           name: str, min_quality: int) -> Optional[Dict[str, Any]]:
         """MODIFIED: Enhanced result processing with md_date extraction"""
         try:
-            url = item.get('link', '')
+            url = item.get('link', '') or item.get('url', '')
             title = item.get('title', '')
             
             if not url or not title:
