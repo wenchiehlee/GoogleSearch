@@ -30,7 +30,11 @@ env:
 jobs:
   daily-search:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        batch: [1, 2, 3, 4]  # Split into 4 parallel jobs
     
     steps:
     - name: Checkout Repository
@@ -63,8 +67,6 @@ jobs:
           exit 1
         fi
         echo "Required files found"
-        COMPANY_COUNT=$(tail -n +2 StockID_TWSE_TPEX.csv | wc -l)
-        echo "Companies in watchlist: $COMPANY_COUNT"
     
     - name: Create Directory Structure
       run: |
@@ -102,6 +104,29 @@ jobs:
         echo "Validating API setup..."
         python search_group/search_cli.py validate
         echo "API validation completed"
+        
+    - name: Split Watchlist for Batch ${{ matrix.batch }}
+      run: |
+        echo "Splitting watchlist for batch ${{ matrix.batch }}/4..."
+        # Calculate total lines (minus header)
+        TOTAL_LINES=$(( $(tail -n +2 StockID_TWSE_TPEX.csv | wc -l) ))
+        BATCH_SIZE=$(( ($TOTAL_LINES + 3) / 4 ))
+        START_LINE=$(( (${{ matrix.batch }} - 1) * $BATCH_SIZE + 2 ))
+        END_LINE=$(( $START_LINE + $BATCH_SIZE - 1 ))
+        
+        echo "Processing lines $START_LINE to $END_LINE (Total: $TOTAL_LINES)"
+        
+        # Create header
+        head -n 1 StockID_TWSE_TPEX.csv > batch_watchlist.csv
+        # Extract batch lines
+        sed -n "${START_LINE},${END_LINE}p" StockID_TWSE_TPEX.csv >> batch_watchlist.csv
+        
+        echo "Batch watchlist created with $(wc -l < batch_watchlist.csv) lines (including header)"
+        # Overwrite config to use batch watchlist
+        # We'll modify search_cli.py's config temporarily or point to new file if supported
+        # For now, let's rename original and use batch as main
+        mv StockID_TWSE_TPEX.csv full_watchlist.csv
+        mv batch_watchlist.csv StockID_TWSE_TPEX.csv
     
     - name: Pre-Search Status
       run: |
