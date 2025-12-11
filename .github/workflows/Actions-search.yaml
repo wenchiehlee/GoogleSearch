@@ -276,8 +276,15 @@ jobs:
         if git diff --staged --quiet; then
           echo "No search changes to commit"
         else
+          # Handle parallel commits with rebase
+          git pull --rebase || true
           git commit -m "🔍 Search Group v3.5.0-pure-hash Results - $(date +%Y-%m-%d\ %H:%M:%S)" || true
-          git push || true
+          # Retry push on failure
+          until git push; do
+            echo "Push failed, retrying in 5s..."
+            sleep 5
+            git pull --rebase
+          done
           echo "Search results committed"
         fi
     
