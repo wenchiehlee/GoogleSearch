@@ -1,0 +1,24 @@
+{
+  "query": "test factset",
+  "cached_at": "2025-12-10T12:41:33.073504",
+  "data": {
+    "query_info": {
+      "original_query": "test factset",
+      "total_results": "13400",
+      "search_time": 0.499587,
+      "timestamp": "2025-12-10T12:41:33.073389",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "FactSet Insight - Commentary and research from our desk to yours",
+        "snippet": "9 hours ago ... Stay updated on the S&P 500 with this earnings insight from FactSet. Q4 EPS estimates rose slightly despite macro concerns,... By John Butters | Earnings · Read ...",
+        "url": "https://insight.factset.com/",
+        "domain": "insight.factset.com",
+        "relevance_score": 18,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}
