@@ -267,21 +267,21 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
-        # Clean up any other changes to tracked files to prevent rebase errors
-        git checkout -- .
-        
         # Stage MD files
         git add data/md/*.md || true
         
         if git diff --staged --quiet; then
           echo "No search changes to commit"
         else
-          # Commit FIRST so we have a valid HEAD to rebase
+          # Commit FIRST
           git commit -m "🔍 Search Group v3.5.0-pure-hash Results - $(date +%Y-%m-%d\ %H:%M:%S)"
           
-          # Now pull and rebase our commit on top of remote
-          # Loop to handle contention from parallel jobs
-          MAX_RETRIES=5
+          # Force clean the working directory to remove untracked/modified files (logs, cache)
+          # that might prevent rebase. This respects the commit we just made.
+          git reset --hard
+          
+          # Now pull and rebase
+          MAX_RETRIES=10
           count=0
           until git push; do
             count=$((count + 1))
@@ -290,7 +290,7 @@ jobs:
               exit 1
             fi
             echo "Push failed (attempt $count), pulling and retrying..."
-            sleep $(( 5 + $RANDOM % 10 )) # Random sleep 5-15s to reduce collision chance
+            sleep $(( 5 + $RANDOM % 15 ))
             git pull --rebase
           done
           echo "Search results committed and pushed"
