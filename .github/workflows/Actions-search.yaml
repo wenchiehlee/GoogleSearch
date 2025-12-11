@@ -105,45 +105,11 @@ jobs:
         python search_group/search_cli.py validate
         echo "API validation completed"
         
-    - name: Split Watchlist for Batch ${{ matrix.batch }}
-      run: |
-        echo "Splitting watchlist for batch ${{ matrix.batch }}/4..."
-        # Calculate total lines (minus header)
-        TOTAL_LINES=$(( $(tail -n +2 StockID_TWSE_TPEX.csv | wc -l) ))
-        BATCH_SIZE=$(( ($TOTAL_LINES + 3) / 4 ))
-        START_LINE=$(( (${{ matrix.batch }} - 1) * $BATCH_SIZE + 2 ))
-        END_LINE=$(( $START_LINE + $BATCH_SIZE - 1 ))
-        
-        echo "Processing lines $START_LINE to $END_LINE (Total: $TOTAL_LINES)"
-        
-        # Create header
-        head -n 1 StockID_TWSE_TPEX.csv > batch_watchlist.csv
-        # Extract batch lines
-        sed -n "${START_LINE},${END_LINE}p" StockID_TWSE_TPEX.csv >> batch_watchlist.csv
-        
-        echo "Batch watchlist created with $(wc -l < batch_watchlist.csv) lines (including header)"
-        # Overwrite config to use batch watchlist
-        # We'll modify search_cli.py's config temporarily or point to new file if supported
-        # For now, let's rename original and use batch as main
-        mv StockID_TWSE_TPEX.csv full_watchlist.csv
-        mv batch_watchlist.csv StockID_TWSE_TPEX.csv
-    
-    - name: Pre-Search Status
-      run: |
-        echo "Pre-search status check..."
-        python search_group/search_cli.py status || echo "No previous search data found"
-        echo ""
-        echo "Search Configuration:"
-        echo "  - Company Count: ${{ github.event.inputs.company_count || '2' }}"
-        echo "  - Min Quality: ${{ github.event.inputs.min_quality || '7' }}"
-        echo "  - Taiwan Time: $(TZ='Asia/Taipei' date)"
-        echo "  - UTC Time: $(date -u)"
-    
     - name: Execute Daily Search
       id: search
       continue-on-error: true
       run: |
-        echo "Starting daily Taiwan financial data search..."
+        echo "Starting daily Taiwan financial data search (Batch ${{ matrix.batch }}/4)..."
         
         COMPANY_COUNT="${{ github.event.inputs.company_count || '2' }}"
         MIN_QUALITY="${{ github.event.inputs.min_quality || '7' }}"
@@ -152,21 +118,48 @@ jobs:
         echo "Search Parameters:"
         echo "  - Count per company: $COMPANY_COUNT"
         echo "  - Minimum quality: $MIN_QUALITY"
+        
+        # Calculate batch symbols if no specific companies provided
         if [ -n "$SPECIFIC_COMPANIES" ]; then
-          echo "  - Specific companies: $SPECIFIC_COMPANIES"
+          TARGET_BATCH="$SPECIFIC_COMPANIES"
+          echo "  - Target: Specific companies ($SPECIFIC_COMPANIES)"
         else
-          echo "  - Target: All companies in watchlist"
+          # Extract all symbols from CSV (skipping header)
+          # Use mapfile/readarray to handle lines properly
+          mapfile -t ALL_SYMBOLS < <(tail -n +2 StockID_TWSE_TPEX.csv | cut -d',' -f1 | tr -d '\r')
+          TOTAL_SYMBOLS=${#ALL_SYMBOLS[@]}
+          
+          # Calculate batch slice
+          BATCH_NUM=${{ matrix.batch }}
+          TOTAL_BATCHES=4
+          
+          # Calculate size per batch (ceiling division)
+          BATCH_SIZE=$(( ($TOTAL_SYMBOLS + $TOTAL_BATCHES - 1) / $TOTAL_BATCHES ))
+          
+          START_IDX=$(( ($BATCH_NUM - 1) * $BATCH_SIZE ))
+          
+          # Extract slice
+          BATCH_ARRAY=("${ALL_SYMBOLS[@]:$START_IDX:$BATCH_SIZE}")
+          
+          # Join with commas
+          IFS=,
+          TARGET_BATCH="${BATCH_ARRAY[*]}"
+          
+          echo "  - Target: Batch $BATCH_NUM/$TOTAL_BATCHES"
+          echo "  - Total Symbols: $TOTAL_SYMBOLS"
+          echo "  - Batch Size: ${#BATCH_ARRAY[@]}"
+          echo "  - Start Index: $START_IDX"
         fi
         
-        # Run search and capture exit code without failing the step immediately
-        set +e
-        if [ -n "$SPECIFIC_COMPANIES" ]; then
-          echo "Searching specific companies: $SPECIFIC_COMPANIES"
-          python search_group/search_cli.py search --batch "$SPECIFIC_COMPANIES" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
-        else
-          echo "Searching all companies in watchlist"
-          python search_group/search_cli.py search --all --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
+        if [ -z "$TARGET_BATCH" ]; then
+          echo "⚠️ No symbols found for this batch. Skipping search."
+          exit 0
         fi
+        
+        # Run search with --batch argument
+        set +e
+        echo "Executing search for batch..."
+        python search_group/search_cli.py search --batch "$TARGET_BATCH" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
         SEARCH_EXIT_CODE=$?
         set -e
         
@@ -176,17 +169,6 @@ jobs:
           echo "Search completed successfully"
         else
           echo "Search completed with warnings (exit code: $SEARCH_EXIT_CODE)"
-        fi
-
-    - name: Restore Watchlist File
-      if: always()
-      run: |
-        echo "Restoring original watchlist file..."
-        if [ -f "full_watchlist.csv" ]; then
-          mv full_watchlist.csv StockID_TWSE_TPEX.csv
-          echo "StockID_TWSE_TPEX.csv restored."
-        else
-          echo "Backup file full_watchlist.csv not found, skipping restore."
         fi
     
     - name: Post-Search Analysis
