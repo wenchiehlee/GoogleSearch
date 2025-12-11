@@ -141,6 +141,7 @@ jobs:
     
     - name: Execute Daily Search
       id: search
+      continue-on-error: true
       run: |
         echo "Starting daily Taiwan financial data search..."
         
@@ -157,6 +158,8 @@ jobs:
           echo "  - Target: All companies in watchlist"
         fi
         
+        # Run search and capture exit code without failing the step immediately
+        set +e
         if [ -n "$SPECIFIC_COMPANIES" ]; then
           echo "Searching specific companies: $SPECIFIC_COMPANIES"
           python search_group/search_cli.py search --batch "$SPECIFIC_COMPANIES" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
@@ -164,14 +167,26 @@ jobs:
           echo "Searching all companies in watchlist"
           python search_group/search_cli.py search --all --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
         fi
-        
         SEARCH_EXIT_CODE=$?
+        set -e
+        
         echo "search_exit_code=$SEARCH_EXIT_CODE" >> $GITHUB_OUTPUT
         
         if [ $SEARCH_EXIT_CODE -eq 0 ]; then
           echo "Search completed successfully"
         else
           echo "Search completed with warnings (exit code: $SEARCH_EXIT_CODE)"
+        fi
+
+    - name: Restore Watchlist File
+      if: always()
+      run: |
+        echo "Restoring original watchlist file..."
+        if [ -f "full_watchlist.csv" ]; then
+          mv full_watchlist.csv StockID_TWSE_TPEX.csv
+          echo "StockID_TWSE_TPEX.csv restored."
+        else
+          echo "Backup file full_watchlist.csv not found, skipping restore."
         fi
     
     - name: Post-Search Analysis
