@@ -45,56 +45,19 @@ class SearchEngine:
             r'(\d{4})/(\d{1,2})/(\d{1,2})',
         ]
         
-        # Taiwan financial sites patterns
+        # Taiwan financial sites patterns (Optimized for minimal API usage - v3.5.2)
         self.refined_search_patterns = {
             'factset_direct': [
-                'factset {symbol}',
-                'factset {name}', 
-                '{symbol} factset',
-                '{name} factset',
-                'factset {symbol} EPS',
-                'factset {name} 預估',
-                '"{symbol}" factset 分析師',
-                '"{name}" factset 目標價'
-            ],
-            'cnyes_factset': [
-                'site:cnyes.com factset {symbol}',
-                'site:cnyes.com {symbol} factset',
-                'site:cnyes.com {symbol} EPS 預估',
-                'site:cnyes.com {name} factset',
-                'site:cnyes.com {symbol} 分析師',
-                'site:cnyes.com factset {name}',
-                'site:cnyes.com {symbol} 台股預估'
+                # The single most effective query for recent FactSet reports
+                'site:cnyes.com "FactSet" "{symbol}" "EPS" "預估"',
+                # Backup query for broader coverage
+                '"{symbol}" "FactSet" "目標價" after:2024'
             ],
             'eps_forecast': [
-                '{symbol} EPS 預估',
-                '{name} EPS 預估',
-                '{symbol} EPS 2025',
-                '{name} EPS 2025',
-                '{symbol} 每股盈餘 預估',
-                '{name} 每股盈餘 預估',
-                '{symbol} EPS forecast',
-                '{name} earnings estimates'
-            ],
-            'analyst_consensus': [
-                '{symbol} 分析師 預估',
-                '{name} 分析師 預估',
-                '{symbol} 分析師 目標價',
-                '{name} 分析師 目標價',
-                '{symbol} consensus estimate',
-                '{name} analyst forecast',
-                '{symbol} 共識預估',
-                '{name} 投資評等'
-            ],
-            'taiwan_financial_simple': [
-                'site:cnyes.com {symbol}',
-                'site:statementdog.com {symbol}',
-                'site:wantgoo.com {symbol}',
-                'site:goodinfo.tw {symbol}',
-                'site:uanalyze.com.tw {symbol}',
-                'site:findbillion.com {symbol}',
-                'site:moneydj.com {symbol}',
-                'site:yahoo.com {symbol} 股票'
+                # Direct EPS forecast table search
+                '"{name}" "EPS" "預估" "2025" "2026"',
+                # Analyst consensus specific
+                '"{symbol}" "分析師" "共識" "目標價"'
             ]
         }
         
