@@ -108,7 +108,6 @@ jobs:
         
     - name: Execute Daily Search
       id: search
-      continue-on-error: true
       run: |
         echo "Starting daily Taiwan financial data search (Batch ${{ matrix.batch }}/4)..."
         
@@ -158,19 +157,8 @@ jobs:
         fi
         
         # Run search with --batch argument
-        set +e
         echo "Executing search for batch..."
         python search_group/search_cli.py search --batch "$TARGET_BATCH" --count "$COMPANY_COUNT" --min-quality "$MIN_QUALITY"
-        SEARCH_EXIT_CODE=$?
-        set -e
-        
-        echo "search_exit_code=$SEARCH_EXIT_CODE" >> $GITHUB_OUTPUT
-        
-        if [ $SEARCH_EXIT_CODE -eq 0 ]; then
-          echo "Search completed successfully"
-        else
-          echo "Search completed with warnings (exit code: $SEARCH_EXIT_CODE)"
-        fi
     
     - name: Post-Search Analysis
       run: |
