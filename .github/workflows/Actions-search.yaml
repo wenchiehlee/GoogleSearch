@@ -270,6 +270,10 @@ jobs:
         # Only commit MD files (no cache or logs)
         git add data/md/*.md || true
         
+        # Clean up any other changes to tracked files (logs, cache) to prevent rebase errors
+        # This reverts modifications to files like search_group/logs/search/*.log
+        git checkout -- .
+        
         if git diff --staged --quiet; then
           echo "No search changes to commit"
         else
