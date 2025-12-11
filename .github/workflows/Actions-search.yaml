@@ -267,26 +267,33 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
-        # Only commit MD files (no cache or logs)
-        git add data/md/*.md || true
-        
-        # Clean up any other changes to tracked files (logs, cache) to prevent rebase errors
-        # This reverts modifications to files like search_group/logs/search/*.log
+        # Clean up any other changes to tracked files to prevent rebase errors
         git checkout -- .
+        
+        # Stage MD files
+        git add data/md/*.md || true
         
         if git diff --staged --quiet; then
           echo "No search changes to commit"
         else
-          # Handle parallel commits with rebase
-          git pull --rebase || true
-          git commit -m "🔍 Search Group v3.5.0-pure-hash Results - $(date +%Y-%m-%d\ %H:%M:%S)" || true
-          # Retry push on failure
+          # Commit FIRST so we have a valid HEAD to rebase
+          git commit -m "🔍 Search Group v3.5.0-pure-hash Results - $(date +%Y-%m-%d\ %H:%M:%S)"
+          
+          # Now pull and rebase our commit on top of remote
+          # Loop to handle contention from parallel jobs
+          MAX_RETRIES=5
+          count=0
           until git push; do
-            echo "Push failed, retrying in 5s..."
-            sleep 5
+            count=$((count + 1))
+            if [ $count -ge $MAX_RETRIES ]; then
+              echo "Failed to push after $MAX_RETRIES attempts"
+              exit 1
+            fi
+            echo "Push failed (attempt $count), pulling and retrying..."
+            sleep $(( 5 + $RANDOM % 10 )) # Random sleep 5-15s to reduce collision chance
             git pull --rebase
           done
-          echo "Search results committed"
+          echo "Search results committed and pushed"
         fi
     
     - name: Notify on Failure
