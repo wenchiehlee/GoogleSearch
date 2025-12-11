@@ -249,7 +249,7 @@ jobs:
         echo "Artifacts prepared"
     
     - name: Commit generated search results
-      if: success()
+      if: always() # Commit even if previous steps failed, to save partial results or for debugging
       run: |
         echo "Committing generated search results..."
         
