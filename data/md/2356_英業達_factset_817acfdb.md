@@ -5,7 +5,7 @@ quality_score: 10
 company: 英業達
 stock_code: 2356
 md_date: 2025/12/11
-extracted_date: 2025-12-12T18:50:53.943639
+extracted_date: 2025-12-13T18:44:21.469567
 search_query: site:cnyes.com "FactSet" "2356" "EPS" "預估"
 result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content about 2356 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
