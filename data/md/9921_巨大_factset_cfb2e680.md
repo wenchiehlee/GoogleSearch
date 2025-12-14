@@ -5,7 +5,7 @@ quality_score: 10
 company: 巨大
 stock_code: 9921
 md_date: 2025/12/12
-extracted_date: 2025-12-13T18:44:15.261233
+extracted_date: 2025-12-14T18:45:53.272404
 search_query: site:cnyes.com "FactSet" "9921" "EPS" "預估"
 result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content about 9921 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
