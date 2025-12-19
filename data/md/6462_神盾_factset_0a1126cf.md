@@ -5,9 +5,9 @@ quality_score: 7
 company: 神盾
 stock_code: 6462
 md_date: 2025/10/21
-extracted_date: 2025-12-18T18:50:57.484644
+extracted_date: 2025-12-19T18:48:42.507432
 search_query: "神盾" "EPS" "預估" "2025" "2026"
-result_index: 1
+result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content about 6462 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
 version: 3.5.1-modified
 ---
