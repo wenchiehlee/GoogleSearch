@@ -5,7 +5,7 @@ quality_score: 10
 company: 美利達
 stock_code: 9914
 md_date: 2025/12/12
-extracted_date: 2025-12-20T18:44:14.497577
+extracted_date: 2025-12-21T18:46:07.234456
 search_query: site:cnyes.com "FactSet" "9914" "EPS" "預估"
 result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content about 9914 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
