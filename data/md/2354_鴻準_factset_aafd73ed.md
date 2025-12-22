@@ -5,7 +5,7 @@ quality_score: 7
 company: 鴻準
 stock_code: 2354
 md_date: 2025/10/29
-extracted_date: 2025-12-21T18:46:29.159330
+extracted_date: 2025-12-22T18:50:20.268448
 search_query: "鴻準" "EPS" "預估" "2025" "2026"
 result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content about 2354 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
@@ -32,136 +32,137 @@ version: 3.5.1-modified
 <meta name="og:image" content="https://blog.btcc.com/wp-content/uploads/2025/10/2.about-3035-stock.jpg" />
 
 
-  <link rel="canonical" href="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock" />
-  <meta property="article:published_time" content="2025-10-29T08:05:39+00:00" />
-  <meta property="article:modified_time" content="2025-10-29T08:06:57+00:00" />
+    <link rel="canonical" href="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock" />
+    <meta property="article:published_time" content="2025-10-29T08:05:39+00:00" />
+    <meta property="article:modified_time" content="2025-10-29T08:06:57+00:00" />
 
-  
-  
+    
+      
           
-  
+      
           
-  
-  <link rel="alternate" href="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock" hrefLang="x-default" />
-  
+      
+        <link rel="alternate" href="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock" hrefLang="x-default" />
+        
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
+      
           
-  
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_en-US.xml" />
+            
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_en-US.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_zh-CN.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_zh-TW.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ko-KR.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ja-JP.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_tr-TR.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_es-ES.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ar-EG.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ar-AE.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ar-SA.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_pt-PT.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_pt-BR.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_fr-FR.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_de-DE.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_ru-RU.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_th-TH.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_en-CA.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_en-AU.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_es-MX.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_en-IN.xml" />
+              
+              <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
+                href="https://www.btcc.com/rss/feed_vi-VN.xml" />
+              
 
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_zh-CN.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_zh-TW.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ko-KR.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ja-JP.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_tr-TR.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_es-ES.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ar-EG.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ar-AE.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ar-SA.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_pt-PT.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_pt-BR.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_fr-FR.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_de-DE.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_ru-RU.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_th-TH.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_en-CA.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_en-AU.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_es-MX.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_en-IN.xml" />
-
-        <link rel="alternate" type="application/rss+xml" title="The BTCC Feed"
-            href="https://www.btcc.com/rss/feed_vi-VN.xml" />
 
 
+                <link rel="stylesheet" href="/cms-static/font.css" />
+                <link rel="stylesheet" href="/cms-static/common.css" />
+                <link rel="stylesheet" href="/cms-static/swiper-bundle.min.css">
+                <link rel="stylesheet" href="/cms-static/academy_detail.css" />
+                <link rel="stylesheet" href="/cms-static/btn.css" />
 
+                <script>
+                  var lang = "zh-TW";
+                  var slug = "about-3035-stock";
+                  var currentPostId = "173922";
+                  var trading_guides = "BTCC交易教學影片";
+                  var currentCategory_slug = "academy/financial-investment";
 
-  <link rel="stylesheet" href="/cms-static/font.css" />
-  <link rel="stylesheet" href="/cms-static/common.css" />
-  <link rel="stylesheet" href="/cms-static/swiper-bundle.min.css">
-  <link rel="stylesheet" href="/cms-static/academy_detail.css" />
-  <link rel="stylesheet" href="/cms-static/btn.css" />
-
-  <script>
-    var lang = "zh-TW";
-    var currentPostId = "173922";
-    var trading_guides = "BTCC交易教學影片";
-    var currentCategory_slug = "academy/financial-investment";
-
-  </script>
-  <meta charset="UTF-8" />
+                </script>
+                <meta charset="UTF-8" />
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1, user-scalable=no,viewport-fit=cover" />
@@ -759,58 +760,59 @@ version: 3.5.1-modified
 
     })
   </script>
-  <div class="wrapper">
-    <div class="banner" id="topBanner"></div>
-    <div class="breadCrumb">
-      <a href="/zh-TW/" class="breadCrumb_item">BTCC</a>
-      /
-      <a href="/zh-TW/academy"
+    <div class="wrapper">
+      <div class="banner" id="topBanner"></div>
+      <div class="breadCrumb">
+        <a href="/zh-TW/" class="breadCrumb_item">BTCC</a>
+        /
+        <a href="/zh-TW/academy"
             class="breadCrumb_item ">
             學院
           </a>/<a href="/zh-TW/academy/financial-investment"
             class="breadCrumb_item ">
             投資理財
           </a>
-      /
-      <strong>
-        智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停
-      </strong>
+          /
+          <strong>
+            智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停
+          </strong>
 
 
-    </div>
-    <div class="container">
-      <div class="article-content">
-        <div class="article-detail">
-          <section class="article-body" id="J_Article">
-            <h1>
-              智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停
-            </h1>
-            <div class="author">
-              <!-- 作者 -->
-              <div class="flex flex-center gap-8">
+      </div>
+      <div class="container">
+        <div class="article-content">
+          <div class="article-detail">
+            <section class="article-body no-copy">
+              <h1>
+                智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停
+              </h1>
+              <div class="author">
+                <!-- 作者 -->
+                <div class="flex flex-center gap-8">
+                  
+                    <img width="30" height="30" class="rounded" src="http://2.gravatar.com/avatar/5fb8e566f3d2f1d2a2e868e864b576df?s=96&amp;d=mm&amp;r=g" />
+                    
+                      <span>
+                        <a class="block-show"
+                          href="/zh-TW/academy/author/judy">
+                          作者：陳雅婷
+                        </a>
+                      </span>
+                </div>
+                <span>|</span>
+                <!-- 审稿人 -->
                 
-                <img width="30" height="30" class="rounded" src="http://2.gravatar.com/avatar/5fb8e566f3d2f1d2a2e868e864b576df?s=96&amp;d=mm&amp;r=g" />
-                
-                <span>
-                  <a class="block-show" href="/zh-TW/academy/author/judy">
-                    作者：陳雅婷
-                  </a>
-                </span>
+                    <div>
+                      <span>
+                        最後更新時間：
+                      </span>
+                      <span>
+                        10/29/2025 16:05
+                      </span>
+                    </div>
               </div>
-              <span>|</span>
-              <!-- 审稿人 -->
-              
-              <div>
-                <span>
-                  最後更新時間：
-                </span>
-                <span>
-                  10/29/2025 16:05
-                </span>
-              </div>
-            </div>
-            <div id="detail_container">
-              <p>智原（3035）長年以矽智財（SIP）與 ASIC 設計服務見長，是台灣少數能結合「設計、封裝、製程整合」的半導體公司之一。</p>
+              <div id="detail_container">
+                <p>智原（3035）長年以矽智財（SIP）與 ASIC 設計服務見長，是台灣少數能結合「設計、封裝、製程整合」的半導體公司之一。</p>
 <p>近期，這家無晶圓 IC 設計服務公司宣布成功取得 4 奈米 AI ASIC 新訂單，並切入 2.5D 與 3D 先進封裝技術，帶動股價在法說會後直奔漲停，市場信心明顯回升。</p>
 <p>這讓不少投資者好奇：「智原可以買嗎？」「智原為什麼之前一直跌？」「2025 年智原合理價與目標價是多少？」</p>
 <p>本篇文章將對智原科技及其股票進行詳細介紹，包括其核心業務、競爭優勢及股價走勢，並展望其未來。</p>
@@ -1091,52 +1093,58 @@ version: 3.5.1-modified
 </ul>
 <div class="wp-block-button" align="center"><span style="background-color: #2e4a9d;"><strong><span style="color: #ffffff;"><a class="wp-block-button__link has-background" style="background-color: #2e4a9d; color: #ffffff;" href="https://www.btcc.com/zh-TW/register?utm_source=GW_SEO&amp;inviteCode=%20&amp;utm_medium=article&amp;utm_campaign=judy173922" target="_blank" rel="noopener">立即註冊 BTCC 帳戶</a></span></strong></span></div>
 
+              </div>
+              <!-- FAQ  -->
+              
+              <!-- 免责声明 -->
+              <div class="disclaimer">免責聲明：本文內容僅代表作者個人觀點，僅供參考，並不構成任何投資、法律或專業建議。文章內容不代表 BTCC 的立場，亦不應被視為對任何產品或服務的推薦。投資涉及風險，可能導致全部或部分資本損失。此外，過往的市場表現並不保證當下或未來的收益。請在作出任何決策前充分了解相關風險，並視情況諮詢專業顧問。<br/>如對本文內容有任何疑問或建議，請聯絡：<a href="/cdn-cgi/l/email-protection#a9c8cac8cdccc4d0e9cbddcaca87cac6c4"><span class="__cf_email__" data-cfemail="ec8d8f8d88898195ac8e988f8fc28f8381">[email&#160;protected]</span></a></div>
+            </section>
+          </div>
+          <aside class="detail_aside">
+            <!-- share -->
+            <div>
+              <h2>
+                分享
+              </h2>
+              <div class="share-tools">
+                <div class="event-pointer" data-sharer="twitter" data-title="智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停"
+                  data-hashtags="" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <use xlink:href="#twitter" />
+                  </svg></div>
+                <div class="event-pointer" data-sharer="facebook" data-hashtag="hashtag" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock"> <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <use xlink:href="#facebook" />
+                  </svg></div>
+                <div class="event-pointer" data-sharer="linkedin" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock">
+                  <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <use xlink:href="#linkedin" />
+                  </svg>
+                </div>
+
+                <div class="event-pointer" data-sharer="telegram" data-title="智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停"
+                  data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock">
+                  <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <use xlink:href="#telegram" />
+                  </svg>
+                </div>
+
+              </div>
             </div>
-          </section>
-        </div>
-        <aside class="detail_aside">
-          <!-- share -->
-          <div>
-            <h2>
-              分享
-            </h2>
-            <div class="share-tools">
-              <div class="event-pointer" data-sharer="twitter" data-title="智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停" data-hashtags="" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <use xlink:href="#twitter" />
-                </svg></div>
-              <div class="event-pointer" data-sharer="facebook" data-hashtag="hashtag" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock"> <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <use xlink:href="#facebook" />
-                </svg></div>
-              <div class="event-pointer" data-sharer="linkedin" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock">
-                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <use xlink:href="#linkedin" />
+
+            <!-- aim -->
+
+            <div class="section-list" id="J_SectionList">
+              <div class="trigger event-pointer" id="Menu">
+                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#menu" />
                 </svg>
               </div>
-
-              <div class="event-pointer" data-sharer="telegram" data-title="智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停" data-url="https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock">
-                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <use xlink:href="#telegram" />
-                </svg>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- aim -->
-
-          <div class="section-list" id="J_SectionList">
-            <div class="trigger event-pointer" id="Menu">
-              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                <use xlink:href="#menu" />
-              </svg>
-            </div>
-            <div class="section-scroll">
-              <span class="event-pointer close" id="J_Close"> <i class="iconfont icon-close"></i></span>
-              <div class="grid-list" id="ArticlesectionList">
+              <div class="section-scroll">
+                <span class="event-pointer close" id="J_Close"> <i class="iconfont icon-close"></i></span>
+                <div class="grid-list" id="ArticlesectionList">
+                </div>
               </div>
             </div>
-          </div>
-          <style>
+            <style>
   .newcomer-register {
     padding: 32px 24px;
     border-radius: 12px;
@@ -1198,7 +1206,7 @@ version: 3.5.1-modified
     註冊帳號
   </a>
 </div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.addEventListener('DOMContentLoaded', function() {
     // 注册引导
     var J_RegisterParams = document.getElementById("J_RegisterParams");
@@ -1231,7 +1239,7 @@ version: 3.5.1-modified
 </script>
 
 
-          <style>
+              <style>
   .hotProduct-container {
     padding: 32px 24px;
     border-radius: 12px;
@@ -1251,205 +1259,292 @@ version: 3.5.1-modified
 
   <!-- <div class="banner sm-size adTradeBanner" id="productBanner"></div> -->
 </div>
-        </aside>
+          </aside>
+        </div>
+        <div class="other-list">
+
+          <!-- hot topic -->
+          
+            <section>
+              <h2>
+                熱門話題
+              </h2>
+              <div class="tags">
+                
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e6%bc%b2%e5%81%9c">
+                    智原漲停
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%8f%af%e4%bb%a5%e8%b2%b7%e5%97%8e">
+                    智原可以買嗎
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%87%9f%e6%94%b6">
+                    智原營收
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e6%9c%aa%e4%be%86">
+                    智原未來
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%89%8d%e6%99%af">
+                    智原前景
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%9b%ae%e6%a8%99%e5%83%b9-2025">
+                    智原目標價 2025
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%9b%ae%e6%a8%99%e5%83%b9">
+                    智原目標價
+                  </a>
+                  
+
+                  <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%90%88%e7%90%86%e5%83%b9">
+                    智原合理價
+                  </a>
+                  
+              </div>
+            </section>
+            
+
+
+
+              <!-- related post -->
+
+              
+                <section>
+                  <h2>
+                    相關文章
+                  </h2>
+                  <div class="posts">
+                    
+                      <a href="/zh-TW/academy/financial-investment/usd-twd-forecast">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2022/11/6.usd-twd-1-300x216.jpg" />
+                        </div>
+                        <h3>
+                          美元兌台幣未來走勢如何？2025-2026台幣匯率走勢預測
+                        </h3>
+                        <p>
+                          11 /17/2025 09:00
+                        </p>
+                      </a>
+                      
+                      <a href="/zh-TW/academy/financial-investment/japanese-yen-exchange-rate-trend">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2023/01/6.jpy_-300x216.jpg" />
+                        </div>
+                        <h3>
+                          日圓匯率走勢預測：日幣未來會漲還是跌？現在可以買日幣嗎？
+                        </h3>
+                        <p>
+                          04 /22/2025 11:00
+                        </p>
+                      </a>
+                      
+                      <a href="/zh-TW/academy/financial-investment/us-dollar-exchange-rate-trend-analysis">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2022/10/8.us-dollar-trend-300x216.jpg" />
+                        </div>
+                        <h3>
+                          美金匯率走勢預測：美金會漲還是跌？2025美元台幣未來走勢預測
+                        </h3>
+                        <p>
+                          10 /30/2025 10:30
+                        </p>
+                      </a>
+                      
+                      <a href="/zh-TW/academy/financial-investment/analysis-of-the-future-trend-of-gold">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2022/10/1.gold-price-trend-300x216.jpg" />
+                        </div>
+                        <h3>
+                          黃金價格走勢預測：金價歷史性上漲，未來金價走勢如何？下個目標價格多少？
+                        </h3>
+                        <p>
+                          10 /09/2025 09:15
+                        </p>
+                      </a>
+                      
+                      <a href="/zh-TW/academy/financial-investment/currency-symbol">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2022/12/6.currency-symbols-300x216.jpg" />
+                        </div>
+                        <h3>
+                          台幣美金符號怎麼打、長怎樣？各國貨幣符號打法、念法、代號一次看！
+                        </h3>
+                        <p>
+                          10 /27/2025 09:00
+                        </p>
+                      </a>
+                      
+                      <a href="/zh-TW/academy/financial-investment/gold-price-historical-analysis-and-prediction">
+                        <div class="thumb">
+                          <img src="https://blog.btcc.com/wp-content/uploads/2022/11/6.Gold-Price-History-300x216.jpg" />
+                        </div>
+                        <h3>
+                          黃金價格歷史50年回顧：黃金何時買好？金價最高點最低點是？
+                        </h3>
+                        <p>
+                          10 /20/2025 09:30
+                        </p>
+                      </a>
+                      
+                  </div>
+                </section>
+                
+
+
+                  <!-- latest_post -->
+
+                  
+                    <section>
+                      <h2>
+                        最新資訊
+                      </h2>
+                      <div class="posts">
+                        
+                          <a href="/zh-TW/academy/financial-investment/about-2344-stock">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2025/09/2.about-2344-stock-300x216.jpg" />
+                            </div>
+                            <h3>
+                              華邦電(2344)做什麼的？可以買嗎？華邦電合理價及未來展望
+                            </h3>
+                            <p>
+                              12 /15/2025 09:00
+                            </p>
+                          </a>
+                          
+                          <a href="/zh-TW/academy/others/about-terra-do-kwon">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2025/08/2.do-kwon-300x216.jpg" />
+                            </div>
+                            <h3>
+                              Terra詐騙案創辦人Do Kwon判刑15年！Do Kwon是誰？Terra Luna 崩盤回顧
+                            </h3>
+                            <p>
+                              12 /12/2025 17:00
+                            </p>
+                          </a>
+                          
+                          <a href="/zh-TW/academy/crypto-forecast/meme/pepe-20-price-prediction">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2023/06/1.Pepe-2.0-coin-300x216.png" />
+                            </div>
+                            <h3>
+                              Pepe2.0是什麼？會是下一個暴富機會嗎？$PEPE2幣價分析和價格預測
+                            </h3>
+                            <p>
+                              12 /12/2025 14:00
+                            </p>
+                          </a>
+                          
+                          <a href="/zh-TW/academy/crypto-wiki/altcoin/about-soon-token">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2025/05/2.soon-token-300x216.jpg" />
+                            </div>
+                            <h3>
+                              SOON幣是什麼？未來如何？SOON價格走勢分析及預測
+                            </h3>
+                            <p>
+                              12 /12/2025 12:45
+                            </p>
+                          </a>
+                          
+                          <a href="/zh-TW/academy/others/nvidia-gpu-technology-conference">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2025/03/1.nvidia-gtc-300x216.jpg" />
+                            </div>
+                            <h3>
+                              Nvidia GTC大會是什麼？2025輝達GTC大會黃仁勳演講重點及影響一次看
+                            </h3>
+                            <p>
+                              12 /12/2025 11:00
+                            </p>
+                          </a>
+                          
+                          <a href="/zh-TW/academy/crypto-wiki/altcoin/solana-sol-vs-ethereum-eth">
+                            <div class="thumb">
+                              <img src="https://blog.btcc.com/wp-content/uploads/2024/01/8.solana-vs-ethereum-300x216.png" />
+                            </div>
+                            <h3>
+                              Solana vs 以太坊：SOL和ETH的主要區別，投資哪個好？
+                            </h3>
+                            <p>
+                              12 /12/2025 10:00
+                            </p>
+                          </a>
+                          
+                      </div>
+                    </section>
+                    
+
+                      <!-- video post -->
+
+                      
+                        <section>
+                          <h2>
+                            BTCC交易教學影片
+                          </h2>
+                          <div class="videos">
+                            
+                              <a href="/zh-TW/video/learn-how-to-operate-the-btcc-app-in-90-seconds-lazy-bag">
+                                <div class="thumb">
+                                  <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328143050-300x168.png" />
+                                </div>
+                                <h3>
+                                  【BTCC新手教學】90秒教你如何使用BTCC APP
+                                </h3>
+                              </a>
+
+                              
+                              <a href="/zh-TW/video/exchange-btc-eth-xrp-ada-ltc-cryptocurrency-teaching-on-btcc">
+                                <div class="thumb">
+                                  <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328160938-300x168.png" />
+                                </div>
+                                <h3>
+                                  【BTCC閃兌教學】在BTCC兌換BTC/ETH/XRP/ADA/LTC加密貨幣教學
+                                </h3>
+                              </a>
+
+                              
+                              <a href="/zh-TW/video/how-to-conduct-virtual-currency-contract-transactions-on-btcc">
+                                <div class="thumb">
+                                  <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328161953-300x169.png" />
+                                </div>
+                                <h3>
+                                  【BTCC影片教學】如何在BTCC進行虛擬貨幣合約交易？
+                                </h3>
+                              </a>
+
+                              
+                              <a href="/zh-TW/video/guide-to-buying-cryptocurrencies-with-credit-cards-master-visa">
+                                <div class="thumb">
+                                  <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328144025-300x168.png" />
+                                </div>
+                                <h3>
+                                  【BTCC信用卡買幣入金教學】用信用卡(Master/Visa)購買加密貨幣指南！
+                                </h3>
+                              </a>
+
+                              
+                          </div>
+                        </section>
+                        
+        </div>
       </div>
-      <div class="other-list">
+      <div class="banner" id="bottomBanner"></div>
 
-        <!-- hot topic -->
-        
-        <section>
-          <h2>
-            熱門話題
-          </h2>
-          <div class="tags">
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e6%bc%b2%e5%81%9c">
-              智原漲停
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%8f%af%e4%bb%a5%e8%b2%b7%e5%97%8e">
-              智原可以買嗎
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%87%9f%e6%94%b6">
-              智原營收
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e6%9c%aa%e4%be%86">
-              智原未來
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%89%8d%e6%99%af">
-              智原前景
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%9b%ae%e6%a8%99%e5%83%b9-2025">
-              智原目標價 2025
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e7%9b%ae%e6%a8%99%e5%83%b9">
-              智原目標價
-            </a>
-            
-
-            <a href="/zh-TW/tags/%e6%99%ba%e5%8e%9f%e5%90%88%e7%90%86%e5%83%b9">
-              智原合理價
-            </a>
-            
-          </div>
-        </section>
-        
-
-
-        <!-- related post -->
-
-        
-        <section>
-          <h2>
-            相關文章
-          </h2>
-          <div class="posts">
-            
-            <a href="/zh-TW/academy/financial-investment/usd-twd-forecast">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2022/11/6.usd-twd-1-300x216.jpg" />
-              </div>
-              <h3>
-                美元兌台幣未來走勢如何？2025-2026台幣匯率走勢預測
-              </h3>
-              <p>
-                11 /17/2025 09:00
-              </p>
-            </a>
-            
-            <a href="/zh-TW/academy/financial-investment/japanese-yen-exchange-rate-trend">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2023/01/6.jpy_-300x216.jpg" />
-              </div>
-              <h3>
-                日圓匯率走勢預測：日幣未來會漲還是跌？現在可以買日幣嗎？
-              </h3>
-              <p>
-                04 /22/2025 11:00
-              </p>
-            </a>
-            
-            <a href="/zh-TW/academy/financial-investment/us-dollar-exchange-rate-trend-analysis">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2022/10/8.us-dollar-trend-300x216.jpg" />
-              </div>
-              <h3>
-                美金匯率走勢預測：美金會漲還是跌？2025美元台幣未來走勢預測
-              </h3>
-              <p>
-                10 /30/2025 10:30
-              </p>
-            </a>
-            
-            <a href="/zh-TW/academy/financial-investment/analysis-of-the-future-trend-of-gold">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2022/10/1.gold-price-trend-300x216.jpg" />
-              </div>
-              <h3>
-                黃金價格走勢預測：金價歷史性上漲，未來金價走勢如何？下個目標價格多少？
-              </h3>
-              <p>
-                10 /09/2025 09:15
-              </p>
-            </a>
-            
-            <a href="/zh-TW/academy/financial-investment/currency-symbol">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2022/12/6.currency-symbols-300x216.jpg" />
-              </div>
-              <h3>
-                台幣美金符號怎麼打、長怎樣？各國貨幣符號打法、念法、代號一次看！
-              </h3>
-              <p>
-                10 /27/2025 09:00
-              </p>
-            </a>
-            
-            <a href="/zh-TW/academy/financial-investment/gold-price-historical-analysis-and-prediction">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2022/11/6.Gold-Price-History-300x216.jpg" />
-              </div>
-              <h3>
-                黃金價格歷史50年回顧：黃金何時買好？金價最高點最低點是？
-              </h3>
-              <p>
-                10 /20/2025 09:30
-              </p>
-            </a>
-            
-          </div>
-        </section>
-        
-
-        <!-- video post -->
-
-        
-        <section>
-          <h2>
-            BTCC交易教學影片
-          </h2>
-          <div class="videos">
-            
-            <a href="/zh-TW/video/learn-how-to-operate-the-btcc-app-in-90-seconds-lazy-bag">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328143050-300x168.png" />
-              </div>
-              <h3>
-                【BTCC新手教學】90秒教你如何使用BTCC APP
-              </h3>
-            </a>
-
-            
-            <a href="/zh-TW/video/exchange-btc-eth-xrp-ada-ltc-cryptocurrency-teaching-on-btcc">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328160938-300x168.png" />
-              </div>
-              <h3>
-                【BTCC閃兌教學】在BTCC兌換BTC/ETH/XRP/ADA/LTC加密貨幣教學
-              </h3>
-            </a>
-
-            
-            <a href="/zh-TW/video/how-to-conduct-virtual-currency-contract-transactions-on-btcc">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328161953-300x169.png" />
-              </div>
-              <h3>
-                【BTCC影片教學】如何在BTCC進行虛擬貨幣合約交易？
-              </h3>
-            </a>
-
-            
-            <a href="/zh-TW/video/guide-to-buying-cryptocurrencies-with-credit-cards-master-visa">
-              <div class="thumb">
-                <img src="https://blog.btcc.com/wp-content/uploads/2023/03/20230328144025-300x168.png" />
-              </div>
-              <h3>
-                【BTCC信用卡買幣入金教學】用信用卡(Master/Visa)購買加密貨幣指南！
-              </h3>
-            </a>
-
-            
-          </div>
-        </section>
-        
-      </div>
-    </div>
-    <div class="banner" id="bottomBanner"></div>
-
-      <style>
+        <style>
     .backtop {
       position: fixed;
       bottom: 100px;
@@ -1479,17 +1574,17 @@ version: 3.5.1-modified
     <i class="iconfont icon-arrow-right"></i>
   </div>
 
-  </div>
+    </div>
 
-  <!-- footer -->
-  <script src="/cms-static/swiper-bundle.min.js"></script>
-  <script src="/cms-static/academy_detail.js"></script>
-  <script src="/cms-static/ws.js"></script>
-  <script type="application/ld+json">
+    <!-- footer -->
+    <script src="/cms-static/swiper-bundle.min.js"></script>
+    <script src="/cms-static/academy_detail.js"></script>
+    <script src="/cms-static/ws.js"></script>
+    <script type="application/ld+json">
     {"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock#Article","url":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock","inLanguage":"zh-TW","mainEntityOfPage":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock","headline":"智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停 - BTCC","description":"智原（3035）是一家技術實力、佈局方向均具有潛力的公司。近期取得 4 奈米 AI ASIC 新單、進入 2.5D/3D 封裝，是公司轉型升級的重要里程碑。對於願意承受成長型風險、看好先進製程與封裝長期趨勢的投資人而言，智原可列入佈局名單；但對於短期投資則建議先觀察數季後再決定。","keywords":"智原漲停,智原可以買嗎,智原營收,智原未來,智原前景,智原目標價 2025,智原目標價,智原合理價","datePublished":"2025-10-29T08:05:39+00:00","dateModified":"2025-10-29T08:06:57+00:00","author":{"@type":"Person","url":"https://www.btcc.com/zh-TW/academy/author/undefined","image":{"@type":"ImageObject","url":"","height":48,"width":48}},"editor":{"@type":"Person","url":"https://www.btcc.com/zh-TW/academy/author/undefined","image":{"@type":"ImageObject","url":"","height":48,"width":48}},"publisher":{"@type":"Organization","name":"BTCC","url":"https://www.btcc.com/zh-TW/academy","logo":{"@type":"ImageObject","url":"https://www.btcc.com/BTCC-Logo_200x200.png","width":"200","height":"200"}},"image":{"@type":"ImageObject","url":"https://blog.btcc.com/wp-content/uploads/2025/10/2.about-3035-stock.jpg","width":1000,"height":720}},{"@type":"BreadcrumbList","@id":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock#breadcrumb","name":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://www.btcc.com/zh-TW/academy","name":"學院"}},{"@type":"ListItem","position":2,"item":{"@id":"https://www.btcc.com/zh-TW/academy","name":"學院"}},{"@type":"ListItem","position":3,"item":{"@id":"https://www.btcc.com/zh-TW/academy/financial-investment","name":"投資理財"}},{"@type":"ListItem","position":3,"item":{"@id":"https://www.btcc.com/zh-TW/academy/financial-investment/about-3035-stock","name":"智原(3035)做什麼的？可以買嗎？智原獲4奈米AI ASIC新單，股價飆漲停 - BTCC"}}]}]}
 
   </script>
-  <div class="site-footer">
+    <div class="site-footer">
   <div class="site-footer-container">
     <div class="site-footer-links">
       <div class="site-footer-security">
@@ -1955,14 +2050,14 @@ version: 3.5.1-modified
                          
                       <li>
                         
-                          <a href="/cdn-cgi/l/email-protection#64171114140b161024061007074a070b09" target="_blank" rel="noreferrer noopener">
+                          <a href="/cdn-cgi/l/email-protection#98ebede8e8f7eaecd8faecfbfbb6fbf7f5" target="_blank" rel="noreferrer noopener">
                             
 
                               
 
 
                                     
-                                      <span class="__cf_email__" data-cfemail="582b2d2828372a2c183a2c3b3b763b3735">[email&#160;protected]</span>
+                                      <span class="__cf_email__" data-cfemail="2d5e585d5d425f596d4f594e4e034e4240">[email&#160;protected]</span>
                                         
 
                                           
@@ -2013,6 +2108,6 @@ version: 3.5.1-modified
     }
   });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b198ad6b8d9eacf',t:'MTc2NjM0Mjc4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b21cdde8d78f685',t:'MTc2NjQyOTQyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
