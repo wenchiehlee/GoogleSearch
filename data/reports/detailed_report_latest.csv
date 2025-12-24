@@ -1,4 +1,5 @@
 ﻿代號,名稱,股票代號,MD日期,分析師數量,目標價,2025EPS最高值,2025EPS最低值,2025EPS平均值,2026EPS最高值,2026EPS最低值,2026EPS平均值,2027EPS最高值,2027EPS最低值,2027EPS平均值,品質評分,狀態,驗證狀態,MD File,更新日期
+
 2301,光寶科,2301-TW,2025-10-24,13,168.0,6.97,5.97,6.51,8.96,7.05,8.07,12.32,8.95,10.30,8.2,🟡 良好,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/2301_%E5%85%89%E5%AF%B6%E7%A7%91_factset_0ab017b3.md,2025-12-24 20:49:58
 2330,台積電,2330-TW,2025-12-24,43,1646.0,65.70,56.00,61.62,85.20,65.40,73.40,106.60,69.28,89.59,9.3,🟢 優秀,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/2330_%E5%8F%B0%E7%A9%8D%E9%9B%BB_factset_91757b89.md,2025-12-24 20:49:58
 2354,鴻準,2354-TW,2025-10-29,0,,10.00,10.00,10.00,,,,,,,5.1,🟠 普通,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/2354_%E9%B4%BB%E6%BA%96_factset_aafd73ed.md,2025-12-24 20:49:58
@@ -28,3 +29,4 @@
 8299,群聯,8299-TW,2025-10-24,12,970.0,38.85,23.28,29.44,55.06,35.35,46.86,64.10,41.92,52.50,8.2,🟡 良好,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/8299_%E7%BE%A4%E8%81%AF_factset_bbc25b28.md,2025-12-24 20:49:58
 9914,美利達,9914-TW,2025-12-10,11,121.0,6.64,5.07,5.79,8.31,5.55,6.99,10.03,7.17,8.70,8.6,🟡 良好,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/9914_%E7%BE%8E%E5%88%A9%E9%81%94_factset_76e435ab.md,2025-12-24 20:49:58
 9921,巨大,9921-TW,2025-11-18,9,109.0,6.09,2.78,3.58,8.87,5.42,6.23,10.29,6.74,8.15,7.8,🟡 良好,✅ 通過,https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/9921_%E5%B7%A8%E5%A4%A7_factset_cfb2e680.md,2025-12-24 20:49:58
+
