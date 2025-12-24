@@ -704,11 +704,8 @@ class ReportGenerator:
 
         # Detailed Report
         if detailed_df is not None:
-            detailed_path = os.path.join(self.output_dir, f"detailed_report_{timestamp}.csv")
             detailed_latest = os.path.join(self.output_dir, "detailed_report_latest.csv")
-            _write_csv(detailed_df, detailed_path)
             _write_csv(detailed_df, detailed_latest)
-            saved_files['detailed_report'] = detailed_path
             saved_files['detailed_report_latest'] = detailed_latest
 
         # Query Pattern Summary

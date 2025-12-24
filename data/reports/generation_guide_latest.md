@@ -7,7 +7,6 @@
 
 ### 主要報告檔案
 - portfolio: `portfolio_summary_20251021_113356.csv`
-- detailed: `detailed_report_20251021_113356.csv`
 - validation: `validation_summary_20251021_113356.csv`
 
 
@@ -42,7 +41,7 @@
 - **欄位**: 14 個欄位，包含代號、名稱、EPS 預測、品質評分等
 - **適用**: 高階主管報告、快速概覽
 
-### 詳細報告 (detailed_report_*.csv)
+### 詳細報告 (detailed_report_latest.csv)
 - **用途**: 所有記錄的完整詳細資訊
 - **欄位**: 22 個欄位，包含所有 EPS 數據、驗證狀態、MD 檔案連結
 - **適用**: 分析師深度分析、資料驗證
