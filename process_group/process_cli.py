@@ -30,34 +30,34 @@ class ProcessCLI:
         self._init_components()
     
     def _init_components(self):
-        """初始化各個組件 - 支援graceful degradation"""
-        print(f"ProcessCLI v{self.version} 初始化中...")
-        
-        # 1. MD Scanner (必需)
+        """Initialize components - supports graceful degradation"""
+        print(f"ProcessCLI v{self.version} initializing...")
+
+        # 1. MD Scanner (required)
         try:
             from md_scanner import MDScanner
             self.md_scanner = MDScanner()
-            print("✅ MDScanner 載入成功")
+            print("[OK] MDScanner loaded")
         except ImportError as e:
-            print(f"❌ MDScanner 載入失敗: {e}")
+            print(f"[ERROR] MDScanner failed: {e}")
             sys.exit(1)
         
-        # 2. MD Parser (必需) - 使用修改版
+        # 2. MD Parser (required) - Modified version
         try:
             from md_parser import MDParser
             self.md_parser = MDParser()
-            print(f"✅ MDParser v{self.md_parser.version} 載入成功")
+            print(f"[OK] MDParser v{self.md_parser.version} loaded")
         except ImportError as e:
-            print(f"❌ MDParser 載入失敗: {e}")
+            print(f"[ERROR] MDParser failed: {e}")
             sys.exit(1)
-        
-        # 3. Quality Analyzer (可選)
+
+        # 3. Quality Analyzer (optional)
         try:
             from quality_analyzer import QualityAnalyzer
             self.quality_analyzer = QualityAnalyzer()
-            print("✅ QualityAnalyzer 載入成功")
+            print("[OK] QualityAnalyzer loaded")
         except ImportError as e:
-            print(f"⚠️ QualityAnalyzer 載入失敗: {e} (將使用基本品質分析)")
+            print(f"[WARN] QualityAnalyzer failed: {e} (will use basic analysis)")
             self.quality_analyzer = None
         
         # 4. Keyword Analyzer (可選) - v3.6.1

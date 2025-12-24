@@ -404,57 +404,113 @@ class SearchEngine:
             return None
 
     def _validate_content(self, content: str, symbol: str, name: str) -> Dict[str, Any]:
-        """Enhanced content validation"""
+        """Enhanced content validation with context-aware matching"""
         if not self.enable_content_validation:
             return {'is_valid': True, 'reason': 'Validation disabled'}
-        
+
         try:
             # Convert to lowercase for case-insensitive matching
             content_lower = content.lower()
             symbol_lower = symbol.lower()
             name_lower = name.lower()
-            
-            # Check for symbol presence
-            symbol_found = symbol_lower in content_lower
-            
+
+            # ENHANCED: Context-aware symbol validation
+            # Check for symbol in proper stock code contexts
+            symbol_contexts = [
+                rf'\b{symbol}[-\s]*tw\b',  # 2330-TW or 2330 TW
+                rf'{symbol}[-\s]*台股',     # 2330-台股
+                rf'\({symbol}[-\s]*tw\)',  # (2330-TW)
+                rf'代號[:：\s]*{symbol}\b',  # 代號: 2330
+                rf'{symbol}[-\s]+[^\d]',   # 2330 followed by non-digit (not a price like "2330元")
+            ]
+
+            symbol_in_context = False
+            for pattern in symbol_contexts:
+                if re.search(pattern, content_lower):
+                    symbol_in_context = True
+                    break
+
+            # ENHANCED: Detect false positives - symbol appearing as price/target
+            # Common false positive patterns
+            false_positive_patterns = [
+                rf'目標價[為是]\s*{symbol}元',      # 目標價為2330元
+                rf'目標價[:：]\s*{symbol}元',       # 目標價:2330元
+                rf'預估目標價[為是]?\s*{symbol}元',  # 預估目標價為2330元
+                rf'{symbol}\s*元\s*目標價',         # 2330元目標價
+                rf'升至\s*{symbol}元',              # 升至2330元
+                rf'調升至\s*{symbol}元',            # 調升至2330元
+            ]
+
+            is_false_positive = False
+            false_positive_reason = ""
+            for pattern in false_positive_patterns:
+                if re.search(pattern, content_lower):
+                    is_false_positive = True
+                    false_positive_reason = f"Symbol {symbol} appears as price/target value, not stock code"
+                    break
+
+            # If detected as false positive, return immediately as invalid
+            if is_false_positive:
+                return {
+                    'is_valid': False,
+                    'reason': false_positive_reason,
+                    'confidence': 0,
+                    'symbol_found': False,
+                    'name_found': False,
+                    'false_positive': True
+                }
+
             # Check for company name presence (partial matching)
             name_words = name_lower.split()
             name_matches = sum(1 for word in name_words if len(word) > 1 and word in content_lower)
             name_found = name_matches >= max(1, len(name_words) // 2)
-            
-            # Calculate confidence score
+
+            # ENHANCED: Calculate confidence score with context awareness
             confidence = 0
-            if symbol_found:
-                confidence += 0.6
+
+            # Symbol in proper context is much more reliable
+            if symbol_in_context:
+                confidence += 0.7
+            elif symbol_lower in content_lower:
+                # Symbol found but without proper context - lower confidence
+                confidence += 0.3
+
             if name_found:
                 confidence += 0.4
-            
-            is_valid = confidence >= self.validation_threshold
-            
+
+            # ENHANCED: Require BOTH symbol and name for Taiwan stocks
+            # This significantly reduces false positives
+            is_valid = (symbol_in_context or (symbol_lower in content_lower)) and name_found and confidence >= 0.8
+
             if is_valid:
-                reason = f"Valid content about {symbol}"
-                if symbol_found and name_found:
-                    reason += f" - both symbol and name found"
-                elif symbol_found:
-                    reason += f" - symbol found"
-                else:
-                    reason += f" - name found"
+                reason = f"Valid content about {symbol} ({name})"
+                if symbol_in_context and name_found:
+                    reason += " - symbol in proper context and name found"
+                elif name_found:
+                    reason += " - symbol and name found"
             else:
-                reason = f"Content validation failed for {symbol} - confidence: {confidence:.2f}"
-            
+                reason = f"Content validation failed for {symbol} ({name}) - confidence: {confidence:.2f}"
+                if not symbol_in_context and symbol_lower in content_lower:
+                    reason += " (symbol found but not in proper context)"
+                if not name_found:
+                    reason += " (company name not found)"
+
             return {
                 'is_valid': is_valid,
                 'reason': reason,
                 'confidence': confidence,
-                'symbol_found': symbol_found,
-                'name_found': name_found
+                'symbol_found': symbol_in_context or (symbol_lower in content_lower),
+                'symbol_in_context': symbol_in_context,
+                'name_found': name_found,
+                'false_positive': False
             }
-            
+
         except Exception as e:
             return {
                 'is_valid': False,
                 'reason': f"Validation error: {e}",
-                'confidence': 0
+                'confidence': 0,
+                'false_positive': False
             }
 
     def _assess_quality(self, content: str, title: str, url: str) -> int:

@@ -6,6 +6,7 @@ MD Parser - FactSet Pipeline v3.6.1 (Modified)
 """
 
 import os
+import sys
 import re
 import yaml
 import pandas as pd
@@ -13,6 +14,12 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 import statistics
 import json
+
+# Set UTF-8 encoding for Windows console (only if not already set)
+if sys.platform == 'win32' and hasattr(sys.stdout, 'buffer'):
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 class MDParser:
     def __init__(self):

@@ -28,11 +28,17 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 
+# Set UTF-8 encoding for Windows console
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+
 # Load environment variables from .env file
 try:
     from dotenv import load_dotenv
     load_dotenv()
-    print("✅ Loaded environment variables from .env file")
+    print("[OK] Loaded environment variables from .env file")
 except ImportError:
     # If python-dotenv is not installed, try to load .env manually
     env_file = Path('.env')
