@@ -6,6 +6,7 @@ Process CLI - FactSet Pipeline v3.6.1 (Modified)
 """
 
 import argparse
+import json
 import sys
 import os
 from datetime import datetime
@@ -264,7 +265,21 @@ class ProcessCLI:
         print(f"   觀察名單分析: {'✅ 可用' if self.watchlist_analyzer else '❌ 停用'}")
         print(f"   Google Sheets 上傳: {'✅ 可用' if self.sheets_uploader else '❌ 停用'}")
         
+        self._save_validation_results(validation_results)
         return overall_status
+
+    def _save_validation_results(self, validation_results: Dict[str, Any]) -> None:
+        """儲存驗證結果（僅保留最新檔）"""
+        reports_dir = os.path.join("data", "reports")
+        os.makedirs(reports_dir, exist_ok=True)
+        output_path = os.path.join(reports_dir, "validation_results_latest.json")
+        payload = {
+            'version': self.version,
+            'timestamp': datetime.now().isoformat(),
+            'results': validation_results
+        }
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=True, indent=2)
 
     def process_all_md_files(self, upload_sheets=True, **kwargs) -> bool:
         """MODIFIED: 處理所有 MD 檔案 - 增強內容日期統計"""
@@ -401,7 +416,7 @@ class ProcessCLI:
             
             # 7. 生成統計報告
             statistics = self.report_generator.generate_statistics_report(processed_companies)
-            # stats_file = self.report_generator.save_statistics_report(statistics)
+            self.report_generator.save_statistics_report(statistics)
             
             # 8. 上傳到 Google Sheets (如果可用且要求)
             if upload_sheets and self.sheets_uploader:

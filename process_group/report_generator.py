@@ -5,6 +5,7 @@ Updated to use md_date field from Search Group metadata
 Enhanced MD日期 handling with reliable metadata source
 """
 
+import json
 import os
 import re
 import pandas as pd
@@ -675,19 +676,130 @@ class ReportGenerator:
     
     def generate_keyword_summary(self, keyword_analysis: Dict[str, Any]) -> pd.DataFrame:
         """支援查詢模式分析的關鍵字統計報告生成（保持不變）"""
-        # 保持原有實作不變
-        pass
+        if not keyword_analysis or keyword_analysis.get('error'):
+            return None
+
+        pattern_stats = keyword_analysis.get('pattern_stats', {})
+        if not pattern_stats:
+            return None
+
+        rows = []
+        updated_at = datetime.now(self.taipei_tz).strftime('%Y-%m-%d %H:%M:%S')
+
+        for pattern, stats in sorted(
+            pattern_stats.items(),
+            key=lambda item: item[1].get('usage_count', 0),
+            reverse=True
+        ):
+            avg_quality = stats.get('avg_quality_score', 0)
+            rows.append({
+                'Query pattern': pattern,
+                '使用次數': stats.get('usage_count', 0),
+                '平均品質評分': avg_quality,
+                '最高品質評分': stats.get('max_quality_score', 0),
+                '最低品質評分': stats.get('min_quality_score', 0),
+                '相關公司數量': stats.get('company_count', 0),
+                '品質狀態': self._get_quality_status_by_score_enhanced(avg_quality, True),
+                '分類': stats.get('category', '其他'),
+                '效果評級': self._format_effectiveness_rating(stats.get('effectiveness_score', 0)),
+                '更新日期': updated_at
+            })
+
+        return pd.DataFrame(rows, columns=self.query_pattern_summary_columns)
 
     def generate_watchlist_summary(self, watchlist_analysis: Dict[str, Any]) -> pd.DataFrame:
-        """生成觀察名單統計報告（保持不變）"""
-        # 保持原有實作不變
-        pass
+        """生成觀察名單統計報告 (v3.6.1 新增)"""
+        if not watchlist_analysis or watchlist_analysis.get('error'):
+            return None
+
+        company_status = watchlist_analysis.get('company_processing_status', {})
+        keyword_effectiveness = watchlist_analysis.get('keyword_effectiveness_analysis', {})
+
+        status_labels = {
+            'processed': '✅ 已處理',
+            'multiple_files': '📄 多個檔案',
+            'not_found': '❌ 未找到',
+            'validation_failed': '❌ 驗證失敗',
+            'low_quality': '⚠️ 品質過低'
+        }
+
+        rows = []
+        updated_at = datetime.now(self.taipei_tz).strftime('%Y-%m-%d %H:%M:%S')
+
+        for company_code, status_info in company_status.items():
+            company_name = status_info.get('company_name', '')
+            file_count = status_info.get('file_count', 0)
+            status = status_labels.get(status_info.get('status', ''), '❓ 未知')
+
+            average_quality = status_info.get('average_quality_score', 0.0)
+            max_quality = status_info.get('max_quality_score', 0.0)
+
+            keyword_info = keyword_effectiveness.get(company_code, {})
+            keyword_count = keyword_info.get('keyword_diversity', 0) or 0
+            main_keywords = keyword_info.get('best_keywords', []) or []
+            keyword_avg_quality = keyword_info.get('avg_effectiveness', 0.0) or 0.0
+
+            latest_date = status_info.get('latest_file_date', '')
+
+            validation_status = '✅ 驗證通過'
+            if status_info.get('status') == 'validation_failed' or status_info.get('validation_errors'):
+                validation_status = '❌ 驗證失敗'
+
+            rows.append({
+                '公司代號': self._clean_stock_code_for_display(company_code),
+                '公司名稱': company_name,
+                'MD檔案數量': file_count,
+                '處理狀態': status,
+                '平均品質評分': average_quality,
+                '最高品質評分': max_quality,
+                '搜尋關鍵字數量': keyword_count,
+                '主要關鍵字': ', '.join(main_keywords),
+                '關鍵字平均品質': keyword_avg_quality,
+                '最新檔案日期': latest_date,
+                '驗證狀態': validation_status,
+                '更新日期': updated_at
+            })
+
+        df = pd.DataFrame(rows, columns=self.watchlist_summary_columns)
+        return df
+
+    def save_keyword_summary(self, keyword_df: pd.DataFrame) -> str:
+        """儲存查詢模式統計報告為最新版本"""
+        if keyword_df is None:
+            return ""
+        os.makedirs(self.output_dir, exist_ok=True)
+        query_latest = os.path.join(self.output_dir, "query_pattern_summary_latest.csv")
+        keyword_df.to_csv(query_latest, index=False, encoding='utf-8-sig')
+        return query_latest
+
+    def save_watchlist_summary(self, watchlist_df: pd.DataFrame) -> str:
+        """儲存觀察名單統計報告為最新版本"""
+        if watchlist_df is None:
+            return ""
+        os.makedirs(self.output_dir, exist_ok=True)
+        watchlist_latest = os.path.join(self.output_dir, "watchlist_summary_latest.csv")
+        watchlist_df.to_csv(watchlist_latest, index=False, encoding='utf-8-sig')
+        return watchlist_latest
+
+    def _format_effectiveness_rating(self, score: float) -> str:
+        """格式化查詢模式效果評級"""
+        try:
+            score_val = float(score)
+        except (TypeError, ValueError):
+            score_val = 0.0
+
+        if score_val >= 8:
+            return '優秀 ⭐⭐⭐'
+        if score_val >= 6:
+            return '良好 ⭐⭐'
+        if score_val >= 4:
+            return '普通 ⭐'
+        return '不足'
 
     def save_all_reports(self, portfolio_df: pd.DataFrame, detailed_df: pd.DataFrame, 
                         keyword_df: pd.DataFrame = None, watchlist_df: pd.DataFrame = None) -> Dict[str, str]:
         """儲存所有報告為 CSV"""
         saved_files: Dict[str, str] = {}
-        timestamp = datetime.now(self.taipei_tz).strftime('%Y%m%d_%H%M%S')
         os.makedirs(self.output_dir, exist_ok=True)
 
         def _write_csv(df: pd.DataFrame, path: str) -> None:
@@ -713,11 +825,8 @@ class ReportGenerator:
 
         # Watchlist Summary
         if watchlist_df is not None:
-            watchlist_path = os.path.join(self.output_dir, f"watchlist_summary_{timestamp}.csv")
             watchlist_latest = os.path.join(self.output_dir, "watchlist_summary_latest.csv")
-            _write_csv(watchlist_df, watchlist_path)
             _write_csv(watchlist_df, watchlist_latest)
-            saved_files['watchlist_summary'] = watchlist_path
             saved_files['watchlist_summary_latest'] = watchlist_latest
 
         # Legacy processed outputs (for local consumers)
@@ -733,6 +842,14 @@ class ReportGenerator:
             saved_files['processed_detailed_data'] = processed_detailed
 
         return saved_files
+
+    def save_statistics_report(self, statistics: Dict[str, Any]) -> str:
+        """儲存統計報告為 JSON（僅保留最新檔）"""
+        os.makedirs(self.output_dir, exist_ok=True)
+        stats_latest = os.path.join(self.output_dir, "statistics_latest.json")
+        with open(stats_latest, "w", encoding="utf-8") as f:
+            json.dump(statistics, f, ensure_ascii=True, indent=2)
+        return stats_latest
 
 
 # 測試功能
