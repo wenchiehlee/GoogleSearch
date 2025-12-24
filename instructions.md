@@ -269,6 +269,177 @@ python sheets_uploader.py --test-connection
 # Solution: Check Search Group v3.5.1 content validation logs
 ```
 
+## Efficiency Tools Guide
+
+This section documents the efficiency tools created to streamline testing and data management.
+
+### Problem 1: Slow Verification Process
+**Issue**: Processing all MD files takes too long when we only need to verify specific stocks (e.g., 2330, 2357).
+
+**Solution**: `verify_stocks.py` - Quick verification tool that processes only specified stocks.
+
+### Problem 2: Out-of-Date Data Complexity
+**Issue**: Most MD files can be older than 90 days, slowing down processing and cluttering data.
+
+**Solution**: `quarantine_old_files.py` - Automatically identifies and quarantines old files.
+
+### Quick Reference
+
+```bash
+# 1. Quarantine old files (>90 days)
+python quarantine_old_files.py --days 90 --quarantine
+
+# 2. Quick verification for specific stocks
+python verify_stocks.py 2330 2357
+
+# 3. Check quarantine report
+cat old_files_report.txt
+```
+
+### Tool 1: Quick Stock Verification (`verify_stocks.py`)
+
+**Purpose**: Fast verification of specific stocks without processing all MD files.
+
+**Features**:
+- **Fast**: Process only specified stocks (e.g., 1 file vs full set)
+- **Focused**: Immediate results for target stocks
+- **Complete**: Full quality analysis and reporting
+- **Save**: Results saved to `data/reports/verification/`
+
+**Usage**:
+
+```bash
+# Verify single stock
+python verify_stocks.py 2330
+
+# Verify multiple stocks
+python verify_stocks.py 2330 2357 2454
+
+# Verify and upload to Google Sheets
+python verify_stocks.py 2330 2357 --upload
+```
+
+### Tool 2: Old Files Quarantine (`quarantine_old_files.py`)
+
+**Purpose**: Automatically identify and move MD files older than a specified threshold to quarantine.
+
+**Usage**:
+
+```bash
+# Scan only (no changes)
+python quarantine_old_files.py
+
+# Scan with custom threshold (60 days)
+python quarantine_old_files.py --days 60
+
+# Actually quarantine files (with confirmation)
+python quarantine_old_files.py --days 90 --quarantine
+
+# Auto-confirm quarantine
+echo yes | python quarantine_old_files.py --days 90 --quarantine
+```
+
+**Output Structure**:
+
+```
+data/quarantine/old_files/
+├── 2025-02/
+├── 2025-03/
+├── 2025-06/
+└── 2025-09/
+```
+
+### Best Practices
+
+```bash
+# Daily workflow: search → verify → process
+cd search_group
+python search_cli.py search --company 2330 --count 3
+cd ..
+python verify_stocks.py 2330 2357
+python process_group/process_cli.py process
+
+# Weekly maintenance
+python quarantine_old_files.py --days 90 --quarantine
+python verify_stocks.py 2330 2317 2454 2412 2357
+python process_group/process_cli.py process
+```
+
+## Improved Search Guide (False Positive Prevention)
+
+This section documents the improvements made to prevent false positive content validation.
+
+### Problem Identified
+
+Stock 2330 (台積電/TSMC) had incorrect data because:
+1. MD files contained articles about other stocks where "2330" appeared as a price/target value.
+2. Example: Article about stock 5269 (祥碩) with "預估目標價為2330元" was incorrectly tagged as TSMC content.
+3. Content validation was too lenient and only checked if the symbol appeared anywhere in text.
+
+### Solutions Implemented
+
+#### 1. Enhanced Content Validation (`search_engine.py`)
+
+**Location**: `search_group/search_engine.py` - `_validate_content()` method
+
+**Key Improvements**:
+- **Context-aware symbol matching**: Requires symbol in proper stock contexts (e.g., `2330-TW`, `代號: 2330`).
+- **False positive detection**: Rejects when symbol appears as price/target value (e.g., `目標價為2330元`).
+- **Stricter requirements**: Requires both symbol and company name; minimum confidence 0.8.
+
+#### 2. False Positive Quarantine (`quarantine_false_positives.py`)
+
+**Location**: `quarantine_false_positives.py` (project root)
+
+**Usage**:
+
+```bash
+# Scan and report only
+python quarantine_false_positives.py
+
+# Scan specific stock
+python quarantine_false_positives.py --stock 2330
+
+# Quarantine with confirmation
+python quarantine_false_positives.py --stock 2330 --quarantine
+
+# Scan all stocks and quarantine
+python quarantine_false_positives.py --quarantine
+```
+
+#### 3. Improved Search Patterns (`improved_search_patterns.py`)
+
+**Location**: `search_group/improved_search_patterns.py`
+
+**Key Features**:
+- Tiered pattern system (FactSet direct → consensus → EPS tables → analysis)
+- Stock-specific patterns to avoid false positives
+- Excludes price-only matches (e.g., `-"2330元"`)
+
+**Usage**:
+
+```python
+from improved_search_patterns import get_search_patterns_for_stock
+
+# Get primary patterns for TSMC
+patterns = get_search_patterns_for_stock('2330', '台積電', tier='primary')
+```
+
+### How to Use These Improvements
+
+```bash
+# New searches (validation is automatic)
+cd search_group
+python search_cli.py search --company 2330 --count 5 --min-quality 7
+
+# Scan existing MD files for false positives
+python quarantine_false_positives.py
+
+# Re-process valid files
+cd process_group
+python process_cli.py process
+```
+
 For detailed troubleshooting, implementation guides, and component-specific information, refer to:
 - **Search Group Details**: [search_group/instructions.md](search_group/instructions.md)
 - **Process Group Details**: [process_group/instructions.md](process_group/instructions.md)
