@@ -994,24 +994,28 @@ class MDParser:
     def _extract_eps_data(self, content: str) -> Dict[str, List[float]]:
         """提取 EPS 資料"""
         eps_data = {'2025': [], '2026': [], '2027': []}
-        
-        eps_data.update(self._extract_eps_from_table(content))
-        
+
+        table_stats = self._extract_eps_table_stats(content)
+        if table_stats:
+            eps_data['_table_stats'] = table_stats
+        else:
+            eps_data.update(self._extract_eps_from_table(content))
+
         for pattern in self.eps_patterns:
             matches = re.findall(pattern, content, re.IGNORECASE)
             for match in matches:
                 try:
                     year = match[0]
                     value = float(match[1])
-                    
+
                     if year in eps_data and 0 < value < 1000:
                         eps_data[year].append(value)
                 except (ValueError, IndexError):
                     continue
-        
-        for year in eps_data:
+
+        for year in ['2025', '2026', '2027']:
             eps_data[year] = list(set(eps_data[year]))
-        
+
         return eps_data
 
     def _extract_eps_from_table(self, content: str) -> Dict[str, List[float]]:
@@ -1020,6 +1024,10 @@ class MDParser:
         
         table_patterns = [
             r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
         ]
         
         for pattern in table_patterns:
@@ -1031,6 +1039,7 @@ class MDParser:
                         if i + 1 < len(match):
                             value_str = match[i + 1].strip()
                             value_str = re.sub(r'\([^)]*\)', '', value_str)
+                            value_str = value_str.replace(',', '')
                             value = float(value_str)
                             if 0 < value < 1000:
                                 eps_data[year].append(value)
@@ -1038,6 +1047,58 @@ class MDParser:
                     continue
         
         return eps_data
+
+    def _extract_eps_table_stats(self, content: str) -> Dict[str, Dict[str, float]]:
+        """從 EPS 表格提取統計值"""
+        table_html = self._find_eps_table_html(content)
+        if not table_html:
+            return {}
+
+        label_map = {
+            '最高值': 'high',
+            '最低值': 'low',
+            '平均值': 'avg',
+            '中位數': 'median',
+        }
+        stats: Dict[str, Dict[str, float]] = {}
+
+        row_pattern = (
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>'
+        )
+        for label, v2025, v2026, v2027 in re.findall(row_pattern, table_html):
+            for year, raw in zip(['2025', '2026', '2027'], [v2025, v2026, v2027]):
+                value = self._parse_numeric_value(raw)
+                if value is None:
+                    continue
+                stats.setdefault(year, {})[label_map[label]] = value
+
+        return stats
+
+    def _find_eps_table_html(self, content: str) -> Optional[str]:
+        """定位市場預估 EPS 表格"""
+        eps_table_match = re.search(
+            r'市場預估EPS.*?<table[^>]*>.*?</table>',
+            content,
+            re.DOTALL
+        )
+        if eps_table_match:
+            return eps_table_match.group(0)
+        return None
+
+    def _parse_numeric_value(self, value: str) -> Optional[float]:
+        """解析表格中的數值"""
+        value = re.sub(r'\([^)]*\)', '', value)
+        value = value.replace(',', '').strip()
+        try:
+            number = float(value)
+        except ValueError:
+            return None
+        if not (0 < number < 1000):
+            return None
+        return number
 
     def _extract_target_price(self, content: str) -> Optional[float]:
         """提取目標價格"""
@@ -1068,19 +1129,27 @@ class MDParser:
     def _calculate_eps_statistics(self, eps_data: Dict[str, List[float]]) -> Dict[str, Any]:
         """計算 EPS 統計資料"""
         result = {}
-        
+        table_stats = eps_data.get('_table_stats', {})
+
         for year in ['2025', '2026', '2027']:
             values = eps_data.get(year, [])
-            
-            if values:
-                result[f'eps_{year}_high'] = max(values)
-                result[f'eps_{year}_low'] = min(values)
-                result[f'eps_{year}_avg'] = round(statistics.mean(values), 2)
-            else:
-                result[f'eps_{year}_high'] = None
-                result[f'eps_{year}_low'] = None
-                result[f'eps_{year}_avg'] = None
-        
+            table_year_stats = table_stats.get(year, {})
+
+            high = table_year_stats.get('high')
+            low = table_year_stats.get('low')
+            avg = table_year_stats.get('avg')
+
+            if high is None and values:
+                high = max(values)
+            if low is None and values:
+                low = min(values)
+            if avg is None and values:
+                avg = round(statistics.mean(values), 2)
+
+            result[f'eps_{year}_high'] = high
+            result[f'eps_{year}_low'] = low
+            result[f'eps_{year}_avg'] = avg
+
         return result
 
     def _get_debug_info_enhanced(self, content: str, extracted_date: Optional[str], 
