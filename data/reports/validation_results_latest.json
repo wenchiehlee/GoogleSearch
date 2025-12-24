@@ -1,18 +1,18 @@
 {
   "version": "3.6.1-modified",
-  "timestamp": "2025-12-24T20:50:23.623681",
+  "timestamp": "2025-12-24T23:37:16.148954",
   "results": {
     "md_scanner": {
       "status": "success",
-      "message": "\u627e\u5230 29 \u500b MD \u6a94\u6848",
-      "files_count": 29
+      "message": "\u627e\u5230 45 \u500b MD \u6a94\u6848",
+      "files_count": 45
     },
     "md_parser": {
       "status": "success",
       "message": "MD Parser v3.6.1-modified \u904b\u884c\u6b63\u5e38",
-      "test_file": "2382_\u5ee3\u9054_factset_da3bae84.md",
+      "test_file": "9914_\u7f8e\u5229\u9054_factset_76e435ab.md",
       "content_date_extracted": true,
-      "quality_score": 10.0,
+      "quality_score": 9.75,
       "enhanced_scoring": false
     },
     "keyword_analyzer": {
@@ -29,8 +29,8 @@
       "message": "ReportGenerator v3.6.1-modified \u5df2\u8f09\u5165\uff0c\u652f\u63f4\u589e\u5f37\u5167\u5bb9\u65e5\u671f\u8655\u7406"
     },
     "sheets_uploader": {
-      "status": "disabled",
-      "message": "SheetsUploader \u672a\u8f09\u5165"
+      "status": "success",
+      "message": "SheetsUploader \u5df2\u8f09\u5165"
     }
   }
 }
