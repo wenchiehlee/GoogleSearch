@@ -5,10 +5,10 @@ quality_score: 7
 company: 鴻準
 stock_code: 2354
 md_date: 2025/10/29
-extracted_date: 2025-12-23T18:50:41.575221
+extracted_date: 2025-12-24T14:18:06.359014
 search_query: "鴻準" "EPS" "預估" "2025" "2026"
 result_index: 2
-content_validation: {'is_valid': True, 'reason': 'Valid content about 2354 - both symbol and name found', 'confidence': 1.0, 'symbol_found': True, 'name_found': True}
+content_validation: {'is_valid': True, 'reason': 'Valid content about 2354 (鴻準) - symbol in proper context and name found', 'confidence': 1.1, 'symbol_found': True, 'symbol_in_context': True, 'name_found': True, 'false_positive': False}
 version: 3.5.1-modified
 ---
 <!DOCTYPE html>
@@ -1097,7 +1097,7 @@ version: 3.5.1-modified
               <!-- FAQ  -->
               
               <!-- 免责声明 -->
-              <div class="disclaimer">免責聲明：本文內容僅代表作者個人觀點，僅供參考，並不構成任何投資、法律或專業建議。文章內容不代表 BTCC 的立場，亦不應被視為對任何產品或服務的推薦。投資涉及風險，可能導致全部或部分資本損失。此外，過往的市場表現並不保證當下或未來的收益。請在作出任何決策前充分了解相關風險，並視情況諮詢專業顧問。<br/>如對本文內容有任何疑問或建議，請聯絡：<a href="/cdn-cgi/l/email-protection#6100020005040c1821031502024f020e0c"><span class="__cf_email__" data-cfemail="751416141110180c35170116165b161a18">[email&#160;protected]</span></a></div>
+              <div class="disclaimer">免責聲明：本文內容僅代表作者個人觀點，僅供參考，並不構成任何投資、法律或專業建議。文章內容不代表 BTCC 的立場，亦不應被視為對任何產品或服務的推薦。投資涉及風險，可能導致全部或部分資本損失。此外，過往的市場表現並不保證當下或未來的收益。請在作出任何決策前充分了解相關風險，並視情況諮詢專業顧問。<br/>如對本文內容有任何疑問或建議，請聯絡：<a href="/cdn-cgi/l/email-protection#6607050702030b1f26041205054805090b"><span class="__cf_email__" data-cfemail="3d5c5e5c595850447d5f495e5e135e5250">[email&#160;protected]</span></a></div>
             </section>
           </div>
           <aside class="detail_aside">
@@ -2050,14 +2050,14 @@ version: 3.5.1-modified
                          
                       <li>
                         
-                          <a href="/cdn-cgi/l/email-protection#54272124243b262014362037377a373b39" target="_blank" rel="noreferrer noopener">
+                          <a href="/cdn-cgi/l/email-protection#25565055554a575165475146460b464a48" target="_blank" rel="noreferrer noopener">
                             
 
                               
 
 
                                     
-                                      <span class="__cf_email__" data-cfemail="e89b9d9898879a9ca88a9c8b8bc68b8785">[email&#160;protected]</span>
+                                      <span class="__cf_email__" data-cfemail="42313732322d303602203621216c212d2f">[email&#160;protected]</span>
                                         
 
                                           
@@ -2108,6 +2108,6 @@ version: 3.5.1-modified
     }
   });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b2a0bc22ef69814',t:'MTc2NjUxNTg0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b30b9d48aaa69dc',t:'MTc2NjU4NTg4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>
