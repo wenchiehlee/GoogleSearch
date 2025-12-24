@@ -695,11 +695,8 @@ class ReportGenerator:
 
         # Portfolio Summary
         if portfolio_df is not None:
-            portfolio_path = os.path.join(self.output_dir, f"portfolio_summary_{timestamp}.csv")
             portfolio_latest = os.path.join(self.output_dir, "portfolio_summary_latest.csv")
-            _write_csv(portfolio_df, portfolio_path)
             _write_csv(portfolio_df, portfolio_latest)
-            saved_files['portfolio_summary'] = portfolio_path
             saved_files['portfolio_summary_latest'] = portfolio_latest
 
         # Detailed Report
@@ -710,11 +707,8 @@ class ReportGenerator:
 
         # Query Pattern Summary
         if keyword_df is not None:
-            query_path = os.path.join(self.output_dir, f"query_pattern_summary_{timestamp}.csv")
             query_latest = os.path.join(self.output_dir, "query_pattern_summary_latest.csv")
-            _write_csv(keyword_df, query_path)
             _write_csv(keyword_df, query_latest)
-            saved_files['query_pattern_summary'] = query_path
             saved_files['query_pattern_summary_latest'] = query_latest
 
         # Watchlist Summary

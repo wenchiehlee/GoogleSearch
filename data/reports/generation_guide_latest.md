@@ -6,7 +6,6 @@
 ## 📁 生成的檔案清單
 
 ### 主要報告檔案
-- portfolio: `portfolio_summary_20251021_113356.csv`
 - validation: `validation_summary_20251021_113356.csv`
 
 
@@ -36,7 +35,7 @@
 
 ## 📊 各報告檔案說明
 
-### 投資組合摘要 (portfolio_summary_*.csv)
+### 投資組合摘要 (portfolio_summary_latest.csv)
 - **用途**: 每家公司的關鍵指標摘要
 - **欄位**: 14 個欄位，包含代號、名稱、EPS 預測、品質評分等
 - **適用**: 高階主管報告、快速概覽
@@ -46,7 +45,7 @@
 - **欄位**: 22 個欄位，包含所有 EPS 數據、驗證狀態、MD 檔案連結
 - **適用**: 分析師深度分析、資料驗證
 
-### 查詢模式統計 (query_pattern_summary_*.csv)
+### 查詢模式統計 (query_pattern_summary_latest.csv)
 - **用途**: 搜尋查詢模式效果分析
 - **欄位**: 10 個欄位，包含模式使用次數、品質評分、分類
 - **適用**: 系統優化、搜尋策略改進
