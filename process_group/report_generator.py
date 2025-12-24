@@ -685,9 +685,63 @@ class ReportGenerator:
 
     def save_all_reports(self, portfolio_df: pd.DataFrame, detailed_df: pd.DataFrame, 
                         keyword_df: pd.DataFrame = None, watchlist_df: pd.DataFrame = None) -> Dict[str, str]:
-        """儲存所有報告為 CSV（保持不變）"""
-        # 保持原有實作不變
-        pass
+        """儲存所有報告為 CSV"""
+        saved_files: Dict[str, str] = {}
+        timestamp = datetime.now(self.taipei_tz).strftime('%Y%m%d_%H%M%S')
+        os.makedirs(self.output_dir, exist_ok=True)
+
+        def _write_csv(df: pd.DataFrame, path: str) -> None:
+            df.to_csv(path, index=False, encoding='utf-8-sig')
+
+        # Portfolio Summary
+        if portfolio_df is not None:
+            portfolio_path = os.path.join(self.output_dir, f"portfolio_summary_{timestamp}.csv")
+            portfolio_latest = os.path.join(self.output_dir, "portfolio_summary_latest.csv")
+            _write_csv(portfolio_df, portfolio_path)
+            _write_csv(portfolio_df, portfolio_latest)
+            saved_files['portfolio_summary'] = portfolio_path
+            saved_files['portfolio_summary_latest'] = portfolio_latest
+
+        # Detailed Report
+        if detailed_df is not None:
+            detailed_path = os.path.join(self.output_dir, f"detailed_report_{timestamp}.csv")
+            detailed_latest = os.path.join(self.output_dir, "detailed_report_latest.csv")
+            _write_csv(detailed_df, detailed_path)
+            _write_csv(detailed_df, detailed_latest)
+            saved_files['detailed_report'] = detailed_path
+            saved_files['detailed_report_latest'] = detailed_latest
+
+        # Query Pattern Summary
+        if keyword_df is not None:
+            query_path = os.path.join(self.output_dir, f"query_pattern_summary_{timestamp}.csv")
+            query_latest = os.path.join(self.output_dir, "query_pattern_summary_latest.csv")
+            _write_csv(keyword_df, query_path)
+            _write_csv(keyword_df, query_latest)
+            saved_files['query_pattern_summary'] = query_path
+            saved_files['query_pattern_summary_latest'] = query_latest
+
+        # Watchlist Summary
+        if watchlist_df is not None:
+            watchlist_path = os.path.join(self.output_dir, f"watchlist_summary_{timestamp}.csv")
+            watchlist_latest = os.path.join(self.output_dir, "watchlist_summary_latest.csv")
+            _write_csv(watchlist_df, watchlist_path)
+            _write_csv(watchlist_df, watchlist_latest)
+            saved_files['watchlist_summary'] = watchlist_path
+            saved_files['watchlist_summary_latest'] = watchlist_latest
+
+        # Legacy processed outputs (for local consumers)
+        processed_dir = "data/processed"
+        os.makedirs(processed_dir, exist_ok=True)
+        if portfolio_df is not None:
+            processed_portfolio = os.path.join(processed_dir, "portfolio_summary.csv")
+            _write_csv(portfolio_df, processed_portfolio)
+            saved_files['processed_portfolio_summary'] = processed_portfolio
+        if detailed_df is not None:
+            processed_detailed = os.path.join(processed_dir, "detailed_data.csv")
+            _write_csv(detailed_df, processed_detailed)
+            saved_files['processed_detailed_data'] = processed_detailed
+
+        return saved_files
 
 
 # 測試功能
