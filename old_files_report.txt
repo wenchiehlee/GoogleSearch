@@ -1,7 +1,48 @@
 ================================================================================
 OLD FILES QUARANTINE REPORT
-Generated: 2025-12-24 13:28:25
-Threshold: 90 days (cutoff: 2025-09-25)
+Generated: 2025-12-28 02:00:49
+Threshold: 90 days (cutoff: 2025-09-29)
 ================================================================================
 
-No old files found!
+Total old files found: 4
+
+
+Stock: 2354 (鴻準)
+  Old files: 1
+
+  File: 2354_鴻準_factset_aafd73ed.md
+    Date: 2025/07/05
+    Age: 176 days
+
+
+Stock: 3293 (鈊象)
+  Old files: 1
+
+  File: 3293_鈊象_factset_9bff3d6d.md
+    Date: 2025/06/07
+    Age: 204 days
+
+
+Stock: 6561 (是方)
+  Old files: 1
+
+  File: 6561_是方_factset_8d8f0d9e.md
+    Date: 2025/07/05
+    Age: 176 days
+
+
+Stock: 6695 (芯鼎)
+  Old files: 1
+
+  File: 6695_芯鼎_factset_2e288853.md
+    Date: 2025/07/30
+    Age: 151 days
+
+
+================================================================================
+SUMMARY
+================================================================================
+Total stocks affected: 4
+Total files to quarantine: 4
+Average age: 176.8 days
+Oldest file: 3293_鈊象_factset_9bff3d6d.md (204 days)
