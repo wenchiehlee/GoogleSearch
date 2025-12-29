@@ -8,7 +8,7 @@ on:
       company_count:
         description: "Number of results per company"
         required: false
-        default: "2"
+        default: "4"
         type: string
       min_quality:
         description: "Minimum quality threshold"
