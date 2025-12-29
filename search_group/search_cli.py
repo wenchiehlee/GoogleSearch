@@ -292,21 +292,20 @@ class SearchCLI:
             source = sources[0]
             url = source.get('url', '')
             title = source.get('title', '')
-            
-            # Create fingerprint from truly stable content elements only
-            fingerprint_elements = [
-                symbol,                    # Stock symbol
-                name,                     # Company name  
-                url,                      # Source URL (the actual content source)
-                title                     # Title (content identifier)
-            ]
         else:
-            # Fallback for no sources
-            fingerprint_elements = [
-                symbol,
-                name,
-                'no_source'
-            ]
+            url = financial_data.get('url', '')
+            title = financial_data.get('title', '')
+
+        md_date = financial_data.get('md_date', '')
+
+        # Create fingerprint from stable content elements
+        fingerprint_elements = [
+            symbol,                    # Stock symbol
+            name,                      # Company name
+            url or 'no_url',           # Source URL (content identifier)
+            title or 'no_title',       # Title (content identifier)
+            md_date or 'no_md_date'    # Publication date (avoid merging different dates)
+        ]
         
         # Join and hash stable elements only
         fingerprint_content = '|'.join(fingerprint_elements)

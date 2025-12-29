@@ -315,8 +315,10 @@ class SearchEngine:
     def generate_md_file_with_md_date(self, result: Dict[str, Any], result_index: int) -> Tuple[str, str]:
         """MODIFIED: Generate MD file with enhanced metadata including md_date"""
         
-        # Generate pure content hash for filename
-        content_for_hash = f"{result['content']}{result['url']}{result['title']}"
+        # Include md_date so different publication dates don't collapse to one file
+        content_for_hash = (
+            f"{result['content']}{result['url']}{result['title']}{result.get('md_date', '')}"
+        )
         content_hash = hashlib.md5(content_for_hash.encode('utf-8')).hexdigest()[:8]
         
         company_code = result.get('stock_code', 'Unknown')
