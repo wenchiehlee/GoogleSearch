@@ -29,7 +29,7 @@ class ReportGenerator:
         self.portfolio_summary_columns = [
             '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
             '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
-            '品質評分', '狀態', '更新日期'
+            '品質評分', '狀態', '處理日期'
         ]
 
         # 詳細報告欄位 (22 欄位 - 包含驗證狀態)
@@ -38,25 +38,25 @@ class ReportGenerator:
             '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
             '2026EPS最高值', '2026EPS最低值', '2026EPS平均值',
             '2027EPS最高值', '2027EPS最低值', '2027EPS平均值',
-            '品質評分', '狀態', '驗證狀態', 'MD File', '更新日期'
+            '品質評分', '狀態', '驗證狀態', 'MD File', '搜尋日期', '處理日期'
         ]
 
         # 關鍵字報告欄位 (10 欄位) - 保留傳統關鍵字分析用
         self.keyword_summary_columns = [
             '關鍵字', '使用次數', '平均品質評分', '最高品質評分', '最低品質評分',
-            '相關公司數量', '品質狀態', '分類', '效果評級', '更新日期'
+            '相關公司數量', '品質狀態', '分類', '效果評級', '處理日期'
         ]
         
         # 查詢模式報告欄位 (10 欄位) - 新增標準化查詢模式
         self.query_pattern_summary_columns = [
             'Query pattern', '使用次數', '平均品質評分', '最高品質評分', '最低品質評分',
-            '相關公司數量', '品質狀態', '分類', '效果評級', '更新日期'
+            '相關公司數量', '品質狀態', '分類', '效果評級', '處理日期'
         ]
         
         # 觀察名單報告欄位 (12 欄位) - v3.6.1 新增
         self.watchlist_summary_columns = [
             '公司代號', '公司名稱', 'MD檔案數量', '處理狀態', '平均品質評分', '最高品質評分',
-            '搜尋關鍵字數量', '主要關鍵字', '關鍵字平均品質', '最新檔案日期', '驗證狀態', '更新日期'
+            '搜尋關鍵字數量', '主要關鍵字', '關鍵字平均品質', '最新檔案日期', '驗證狀態', '處理日期'
         ]
 
     def _get_taipei_time(self) -> str:
@@ -246,7 +246,7 @@ class ReportGenerator:
                     '2027EPS平均值': self._format_eps_value(best_data.get('eps_2027_avg')),
                     '品質評分': quality_score,
                     '狀態': quality_status,
-                    '更新日期': self._get_taipei_time()
+                    '處理日期': self._get_taipei_time()
                 }
                 
                 summary_rows.append(summary_row)
@@ -303,6 +303,8 @@ class ReportGenerator:
                 
                 # 處理 MD 檔案連結
                 md_file_url = self._format_md_file_url_with_warning(company_data)
+
+                search_datetime = self._get_search_datetime(company_data)
                 
                 detailed_row = {
                     '代號': company_data.get('company_code', 'Unknown'),
@@ -324,7 +326,8 @@ class ReportGenerator:
                     '狀態': quality_status,
                     '驗證狀態': validation_status,
                     'MD File': md_file_url,
-                    '更新日期': self._get_taipei_time()
+                    '搜尋日期': search_datetime,
+                    '處理日期': self._get_taipei_time()
                 }
                 
                 detailed_rows.append(detailed_row)
@@ -627,6 +630,29 @@ class ReportGenerator:
         
         return raw_url
 
+    def _get_search_datetime(self, company_data: Dict[str, Any]) -> str:
+        """取得搜尋時間 (YAML extracted_date)，格式化為 YYYY-MM-DD HH:MM:SS"""
+        yaml_data = company_data.get('yaml_data', {})
+        raw_value = yaml_data.get('extracted_date') or company_data.get('extracted_date') or ''
+
+        if isinstance(raw_value, datetime):
+            return raw_value.strftime('%Y-%m-%d %H:%M:%S')
+
+        raw_str = str(raw_value).strip()
+        if not raw_str:
+            return ""
+
+        try:
+            sanitized = raw_str.replace('T', ' ').replace('Z', '')
+            if '.' in sanitized:
+                sanitized = sanitized.split('.')[0]
+            parsed = datetime.fromisoformat(sanitized)
+            if parsed.tzinfo is not None:
+                parsed = parsed.astimezone(self.taipei_tz)
+            return parsed.strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return raw_str
+
     def _format_eps_value(self, eps_value) -> str:
         """格式化 EPS 數值"""
         if eps_value is None or eps_value == '':
@@ -702,7 +728,7 @@ class ReportGenerator:
                 '品質狀態': self._get_quality_status_by_score_enhanced(avg_quality, True),
                 '分類': stats.get('category', '其他'),
                 '效果評級': self._format_effectiveness_rating(stats.get('effectiveness_score', 0)),
-                '更新日期': updated_at
+                '處理日期': updated_at
             })
 
         return pd.DataFrame(rows, columns=self.query_pattern_summary_columns)
@@ -757,7 +783,7 @@ class ReportGenerator:
                 '關鍵字平均品質': keyword_avg_quality,
                 '最新檔案日期': latest_date,
                 '驗證狀態': validation_status,
-                '更新日期': updated_at
+                '處理日期': updated_at
             })
 
         df = pd.DataFrame(rows, columns=self.watchlist_summary_columns)
