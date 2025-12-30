@@ -32,7 +32,7 @@ class ReportGenerator:
             '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
             '2026EPS最高值', '2026EPS最低值', '2026EPS平均值',
             '2027EPS最高值', '2027EPS最低值', '2027EPS平均值',
-            '品質評分', '狀態', 'MD日期', 'MD File', '處理日期'
+            '品質評分', '狀態', 'MD日期', 'MD File', '搜尋日期', '處理日期'
         ]
 
         # 詳細報告欄位 (22 欄位 - 包含驗證狀態)
@@ -232,6 +232,7 @@ class ReportGenerator:
                 has_date = bool(md_date and md_date.strip())
                 quality_status = self._get_quality_status_by_score_enhanced(quality_score, has_date)
                 md_file_url = self._format_md_file_url_with_warning(best_data)
+                search_datetime = self._get_search_datetime(best_data)
                 
                 # 使用最佳品質資料生成摘要
                 clean_code = self._clean_stock_code_for_display(company_code)
@@ -258,6 +259,7 @@ class ReportGenerator:
                     '狀態': quality_status,
                     'MD日期': md_date,
                     'MD File': md_file_url,
+                    '搜尋日期': search_datetime,
                     '處理日期': self._get_taipei_time()
                 }
                 
