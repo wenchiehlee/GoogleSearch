@@ -1,7 +1,7 @@
 {
   "version": "3.6.1-updated-for-md-date",
   "report_type": "comprehensive_with_md_date_priority",
-  "timestamp": "2025-12-30T09:51:20.438440",
+  "timestamp": "2025-12-30T15:02:04.923840",
   "total_companies": 96,
   "companies_with_data": 96,
   "success_rate": 100.0,
@@ -31,8 +31,8 @@
     "files_with_quality_1_or_less": 0,
     "quality_distribution": {
       "excellent_9_10": 1,
-      "good_7_8": 63,
-      "fair_5_6": 13,
+      "good_7_8": 66,
+      "fair_5_6": 10,
       "poor_3_4": 19,
       "very_poor_1_2": 0,
       "missing_date_or_error_0_1": 0

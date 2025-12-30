@@ -1024,8 +1024,12 @@ class MDParser:
         
         table_patterns = [
             r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
+            r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)',
             r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
             r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
             r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
             r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
         ]
@@ -1034,9 +1038,18 @@ class MDParser:
             matches = re.findall(pattern, content)
             for match in matches:
                 try:
-                    years = ['2025', '2026', '2027']
-                    for i, year in enumerate(years):
-                        if i + 1 < len(match):
+                    if len(match) == 4:
+                        years = ['2025', '2026', '2027']
+                        for i, year in enumerate(years):
+                            value_str = match[i + 1].strip()
+                            value_str = re.sub(r'\([^)]*\)', '', value_str)
+                            value_str = value_str.replace(',', '')
+                            value = float(value_str)
+                            if 0 < value < 1000:
+                                eps_data[year].append(value)
+                    elif len(match) == 3:
+                        years = ['2025', '2026']
+                        for i, year in enumerate(years):
                             value_str = match[i + 1].strip()
                             value_str = re.sub(r'\([^)]*\)', '', value_str)
                             value_str = value_str.replace(',', '')
@@ -1062,14 +1075,26 @@ class MDParser:
         }
         stats: Dict[str, Dict[str, float]] = {}
 
-        row_pattern = (
+        row_pattern_3 = (
             r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
             r'<td[^>]*>([^<]+)</td>\s*'
             r'<td[^>]*>([^<]+)</td>\s*'
             r'<td[^>]*>([^<]+)</td>'
         )
-        for label, v2025, v2026, v2027 in re.findall(row_pattern, table_html):
+        for label, v2025, v2026, v2027 in re.findall(row_pattern_3, table_html):
             for year, raw in zip(['2025', '2026', '2027'], [v2025, v2026, v2027]):
+                value = self._parse_numeric_value(raw)
+                if value is None:
+                    continue
+                stats.setdefault(year, {})[label_map[label]] = value
+
+        row_pattern_2 = (
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>'
+        )
+        for label, v2025, v2026 in re.findall(row_pattern_2, table_html):
+            for year, raw in zip(['2025', '2026'], [v2025, v2026]):
                 value = self._parse_numeric_value(raw)
                 if value is None:
                     continue
