@@ -25,11 +25,14 @@ class ReportGenerator:
         # 設定台北時區
         self.taipei_tz = pytz.timezone('Asia/Taipei')
         
-        # 投資組合摘要欄位 (14 欄位)
+        # 投資組合摘要欄位
         self.portfolio_summary_columns = [
             '代號', '名稱', '股票代號', 'MD最舊日期', 'MD最新日期', 'MD資料筆數',
-            '分析師數量', '目標價', '2025EPS平均值', '2026EPS平均值', '2027EPS平均值',
-            '品質評分', '狀態', '處理日期'
+            '分析師數量', '目標價',
+            '2025EPS最高值', '2025EPS最低值', '2025EPS平均值',
+            '2026EPS最高值', '2026EPS最低值', '2026EPS平均值',
+            '2027EPS最高值', '2027EPS最低值', '2027EPS平均值',
+            '品質評分', '狀態', 'MD日期', 'MD File', '處理日期'
         ]
 
         # 詳細報告欄位 (22 欄位 - 包含驗證狀態)
@@ -228,6 +231,7 @@ class ReportGenerator:
                 md_date = self._get_md_date_with_priority(best_data)
                 has_date = bool(md_date and md_date.strip())
                 quality_status = self._get_quality_status_by_score_enhanced(quality_score, has_date)
+                md_file_url = self._format_md_file_url_with_warning(best_data)
                 
                 # 使用最佳品質資料生成摘要
                 clean_code = self._clean_stock_code_for_display(company_code)
@@ -241,11 +245,19 @@ class ReportGenerator:
                     'MD資料筆數': len(all_files),
                     '分析師數量': best_data.get('analyst_count', 0),
                     '目標價': best_data.get('target_price', ''),
+                    '2025EPS最高值': self._format_eps_value(best_data.get('eps_2025_high')),
+                    '2025EPS最低值': self._format_eps_value(best_data.get('eps_2025_low')),
                     '2025EPS平均值': self._format_eps_value(best_data.get('eps_2025_avg')),
+                    '2026EPS最高值': self._format_eps_value(best_data.get('eps_2026_high')),
+                    '2026EPS最低值': self._format_eps_value(best_data.get('eps_2026_low')),
                     '2026EPS平均值': self._format_eps_value(best_data.get('eps_2026_avg')),
+                    '2027EPS最高值': self._format_eps_value(best_data.get('eps_2027_high')),
+                    '2027EPS最低值': self._format_eps_value(best_data.get('eps_2027_low')),
                     '2027EPS平均值': self._format_eps_value(best_data.get('eps_2027_avg')),
                     '品質評分': quality_score,
                     '狀態': quality_status,
+                    'MD日期': md_date,
+                    'MD File': md_file_url,
                     '處理日期': self._get_taipei_time()
                 }
                 
