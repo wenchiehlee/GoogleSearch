@@ -1,4 +1,4 @@
-name: Weekly Quarantine Old Files
+name: Weekly Quarantine Files
 
 on:
   #schedule:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  quarantine-old-files:
+  quarantine-files:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,10 +32,10 @@ jobs:
           echo "📊 Files before quarantine:"
           ls -1 data/md/*.md 2>/dev/null | wc -l || echo "0"
 
-      - name: Run quarantine script (90 days threshold)
+      - name: Run quarantine script (90 days and quality threshold)
         run: |
           echo "🗂️ Starting quarantine process..."
-          echo "yes" | python quarantine_old_files.py --days 90 --quarantine
+          echo "yes" | python quarantine_files.py --days 90 --max-quality 6 --quarantine
 
       - name: Count files after quarantine
         run: |
@@ -69,10 +69,10 @@ jobs:
           QUARANTINED_COUNT=$(git diff --cached --numstat | grep "data/quarantine" | wc -l)
 
           git commit \
-            -m "🗂️ Weekly Quarantine - Old Files Cleanup" \
-            -m "Automatically quarantined MD files older than 90 days" \
+            -m "🗂️ Weekly Quarantine - Files Cleanup" \
+            -m "Automatically quarantined MD files older than 90 days or low quality" \
             -m "- Files quarantined: ${QUARANTINED_COUNT}" \
-            -m "- Threshold: 90 days" \
+            -m "- Threshold: 90 days, quality <= 6" \
             -m "- Trigger: Weekly scheduled task" \
             -m "- Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" \
             -m "📋 Report: old_files_report.txt" \
@@ -105,15 +105,15 @@ jobs:
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: `🗂️ Weekly Quarantine: ${totalFiles} old files archived`,
+                title: `🗂️ Weekly Quarantine: ${totalFiles} files archived`,
                 body: [
-                  '## Weekly Old Files Quarantine Report',
+                  '## Weekly Files Quarantine Report',
                   '',
                   'The automated weekly quarantine process has completed.',
                   '',
                   '### Summary',
                   `- **Files quarantined**: ${totalFiles}`,
-                  '- **Threshold**: Files older than 90 days',
+                  '- **Threshold**: Files older than 90 days or quality <= 6',
                   '- **Location**: `data/quarantine/old_files/`',
                   `- **Date**: ${new Date().toISOString().split('T')[0]}`,
                   '',

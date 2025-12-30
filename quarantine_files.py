@@ -4,9 +4,11 @@ Quarantine Old MD Files Script
 Moves MD files older than 3 months to quarantine directory
 
 Usage:
-    python quarantine_old_files.py                    # Scan and report only
-    python quarantine_old_files.py --quarantine       # Actually move files
-    python quarantine_old_files.py --days 90          # Custom age threshold
+    python quarantine_files.py                        # Scan and report only
+    python quarantine_files.py --quarantine           # Actually move files
+    python quarantine_files.py --days 90              # Custom age threshold
+    python quarantine_files.py --max-quality 5        # Quarantine low-quality files
+    python quarantine_files.py --days 90 --max-quality 5 --quarantine
 """
 
 import os
@@ -28,16 +30,19 @@ if sys.platform == 'win32':
 class OldFileQuarantiner:
     """Quarantine MD files older than specified threshold"""
 
-    def __init__(self, days_threshold: int = 90):
+    def __init__(self, days_threshold: int = 90, max_quality: float = None):
         self.data_dir = Path("data/md")
         self.quarantine_dir = Path("data/quarantine/old_files")
         self.quarantine_dir.mkdir(parents=True, exist_ok=True)
         self.days_threshold = days_threshold
+        self.max_quality = max_quality
         self.cutoff_date = datetime.now() - timedelta(days=days_threshold)
 
         print(f"[INFO] Quarantine threshold: {days_threshold} days")
         print(f"[INFO] Cutoff date: {self.cutoff_date.strftime('%Y-%m-%d')}")
-        print(f"[INFO] Files older than this will be quarantined\n")
+        if self.max_quality is not None:
+            print(f"[INFO] Max quality threshold: {self.max_quality}")
+        print(f"[INFO] Files older than cutoff or below quality will be quarantined\n")
 
     def extract_md_date(self, filepath: Path) -> Tuple[datetime, str]:
         """Extract md_date from MD file"""
@@ -72,12 +77,32 @@ class OldFileQuarantiner:
             # Return very old date to be safe
             return datetime(2020, 1, 1), "2020/01/01 (error)"
 
+    def extract_quality_score(self, filepath: Path) -> float:
+        """Extract quality_score from MD file"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read(2000)
+            match = re.search(r'quality_score:\s*([0-9]+(?:\.[0-9]+)?)', content)
+            if match:
+                return float(match.group(1))
+        except Exception as e:
+            print(f"[ERROR] Failed to extract quality score from {filepath.name}: {e}")
+        return -1.0
+
     def extract_stock_info(self, filename: str) -> Tuple[str, str]:
         """Extract stock code and company name from filename"""
         match = re.match(r'(\d{4})_([^_]+)_', filename)
         if match:
             return match.group(1), match.group(2)
         return "Unknown", "Unknown"
+
+    def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float) -> List[str]:
+        reasons = []
+        if date_obj < self.cutoff_date:
+            reasons.append("old")
+        if self.max_quality is not None and quality_score >= 0 and quality_score <= self.max_quality:
+            reasons.append("low_quality")
+        return reasons
 
     def scan_old_files(self) -> List[Dict]:
         """Scan for MD files older than threshold"""
@@ -88,8 +113,10 @@ class OldFileQuarantiner:
 
         for filepath in md_files:
             date_obj, date_str = self.extract_md_date(filepath)
+            quality_score = self.extract_quality_score(filepath)
+            reasons = self._get_quarantine_reasons(date_obj, quality_score)
 
-            if date_obj < self.cutoff_date:
+            if reasons:
                 stock_code, company_name = self.extract_stock_info(filepath.name)
                 age_days = (datetime.now() - date_obj).days
 
@@ -100,7 +127,9 @@ class OldFileQuarantiner:
                     'company_name': company_name,
                     'md_date': date_str,
                     'date_obj': date_obj,
-                    'age_days': age_days
+                    'age_days': age_days,
+                    'quality_score': quality_score,
+                    'reasons': reasons
                 })
 
         return results
@@ -112,6 +141,8 @@ class OldFileQuarantiner:
         report_lines.append("OLD FILES QUARANTINE REPORT")
         report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append(f"Threshold: {self.days_threshold} days (cutoff: {self.cutoff_date.strftime('%Y-%m-%d')})")
+        if self.max_quality is not None:
+            report_lines.append(f"Max quality: {self.max_quality}")
         report_lines.append("=" * 80)
         report_lines.append("")
 
@@ -143,6 +174,8 @@ class OldFileQuarantiner:
                 report_lines.append(f"  File: {item['filename']}")
                 report_lines.append(f"    Date: {item['md_date']}")
                 report_lines.append(f"    Age: {item['age_days']} days")
+                report_lines.append(f"    Quality: {item['quality_score']}")
+                report_lines.append(f"    Reasons: {', '.join(item['reasons'])}")
                 report_lines.append("")
 
             if len(items) > 5:
@@ -156,6 +189,9 @@ class OldFileQuarantiner:
         report_lines.append(f"Total stocks affected: {len(by_stock)}")
         report_lines.append(f"Total files to quarantine: {len(results)}")
         report_lines.append(f"Average age: {sum(r['age_days'] for r in results) / len(results):.1f} days")
+        if self.max_quality is not None:
+            low_quality_count = sum(1 for r in results if "low_quality" in r['reasons'])
+            report_lines.append(f"Low quality files: {low_quality_count}")
         oldest = max(results, key=lambda x: x['age_days'])
         report_lines.append(f"Oldest file: {oldest['filename']} ({oldest['age_days']} days)")
 
@@ -192,10 +228,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python quarantine_old_files.py                 # Scan and report (90 days)
-  python quarantine_old_files.py --days 60       # Use 60 days threshold
-  python quarantine_old_files.py --quarantine    # Actually quarantine files
-  python quarantine_old_files.py --days 180 --quarantine  # Quarantine >180 days
+  python quarantine_files.py                 # Scan and report (90 days)
+  python quarantine_files.py --days 60       # Use 60 days threshold
+  python quarantine_files.py --quarantine    # Actually quarantine files
+  python quarantine_files.py --days 180 --quarantine  # Quarantine >180 days
         """
     )
 
@@ -203,6 +239,8 @@ Examples:
                        help='Actually move files to quarantine (default: report only)')
     parser.add_argument('--days', type=int, default=90,
                        help='Age threshold in days (default: 90)')
+    parser.add_argument('--max-quality', type=float, default=None,
+                       help='Quarantine files with quality_score <= max-quality')
     parser.add_argument('--output', type=str, default='old_files_report.txt',
                        help='Output report filename')
 
@@ -214,7 +252,7 @@ Examples:
     print()
 
     # Scan for old files
-    quarantiner = OldFileQuarantiner(days_threshold=args.days)
+    quarantiner = OldFileQuarantiner(days_threshold=args.days, max_quality=args.max_quality)
     results = quarantiner.scan_old_files()
 
     # Generate report
