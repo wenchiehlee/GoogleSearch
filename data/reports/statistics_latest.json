@@ -1,45 +1,45 @@
 {
   "version": "3.6.1-updated-for-md-date",
   "report_type": "comprehensive_with_md_date_priority",
-  "timestamp": "2025-12-30T15:56:57.474198",
-  "total_companies": 71,
-  "companies_with_data": 71,
+  "timestamp": "2025-12-30T23:41:06.686180",
+  "total_companies": 105,
+  "companies_with_data": 105,
   "success_rate": 100.0,
   "md_date_source_analysis": {
-    "total_files_processed": 71,
-    "md_date_from_search_group": 53,
-    "content_date_from_process_group": 18,
+    "total_files_processed": 105,
+    "md_date_from_search_group": 80,
+    "content_date_from_process_group": 25,
     "no_date_available": 0,
-    "search_group_coverage_rate": 74.6,
+    "search_group_coverage_rate": 76.2,
     "total_date_coverage_rate": 100.0,
     "priority_system": "md_date (Search Group) > content_date (Process Group) > empty",
-    "improvement_note": "Search Group \u63d0\u4f9b\u4e86 53 \u500b\u6a94\u6848\u7684 md_date\uff0cProcess Group \u63d0\u4f9b\u4e86 18 \u500b fallback \u65e5\u671f"
+    "improvement_note": "Search Group \u63d0\u4f9b\u4e86 80 \u500b\u6a94\u6848\u7684 md_date\uff0cProcess Group \u63d0\u4f9b\u4e86 25 \u500b fallback \u65e5\u671f"
   },
   "validation_statistics": {
-    "validation_passed": 71,
+    "validation_passed": 105,
     "validation_failed": 0,
     "validation_disabled": 0,
     "validation_success_rate": 100.0,
-    "companies_included_in_report": 71,
+    "companies_included_in_report": 105,
     "inclusion_rate": 100.0,
     "filtered_out": 0
   },
   "quality_analysis": {
-    "average_quality_score": 7.3,
+    "average_quality_score": 7.2,
     "highest_quality_score": 9.1,
-    "lowest_quality_score": 4.6,
+    "lowest_quality_score": 4.3,
     "files_with_quality_1_or_less": 0,
     "quality_distribution": {
       "excellent_9_10": 1,
-      "good_7_8": 48,
-      "fair_5_6": 7,
-      "poor_3_4": 15,
+      "good_7_8": 71,
+      "fair_5_6": 11,
+      "poor_3_4": 22,
       "very_poor_1_2": 0,
       "missing_date_or_error_0_1": 0
     }
   },
   "watchlist_statistics": {
-    "watchlist_companies_in_data": 71,
+    "watchlist_companies_in_data": 105,
     "watchlist_coverage_in_data": 100.0
   }
 }
