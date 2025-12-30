@@ -808,7 +808,7 @@ class ReportGenerator:
         if keyword_df is None:
             return ""
         os.makedirs(self.output_dir, exist_ok=True)
-        query_latest = os.path.join(self.output_dir, "query_pattern_summary_latest.csv")
+        query_latest = os.path.join(self.output_dir, "factset_query_pattern_summary_latest.csv")
         keyword_df.to_csv(query_latest, index=False, encoding='utf-8-sig')
         return query_latest
 
@@ -847,21 +847,21 @@ class ReportGenerator:
 
         # Portfolio Summary
         if portfolio_df is not None:
-            portfolio_latest = os.path.join(self.output_dir, "portfolio_summary_latest.csv")
+            portfolio_latest = os.path.join(self.output_dir, "factset_portfolio_summary_latest.csv")
             _write_csv(portfolio_df, portfolio_latest)
-            saved_files['portfolio_summary_latest'] = portfolio_latest
+            saved_files['factset_portfolio_summary_latest'] = portfolio_latest
 
         # Detailed Report
         if detailed_df is not None:
-            detailed_latest = os.path.join(self.output_dir, "detailed_report_latest.csv")
+            detailed_latest = os.path.join(self.output_dir, "factset_detailed_report_latest.csv")
             _write_csv(detailed_df, detailed_latest)
-            saved_files['detailed_report_latest'] = detailed_latest
+            saved_files['factset_detailed_report_latest'] = detailed_latest
 
         # Query Pattern Summary
         if keyword_df is not None:
-            query_latest = os.path.join(self.output_dir, "query_pattern_summary_latest.csv")
+            query_latest = os.path.join(self.output_dir, "factset_query_pattern_summary_latest.csv")
             _write_csv(keyword_df, query_latest)
-            saved_files['query_pattern_summary_latest'] = query_latest
+            saved_files['factset_query_pattern_summary_latest'] = query_latest
 
         # Watchlist Summary
         if watchlist_df is not None:

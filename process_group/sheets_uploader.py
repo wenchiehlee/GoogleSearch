@@ -186,7 +186,7 @@ class SheetsUploader:
             
             # 1. 投資組合摘要 CSV
             portfolio_path = os.path.join(self.validation_settings['csv_output_dir'], f'portfolio_summary_{timestamp}.csv')
-            portfolio_latest = os.path.join(self.validation_settings['csv_output_dir'], 'portfolio_summary_latest.csv')
+            portfolio_latest = os.path.join(self.validation_settings['csv_output_dir'], 'factset_portfolio_summary_latest.csv')
             
             portfolio_df_clean = portfolio_df.fillna('')
             portfolio_df_clean.to_csv(portfolio_path, index=False, encoding='utf-8-sig')
@@ -197,7 +197,7 @@ class SheetsUploader:
             
             # 2. 詳細報告 CSV
             detailed_path = os.path.join(self.validation_settings['csv_output_dir'], f'detailed_report_{timestamp}.csv')
-            detailed_latest = os.path.join(self.validation_settings['csv_output_dir'], 'detailed_report_latest.csv')
+            detailed_latest = os.path.join(self.validation_settings['csv_output_dir'], 'factset_detailed_report_latest.csv')
             
             detailed_df_clean = detailed_df.fillna('')
             detailed_df_clean.to_csv(detailed_path, index=False, encoding='utf-8-sig')
@@ -211,7 +211,7 @@ class SheetsUploader:
                 # 檢查是否為查詢模式報告
                 if len(keyword_df.columns) > 0 and keyword_df.columns[0] == 'Query pattern':
                     keyword_path = os.path.join(self.validation_settings['csv_output_dir'], f'query_pattern_summary_{timestamp}.csv')
-                    keyword_latest = os.path.join(self.validation_settings['csv_output_dir'], 'query_pattern_summary_latest.csv')
+                    keyword_latest = os.path.join(self.validation_settings['csv_output_dir'], 'factset_query_pattern_summary_latest.csv')
                     report_type = "查詢模式統計"
                 else:
                     keyword_path = os.path.join(self.validation_settings['csv_output_dir'], f'keyword_summary_{timestamp}.csv')
@@ -476,9 +476,9 @@ class SheetsUploader:
         guide_content += f"""
 
 ### 最新版本檔案 (無時間戳)
-- `portfolio_summary_latest.csv` - 投資組合摘要
-- `detailed_report_latest.csv` - 詳細報告
-- `query_pattern_summary_latest.csv` - 查詢模式統計 (如有)
+- `factset_portfolio_summary_latest.csv` - 投資組合摘要
+- `factset_detailed_report_latest.csv` - 詳細報告
+- `factset_query_pattern_summary_latest.csv` - 查詢模式統計 (如有)
 - `watchlist_summary_latest.csv` - 觀察名單統計 (如有)
 - `validation_summary_latest.csv` - 驗證摘要
 
