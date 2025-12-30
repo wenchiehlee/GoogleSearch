@@ -1,4 +1,4 @@
-name: Weekly Quarantine Files
+name: Quarantine Files
 
 on:
   #schedule:
