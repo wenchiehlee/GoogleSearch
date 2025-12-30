@@ -1,0 +1,8 @@
+#.github/sync.yml
+group:
+  # 1st group for sync-up
+  - files:
+      - source: data/reports/factset_portfolio_summary_latest.csv
+        dest:   data/stage1_raw/factset_portfolio_summary_latest.csv
+    repos: |
+        wenchiehlee-investment/Python-Actions.GoodInfo.Analyzer
