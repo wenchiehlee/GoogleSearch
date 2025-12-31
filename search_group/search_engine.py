@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-Search Engine - FactSet Pipeline v3.5.1 (Modified for md_date)
-Enhanced search engine with content date extraction and md_date metadata field
-Adds md_date field to metadata for reliable date display in reports
+Search Engine - FactSet Pipeline v3.6.0
+Enhanced search engine with Multi-Layer Content Validation
+- Layer 1: Title validation (detect wrong company in title)
+- Layer 2: Combined pattern matching (symbol+name together)
+- Layer 3: Proximity check (symbol and name within 200 chars)
+- Layer 4: Context-aware fallback with stricter thresholds
 
-FIXED: Type conversion issue in search_comprehensive method
+Also includes md_date extraction for reliable date display in reports
 """
 
 import os
@@ -31,12 +34,12 @@ except Exception:
     QualityAnalyzer = None
 
 class SearchEngine:
-    """Enhanced Search Engine with md_date extraction - v3.5.1-modified"""
-    
+    """Enhanced Search Engine with Multi-Layer Validation - v3.6.0"""
+
     def __init__(self, api_manager, config):
         self.api_manager = api_manager
         self.config = config
-        self.version = "3.5.1-modified"
+        self.version = "3.6.0"
         
         # Content validation settings
         self.enable_content_validation = True
@@ -438,7 +441,7 @@ class SearchEngine:
             return None
 
     def _validate_content(self, content: str, symbol: str, name: str) -> Dict[str, Any]:
-        """Enhanced content validation with context-aware matching"""
+        """Multi-Layer Validation with title check, combined patterns, and proximity - v3.6.0"""
         if not self.enable_content_validation:
             return {'is_valid': True, 'reason': 'Validation disabled'}
 
@@ -448,7 +451,111 @@ class SearchEngine:
             symbol_lower = symbol.lower()
             name_lower = name.lower()
 
-            # ENHANCED: Context-aware symbol validation
+            # ========================================
+            # LAYER 1: TITLE VALIDATION (Highest Priority)
+            # ========================================
+            # Extract title from HTML and check if it mentions wrong company
+            title_text = ""
+            title_match = re.search(r'<title>(.*?)</title>', content, re.IGNORECASE | re.DOTALL)
+            if title_match:
+                title_text = title_match.group(1).lower()
+
+            # Also check meta og:title for better accuracy
+            meta_title_match = re.search(r'<meta\s+property=["\']og:title["\']\s+content=["\'](.*?)["\']', content, re.IGNORECASE)
+            if meta_title_match:
+                title_text = meta_title_match.group(1).lower()
+
+            # Check if title mentions a DIFFERENT company code in format (XXXX-TW)
+            other_company_pattern = r'\((\d{4})[-\s]*tw\)'
+            title_company_matches = re.findall(other_company_pattern, title_text)
+            if title_company_matches:
+                # Found company codes in title - verify they match our symbol
+                found_symbols = [m for m in title_company_matches]
+                if symbol not in found_symbols and len(found_symbols) > 0:
+                    wrong_symbol = found_symbols[0]
+                    return {
+                        'is_valid': False,
+                        'reason': f"Title mentions different company ({wrong_symbol}-TW) instead of {symbol}",
+                        'confidence': 0,
+                        'symbol_found': False,
+                        'name_found': False,
+                        'false_positive': True,
+                        'validation_layer': 'title_check'
+                    }
+
+            # ========================================
+            # LAYER 2: COMBINED PATTERN CHECK
+            # ========================================
+            # Look for symbol and name appearing together in common patterns
+            combined_patterns = [
+                rf'{name_lower}[^\)]*\({symbol}[-\s]*tw\)',  # 聯發科(2454-TW)
+                rf'\({symbol}[-\s]*tw\)[^\)]*{name_lower}',  # (2454-TW) 聯發科
+                rf'{symbol}[-\s]*tw[^\)]*{name_lower}',      # 2454-TW 聯發科
+                rf'{name_lower}[^\d]{{0,20}}{symbol}[-\s]*tw',  # 聯發科...2454-TW (within 20 chars)
+                rf'代號[:：\s]*{symbol}[^\)]*{name_lower}',   # 代號: 2454 聯發科
+            ]
+
+            has_combined_match = False
+            combined_match_pattern = ""
+            for pattern in combined_patterns:
+                match = re.search(pattern, content_lower)
+                if match:
+                    has_combined_match = True
+                    combined_match_pattern = pattern
+                    break
+
+            if has_combined_match:
+                # Strong signal - symbol and name appear together
+                return {
+                    'is_valid': True,
+                    'reason': f"Valid content - symbol and name found together in pattern",
+                    'confidence': 1.2,
+                    'symbol_found': True,
+                    'symbol_in_context': True,
+                    'name_found': True,
+                    'false_positive': False,
+                    'validation_layer': 'combined_pattern'
+                }
+
+            # ========================================
+            # LAYER 3: PROXIMITY CHECK
+            # ========================================
+            # Check if symbol and name appear close to each other
+            symbol_positions = [m.start() for m in re.finditer(symbol, content_lower)]
+            name_positions = [m.start() for m in re.finditer(name_lower, content_lower)]
+
+            proximity_threshold = 200  # characters
+            has_proximity_match = False
+            min_distance = float('inf')
+
+            for sym_pos in symbol_positions:
+                for name_pos in name_positions:
+                    distance = abs(sym_pos - name_pos)
+                    if distance <= proximity_threshold:
+                        has_proximity_match = True
+                        min_distance = min(min_distance, distance)
+
+            if has_proximity_match:
+                # Good signal - symbol and name appear near each other
+                # Confidence based on proximity (closer = higher confidence)
+                proximity_confidence = 1.0 - (min_distance / proximity_threshold) * 0.2  # 0.8 to 1.0
+                return {
+                    'is_valid': True,
+                    'reason': f"Valid content - symbol and name found within {min_distance} characters",
+                    'confidence': proximity_confidence,
+                    'symbol_found': True,
+                    'symbol_in_context': True,
+                    'name_found': True,
+                    'false_positive': False,
+                    'validation_layer': 'proximity_check',
+                    'proximity_distance': min_distance
+                }
+
+            # ========================================
+            # LAYER 4: CONTEXT-AWARE FALLBACK
+            # ========================================
+            # Original context-aware validation with stricter requirements
+
             # Check for symbol in proper stock code contexts
             symbol_contexts = [
                 rf'\b{symbol}[-\s]*tw\b',  # 2330-TW or 2330 TW
@@ -464,8 +571,7 @@ class SearchEngine:
                     symbol_in_context = True
                     break
 
-            # ENHANCED: Detect false positives - symbol appearing as price/target
-            # Common false positive patterns
+            # Detect false positives - symbol appearing as price/target
             false_positive_patterns = [
                 rf'目標價[為是]\s*{symbol}元',      # 目標價為2330元
                 rf'目標價[:：]\s*{symbol}元',       # 目標價:2330元
@@ -483,7 +589,6 @@ class SearchEngine:
                     false_positive_reason = f"Symbol {symbol} appears as price/target value, not stock code"
                     break
 
-            # If detected as false positive, return immediately as invalid
             if is_false_positive:
                 return {
                     'is_valid': False,
@@ -491,7 +596,8 @@ class SearchEngine:
                     'confidence': 0,
                     'symbol_found': False,
                     'name_found': False,
-                    'false_positive': True
+                    'false_positive': True,
+                    'validation_layer': 'price_detection'
                 }
 
             # Check for company name presence (partial matching)
@@ -499,35 +605,32 @@ class SearchEngine:
             name_matches = sum(1 for word in name_words if len(word) > 1 and word in content_lower)
             name_found = name_matches >= max(1, len(name_words) // 2)
 
-            # ENHANCED: Calculate confidence score with context awareness
+            # Calculate confidence with REDUCED weight for fallback layer
             confidence = 0
 
-            # Symbol in proper context is much more reliable
             if symbol_in_context:
-                confidence += 0.7
+                confidence += 0.5  # Reduced from 0.7
             elif symbol_lower in content_lower:
-                # Symbol found but without proper context - lower confidence
-                confidence += 0.3
+                confidence += 0.2  # Reduced from 0.3
 
             if name_found:
-                confidence += 0.4
+                confidence += 0.3  # Reduced from 0.4
 
-            # ENHANCED: Require BOTH symbol and name for Taiwan stocks
-            # This significantly reduces false positives
-            is_valid = (symbol_in_context or (symbol_lower in content_lower)) and name_found and confidence >= 0.8
+            # STRICTER threshold for fallback validation (0.7 instead of 0.8)
+            # Most valid content should pass Layer 1-3, so fallback needs higher standards
+            is_valid = (symbol_in_context or (symbol_lower in content_lower)) and name_found and confidence >= 0.7
 
             if is_valid:
-                reason = f"Valid content about {symbol} ({name})"
+                reason = f"Valid content about {symbol} ({name}) - fallback validation"
                 if symbol_in_context and name_found:
-                    reason += " - symbol in proper context and name found"
-                elif name_found:
-                    reason += " - symbol and name found"
+                    reason += " (symbol in context, name found separately)"
             else:
                 reason = f"Content validation failed for {symbol} ({name}) - confidence: {confidence:.2f}"
                 if not symbol_in_context and symbol_lower in content_lower:
                     reason += " (symbol found but not in proper context)"
                 if not name_found:
                     reason += " (company name not found)"
+                reason += " - failed all validation layers"
 
             return {
                 'is_valid': is_valid,
@@ -536,7 +639,8 @@ class SearchEngine:
                 'symbol_found': symbol_in_context or (symbol_lower in content_lower),
                 'symbol_in_context': symbol_in_context,
                 'name_found': name_found,
-                'false_positive': False
+                'false_positive': not is_valid,
+                'validation_layer': 'fallback'
             }
 
         except Exception as e:
@@ -544,7 +648,8 @@ class SearchEngine:
                 'is_valid': False,
                 'reason': f"Validation error: {e}",
                 'confidence': 0,
-                'false_positive': False
+                'false_positive': False,
+                'validation_layer': 'error'
             }
 
     def _assess_quality(self, content: str, title: str, url: str, symbol: str, name: str) -> float:
