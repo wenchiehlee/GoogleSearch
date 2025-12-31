@@ -79,7 +79,7 @@ class WatchlistAnalyzer:
                     
                     for encoding in encodings:
                         try:
-                            df = pd.read_csv(csv_path, header=None, names=['code', 'name'], encoding=encoding)
+                            df = pd.read_csv(csv_path, header=0, encoding=encoding)
                             print(f"✅ 成功使用 {encoding} 編碼讀取")
                             break
                         except UnicodeDecodeError:
@@ -87,20 +87,26 @@ class WatchlistAnalyzer:
                         except Exception as e:
                             print(f"⚠️ 使用 {encoding} 編碼讀取失敗: {e}")
                             continue
-                    
+
                     if df is None:
                         print(f"❌ 無法使用任何編碼讀取 {csv_path}")
                         continue
-                    
+
                     # 驗證和清理數據
                     valid_count = 0
                     invalid_count = 0
                     duplicate_count = 0
-                    
+                    skipped_count = 0  # 跳過的非數據行（如 0000）
+
                     for idx, row in df.iterrows():
                         try:
-                            code = str(row['code']).strip()
-                            name = str(row['name']).strip()
+                            code = str(row['代號']).strip()
+                            name = str(row['名稱']).strip()
+
+                            # 跳過佔位符和測試數據（不計入統計）
+                            if code in ['0', '0000', '9999', 'TEST', 'test']:
+                                skipped_count += 1
+                                continue
                             
                             # 驗證公司代號格式
                             if not self._is_valid_company_code(code):
@@ -126,13 +132,19 @@ class WatchlistAnalyzer:
                             print(f"❌ 處理第{idx+1}行時發生錯誤: {e}")
                             continue
                     
+                    # 計算實際數據行數（排除佔位符）
+                    total_rows = len(df)
+                    data_rows = total_rows - skipped_count
+
                     print(f"📊 觀察名單載入統計:")
                     print(f"   檔案: {csv_path}")
-                    print(f"   總行數: {len(df)}")
+                    print(f"   總行數: {total_rows}")
                     print(f"   有效數據: {valid_count}")
                     print(f"   無效數據: {invalid_count}")
                     print(f"   重複數據: {duplicate_count}")
-                    print(f"   成功率: {valid_count/len(df)*100:.1f}%")
+                    if skipped_count > 0:
+                        print(f"   跳過數據: {skipped_count} (佔位符/測試)")
+                    print(f"   成功率: {valid_count/data_rows*100:.1f}%")
                     
                     # 驗證載入的資料品質
                     self._validate_watchlist_quality(mapping)
