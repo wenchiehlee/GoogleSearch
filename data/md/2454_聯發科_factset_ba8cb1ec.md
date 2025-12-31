@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6115693
 title: 鉅亨速報- Factset 最新調查：聯發科(2454-TW)EPS預估下修至66.27 ...
-quality_score: 10
+quality_score: 9.6
 company: 聯發科
 stock_code: 2454
 md_date: 2025/12/27

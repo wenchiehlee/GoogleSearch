@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6172965
 title: 台積電好事連樁法人十月新布局！ | 鉅亨網- 專家觀點
-quality_score: 8
+quality_score: 0.4
 company: 崇越
 stock_code: 5434
 md_date: 2025/09/30

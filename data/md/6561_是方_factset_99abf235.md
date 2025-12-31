@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6095584
 title: 鉅亨速報- Factset 最新調查：群光(2385-TW)目標價調降至170元 ...
-quality_score: 10
+quality_score: 4.3
 company: 是方
 stock_code: 6561
 md_date: 2025/07/05

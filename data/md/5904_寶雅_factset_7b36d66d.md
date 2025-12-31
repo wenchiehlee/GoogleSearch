@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6079250
 title: 寶雅上半年每股賺12.97元下半年再開至少10家新店| 鉅亨網- 台股新聞
-quality_score: 8
+quality_score: 0.4
 company: 寶雅
 stock_code: 5904
 md_date: 2025/07/28

@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6175129
 title: 鉅亨速報- Factset 最新調查：光寶科(2301-TW)EPS預估上修至6.4元 ...
-quality_score: 8.2
+quality_score: 8.6
 company: 光寶科
 stock_code: 2301
 md_date: 2025/10/02

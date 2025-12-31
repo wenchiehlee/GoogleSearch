@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6199496
 title: 〈ETF成分股調整〉重AI砍傳產​​​​​​​ 00881、00733等6檔台股 ...
-quality_score: 9
+quality_score: 2.1
 company: 聯強
 stock_code: 2347
 md_date: 2025/12/27

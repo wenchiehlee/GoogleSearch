@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/5923034
 title: 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元 ...
-quality_score: 10
+quality_score: 9.6
 company: 鴻海
 stock_code: 2317
 md_date: 2025/04/07

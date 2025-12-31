@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6203317
 title: 鉅亨速報- Factset 最新調查：緯穎(6669-TW)EPS預估上修至239.25 ...
-quality_score: 10
+quality_score: 9.6
 company: 緯穎
 stock_code: 6669
 md_date: 2025/10/24

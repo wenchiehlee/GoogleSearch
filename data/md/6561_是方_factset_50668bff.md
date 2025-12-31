@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6097386
 title: 鉅亨速報- Factset 最新調查：元太(8069-TW)EPS預估上修至9.67元 ...
-quality_score: 8.2
+quality_score: 9.2
 company: 是方
 stock_code: 6561
 md_date: 2025/08/07

@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6275753
 title: 盤後速報- 富邦特選高股息30(00900)次交易(16)日除息0.08元，參考 ...
-quality_score: 8
+quality_score: 0.4
 company: 可成
 stock_code: 2474
 md_date: 2025/12/15

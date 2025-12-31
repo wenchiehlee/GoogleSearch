@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6220956
 title: 鉅亨速報- Factset 最新調查：信驊(5274-TW)EPS預估上修至92.12元 ...
-quality_score: 10
+quality_score: 9.2
 company: 信驊
 stock_code: 5274
 md_date: 2025/11/06

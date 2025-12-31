@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6235661
 title: 鉅亨速報- Factset 最新調查：鴻海(2317-TW)目標價調升至300元 ...
-quality_score: 10
+quality_score: 4.6
 company: 鴻海
 stock_code: 2317
 md_date: 2025/11/13

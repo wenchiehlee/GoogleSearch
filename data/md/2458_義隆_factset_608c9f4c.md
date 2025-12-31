@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6291082
 title: 鉅亨速報- Factset 最新調查：義隆(2458-TW)EPS預估上修至7.7元 ...
-quality_score: 8.2
+quality_score: 7.6
 company: 義隆
 stock_code: 2458
 md_date: 2025/12/29

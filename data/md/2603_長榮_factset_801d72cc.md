@@ -1,7 +1,7 @@
 ---
 url: https://m.cnyes.com/news/id/6292065
 title: 鉅亨速報- Factset 最新調查：長榮(2603-TW)EPS預估下修至30.31元 ...
-quality_score: 10
+quality_score: 6.4
 company: 長榮
 stock_code: 2603
 md_date: 2025/12/29

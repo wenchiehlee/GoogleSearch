@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6239953
 title: 鉅亨速報- Factset 最新調查：和碩(4938-TW)EPS預估上修至4.9元 ...
-quality_score: 8.2
+quality_score: 8.6
 company: 和碩
 stock_code: 4938
 md_date: 2025/11/17

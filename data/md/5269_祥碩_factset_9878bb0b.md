@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6175133
 title: 鉅亨速報- Factset 最新調查：祥碩(5269-TW)EPS預估上修至72.83元 ...
-quality_score: 10
+quality_score: 8.6
 company: 祥碩
 stock_code: 5269
 md_date: 2025/10/02

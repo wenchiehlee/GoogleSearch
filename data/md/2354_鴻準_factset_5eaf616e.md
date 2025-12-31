@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6178726
 title: 營收速報- 鴻準(2354)9月營收129.63億元年增率高達131.26％ | 鉅亨網
-quality_score: 9
+quality_score: 2.7
 company: 鴻準
 stock_code: 2354
 md_date: 2025/10/07

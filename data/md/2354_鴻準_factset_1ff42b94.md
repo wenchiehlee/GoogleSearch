@@ -1,7 +1,7 @@
 ---
 url: https://www.btcc.com/zh-TW/academy/financial-investment/about-3706-stock
 title: 神達(3706)做什麼的？值得投資嗎？神達股價逼近百元，現在可以買 ...
-quality_score: 7
+quality_score: 2.1
 company: 鴻準
 stock_code: 2354
 md_date: 2025/08/28

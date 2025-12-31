@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6107562
 title: 鉅亨速報- Factset 最新調查：廣達(2382-TW)EPS預估下修至18.58元 ...
-quality_score: 10
+quality_score: 9.6
 company: 廣達
 stock_code: 2382
 md_date: 2025/08/13

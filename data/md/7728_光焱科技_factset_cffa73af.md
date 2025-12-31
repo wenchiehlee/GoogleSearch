@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6258349
 title: 【量大強漲股整理】台股震盪回檔之下，迎接12月關注那些大事?潛力 ...
-quality_score: 9
+quality_score: 2.1
 company: 光焱科技
 stock_code: 7728
 md_date: 2025/12/01

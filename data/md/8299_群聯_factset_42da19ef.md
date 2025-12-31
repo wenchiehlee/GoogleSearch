@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6159325
 title: 鉅亨速報- Factset 最新調查：群聯(8299-TW)EPS預估下修至26.36元 ...
-quality_score: 8.0
+quality_score: 8.6
 company: 群聯
 stock_code: 8299
 md_date: 2025/09/18

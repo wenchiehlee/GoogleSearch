@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/5957855
 title: 鉅亨速報- Factset 最新調查：緯創(3231-TW)EPS預估上修至8.18元 ...
-quality_score: 7.7
+quality_score: 8.6
 company: 緯創
 stock_code: 3231
 md_date: 2025/05/02

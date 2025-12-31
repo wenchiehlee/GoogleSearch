@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6187877
 title: 鉅亨速報- Factset 最新調查：聯詠(3034-TW)EPS預估下修至26.77元 ...
-quality_score: 8.4
+quality_score: 9.2
 company: 聯詠
 stock_code: 3034
 md_date: 2025/10/13

@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6011140
 title: 鈊象自結5月稅前每股盈餘3.07元前5月獲利年增17%
-quality_score: 8
+quality_score: 2.1
 company: 鈊象
 stock_code: 3293
 md_date: 2025/06/07

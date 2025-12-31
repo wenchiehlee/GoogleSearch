@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6278227
 title: 盤中速報- 合晶(6182)急拉3.45%報31.5元
-quality_score: 8
+quality_score: 0.4
 company: 合晶
 stock_code: 6182
 md_date: 2025/12/17

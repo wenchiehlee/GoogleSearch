@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6092823
 title: 盤中速報- 碩網(7547)大漲7.45%，報137元| 鉅亨網- 台股盤中
-quality_score: 8
+quality_score: 0.4
 company: 碩網
 stock_code: 7547
 md_date: 2025/08/06

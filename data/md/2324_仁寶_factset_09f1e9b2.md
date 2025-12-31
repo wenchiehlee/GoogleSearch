@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6119796
 title: 鉅亨速報- Factset 最新調查：仁寶(2324-TW)EPS預估下修至2.16元 ...
-quality_score: 10
+quality_score: 7.3
 company: 仁寶
 stock_code: 2324
 md_date: 2025/08/21

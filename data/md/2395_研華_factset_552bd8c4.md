@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6226251
 title: 鉅亨速報- Factset 最新調查：研華(2395-TW)EPS預估上修至11.48元 ...
-quality_score: 8.4
+quality_score: 9.2
 company: 研華
 stock_code: 2395
 md_date: 2025/11/07

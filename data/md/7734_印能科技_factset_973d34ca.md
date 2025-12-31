@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6237361
 title: 盤中速報- 印能科技(7734)急拉3.09%報900.0元，成交51張| 鉅亨網 ...
-quality_score: 8
+quality_score: 0.4
 company: 印能科技
 stock_code: 7734
 md_date: 2025/11/14

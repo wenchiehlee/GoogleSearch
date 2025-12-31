@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6126669
 title: 鉅亨速報- Factset 最新調查：啟碁(6285-TW)EPS預估下修至7.52元 ...
-quality_score: 10
+quality_score: 7.6
 company: 啟碁
 stock_code: 6285
 md_date: 2025/08/26

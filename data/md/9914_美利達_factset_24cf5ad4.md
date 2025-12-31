@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6285788
 title: 鉅亨速報- Factset 最新調查：美利達(9914-TW)EPS預估下修至5.68元 ...
-quality_score: 8.1
+quality_score: 7.6
 company: 美利達
 stock_code: 9914
 md_date: 2025/12/23

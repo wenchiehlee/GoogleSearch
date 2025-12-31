@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6189570
 title: 安格砸1.98億元入股欣普羅神盾集團大搶AI視覺商機| 鉅亨網- 台股新聞
-quality_score: 9
+quality_score: 2.7
 company: 鈺寶-創
 stock_code: 3150
 md_date: 2025/12/14

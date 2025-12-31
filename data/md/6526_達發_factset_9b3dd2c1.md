@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6223406
 title: 鉅亨速報- Factset 最新調查：達發(6526-TW)EPS預估上修至17.83元 ...
-quality_score: 10
+quality_score: 5.9
 company: 達發
 stock_code: 6526
 md_date: 2025/11/07

@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6190055
 title: 鉅亨速報- Factset 最新調查：台達電(2308-TW)EPS預估上修至22元 ...
-quality_score: 10
+quality_score: 9.3
 company: 台達電
 stock_code: 2308
 md_date: 2025/10/14

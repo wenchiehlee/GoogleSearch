@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6275805
 title: 三商餐飲:本公司受邀參加國泰綜合證券舉辦之線上法人說明會| 鉅亨網 ...
-quality_score: 8
+quality_score: 2.1
 company: 三商餐飲
 stock_code: 7705
 md_date: 2025/12/15

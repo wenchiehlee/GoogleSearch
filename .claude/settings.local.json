@@ -10,7 +10,12 @@
       "Bash(cp:*)",
       "Bash(grep:*)",
       "Bash(git commit:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(tee:*)",
+      "Bash(awk:*)",
+      "Bash(test:*)",
+      "Bash(iconv:*)"
     ]
   }
 }

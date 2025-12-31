@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6223499
 title: 盤中速報- 奕力-KY(6962)大漲7.94%，報46.2元
-quality_score: 7
+quality_score: 0.4
 company: 奕力-KY
 stock_code: 6962
 md_date: 2025/11/07

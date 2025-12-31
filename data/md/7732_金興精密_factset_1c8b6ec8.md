@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6259304
 title: 盤中速報- 金興精密(7732)急拉6.1%報43.0元，成交97張| 鉅亨網- 台 ...
-quality_score: 7
+quality_score: 0.4
 company: 金興精密
 stock_code: 7732
 md_date: 2025/12/02

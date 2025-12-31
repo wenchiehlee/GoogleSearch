@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6233480
 title: 盤中速報- 濾能(6823)股價拉至漲停，漲停價85.3元，成交329張| 鉅亨網
-quality_score: 7
+quality_score: 0.4
 company: 力領科技
 stock_code: 6996
 md_date: 2025/11/12

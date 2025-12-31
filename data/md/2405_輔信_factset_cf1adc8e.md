@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6200290
 title: 盤中速報- 輔信(2405)急拉3.02%報20.5元
-quality_score: 9
+quality_score: 0.4
 company: 輔信
 stock_code: 2405
 md_date: 2025/10/22

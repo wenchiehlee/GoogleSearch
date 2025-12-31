@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6042280
 title: 鴻勁四廠Q4動工2028年啟用季產能估增40% | 鉅亨網- 台股新聞
-quality_score: 9
+quality_score: 0.4
 company: 鴻勁
 stock_code: 7769
 md_date: 2025/12/14

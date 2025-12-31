@@ -1,45 +1,45 @@
 {
   "version": "3.6.1-updated-for-md-date",
   "report_type": "comprehensive_with_md_date_priority",
-  "timestamp": "2025-12-31T03:01:57.080882",
-  "total_companies": 125,
-  "companies_with_data": 125,
+  "timestamp": "2025-12-31T17:53:08.414703",
+  "total_companies": 132,
+  "companies_with_data": 132,
   "success_rate": 100.0,
   "md_date_source_analysis": {
-    "total_files_processed": 125,
-    "md_date_from_search_group": 100,
-    "content_date_from_process_group": 25,
+    "total_files_processed": 132,
+    "md_date_from_search_group": 99,
+    "content_date_from_process_group": 33,
     "no_date_available": 0,
-    "search_group_coverage_rate": 80.0,
+    "search_group_coverage_rate": 75.0,
     "total_date_coverage_rate": 100.0,
     "priority_system": "md_date (Search Group) > content_date (Process Group) > empty",
-    "improvement_note": "Search Group \u63d0\u4f9b\u4e86 100 \u500b\u6a94\u6848\u7684 md_date\uff0cProcess Group \u63d0\u4f9b\u4e86 25 \u500b fallback \u65e5\u671f"
+    "improvement_note": "Search Group \u63d0\u4f9b\u4e86 99 \u500b\u6a94\u6848\u7684 md_date\uff0cProcess Group \u63d0\u4f9b\u4e86 33 \u500b fallback \u65e5\u671f"
   },
   "validation_statistics": {
-    "validation_passed": 125,
+    "validation_passed": 132,
     "validation_failed": 0,
     "validation_disabled": 0,
     "validation_success_rate": 100.0,
-    "companies_included_in_report": 125,
+    "companies_included_in_report": 132,
     "inclusion_rate": 100.0,
     "filtered_out": 0
   },
   "quality_analysis": {
-    "average_quality_score": 7.3,
-    "highest_quality_score": 9.1,
-    "lowest_quality_score": 4.0,
-    "files_with_quality_1_or_less": 0,
+    "average_quality_score": 6.2,
+    "highest_quality_score": 10.0,
+    "lowest_quality_score": 0.4,
+    "files_with_quality_1_or_less": 26,
     "quality_distribution": {
-      "excellent_9_10": 1,
-      "good_7_8": 89,
-      "fair_5_6": 11,
-      "poor_3_4": 24,
-      "very_poor_1_2": 0,
-      "missing_date_or_error_0_1": 0
+      "excellent_9_10": 40,
+      "good_7_8": 41,
+      "fair_5_6": 8,
+      "poor_3_4": 3,
+      "very_poor_1_2": 16,
+      "missing_date_or_error_0_1": 26
     }
   },
   "watchlist_statistics": {
-    "watchlist_companies_in_data": 125,
+    "watchlist_companies_in_data": 132,
     "watchlist_coverage_in_data": 100.0
   }
 }

@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6109835
 title: 鉅亨速報- Factset 最新調查：智原(3035-TW)EPS預估上修至2.57元 ...
-quality_score: 10
+quality_score: 7.9
 company: 智原
 stock_code: 3035
 md_date: 2025/08/14

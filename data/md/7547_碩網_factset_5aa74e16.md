@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6047565
 title: 碩網7月下旬掛牌上櫃搭生成式AI商機樂看全年營收增長空間| 鉅亨網 ...
-quality_score: 7
+quality_score: 0.4
 company: 碩網
 stock_code: 7547
 md_date: 2025/12/14

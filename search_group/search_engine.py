@@ -25,7 +25,7 @@ if str(REPO_ROOT) not in sys.path:
 
 try:
     from process_group.md_parser import MDParser
-    from process_group.quality_analyzer import QualityAnalyzer
+    from process_group.quality_analyzer_simplified import QualityAnalyzerSimplified as QualityAnalyzer
 except Exception:
     MDParser = None
     QualityAnalyzer = None

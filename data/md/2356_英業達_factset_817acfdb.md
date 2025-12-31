@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6271366
 title: 鉅亨速報- Factset 最新調查：英業達(2356-TW)EPS預估下修至2.34元 ...
-quality_score: 10
+quality_score: 7.6
 company: 英業達
 stock_code: 2356
 md_date: 2025/12/11

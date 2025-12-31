@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/5853957
 title: 〈焦點股〉搶搭AI順風車漲停資訊軟體股百花開| 鉅亨網- 台股
-quality_score: 9
+quality_score: 2.1
 company: 全景軟體
 stock_code: 8272
 md_date: 2025/12/27

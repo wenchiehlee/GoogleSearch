@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/5837910
 title: 興櫃股王印能2月下旬上櫃大啖先進封裝商機| 鉅亨網- 台股新聞
-quality_score: 8
+quality_score: 0.4
 company: 印能科技
 stock_code: 7734
 md_date: 2025/12/14

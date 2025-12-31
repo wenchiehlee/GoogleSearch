@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/print/6286508
 title: 鉅亨速報- Factset 最新調查：巨大(9921-TW)EPS預估下修至3.26元 ...
-quality_score: 10
+quality_score: 6.9
 company: 巨大
 stock_code: 9921
 md_date: 2025/12/23

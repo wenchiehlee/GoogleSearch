@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6209976
 title: 鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至53.69元 ...
-quality_score: 10
+quality_score: 9.2
 company: 華碩
 stock_code: 2357
 md_date: 2025/10/30

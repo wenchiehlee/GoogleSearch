@@ -1,7 +1,7 @@
 ---
 url: https://news.cnyes.com/news/id/6239547
 title: 鉅亨速報- Factset 最新調查：技嘉(2376-TW)EPS預估下修至19.41元 ...
-quality_score: 8.2
+quality_score: 8.6
 company: 技嘉
 stock_code: 2376
 md_date: 2025/11/17
