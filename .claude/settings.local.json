@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Update Type 51 column names to match actual CSV structure\n\n- Replace placeholder notation \\({N}EPS\\) with concrete year examples \\(2025EPS\\)\n- Simplify descriptions by removing redundant Chinese prefixes\n- Maintain dynamic year explanation in Notes column\n- Ensures consistency with factset_portfolio_summary_latest.csv\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(ls:*)",
+      "Bash(done)",
+      "Bash(python:*)",
+      "Bash(cp:*)",
+      "Bash(grep:*)",
+      "Bash(git commit:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}

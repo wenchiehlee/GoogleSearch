@@ -30,19 +30,37 @@ if sys.platform == 'win32':
 class OldFileQuarantiner:
     """Quarantine MD files older than specified threshold"""
 
-    def __init__(self, days_threshold: int = 90, max_quality: float = None):
+    def __init__(self, days_threshold: int = None, max_quality: float = None):
         self.data_dir = Path("data/md")
         self.quarantine_dir = Path("data/quarantine/old_files")
         self.quarantine_dir.mkdir(parents=True, exist_ok=True)
         self.days_threshold = days_threshold
         self.max_quality = max_quality
-        self.cutoff_date = datetime.now() - timedelta(days=days_threshold)
 
-        print(f"[INFO] Quarantine threshold: {days_threshold} days")
-        print(f"[INFO] Cutoff date: {self.cutoff_date.strftime('%Y-%m-%d')}")
+        # Only calculate cutoff_date if days_threshold is specified
+        if self.days_threshold is not None:
+            self.cutoff_date = datetime.now() - timedelta(days=days_threshold)
+            print(f"[INFO] Age threshold: {days_threshold} days")
+            print(f"[INFO] Cutoff date: {self.cutoff_date.strftime('%Y-%m-%d')}")
+        else:
+            self.cutoff_date = None
+
         if self.max_quality is not None:
-            print(f"[INFO] Max quality threshold: {self.max_quality}")
-        print(f"[INFO] Files older than cutoff or below quality will be quarantined\n")
+            print(f"[INFO] Quality threshold: {self.max_quality}")
+
+        # Build filter description
+        filters = []
+        if self.cutoff_date is not None:
+            filters.append(f"older than {days_threshold} days")
+        if self.max_quality is not None:
+            filters.append(f"quality <= {self.max_quality}")
+
+        if filters:
+            print(f"[INFO] Quarantine criteria: {' OR '.join(filters)}\n")
+        else:
+            print(f"[INFO] No filters specified - will use default (90 days)\n")
+            self.days_threshold = 90
+            self.cutoff_date = datetime.now() - timedelta(days=90)
 
     def extract_md_date(self, filepath: Path) -> Tuple[datetime, str]:
         """Extract md_date from MD file"""
@@ -77,17 +95,39 @@ class OldFileQuarantiner:
             # Return very old date to be safe
             return datetime(2020, 1, 1), "2020/01/01 (error)"
 
-    def extract_quality_score(self, filepath: Path) -> float:
-        """Extract quality_score from MD file"""
+    def extract_quality_score(self, filepath: Path) -> tuple[float, bool]:
+        """
+        Extract quality_score or 品質評分 from MD file
+        Returns: (quality_score, is_consistent)
+        - is_consistent=False if both fields exist but have different values
+        """
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read(2000)
-            match = re.search(r'quality_score:\s*([0-9]+(?:\.[0-9]+)?)', content)
-            if match:
-                return float(match.group(1))
+
+            # Extract both field names if they exist
+            en_match = re.search(r'quality_score:\s*([0-9]+(?:\.[0-9]+)?)', content)
+            zh_match = re.search(r'品質評分:\s*([0-9]+(?:\.[0-9]+)?)', content)
+
+            en_score = float(en_match.group(1)) if en_match else None
+            zh_score = float(zh_match.group(1)) if zh_match else None
+
+            # Check for inconsistency
+            if en_score is not None and zh_score is not None:
+                if abs(en_score - zh_score) > 0.01:  # Allow tiny float differences
+                    print(f"[WARNING] Inconsistent quality scores in {filepath.name}: "
+                          f"quality_score={en_score}, 品質評分={zh_score}")
+                    return (en_score, False)  # Return English version but mark as inconsistent
+
+            # Return whichever score exists
+            if en_score is not None:
+                return (en_score, True)
+            if zh_score is not None:
+                return (zh_score, True)
+
         except Exception as e:
             print(f"[ERROR] Failed to extract quality score from {filepath.name}: {e}")
-        return -1.0
+        return (-1.0, True)
 
     def extract_stock_info(self, filename: str) -> Tuple[str, str]:
         """Extract stock code and company name from filename"""
@@ -96,10 +136,15 @@ class OldFileQuarantiner:
             return match.group(1), match.group(2)
         return "Unknown", "Unknown"
 
-    def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float) -> List[str]:
+    def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float, is_consistent: bool) -> List[str]:
         reasons = []
-        if date_obj < self.cutoff_date:
+        # Check for data inconsistency first
+        if not is_consistent:
+            reasons.append("inconsistent_quality")
+        # Only check age if days_threshold was specified
+        if self.cutoff_date is not None and date_obj < self.cutoff_date:
             reasons.append("old")
+        # Only check quality if max_quality was specified
         if self.max_quality is not None and quality_score >= 0 and quality_score <= self.max_quality:
             reasons.append("low_quality")
         return reasons
@@ -113,8 +158,8 @@ class OldFileQuarantiner:
 
         for filepath in md_files:
             date_obj, date_str = self.extract_md_date(filepath)
-            quality_score = self.extract_quality_score(filepath)
-            reasons = self._get_quarantine_reasons(date_obj, quality_score)
+            quality_score, is_consistent = self.extract_quality_score(filepath)
+            reasons = self._get_quarantine_reasons(date_obj, quality_score, is_consistent)
 
             if reasons:
                 stock_code, company_name = self.extract_stock_info(filepath.name)
@@ -138,11 +183,12 @@ class OldFileQuarantiner:
         """Generate detailed report of old files"""
         report_lines = []
         report_lines.append("=" * 80)
-        report_lines.append("OLD FILES QUARANTINE REPORT")
+        report_lines.append("QUARANTINE REPORT")
         report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        report_lines.append(f"Threshold: {self.days_threshold} days (cutoff: {self.cutoff_date.strftime('%Y-%m-%d')})")
+        if self.cutoff_date is not None:
+            report_lines.append(f"Age threshold: {self.days_threshold} days (cutoff: {self.cutoff_date.strftime('%Y-%m-%d')})")
         if self.max_quality is not None:
-            report_lines.append(f"Max quality: {self.max_quality}")
+            report_lines.append(f"Quality threshold: <= {self.max_quality}")
         report_lines.append("=" * 80)
         report_lines.append("")
 
@@ -192,6 +238,9 @@ class OldFileQuarantiner:
         if self.max_quality is not None:
             low_quality_count = sum(1 for r in results if "low_quality" in r['reasons'])
             report_lines.append(f"Low quality files: {low_quality_count}")
+        inconsistent_count = sum(1 for r in results if "inconsistent_quality" in r['reasons'])
+        if inconsistent_count > 0:
+            report_lines.append(f"Inconsistent quality scores: {inconsistent_count}")
         oldest = max(results, key=lambda x: x['age_days'])
         report_lines.append(f"Oldest file: {oldest['filename']} ({oldest['age_days']} days)")
 
@@ -237,8 +286,8 @@ Examples:
 
     parser.add_argument('--quarantine', action='store_true',
                        help='Actually move files to quarantine (default: report only)')
-    parser.add_argument('--days', type=int, default=90,
-                       help='Age threshold in days (default: 90)')
+    parser.add_argument('--days', type=int, default=None,
+                       help='Age threshold in days (omit to ignore age)')
     parser.add_argument('--max-quality', type=float, default=None,
                        help='Quarantine files with quality_score <= max-quality')
     parser.add_argument('--output', type=str, default='old_files_report.txt',

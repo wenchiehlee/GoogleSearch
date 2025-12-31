@@ -35,7 +35,7 @@ jobs:
       - name: Run quarantine script (quality threshold)
         run: |
           echo "🗂️ Starting quarantine process..."
-          echo "yes" | python quarantine_files.py --max-quality 6 --quarantine
+          echo "yes" | python quarantine_files.py --max-quality 6.5 --quarantine
 
       - name: Count files after quarantine
         run: |
@@ -72,7 +72,7 @@ jobs:
             -m "🗂️ Weekly Quarantine - Files Cleanup" \
             -m "Automatically quarantined MD files older than 90 days or low quality" \
             -m "- Files quarantined: ${QUARANTINED_COUNT}" \
-            -m "- Threshold: 90 days, quality <= 6" \
+            -m "- Threshold: 90 days, quality <= 6.5" \
             -m "- Trigger: Weekly scheduled task" \
             -m "- Date: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" \
             -m "📋 Report: old_files_report.txt" \
@@ -113,7 +113,7 @@ jobs:
                   '',
                   '### Summary',
                   `- **Files quarantined**: ${totalFiles}`,
-                  '- **Threshold**: Files older than 90 days or quality <= 6',
+                  '- **Threshold**: Files older than 90 days or quality <= 6.5',
                   '- **Location**: `data/quarantine/old_files/`',
                   `- **Date**: ${new Date().toISOString().split('T')[0]}`,
                   '',
