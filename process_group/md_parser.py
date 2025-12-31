@@ -32,6 +32,7 @@ class MDParser:
             'search_query': r'search_query:\s*(.+?)(?:\n|$)',
             'keywords': r'keywords:\s*(.+?)(?:\n|$)',
             'search_terms': r'search_terms:\s*(.+?)(?:\n|$)',
+            'quality_score': r'quality_score:\s*([0-9]+(?:\.[0-9]+)?)(?:\n|$)',  # 品質評分
             'query_pattern': r'query_pattern:\s*(.+?)(?:\n|$)',
             'original_query': r'original_query:\s*(.+?)(?:\n|$)',
             'company_code': r'company_code:\s*(.+?)(?:\n|$)',
@@ -204,25 +205,39 @@ class MDParser:
             
             # 增強的 YAML front matter 解析
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
-            
+
+            # CRITICAL: Read quality_score from MD file YAML (不重新計算)
+            # 直接讀取 Search Group 寫入的 quality_score，作為 品質評分
+            quality_score_from_yaml = yaml_data.get('quality_score')
+            if quality_score_from_yaml is not None:
+                try:
+                    data_richness = float(quality_score_from_yaml)
+                    print(f"✓ 使用 MD 檔案的 quality_score: {data_richness}")
+                except (ValueError, TypeError):
+                    print(f"⚠️  quality_score 格式錯誤，使用預設值 0")
+                    data_richness = 0.0
+            else:
+                print(f"⚠️  MD 檔案缺少 quality_score，使用預設值 0")
+                data_richness = 0.0
+
             # 查詢模式提取 (v3.6.1 核心功能)
             search_keywords = self._extract_search_keywords_enhanced(content, yaml_data)
-            
+
             # 核心驗證：對照觀察名單 (增強版)
             validation_result = self._validate_against_watch_list_enhanced(company_code, company_name)
-            
+
             # 原有功能：日期提取
             content_date = self._extract_content_date_bulletproof(content)
             extraction_status = "content_extraction" if content_date else "no_date_found"
-            
+
             # 原有功能：EPS 等資料提取
             eps_data = self._extract_eps_data(content)
             eps_stats = self._calculate_eps_statistics(eps_data)
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
-            
-            # MODIFIED: Enhanced data richness calculation with content date penalty
-            data_richness = self._calculate_data_richness_enhanced(eps_stats, target_price, analyst_count, content_date)
+
+            # REMOVED: 不再重新計算 quality score，直接使用 YAML 中的值
+            # data_richness 已從上方 YAML 讀取
             
             # 內容品質評估 (v3.6.1)
             content_quality_metrics = self._assess_content_quality(content)

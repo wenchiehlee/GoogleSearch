@@ -72,18 +72,14 @@ class QualityAnalyzer:
             consistency_analysis = self._analyze_data_consistency(parsed_data)
             validation_analysis = self._analyze_content_validation(parsed_data)
             
-            # 計算基礎品質分數
-            base_quality_score = (
-                completeness_analysis['score'] * self.QUALITY_WEIGHTS['data_completeness'] +
-                coverage_analysis['score'] * self.QUALITY_WEIGHTS['analyst_coverage'] +
-                freshness_analysis['score'] * self.QUALITY_WEIGHTS['data_freshness'] +
-                content_analysis['score'] * self.QUALITY_WEIGHTS['content_quality'] +
-                consistency_analysis['score'] * self.QUALITY_WEIGHTS['data_consistency'] +
-                validation_analysis['score'] * self.QUALITY_WEIGHTS['content_validation']
-            )
-            
-            # 確保分數在 0-10 範圍內
-            final_quality_score = round(min(max(base_quality_score, 0), 10), 1)
+            # CRITICAL: 直接使用 MD 檔案的 quality_score，不重新計算
+            # 品質評分應該只從 MD 檔案讀取，保持與 Search Group 一致
+            md_quality_score = parsed_data.get('quality_score', 0)
+            if md_quality_score > 0:
+                final_quality_score = round(md_quality_score, 1)
+            else:
+                # Fallback: 如果 MD 檔案缺少 quality_score，使用預設值 0
+                final_quality_score = 0.0
             
             # 確定品質類別和狀態
             quality_category = self._determine_quality_category_fixed(final_quality_score)
@@ -117,7 +113,7 @@ class QualityAnalyzer:
                 },
                 
                 'score_adjustment': {
-                    'base_score': round(base_quality_score, 1),
+                    'base_score': round(final_quality_score, 1),  # 使用 MD 檔案的品質評分
                     'final_score': final_quality_score,
                     'adjustment_reason': "正常評分，無調整"
                 }
