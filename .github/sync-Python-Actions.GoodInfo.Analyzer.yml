@@ -4,7 +4,6 @@ group:
   - files:
       - source: data/reports/factset_portfolio_summary_latest.csv
         dest:   data/stage1_raw/factset_portfolio_summary_latest.csv
-  - files:
       - source: data/reports/factset_detailed_report_latest.csv
         dest:   data/stage1_raw/factset_detailed_report_latest.csv
     repos: |
