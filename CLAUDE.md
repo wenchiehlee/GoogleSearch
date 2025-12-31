@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Stage 0: Watchlist Update (Daily 18:00 UTC)
 ├─ Get觀察名單.py → Updates stock lists
 
-Stage 1: Search Group (v3.5.1) → Stage 2: Process Group (v3.6.1)
+Stage 1: Search Group (v3.6.0) → Stage 2: Process Group (v3.6.1)
 ├─ Searches with API key rotation    ├─ Analyzes MD files
 ├─ Validates content                  ├─ Scores quality
 ├─ Generates MD files                 ├─ Generates reports
@@ -109,7 +109,42 @@ Supports up to 7 Google API keys for quota management:
 - Automatic failover on 429 (quota exceeded)
 - ~700 searches/day capacity with 7 keys
 
-### 4. Quality Scoring System
+### 4. Multi-Layer Content Validation (Search Group v3.6.0)
+
+Prevents false positives where search results mention the company in sidebar/ads but the article is about a different company. Uses 4-layer validation:
+
+**Layer 1: Title Validation** (Highest Priority)
+- Extracts company code from HTML `<title>` and `og:title` meta tags
+- **Immediately rejects** if title mentions different company code
+- Example: Search for "2454 聯發科" but title shows "欣興(3037-TW)" → rejected
+- Confidence: 0 (rejected) or continues to next layer
+
+**Layer 2: Combined Pattern Matching**
+- Looks for symbol and name appearing together in common patterns:
+  - `聯發科(2454-TW)` or `(2454-TW) 聯發科`
+  - `2454-TW 聯發科` within 20 characters
+  - `代號: 2454 聯發科`
+- Strong signal that content is genuinely about the company
+- Confidence: 1.2 (high)
+
+**Layer 3: Proximity Check**
+- Verifies symbol "2454" and name "聯發科" appear within 200 characters
+- Prevents false matches from sidebar/recommended articles
+- Confidence: 0.8-1.0 (based on distance, closer = higher)
+
+**Layer 4: Context-Aware Fallback**
+- Original validation logic with stricter thresholds
+- Checks symbol in proper stock code contexts (e.g., "2330-TW", not "2330元")
+- Detects false positives where symbol appears as price (e.g., "目標價2330元")
+- Confidence: Reduced weights (0.5 for symbol, 0.3 for name)
+- Threshold: 0.7 (stricter than previous 0.8)
+
+**Benefits:**
+- Eliminates false positives from cross-company page references
+- Scan of 115 files found 5 false positives, all would be caught by Layer 1
+- Provides validation_layer field in response for debugging
+
+### 5. Quality Scoring System
 
 Standardized 0-10 scale used throughout:
 - **9-10** (🟢 完整): EPS 90%+, 20+ analysts, ≤7 days
@@ -117,7 +152,7 @@ Standardized 0-10 scale used throughout:
 - **3-7** (🟠 部分): EPS 30%+, 5+ analysts, ≤90 days
 - **0-2** (🔴 不足): Limited/missing data
 
-### 5. Graceful Degradation (Process Group)
+### 6. Graceful Degradation (Process Group)
 
 Process CLI uses "graceful degradation" - if optional modules fail to load, core functionality continues. Critical modules (md_scanner, md_parser) must load successfully.
 
@@ -190,8 +225,8 @@ search_query: 台積電 2330 factset EPS 預估
 quality_score: 8
 company: 台積電
 stock_code: 2330
-content_validation: {"is_valid": true, "reason": "..."}
-version: v3.5.1
+content_validation: {"is_valid": true, "reason": "...", "validation_layer": "combined_pattern"}
+version: v3.6.0
 ---
 [Content continues...]
 ```
@@ -219,7 +254,7 @@ All reports generated in `data/reports/` as CSV and uploaded to Google Sheets.
 ## Version Tracking
 
 Current versions:
-- Search Group: v3.5.1 (API key rotation + content validation)
+- Search Group: v3.6.0 (Multi-Layer Validation + API key rotation)
 - Process Group: v3.6.1 (watchlist analysis + query patterns)
 - Overall Pipeline: v3.6.1
 
