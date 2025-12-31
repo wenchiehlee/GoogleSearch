@@ -35,13 +35,19 @@ if sys.platform == 'win32':
     sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 # Load environment variables from .env file
+env_file = Path('.env')
 try:
     from dotenv import load_dotenv
-    load_dotenv()
-    print("[OK] Loaded environment variables from .env file")
-except ImportError:
-    # If python-dotenv is not installed, try to load .env manually
-    env_file = Path('.env')
+    if env_file.exists():
+        loaded = load_dotenv(dotenv_path=env_file)
+        if loaded:
+            print("[OK] Loaded environment variables from .env file")
+        else:
+            print("📄 .env file found but not loaded; falling back to manual load")
+            raise RuntimeError("dotenv load failed")
+    else:
+        print("⚠️ No .env file found")
+except (ImportError, RuntimeError):
     if env_file.exists():
         print("📄 Loading .env file manually...")
         with open(env_file, 'r', encoding='utf-8') as f:
@@ -53,8 +59,6 @@ except ImportError:
                     value = value.strip('"\'')
                     os.environ[key.strip()] = value
         print("✅ Loaded environment variables manually")
-    else:
-        print("⚠️ No .env file found")
 
 # Version Information
 __version__ = "3.5.1"

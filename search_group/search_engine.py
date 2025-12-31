@@ -9,13 +9,26 @@ FIXED: Type conversion issue in search_comprehensive method
 
 import os
 import re
+import sys
 import hashlib
 import requests
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple, Union
 from urllib.parse import urljoin, urlparse
 import time
 import random
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.append(str(REPO_ROOT))
+
+try:
+    from process_group.md_parser import MDParser
+    from process_group.quality_analyzer import QualityAnalyzer
+except Exception:
+    MDParser = None
+    QualityAnalyzer = None
 
 class SearchEngine:
     """Enhanced Search Engine with md_date extraction - v3.5.1-modified"""
@@ -51,16 +64,35 @@ class SearchEngine:
                 # The single most effective query for recent FactSet reports
                 'site:cnyes.com "FactSet" "{symbol}" "EPS" "預估"',
                 # Backup query for broader coverage
-                '"{symbol}" "FactSet" "目標價" after:2024'
+                '"{symbol}" "FactSet" "目標價" after:2024',
+                'site:cnyes.com "{symbol}" "{name}" "FactSet"',
+                'site:cnyes.com "{symbol}" "聯強" "FactSet"',
+                '"{symbol}" "{name}" "FactSet" "共識"'
             ],
             'eps_forecast': [
                 # Direct EPS forecast table search
                 '"{name}" "EPS" "預估" "2025" "2026"',
                 # Analyst consensus specific
-                '"{symbol}" "分析師" "共識" "目標價"'
+                '"{symbol}" "分析師" "共識" "目標價"',
+                '"{symbol}" "{name}" "分析師" "FactSet"',
+                '"{symbol}" "{name}" "EPS" "目標價"'
+            ],
+            'factset_secondary': [
+                'site:statementdog.com "{symbol}" "FactSet"',
+                'site:moneydj.com "{symbol}" "FactSet"',
+                'site:yahoo.com "{symbol}" "FactSet"'
             ]
         }
         
+        self.md_parser = None
+        self.quality_analyzer = None
+        if MDParser is not None and QualityAnalyzer is not None:
+            try:
+                self.md_parser = MDParser()
+                self.quality_analyzer = QualityAnalyzer()
+            except Exception as exc:
+                print(f"⚠️ Quality scoring init failed: {exc}")
+
         print(f"SearchEngine v{self.version} initialized with md_date extraction")
 
     def search_comprehensive(self, symbol: str, name: str, count: Union[int, str] = 'all', min_quality: int = 4) -> List[Dict[str, Any]]:
@@ -164,7 +196,7 @@ class SearchEngine:
             validation_result = self._validate_content(content, symbol, name)
             
             # Quality assessment
-            quality_score = self._assess_quality(content, title, url)
+            quality_score = self._assess_quality(content, title, url, symbol, name)
             
             # Apply validation penalty if needed
             if not validation_result['is_valid']:
@@ -515,39 +547,66 @@ class SearchEngine:
                 'false_positive': False
             }
 
-    def _assess_quality(self, content: str, title: str, url: str) -> int:
+    def _assess_quality(self, content: str, title: str, url: str, symbol: str, name: str) -> float:
         """Assess content quality (0-10 scale)"""
+        if self.md_parser is not None and self.quality_analyzer is not None:
+            content_date = self.md_parser._extract_content_date_bulletproof(content)
+            eps_data = self.md_parser._extract_eps_data(content)
+            eps_stats = self.md_parser._calculate_eps_statistics(eps_data)
+            target_price = self.md_parser._extract_target_price(content)
+            analyst_count = self.md_parser._extract_analyst_count(content)
+            validation_result = self.md_parser._validate_against_watch_list_enhanced(symbol, name)
+
+            parsed_data = {
+                'company_code': symbol,
+                'company_name': name,
+                'data_source': 'factset',
+                'file_mtime': datetime.now(),
+                'content_date': content_date,
+                'target_price': target_price,
+                'analyst_count': analyst_count,
+                'content': content,
+                'validation_result': validation_result,
+                'content_validation_passed': validation_result.get('overall_status') == 'valid',
+                'validation_warnings': validation_result.get('warnings', []),
+                'validation_errors': validation_result.get('errors', []),
+            }
+            parsed_data.update(eps_stats)
+
+            quality_data = self.quality_analyzer.analyze(parsed_data)
+            return quality_data.get('quality_score', 0.0)
+
         score = 0
-        
+
         # Content length scoring
         if len(content) > 2000:
             score += 2
         elif len(content) > 1000:
             score += 1
-        
+
         # Financial keywords
         financial_keywords = [
-            'eps', '每股盈餘', '營收', '獲利', '分析師', '預估', 'factset', 
+            'eps', '每股盈餘', '營收', '獲利', '分析師', '預估', 'factset',
             '目標價', '評等', 'bloomberg', 'consensus'
         ]
-        
+
         keyword_count = sum(1 for keyword in financial_keywords if keyword in content.lower())
         score += min(keyword_count, 4)
-        
+
         # Source quality
         if 'cnyes.com' in url:
             score += 2
         elif any(site in url for site in ['statementdog.com', 'moneydj.com', 'yahoo.com']):
             score += 1
-        
+
         # Title quality
         if any(word in title.lower() for word in ['factset', 'eps', '預估', '分析師']):
             score += 1
-        
+
         # Numerical data presence
         if re.search(r'\d+\.?\d*\s*元', content):
             score += 1
-        
+
         return min(score, 10)
 
 
