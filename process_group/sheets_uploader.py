@@ -210,41 +210,34 @@ class SheetsUploader:
             if keyword_df is not None and not keyword_df.empty:
                 # 檢查是否為查詢模式報告
                 if len(keyword_df.columns) > 0 and keyword_df.columns[0] == 'Query pattern':
-                    keyword_path = os.path.join(self.validation_settings['csv_output_dir'], f'query_pattern_summary_{timestamp}.csv')
-                    keyword_latest = os.path.join(self.validation_settings['csv_output_dir'], 'factset_query_pattern_summary_latest.csv')
+                    keyword_path = os.path.join(self.validation_settings['csv_output_dir'], 'factset_query_pattern_summary_latest.csv')
                     report_type = "查詢模式統計"
                 else:
-                    keyword_path = os.path.join(self.validation_settings['csv_output_dir'], f'keyword_summary_{timestamp}.csv')
-                    keyword_latest = os.path.join(self.validation_settings['csv_output_dir'], 'keyword_summary_latest.csv')
+                    keyword_path = os.path.join(self.validation_settings['csv_output_dir'], 'keyword_summary_latest.csv')
                     report_type = "關鍵字統計"
-                
+
                 keyword_df_clean = keyword_df.fillna('')
                 keyword_df_clean.to_csv(keyword_path, index=False, encoding='utf-8-sig')
-                keyword_df_clean.to_csv(keyword_latest, index=False, encoding='utf-8-sig')
-                
+
                 saved_files['keyword'] = keyword_path
                 print(f"✅ {report_type} CSV: {os.path.basename(keyword_path)}")
             
             # 4. 觀察名單報告 CSV
             if watchlist_df is not None and not watchlist_df.empty:
-                watchlist_path = os.path.join(self.validation_settings['csv_output_dir'], f'watchlist_summary_{timestamp}.csv')
-                watchlist_latest = os.path.join(self.validation_settings['csv_output_dir'], 'watchlist_summary_latest.csv')
-                
+                watchlist_path = os.path.join(self.validation_settings['csv_output_dir'], 'watchlist_summary_latest.csv')
+
                 watchlist_df_clean = watchlist_df.fillna('')
                 watchlist_df_clean.to_csv(watchlist_path, index=False, encoding='utf-8-sig')
-                watchlist_df_clean.to_csv(watchlist_latest, index=False, encoding='utf-8-sig')
-                
+
                 saved_files['watchlist'] = watchlist_path
                 print(f"✅ 觀察名單統計 CSV: {os.path.basename(watchlist_path)}")
-            
+
             # 5. 生成驗證摘要 CSV
             validation_data = self._generate_validation_summary_data_v361(portfolio_df, detailed_df, watchlist_df)
-            validation_path = os.path.join(self.validation_settings['csv_output_dir'], f'validation_summary_{timestamp}.csv')
-            validation_latest = os.path.join(self.validation_settings['csv_output_dir'], 'validation_summary_latest.csv')
-            
+            validation_path = os.path.join(self.validation_settings['csv_output_dir'], 'validation_summary_latest.csv')
+
             validation_data.to_csv(validation_path, index=False, encoding='utf-8-sig')
-            validation_data.to_csv(validation_latest, index=False, encoding='utf-8-sig')
-            
+
             saved_files['validation'] = validation_path
             print(f"✅ 驗證摘要 CSV: {os.path.basename(validation_path)}")
             
@@ -253,7 +246,7 @@ class SheetsUploader:
             
             print(f"\n🎉 CSV-only 模式完成！")
             print(f"📁 所有檔案位於: {os.path.abspath(self.validation_settings['csv_output_dir'])}")
-            print(f"📋 使用指南: generation_guide_{timestamp}.md")
+            print(f"📋 使用指南: generation_guide_latest.md")
             print(f"\n💡 手動上傳建議:")
             print(f"   1. 開啟 Google Sheets")
             print(f"   2. 匯入各個 *_latest.csv 檔案")
@@ -564,15 +557,11 @@ class SheetsUploader:
 FactSet Pipeline v3.6.1 - CSV Only Mode
 避免 Google Sheets API 限制，提供穩定可靠的輸出方案
 """
-        
-        # 儲存使用指南
-        guide_path = os.path.join(self.validation_settings['csv_output_dir'], f'generation_guide_{timestamp}.md')
-        guide_latest = os.path.join(self.validation_settings['csv_output_dir'], 'generation_guide_latest.md')
-        
+
+        # 儲存使用指南 (只生成 latest 版本)
+        guide_path = os.path.join(self.validation_settings['csv_output_dir'], 'generation_guide_latest.md')
+
         with open(guide_path, 'w', encoding='utf-8') as f:
-            f.write(guide_content)
-        
-        with open(guide_latest, 'w', encoding='utf-8') as f:
             f.write(guide_content)
 
     def _handle_validation_summary_v361_safe(self, portfolio_df: pd.DataFrame, detailed_df: pd.DataFrame, 
@@ -787,19 +776,13 @@ FactSet Pipeline v3.6.1 - CSV Only Mode
         return pd.DataFrame(summary_rows)
 
     def _save_validation_summary_csv(self, validation_df: pd.DataFrame) -> str:
-        """儲存驗證摘要為 CSV 檔案"""
+        """儲存驗證摘要為 CSV 檔案 (只生成 latest 版本)"""
         try:
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            csv_filename = f'validation_summary_{timestamp}.csv'
-            csv_path = os.path.join(self.validation_settings['csv_output_dir'], csv_filename)
-            
+            csv_path = os.path.join(self.validation_settings['csv_output_dir'], 'validation_summary_latest.csv')
+
             # 儲存 CSV
             validation_df.to_csv(csv_path, index=False, encoding='utf-8-sig')
-            
-            # 同時儲存最新版本
-            latest_csv_path = os.path.join(self.validation_settings['csv_output_dir'], 'validation_summary_latest.csv')
-            validation_df.to_csv(latest_csv_path, index=False, encoding='utf-8-sig')
-            
+
             return csv_path
             
         except Exception as e:
