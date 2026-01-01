@@ -3,6 +3,11 @@
 Quarantine MD Files Script
 Moves problematic MD files to quarantine directory
 
+Detection Methods:
+  1. CSV-based (RECOMMENDED, default): Fast, uses factset_detailed_report_latest.csv
+     - Criteria: quality_score >= 7 AND 分析師數量 = 0
+  2. File-based (fallback): Direct MD file parsing
+
 Quarantine Criteria (Optional Filters):
   - Old files (--days X: older than X days)
   - Low quality files (--max-quality N: quality_score <= N)
@@ -11,14 +16,10 @@ Always Checked:
   - Inflated quality scores (high score but no actual data)
   - Inconsistent quality metadata (quality_score ≠ 品質評分)
 
-Performance:
-  - Optimized single-pass file reading
-  - Real-time progress indicators
-  - ETA and processing speed display
-
 Usage:
-    python quarantine_files.py                        # Check inflated/inconsistent only
+    python quarantine_files.py                        # CSV-based detection (default)
     python quarantine_files.py --quarantine           # Actually move files
+    python quarantine_files.py --no-csv               # Use file-based detection
     python quarantine_files.py --days 90              # Add age filter (>90 days)
     python quarantine_files.py --max-quality 5        # Add quality filter (≤5)
     python quarantine_files.py --days 90 --max-quality 5 --quarantine
@@ -354,8 +355,85 @@ class OldFileQuarantiner:
             reasons.append("low_quality")
         return reasons
 
+    def scan_from_csv(self, csv_path: str = 'data/reports/factset_detailed_report_latest.csv') -> List[Dict]:
+        """
+        CSV-based detection (RECOMMENDED): Much faster and more reliable
+
+        Quarantine files with:
+        - quality_score >= 7 AND 分析師數量 = 0
+
+        This approach is simpler than parsing MD files and uses already-processed data.
+        """
+        try:
+            import pandas as pd
+        except ImportError:
+            print("[ERROR] pandas not installed. Install with: pip install pandas")
+            print("[INFO] Falling back to file-based scanning...")
+            return self.scan_old_files()
+
+        csv_path = Path(csv_path)
+        if not csv_path.exists():
+            print(f"[WARNING] CSV report not found: {csv_path}")
+            print("[INFO] Falling back to file-based scanning...")
+            return self.scan_old_files()
+
+        print(f"[INFO] Using CSV-based detection: {csv_path}")
+        print(f"[INFO] Criteria: quality_score >= 7 AND 分析師數量 = 0\n")
+
+        # Read CSV
+        df = pd.read_csv(csv_path, encoding='utf-8-sig')
+
+        # Find inflated: quality >= 7 but 0 analysts
+        inflated = df[
+            (df['品質評分'] >= 7) &
+            (df['分析師數量'] == 0)
+        ]
+
+        print(f"[INFO] Found {len(inflated)} files with inflated quality scores")
+
+        results = []
+        for idx, row in inflated.iterrows():
+            stock_code = row['代號']
+            company_name = row['名稱']
+            quality_score = row['品質評分']
+            md_date = str(row['MD日期'])
+
+            # Find matching MD file(s)
+            md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+
+            for md_file in md_files:
+                # Parse date for directory organization
+                if pd.notna(md_date) and len(md_date) >= 10:
+                    try:
+                        date_obj = datetime.strptime(md_date, '%Y-%m-%d')
+                        date_str = date_obj.strftime('%Y/%m/%d')
+                    except:
+                        date_obj = datetime.now()
+                        date_str = date_obj.strftime('%Y/%m/%d')
+                else:
+                    date_obj = datetime.now()
+                    date_str = date_obj.strftime('%Y/%m/%d')
+
+                results.append({
+                    'filepath': md_file,
+                    'date_obj': date_obj,
+                    'date_str': date_str,
+                    'quality_score': quality_score,
+                    'reasons': ['inflated_quality'],
+                    'company': company_name,
+                    'stock_code': stock_code
+                })
+                break  # Only quarantine first matching file per row
+
+        print(f"[INFO] CSV scan completed. Found {len(results)} files to quarantine\n")
+        return results
+
     def scan_old_files(self) -> List[Dict]:
-        """Scan for MD files older than threshold"""
+        """
+        File-based detection: Scans MD files directly (slower but works without CSV)
+
+        For better performance and reliability, use scan_from_csv() instead.
+        """
         results = []
 
         md_files = list(self.data_dir.glob("*.md"))
@@ -533,20 +611,28 @@ class OldFileQuarantiner:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Quarantine problematic MD files (inflated/inconsistent quality, optional age/quality filters)',
+        description='Quarantine problematic MD files (CSV-based detection by default, inflated/inconsistent quality)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python quarantine_files.py                 # Check inflated/inconsistent only
+  python quarantine_files.py                 # CSV-based detection (default, fast)
+  python quarantine_files.py --quarantine    # Actually move files
+  python quarantine_files.py --no-csv        # Use file-based detection (slower)
   python quarantine_files.py --days 60       # Add age filter (>60 days)
   python quarantine_files.py --max-quality 5 # Add quality filter (≤5)
-  python quarantine_files.py --quarantine    # Actually move files
   python quarantine_files.py --days 180 --quarantine  # Age filter + move
+
+CSV-based detection (RECOMMENDED):
+  - Uses: data/reports/factset_detailed_report_latest.csv
+  - Criteria: quality_score >= 7 AND 分析師數量 = 0
+  - Advantage: Fast, reliable, uses already-processed data
         """
     )
 
     parser.add_argument('--quarantine', action='store_true',
                        help='Actually move files to quarantine (default: report only)')
+    parser.add_argument('--no-csv', action='store_true',
+                       help='Use file-based detection instead of CSV (slower)')
     parser.add_argument('--days', type=int, default=None,
                        help='Age threshold in days (omit to ignore age)')
     parser.add_argument('--max-quality', type=float, default=None,
@@ -557,13 +643,19 @@ Examples:
     args = parser.parse_args()
 
     print("=" * 80)
-    print("OLD FILES QUARANTINE TOOL - FactSet Pipeline")
+    print("QUARANTINE TOOL - FactSet Pipeline")
     print("=" * 80)
     print()
 
-    # Scan for old files
+    # Scan for problematic files
     quarantiner = OldFileQuarantiner(days_threshold=args.days, max_quality=args.max_quality)
-    results = quarantiner.scan_old_files()
+
+    # Use CSV-based detection by default (faster, more reliable)
+    if args.no_csv:
+        print("[INFO] Using file-based detection (--no-csv flag)\n")
+        results = quarantiner.scan_old_files()
+    else:
+        results = quarantiner.scan_from_csv()
 
     # Generate report
     report = quarantiner.generate_report(results)
