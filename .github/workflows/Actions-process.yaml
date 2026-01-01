@@ -1,12 +1,10 @@
 name: Daily FactSet Process - Taiwan Financial Data
 on:
-  schedule:
-    # Run twice daily at 7:30 AM and 7:30 PM Taiwan time (UTC+8)
-    # 7:30 AM Taiwan = 11:30 PM UTC (previous day)
-    # 7:30 PM Taiwan = 11:30 AM UTC
-    - cron: '30 23 * * *'   # 7:30 AM Taiwan time
-    - cron: '30 11 * * *'   # 7:30 PM Taiwan time
-  
+  workflow_run:
+    workflows: ["Quarantine Files (CSV-based)"]  # Trigger after Quarantine completes
+    types:
+      - completed
+
   # Allow manual triggering
   workflow_dispatch:
     inputs:

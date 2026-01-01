@@ -2,13 +2,9 @@ name: Quarantine Files (CSV-based)
 
 on:
   workflow_run:
-    workflows: ["Daily FactSet Process - Taiwan Financial Data"]  # Trigger after CSV is generated
+    workflows: ["Daily FactSet Search - Taiwan Financial Data"]  # Trigger after Search completes
     types:
       - completed
-
-  schedule:
-    # Backup: Run daily at 09:30 UTC (17:30 Taiwan) if process didn't run
-    - cron: '30 9 * * *'
 
   workflow_dispatch:  # Allow manual trigger
 
