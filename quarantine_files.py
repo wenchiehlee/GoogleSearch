@@ -167,38 +167,61 @@ class OldFileQuarantiner:
         """
         Check if file has actual FactSet data (EPS, analysts, target price)
         Returns True if data found, False if missing
+
+        IMPROVED: Strips HTML to avoid false positives from HTML garbage
         """
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
 
-            # Check for EPS data patterns
+            # Strip HTML tags to avoid false positives
+            # Remove everything from <!DOCTYPE or <html to end of file
+            html_start = content.find('<!DOCTYPE')
+            if html_start == -1:
+                html_start = content.find('<html')
+
+            if html_start > 0:
+                # Only search content before HTML starts (actual article text)
+                content = content[:html_start]
+
+            # Also strip any remaining HTML tags
+            content = re.sub(r'<[^>]+>', '', content)
+
+            # Skip YAML frontmatter (only search actual content)
+            if content.startswith('---'):
+                parts = content.split('---', 2)
+                if len(parts) >= 3:
+                    content = parts[2]  # Content after second ---
+
+            # More specific EPS patterns (avoid HTML false positives)
             eps_patterns = [
-                r'EPS.*?(\d{4}).*?(\d+\.?\d*)',  # EPS with year and value
-                r'每股盈餘.*?(\d+\.?\d*)',
-                r'earnings.*?per.*?share',
+                r'(?:FY|20\d{2})\s*EPS.*?NT?\$?\s*(\d+\.?\d*)',  # EPS with year prefix
+                r'EPS.*?[預估值].*?(\d+\.?\d*)',  # EPS with forecast keywords
+                r'每股盈餘.*?(\d+\.?\d*)\s*元',  # Chinese EPS with units
             ]
 
-            # Check for analyst count
+            # More specific analyst patterns
             analyst_patterns = [
-                r'(\d+).*?位?分析師',
-                r'(\d+).*?analysts?',
-                r'分析師.*?(\d+)',
+                r'(\d+)\s*位分析師',  # X analysts (Chinese)
+                r'分析師共\s*(\d+)',  # Total X analysts
+                r'(\d+)\s*analysts?\s+covering',  # X analysts covering
             ]
 
-            # Check for target price
+            # More specific target price patterns
             target_patterns = [
-                r'目標價.*?(\d+\.?\d*)',
-                r'target.*?price.*?(\d+\.?\d*)',
-                r'NT\$?\s*(\d+\.?\d*)',
+                r'目標價.*?NT?\$?\s*(\d+\.?\d*)\s*元',  # Target price with units
+                r'target\s+price.*?NT?\$?\s*(\d+\.?\d*)',  # English target price
+                r'平均目標價.*?(\d+\.?\d*)',  # Average target price
             ]
 
             has_eps = any(re.search(pattern, content, re.IGNORECASE) for pattern in eps_patterns)
             has_analysts = any(re.search(pattern, content, re.IGNORECASE) for pattern in analyst_patterns)
             has_target = any(re.search(pattern, content, re.IGNORECASE) for pattern in target_patterns)
 
-            # Also check for FactSet specific content
-            has_factset = 'factset' in content.lower() or 'FactSet' in content
+            # Check for FactSet content in article (not just metadata)
+            # Require it to be near financial terms
+            has_factset = bool(re.search(r'FactSet.*?(?:預估|分析|目標價|EPS|盈餘)', content, re.IGNORECASE)) or \
+                         bool(re.search(r'(?:預估|分析|目標價|EPS|盈餘).*?FactSet', content, re.IGNORECASE))
 
             return has_eps or has_analysts or has_target or has_factset
 
@@ -253,27 +276,47 @@ class OldFileQuarantiner:
             # Get final quality score
             quality_score = en_score if en_score is not None else (zh_score if zh_score is not None else -1.0)
 
-            # Check for actual data (use full content)
+            # Check for actual data (IMPROVED: strip HTML first)
+            text_content = content
+
+            # Strip HTML tags to avoid false positives
+            html_start = text_content.find('<!DOCTYPE')
+            if html_start == -1:
+                html_start = text_content.find('<html')
+            if html_start > 0:
+                text_content = text_content[:html_start]
+
+            # Strip remaining HTML tags
+            text_content = re.sub(r'<[^>]+>', '', text_content)
+
+            # Skip YAML frontmatter
+            if text_content.startswith('---'):
+                parts = text_content.split('---', 2)
+                if len(parts) >= 3:
+                    text_content = parts[2]
+
+            # More specific patterns (same as has_actual_data)
             eps_patterns = [
-                r'EPS.*?(\d{4}).*?(\d+\.?\d*)',
-                r'每股盈餘.*?(\d+\.?\d*)',
-                r'earnings.*?per.*?share',
+                r'(?:FY|20\d{2})\s*EPS.*?NT?\$?\s*(\d+\.?\d*)',
+                r'EPS.*?[預估值].*?(\d+\.?\d*)',
+                r'每股盈餘.*?(\d+\.?\d*)\s*元',
             ]
             analyst_patterns = [
-                r'(\d+).*?位?分析師',
-                r'(\d+).*?analysts?',
-                r'分析師.*?(\d+)',
+                r'(\d+)\s*位分析師',
+                r'分析師共\s*(\d+)',
+                r'(\d+)\s*analysts?\s+covering',
             ]
             target_patterns = [
-                r'目標價.*?(\d+\.?\d*)',
-                r'target.*?price.*?(\d+\.?\d*)',
-                r'NT\$?\s*(\d+\.?\d*)',
+                r'目標價.*?NT?\$?\s*(\d+\.?\d*)\s*元',
+                r'target\s+price.*?NT?\$?\s*(\d+\.?\d*)',
+                r'平均目標價.*?(\d+\.?\d*)',
             ]
 
-            has_eps = any(re.search(pattern, content, re.IGNORECASE) for pattern in eps_patterns)
-            has_analysts = any(re.search(pattern, content, re.IGNORECASE) for pattern in analyst_patterns)
-            has_target = any(re.search(pattern, content, re.IGNORECASE) for pattern in target_patterns)
-            has_factset = 'factset' in content.lower() or 'FactSet' in content
+            has_eps = any(re.search(pattern, text_content, re.IGNORECASE) for pattern in eps_patterns)
+            has_analysts = any(re.search(pattern, text_content, re.IGNORECASE) for pattern in analyst_patterns)
+            has_target = any(re.search(pattern, text_content, re.IGNORECASE) for pattern in target_patterns)
+            has_factset = bool(re.search(r'FactSet.*?(?:預估|分析|目標價|EPS|盈餘)', text_content, re.IGNORECASE)) or \
+                         bool(re.search(r'(?:預估|分析|目標價|EPS|盈餘).*?FactSet', text_content, re.IGNORECASE))
 
             has_data = has_eps or has_analysts or has_target or has_factset
 
