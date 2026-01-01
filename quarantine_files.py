@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """
-Quarantine Old MD Files Script
-Moves MD files older than 3 months to quarantine directory
+Quarantine MD Files Script
+Moves problematic MD files to quarantine directory
+
+Quarantine Criteria:
+  - Old files (older than X days)
+  - Low quality files (quality_score <= threshold)
+  - Inflated quality scores (high score but no actual data)
+  - Inconsistent quality metadata
 
 Usage:
-    python quarantine_files.py                        # Scan and report only
+    python quarantine_files.py                        # Scan and report only (no age filter)
     python quarantine_files.py --quarantine           # Actually move files
     python quarantine_files.py --days 90              # Custom age threshold
     python quarantine_files.py --max-quality 5        # Quarantine low-quality files
@@ -136,11 +142,57 @@ class OldFileQuarantiner:
             return match.group(1), match.group(2)
         return "Unknown", "Unknown"
 
-    def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float, is_consistent: bool) -> List[str]:
+    def has_actual_data(self, filepath: Path) -> bool:
+        """
+        Check if file has actual FactSet data (EPS, analysts, target price)
+        Returns True if data found, False if missing
+        """
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Check for EPS data patterns
+            eps_patterns = [
+                r'EPS.*?(\d{4}).*?(\d+\.?\d*)',  # EPS with year and value
+                r'每股盈餘.*?(\d+\.?\d*)',
+                r'earnings.*?per.*?share',
+            ]
+
+            # Check for analyst count
+            analyst_patterns = [
+                r'(\d+).*?位?分析師',
+                r'(\d+).*?analysts?',
+                r'分析師.*?(\d+)',
+            ]
+
+            # Check for target price
+            target_patterns = [
+                r'目標價.*?(\d+\.?\d*)',
+                r'target.*?price.*?(\d+\.?\d*)',
+                r'NT\$?\s*(\d+\.?\d*)',
+            ]
+
+            has_eps = any(re.search(pattern, content, re.IGNORECASE) for pattern in eps_patterns)
+            has_analysts = any(re.search(pattern, content, re.IGNORECASE) for pattern in analyst_patterns)
+            has_target = any(re.search(pattern, content, re.IGNORECASE) for pattern in target_patterns)
+
+            # Also check for FactSet specific content
+            has_factset = 'factset' in content.lower() or 'FactSet' in content
+
+            return has_eps or has_analysts or has_target or has_factset
+
+        except Exception as e:
+            print(f"[ERROR] Failed to check data in {filepath.name}: {e}")
+            return True  # Assume has data if we can't check
+
+    def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float, is_consistent: bool, has_data: bool = True) -> List[str]:
         reasons = []
         # Check for data inconsistency first
         if not is_consistent:
             reasons.append("inconsistent_quality")
+        # Check for inflated quality score (high score but no actual data)
+        if quality_score >= 7.0 and not has_data:
+            reasons.append("inflated_quality")
         # Only check age if days_threshold was specified
         if self.cutoff_date is not None and date_obj < self.cutoff_date:
             reasons.append("old")
@@ -159,7 +211,11 @@ class OldFileQuarantiner:
         for filepath in md_files:
             date_obj, date_str = self.extract_md_date(filepath)
             quality_score, is_consistent = self.extract_quality_score(filepath)
-            reasons = self._get_quarantine_reasons(date_obj, quality_score, is_consistent)
+
+            # Check if file has actual data (for inflated quality detection)
+            has_data = self.has_actual_data(filepath)
+
+            reasons = self._get_quarantine_reasons(date_obj, quality_score, is_consistent, has_data)
 
             if reasons:
                 stock_code, company_name = self.extract_stock_info(filepath.name)
@@ -174,6 +230,7 @@ class OldFileQuarantiner:
                     'date_obj': date_obj,
                     'age_days': age_days,
                     'quality_score': quality_score,
+                    'has_data': has_data,
                     'reasons': reasons
                 })
 
@@ -238,6 +295,9 @@ class OldFileQuarantiner:
         if self.max_quality is not None:
             low_quality_count = sum(1 for r in results if "low_quality" in r['reasons'])
             report_lines.append(f"Low quality files: {low_quality_count}")
+        inflated_count = sum(1 for r in results if "inflated_quality" in r['reasons'])
+        if inflated_count > 0:
+            report_lines.append(f"Inflated quality scores (high score, no data): {inflated_count}")
         inconsistent_count = sum(1 for r in results if "inconsistent_quality" in r['reasons'])
         if inconsistent_count > 0:
             report_lines.append(f"Inconsistent quality scores: {inconsistent_count}")
