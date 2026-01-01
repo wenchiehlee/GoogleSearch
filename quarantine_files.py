@@ -3,26 +3,29 @@
 Quarantine MD Files Script
 Moves problematic MD files to quarantine directory
 
+DEFAULT BEHAVIOR (no flags):
+  - CSV-based detection: Uses factset_detailed_report_latest.csv
+  - Checks ONLY: quality_score >= 7 AND 分析師數量 = 0 (inflated quality)
+  - Does NOT check: age, low quality (unless --days or --max-quality added)
+
 Detection Methods:
   1. CSV-based (RECOMMENDED, default): Fast, uses factset_detailed_report_latest.csv
      - Criteria: quality_score >= 7 AND 分析師數量 = 0
-  2. File-based (fallback): Direct MD file parsing
+     - Only checks inflated quality scores
+  2. File-based (--no-csv): Direct MD file parsing
+     - Also checks: inconsistent quality metadata
 
-Quarantine Criteria (Optional Filters):
-  - Old files (--days X: older than X days)
-  - Low quality files (--max-quality N: quality_score <= N)
-
-Always Checked:
-  - Inflated quality scores (high score but no actual data)
-  - Inconsistent quality metadata (quality_score ≠ 品質評分)
+OPTIONAL Filters (must explicitly add):
+  - Age filter (--days X): Quarantine files older than X days
+  - Quality filter (--max-quality N): Quarantine files with score <= N
 
 Usage:
-    python quarantine_files.py                        # CSV-based detection (default)
+    python quarantine_files.py                        # CSV: inflated quality ONLY
     python quarantine_files.py --quarantine           # Actually move files
-    python quarantine_files.py --no-csv               # Use file-based detection
-    python quarantine_files.py --days 90              # Add age filter (>90 days)
-    python quarantine_files.py --max-quality 5        # Add quality filter (≤5)
-    python quarantine_files.py --days 90 --max-quality 5 --quarantine
+    python quarantine_files.py --no-csv               # File-based: inflated + inconsistent
+    python quarantine_files.py --days 90              # ADD age filter (>90 days)
+    python quarantine_files.py --max-quality 5        # ADD quality filter (≤5)
+    python quarantine_files.py --days 90 --quarantine # Age filter + quarantine
 """
 
 import os
@@ -611,21 +614,33 @@ class OldFileQuarantiner:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Quarantine problematic MD files (CSV-based detection by default, inflated/inconsistent quality)',
+        description='Quarantine problematic MD files with CSV-based detection',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  python quarantine_files.py                 # CSV-based detection (default, fast)
-  python quarantine_files.py --quarantine    # Actually move files
-  python quarantine_files.py --no-csv        # Use file-based detection (slower)
-  python quarantine_files.py --days 60       # Add age filter (>60 days)
-  python quarantine_files.py --max-quality 5 # Add quality filter (≤5)
-  python quarantine_files.py --days 180 --quarantine  # Age filter + move
+DEFAULT BEHAVIOR (no flags):
+  python quarantine_files.py                 # CSV-based: inflated quality ONLY
 
-CSV-based detection (RECOMMENDED):
+  What it checks:
+  - Inflated quality scores (score >= 7 AND 分析師數量 = 0)
+  - Source: data/reports/factset_detailed_report_latest.csv
+
+  What it does NOT check (unless explicitly added):
+  - Age-based filtering (no --days flag)
+  - Low quality filtering (no --max-quality flag)
+
+Examples:
+  python quarantine_files.py                 # Dry-run: Check inflated quality only
+  python quarantine_files.py --quarantine    # Move files: inflated quality only
+  python quarantine_files.py --no-csv        # File-based: inflated + inconsistent
+  python quarantine_files.py --days 60       # CSV + ADD age filter (>60 days)
+  python quarantine_files.py --max-quality 5 # CSV + ADD quality filter (≤5)
+  python quarantine_files.py --days 180 --quarantine  # Age + quality + move
+
+CSV-based detection (DEFAULT):
   - Uses: data/reports/factset_detailed_report_latest.csv
-  - Criteria: quality_score >= 7 AND 分析師數量 = 0
-  - Advantage: Fast, reliable, uses already-processed data
+  - Checks ONLY: quality_score >= 7 AND 分析師數量 = 0
+  - Fast, reliable, uses already-processed data
+  - Perfect for daily automation (no age checking)
         """
     )
 
