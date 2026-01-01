@@ -1,0 +1,33 @@
+{
+  "query": "\"2330\" \"分析師\" \"共識\" \"目標價\"",
+  "cached_at": "2025-12-30T17:19:23.853406",
+  "data": {
+    "query_info": {
+      "original_query": "\"2330\" \"分析師\" \"共識\" \"目標價\"",
+      "total_results": "2",
+      "search_time": 0.158011,
+      "timestamp": "2025-12-30T17:19:23.853346",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "爲什麼英偉達和其他這些芯片股票被認爲是今年剩餘時間的熱門投資",
+        "snippet": "Sep 3, 2025 ... ... ，分析師表示，人工智能將繼續推動芯片股票，並且在不斷變化的地緣政治和經濟背景下，這是'相對確定的領域'。Cantor的分析師 ... FactSet的共識爲3.85美元。 Although AMD's data ...",
+        "url": "https://news.futunn.com/hk/post/61625023/why-nvidia-and-these-other-chip-stocks-were-just-deemed",
+        "domain": "news.futunn.com",
+        "relevance_score": 5,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "NVDA/輝達- 研究報告與輝達概念股分析｜股市爆料同學會",
+        "snippet": "Sep 24, 2025 ... ... 共識（2.86 美元）5.9%，顯示營收規模擴張與毛利率提升已成功轉化為獲利成長 ... ,分析師下調評等與目標價美國銀行將邁威爾評級由「買進」降至「中立」，並將目標 ...",
+        "url": "https://www.cmoney.tw/forum/usstock/NVDA?tab=report",
+        "domain": "www.cmoney.tw",
+        "relevance_score": 3,
+        "has_factset_content": false,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

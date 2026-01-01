@@ -1,0 +1,69 @@
+2025-12-30 16:57:07,617 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 16:57:07,617 - INFO - Validating setup with key rotation support...
+2025-12-30 16:57:08,506 - ERROR - Setup validation failed: StockID_TWSE_TPEX.csv not found at StockID_TWSE_TPEX.csv
+2025-12-30 16:57:26,035 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 16:57:26,035 - ERROR - Search company failed: StockID_TWSE_TPEX.csv not found at StockID_TWSE_TPEX.csv
+2025-12-30 16:58:48,912 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 16:58:48,914 - INFO - Loaded 118 companies from watchlist
+2025-12-30 16:58:48,914 - INFO - Starting comprehensive search with key rotation for 2357 華碩 (saving 5 results, min quality 4)
+2025-12-30 16:58:56,970 - INFO - 💾 Creating VALID content: 2357_華碩_factset_f97b871b.md (Q:10/10)
+2025-12-30 16:58:56,974 - INFO - 💾 Creating VALID content: 2357_華碩_factset_677cedb1.md (Q:10/10)
+2025-12-30 16:58:56,977 - INFO - 💾 Creating VALID content: 2357_華碩_factset_2ecaa80f.md (Q:10/10)
+2025-12-30 16:58:56,981 - INFO - 💾 Creating VALID content: 2357_華碩_factset_f06a7c14.md (Q:10/10)
+2025-12-30 16:58:56,984 - INFO - 💾 Creating VALID content: 2357_華碩_factset_be421eb1.md (Q:10/10)
+2025-12-30 16:58:56,987 - INFO - ✅ 2357 completed - 5 unique files from 5 results (1 patterns, 1 API calls, 0 key rotations)
+2025-12-30 17:17:00,173 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 17:17:00,175 - INFO - Loaded 118 companies from watchlist
+2025-12-30 17:17:00,175 - INFO - Starting comprehensive search with key rotation for 2357 華碩 (saving 20 results, min quality 4)
+2025-12-30 17:17:20,897 - INFO - 📝 Updating VALID content: 2357_華碩_factset_f97b871b.md (Q:10/10)
+2025-12-30 17:17:20,901 - INFO - 📝 Updating VALID content: 2357_華碩_factset_677cedb1.md (Q:10/10)
+2025-12-30 17:17:20,903 - INFO - 📝 Updating VALID content: 2357_華碩_factset_2ecaa80f.md (Q:10/10)
+2025-12-30 17:17:20,908 - INFO - 📝 Updating VALID content: 2357_華碩_factset_f06a7c14.md (Q:10/10)
+2025-12-30 17:17:20,911 - INFO - 📝 Updating VALID content: 2357_華碩_factset_be421eb1.md (Q:10/10)
+2025-12-30 17:17:20,915 - INFO - 💾 Creating VALID content: 2357_華碩_factset_5b42d8ae.md (Q:10/10)
+2025-12-30 17:17:20,918 - INFO - 💾 Creating VALID content: 2357_華碩_factset_3302f298.md (Q:10/10)
+2025-12-30 17:17:20,922 - INFO - 💾 Creating VALID content: 2357_華碩_factset_88811b3b.md (Q:10/10)
+2025-12-30 17:17:20,924 - INFO - 💾 Creating VALID content: 2357_華碩_factset_d3042c13.md (Q:10/10)
+2025-12-30 17:17:20,927 - INFO - 💾 Creating VALID content: 2357_華碩_factset_4f7a6a98.md (Q:10/10)
+2025-12-30 17:17:20,929 - INFO - 📝 Updating VALID content: 2357_華碩_factset_2ecaa80f.md (Q:10/10)
+2025-12-30 17:17:20,931 - INFO - 📝 Updating VALID content: 2357_華碩_factset_f06a7c14.md (Q:10/10)
+2025-12-30 17:17:20,932 - INFO - 📝 Updating VALID content: 2357_華碩_factset_be421eb1.md (Q:10/10)
+2025-12-30 17:17:20,934 - INFO - 📝 Updating VALID content: 2357_華碩_factset_5b42d8ae.md (Q:10/10)
+2025-12-30 17:17:20,936 - INFO - 📝 Updating VALID content: 2357_華碩_factset_f97b871b.md (Q:10/10)
+2025-12-30 17:17:20,938 - INFO - 📝 Updating VALID content: 2357_華碩_factset_4f7a6a98.md (Q:10/10)
+2025-12-30 17:17:20,973 - INFO - ✅ 2357 completed - 10 unique files from 16 results (4 patterns, 4 API calls, 0 key rotations)
+2025-12-30 17:19:04,091 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 17:19:04,092 - INFO - Loaded 118 companies from watchlist
+2025-12-30 17:19:04,092 - INFO - Starting comprehensive search with key rotation for 2330 台積電 (saving 20 results, min quality 4)
+2025-12-30 17:19:25,526 - INFO - 💾 Creating VALID content: 2330_台積電_factset_4270e85a.md (Q:10/10)
+2025-12-30 17:19:25,529 - INFO - 💾 Creating VALID content: 2330_台積電_factset_842fc053.md (Q:10/10)
+2025-12-30 17:19:25,533 - INFO - 💾 Creating VALID content: 2330_台積電_factset_10751eec.md (Q:10/10)
+2025-12-30 17:19:25,537 - INFO - 💾 Creating VALID content: 2330_台積電_factset_247c37bf.md (Q:10/10)
+2025-12-30 17:19:25,539 - INFO - 💾 Creating VALID content: 2330_台積電_factset_70e0aa6f.md (Q:10/10)
+2025-12-30 17:19:25,541 - INFO - 💾 Creating VALID content: 2330_台積電_factset_51db417a.md (Q:10/10)
+2025-12-30 17:19:25,543 - INFO - 💾 Creating VALID content: 2330_台積電_factset_786a51d2.md (Q:10/10)
+2025-12-30 17:19:25,546 - INFO - 📝 Updating VALID content: 2330_台積電_factset_842fc053.md (Q:10/10)
+2025-12-30 17:19:25,549 - INFO - 💾 Creating VALID content: 2330_台積電_factset_7999b71b.md (Q:9/10)
+2025-12-30 17:19:25,554 - INFO - 💾 Creating VALID content: 2330_台積電_factset_48ea0e9a.md (Q:8/10)
+2025-12-30 17:19:25,582 - INFO - ✅ 2330 completed - 9 unique files from 10 results (4 patterns, 4 API calls, 0 key rotations)
+2025-12-30 17:20:08,769 - INFO - Search CLI v3.5.1 initialized with API key rotation support
+2025-12-30 17:20:08,770 - INFO - Loaded 118 companies from watchlist
+2025-12-30 17:20:08,770 - INFO - Starting comprehensive search with key rotation for 2317 鴻海 (saving 20 results, min quality 4)
+2025-12-30 17:20:36,053 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_78dc95c1.md (Q:10/10)
+2025-12-30 17:20:36,058 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_33a87a34.md (Q:10/10)
+2025-12-30 17:20:36,063 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_46cef980.md (Q:10/10)
+2025-12-30 17:20:36,067 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_8de67e29.md (Q:10/10)
+2025-12-30 17:20:36,074 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_0d8d8b0e.md (Q:10/10)
+2025-12-30 17:20:36,079 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_588279bc.md (Q:10/10)
+2025-12-30 17:20:36,083 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_3e00a7c4.md (Q:10/10)
+2025-12-30 17:20:36,089 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_4a5b5399.md (Q:10/10)
+2025-12-30 17:20:36,096 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_d06bf05a.md (Q:10/10)
+2025-12-30 17:20:36,103 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_f79e0c91.md (Q:10/10)
+2025-12-30 17:20:36,114 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_3ebb9e93.md (Q:7/10)
+2025-12-30 17:20:36,124 - INFO - 📝 Updating VALID content: 2317_鴻海_factset_33a87a34.md (Q:10/10)
+2025-12-30 17:20:36,130 - INFO - 📝 Updating VALID content: 2317_鴻海_factset_8de67e29.md (Q:10/10)
+2025-12-30 17:20:36,135 - INFO - 📝 Updating VALID content: 2317_鴻海_factset_0d8d8b0e.md (Q:10/10)
+2025-12-30 17:20:36,140 - INFO - 📝 Updating VALID content: 2317_鴻海_factset_4a5b5399.md (Q:10/10)
+2025-12-30 17:20:36,145 - INFO - 📝 Updating VALID content: 2317_鴻海_factset_46cef980.md (Q:10/10)
+2025-12-30 17:20:36,153 - INFO - 💾 Creating VALID content: 2317_鴻海_factset_7fe26de9.md (Q:9/10)
+2025-12-30 17:20:36,204 - INFO - ✅ 2317 completed - 12 unique files from 17 results (4 patterns, 4 API calls, 0 key rotations)

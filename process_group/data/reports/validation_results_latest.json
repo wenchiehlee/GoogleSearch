@@ -1,0 +1,32 @@
+{
+  "version": "3.6.1-modified",
+  "timestamp": "2026-01-01T10:58:52.009464",
+  "results": {
+    "md_scanner": {
+      "status": "success",
+      "message": "\u627e\u5230 0 \u500b MD \u6a94\u6848",
+      "files_count": 0
+    },
+    "md_parser": {
+      "status": "warning",
+      "message": "\u7121 MD \u6a94\u6848\u53ef\u6e2c\u8a66"
+    },
+    "keyword_analyzer": {
+      "status": "success",
+      "message": "KeywordAnalyzer v3.6.1 \u5df2\u8f09\u5165\uff0c\u652f\u63f4\u6a19\u6e96\u5316\u67e5\u8a62\u6a21\u5f0f\u5206\u6790"
+    },
+    "watchlist_analyzer": {
+      "status": "success",
+      "message": "WatchlistAnalyzer v3.6.1 \u5df2\u8f09\u5165\uff0c\u89c0\u5bdf\u540d\u55ae: 117 \u5bb6\u516c\u53f8",
+      "watchlist_size": 117
+    },
+    "report_generator": {
+      "status": "success",
+      "message": "ReportGenerator v3.6.1-modified \u5df2\u8f09\u5165\uff0c\u652f\u63f4\u589e\u5f37\u5167\u5bb9\u65e5\u671f\u8655\u7406"
+    },
+    "sheets_uploader": {
+      "status": "success",
+      "message": "SheetsUploader \u5df2\u8f09\u5165"
+    }
+  }
+}

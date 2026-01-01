@@ -15,7 +15,16 @@
       "Bash(tee:*)",
       "Bash(awk:*)",
       "Bash(test:*)",
-      "Bash(iconv:*)"
+      "Bash(iconv:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git status:*)",
+      "Bash(timeout 30 python:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)",
+      "Bash(git ls-files:*)"
     ]
   }
 }

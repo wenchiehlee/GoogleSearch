@@ -737,33 +737,94 @@ class ProcessCLI:
             traceback.print_exc()
             return False
 
+    def generate_csv_only(self) -> bool:
+        """僅生成 CSV 報告 (用於 Quarantine 偵測)
+
+        輕量級處理:
+        - 掃描和解析 MD 檔案
+        - 生成 factset_detailed_report_latest.csv
+        - 不上傳、不生成其他報告
+        - 用於 Quarantine workflow 的偵測來源
+        """
+        print(f"\n=== 生成 CSV 報告 (v{self.version}) ===")
+
+        try:
+            # 1. 掃描 MD 檔案
+            print("📁 掃描 MD 檔案...")
+            md_files = self.md_scanner.scan_all_md_files()
+
+            if not md_files:
+                print("❌ 未找到任何 MD 檔案")
+                return False
+
+            print(f"✅ 找到 {len(md_files)} 個 MD 檔案")
+
+            # 2. 解析 MD 檔案
+            print("🔄 解析 MD 檔案...")
+            processed_companies = []
+
+            for md_file in md_files:
+                try:
+                    parsed_data = self.md_parser.parse_md_file(md_file)
+                    processed_companies.append(parsed_data)
+                except Exception as e:
+                    print(f"⚠️ 解析檔案失敗 {md_file}: {e}")
+                    continue
+
+            if not processed_companies:
+                print("❌ 沒有成功處理的公司資料")
+                return False
+
+            print(f"✅ 成功處理 {len(processed_companies)} 家公司")
+
+            # 3. 生成詳細報告 CSV
+            print("📋 生成詳細報告...")
+            detailed_report = self.report_generator.generate_detailed_report(processed_companies)
+            print(f"✅ 詳細報告: {len(detailed_report)} 筆記錄")
+
+            # 4. 僅儲存詳細報告 CSV
+            output_path = os.path.join(self.report_generator.output_dir, 'factset_detailed_report_latest.csv')
+            df = pd.DataFrame(detailed_report)
+            df.to_csv(output_path, index=False, encoding='utf-8-sig')
+            print(f"💾 已儲存: {output_path}")
+
+            print(f"\n✅ CSV 報告生成完成！")
+            print(f"📊 用途: Quarantine workflow 偵測來源")
+
+            return True
+
+        except Exception as e:
+            print(f"❌ CSV 生成失敗: {e}")
+            traceback.print_exc()
+            return False
+
     def show_stats(self) -> bool:
         """顯示統計資訊 - 增強內容日期統計"""
         print(f"\n=== ProcessCLI v{self.version} 統計資訊 ===")
-        
+
         try:
             # MD 檔案統計
             md_files = self.md_scanner.scan_all_md_files()
             stats = self.md_scanner.get_stats()
-            
+
             print(f"📁 MD 檔案統計:")
             print(f"   總檔案數: {len(md_files)}")
             print(f"   檔案總大小: {stats.get('total_size_mb', 0):.1f} MB")
             print(f"   最新檔案: {stats.get('newest_file', 'N/A')}")
             print(f"   最舊檔案: {stats.get('oldest_file', 'N/A')}")
-            
+
             # 快速內容日期統計
             if md_files:
                 print(f"\n📅 內容日期提取快速統計 (抽樣前10個檔案):")
                 sample_files = md_files[:10]
                 sample_stats = {'with_date': 0, 'without_date': 0, 'low_quality': 0}
-                
+
                 for md_file in sample_files:
                     try:
                         parsed_data = self.md_parser.parse_md_file(md_file)
                         content_date = parsed_data.get('content_date', '')
                         quality_score = parsed_data.get('quality_score', 0)
-                        
+
                         if content_date:
                             sample_stats['with_date'] += 1
                         else:
@@ -772,11 +833,11 @@ class ProcessCLI:
                                 sample_stats['low_quality'] += 1
                     except:
                         sample_stats['without_date'] += 1
-                
+
                 sample_success_rate = (sample_stats['with_date'] / len(sample_files) * 100)
                 print(f"   抽樣成功率: {sample_success_rate:.1f}% ({sample_stats['with_date']}/{len(sample_files)})")
                 print(f"   低品質(缺日期): {sample_stats['low_quality']}")
-            
+
             # 模組狀態
             print(f"\n🔧 模組狀態:")
             print(f"   MD Parser: ✅ v{self.md_parser.version if self.md_parser else 'N/A'}")
@@ -785,9 +846,9 @@ class ProcessCLI:
             print(f"   Watchlist Analyzer: {'✅' if self.watchlist_analyzer else '❌'}")
             print(f"   Report Generator: {'✅' if self.report_generator else '❌'}")
             print(f"   Sheets Uploader: {'✅' if self.sheets_uploader else '❌'}")
-            
+
             return True
-            
+
         except Exception as e:
             print(f"❌ 統計資訊獲取失敗: {e}")
             return False
@@ -803,6 +864,7 @@ def main():
   python process_cli.py validate                    # 驗證系統設定
   python process_cli.py process                     # 完整處理所有檔案
   python process_cli.py process --no-upload         # 處理但不上傳
+  python process_cli.py generate-csv                # 僅生成 CSV (用於 Quarantine)
   python process_cli.py analyze-content-date        # 分析內容日期提取
   python process_cli.py analyze-keywords            # 查詢模式分析
   python process_cli.py analyze-watchlist           # 觀察名單分析
@@ -815,6 +877,7 @@ v3.6.1-modified 增強功能:
   ✅ 詳細的內容日期提取成功率統計
   ✅ 標準化查詢模式分析和報告
   ✅ 觀察名單覆蓋率分析和報告
+  ✅ 輕量級 CSV 生成 (generate-csv) 用於 Quarantine 偵測
         """
     )
     
@@ -823,6 +886,7 @@ v3.6.1-modified 增強功能:
         'process',                 # 處理所有 MD 檔案
         'process-recent',          # 處理最近的 MD 檔案
         'process-single',          # 處理單一公司
+        'generate-csv',            # 僅生成 CSV (用於 Quarantine)
         'analyze-quality',         # 品質分析
         'analyze-keywords',        # 查詢模式分析 (v3.6.1)
         'analyze-watchlist',       # 觀察名單分析 (v3.6.1)
@@ -856,28 +920,31 @@ v3.6.1-modified 增強功能:
     try:
         if args.command == 'validate':
             success = cli.validate_setup()
-        
+
         elif args.command == 'process':
             success = cli.process_all_md_files(upload_sheets=upload_sheets)
-        
+
+        elif args.command == 'generate-csv':
+            success = cli.generate_csv_only()
+
         elif args.command == 'analyze-content-date':
             success = cli.analyze_content_date_extraction()
-        
+
         elif args.command == 'analyze-keywords':
             success = cli.analyze_keywords_only()
-        
+
         elif args.command == 'analyze-watchlist':
             success = cli.analyze_watchlist_only()
-        
+
         elif args.command == 'keyword-summary':
             success = cli.generate_keyword_summary(upload_sheets=upload_sheets)
-        
+
         elif args.command == 'watchlist-summary':
             success = cli.generate_watchlist_summary(upload_sheets=upload_sheets)
-        
+
         elif args.command == 'stats':
             success = cli.show_stats()
-        
+
         else:
             print(f"❌ 未實現的命令: {args.command}")
             success = False

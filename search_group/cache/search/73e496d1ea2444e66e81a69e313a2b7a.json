@@ -1,0 +1,14 @@
+{
+  "query": "\"2357\" \"FactSet\" \"目標價\" after:2024",
+  "cached_at": "2025-12-30T17:17:11.863714",
+  "data": {
+    "query_info": {
+      "original_query": "\"2357\" \"FactSet\" \"目標價\" after:2024",
+      "total_results": "0",
+      "search_time": 0.314378,
+      "timestamp": "2025-12-30T17:17:11.863635",
+      "api_key_used": 1
+    },
+    "items": []
+  }
+}

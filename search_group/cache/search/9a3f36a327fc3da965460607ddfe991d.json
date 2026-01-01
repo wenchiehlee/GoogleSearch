@@ -1,0 +1,105 @@
+{
+  "query": "site:cnyes.com \"FactSet\" \"2357\" \"EPS\" \"預估\"",
+  "cached_at": "2025-12-30T16:58:49.596026",
+  "data": {
+    "query_info": {
+      "original_query": "site:cnyes.com \"FactSet\" \"2357\" \"EPS\" \"預估\"",
+      "total_results": "34",
+      "search_time": 0.345275,
+      "timestamp": "2025-12-30T16:58:49.595887",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估下修至54.36元 ...",
+        "snippet": "21 hours ago ... 根據FactSet最新調查，共16位分析師，對華碩(2357-TW)做出2025年EPS預估：中位數由54.73元下修至54.36元，其中最高估值56.56元，最低估值51.09元，預估目標價為735元。",
+        "url": "https://m.cnyes.com/news/id/6291992",
+        "domain": "m.cnyes.com",
+        "relevance_score": 21,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估下修至52.43元 ...",
+        "snippet": "Aug 25, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6124018",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至53.69元 ...",
+        "snippet": "Oct 30, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6209976",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估下修至53.05元 ...",
+        "snippet": "Aug 14, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6110487",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至52.79元 ...",
+        "snippet": "Aug 29, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6133205",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估下修至53.29元 ...",
+        "snippet": "Jul 3, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6048256",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至49元 ...",
+        "snippet": "Jan 2, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/5824668",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至54.31元 ...",
+        "snippet": "Nov 12, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6233949",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至54.4元 ...",
+        "snippet": "May 21, 2025 ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/5987738",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華碩(2357-TW)EPS預估上修至54.73元 ...",
+        "snippet": "7 days ago ... FactSet 最新調查：華碩(2357-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6286074",
+        "domain": "news.cnyes.com",
+        "relevance_score": 19,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

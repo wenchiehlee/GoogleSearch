@@ -1,0 +1,105 @@
+{
+  "query": "\"台積電\" \"EPS\" \"預估\" \"2025\" \"2026\"",
+  "cached_at": "2025-12-30T17:19:17.932112",
+  "data": {
+    "query_info": {
+      "original_query": "\"台積電\" \"EPS\" \"預估\" \"2025\" \"2026\"",
+      "total_results": "10200",
+      "search_time": 0.472169,
+      "timestamp": "2025-12-30T17:19:17.931706",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至61.26 ...",
+        "snippet": "Oct 17, 2025 ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至61.26元，預估目標價為1646元 ; 預估值, 2025年(前值), 2026年, 2027年, 2028年 ; 最高值, 65.7(65.7), 85.2, 106.6 ...",
+        "url": "https://news.cnyes.com/news/id/6194993",
+        "domain": "news.cnyes.com",
+        "relevance_score": 22,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至59.66 ...",
+        "snippet": "Jan 16, 2025 ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至59.66元，預估目標價為1394元 ; 預估值. 2025年(前值). 2026年. 2027年. 2028年 ; 最高值. 65.9(65.9). 79.9. 82.64.",
+        "url": "https://tw.stock.yahoo.com/news/%E9%89%85%E4%BA%A8%E9%80%9F%E5%A0%B1-factset-%E6%9C%80%E6%96%B0%E8%AA%BF%E6%9F%A5-%E5%8F%B0%E7%A9%8D%E9%9B%BB-2330-001033406.html",
+        "domain": "tw.stock.yahoo.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：華邦電(2344-TW)EPS預估上修至0.94元 ...",
+        "snippet": "19 hours ago ... ... 2025年EPS預估：中位數由0.91元上修至0.94元，其中最高估值1.26元，最低估值-0.43元，預估目標價為80元。 市場預估EPS. 預估值, 2025年(前值), 2026年, 2027年. 最高值, 1.26 ...",
+        "url": "https://m.cnyes.com/news/id/6292062",
+        "domain": "m.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：緯穎(6669-TW)EPS預估上修至166.8元 ...",
+        "snippet": "May 16, 2025 ... ... 2025年EPS預估：中位數由165.66元上修至166.8元，其中最高估值193.34元，最低估值147.7元，預估目標價為2900元。 市場預估EPS. 預估值. 2025年(前值). 2026年 ... 台積電領漲452 ...",
+        "url": "https://hk.finance.yahoo.com/news/%E9%89%85%E4%BA%A8%E9%80%9F%E5%A0%B1-factset-%E6%9C%80%E6%96%B0%E8%AA%BF%E6%9F%A5-%E7%B7%AF%E7%A9%8E-6669-081113499.html",
+        "domain": "hk.finance.yahoo.com",
+        "relevance_score": 17,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "Factset 最新調查：台積電(2330-TW)EPS預估上修至61.26元，預估 ...",
+        "snippet": "Oct 16, 2025 ... Factset 最新調查：台積電(2330-TW)EPS預估上修至61.26元，預估目標價為1646元 ; 預估值, 2025年(前值), 2026年, 2027年, 2028年 ; 最高值, 65.7(65.7), 85.2, 106.6, 103.67.",
+        "url": "https://www.sinotrade.com.tw/richclub/news/68f18e1d8ff59b56a61244e2",
+        "domain": "www.sinotrade.com.tw",
+        "relevance_score": 16,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "台積電EPS 預估大公開：長期投資到底值不值得？",
+        "snippet": "Sep 17, 2025 ... 根據 FactSet 最新調查，共42 位分析師對台積電（2330-TW）2025 年EPS 做出預估： ... 2026年最低值：64.2 中位數：70.86 平均值：71.08 最高值：79.9; 2027年最低值 ...",
+        "url": "https://vocus.cc/article/68ca3243fd89780001dc418c",
+        "domain": "vocus.cc",
+        "relevance_score": 13,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：技嘉(2376-TW)EPS預估下修至18.51元 ...",
+        "snippet": "6 days ago ... 預估值2025年(前值) 2026年2027年最高值20.37(20.37) 24.56 27.18 最低值17.73 ... 台積電：矽光子2026年量產！「7檔概念股」搶先表態. CMoney · 查看更多anue鉅亨網.",
+        "url": "https://today.line.me/tw/v3/article/1DnrP39",
+        "domain": "today.line.me",
+        "relevance_score": 11,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "【即時新聞】欣興(3037)2025年EPS預估下修至3.45元，市場看好AI ...",
+        "snippet": "Nov 27, 2025 ... 台積電：矽光子2026年量產！「7檔概念股」搶先表態 · 2. 【台股盤後】內、外資 ... 法人普遍預估東元2025至2026年EPS為2.5至3.24元不等，但專案進度所帶來的認列時間 ...",
+        "url": "https://cmnews.com.tw/article/newsyoudeservetoknow-3266e373-cb3f-11f0-aa49-21957cd0fb9c",
+        "domain": "cmnews.com.tw",
+        "relevance_score": 8,
+        "has_factset_content": false,
+        "has_financial_content": true
+      },
+      {
+        "title": "〈財經週報-投資趨勢〉創新高後的下一步？美股如千里名駒長跑力 ...",
+        "snippet": "Jul 6, 2025 ... ... Factset發布的數據，或可為投資人提供指引。根據Factset預估，2025年美股EPS（每股盈餘)）年增率可望達到9.1%，2026年EPS ... 台積電（tSMC；股票代號2330）是全球領先的 ...",
+        "url": "https://stock.ltn.com.tw/article/vscu1mwvpxph",
+        "domain": "stock.ltn.com.tw",
+        "relevance_score": 7,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "3Q25財報觀察與展望：旺季+降息+AI，美股前景可期| 富蘭克林",
+        "snippet": "Sep 30, 2025 ... ... 預估(%). 資料來源：FactSet (2025/9/26)。 ◎附表：2025年10月至11月期間重要企業財報公布時程表. 資料表格. 日期, 公司名稱, 3Q25每股盈餘(EPS)預估值 ...",
+        "url": "https://www.franklin.com.tw/investment/718",
+        "domain": "www.franklin.com.tw",
+        "relevance_score": 6,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

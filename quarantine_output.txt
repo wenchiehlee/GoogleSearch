@@ -1,0 +1,877 @@
+================================================================================
+OLD FILES QUARANTINE TOOL - FactSet Pipeline
+================================================================================
+
+[INFO] No age/quality filters - will check for inflated/inconsistent quality scores only
+[INFO] Always checking: inflated quality scores, inconsistent metadata
+
+[INFO] Scanning 135 MD files...
+
+[PROGRESS] 13/135 files (9%) | 0.4 files/sec | ETA: 283s
+[PROGRESS] 26/135 files (19%) | 0.4 files/sec | ETA: 258s
+[PROGRESS] 39/135 files (28%) | 0.4 files/sec | ETA: 221s
+[PROGRESS] 52/135 files (38%) | 0.4 files/sec | ETA: 192s
+[PROGRESS] 65/135 files (48%) | 0.5 files/sec | ETA: 152s
+[PROGRESS] 78/135 files (57%) | 0.5 files/sec | ETA: 122s
+[PROGRESS] 91/135 files (67%) | 0.5 files/sec | ETA: 93s
+[PROGRESS] 104/135 files (77%) | 0.5 files/sec | ETA: 65s
+[PROGRESS] 117/135 files (86%) | 0.5 files/sec | ETA: 37s
+[PROGRESS] 130/135 files (96%) | 0.5 files/sec | ETA: 10s
+[PROGRESS] 135/135 files (100%) | 0.5 files/sec | ETA: 0s
+
+[INFO] Scan completed in 276.7s (0.5 files/sec)
+[INFO] Found 133 files matching quarantine criteria
+
+================================================================================
+QUARANTINE REPORT
+Generated: 2026-01-01 13:13:03
+================================================================================
+
+Total old files found: 133
+
+
+Stock: 2301 (光寶科)
+  Old files: 3
+
+  File: 2301_光寶科_factset_fed89985.md
+    Date: 2025/10/02
+    Age: 91 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2301_光寶科_factset_0ab017b3.md
+    Date: 2025/10/24
+    Age: 69 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 2301_光寶科_factset_83089811.md
+    Date: 2025/10/24
+    Age: 69 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2308 (台達電)
+  Old files: 11
+
+  File: 2308_台達電_factset_71c9c911.md
+    Date: 2025/03/04
+    Age: 303 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 2308_台達電_factset_5596d0f0.md
+    Date: 2025/04/17
+    Age: 259 days
+    Quality: 7.3
+    Reasons: inflated_quality
+
+  File: 2308_台達電_factset_df0e7934.md
+    Date: 2025/05/02
+    Age: 244 days
+    Quality: 7.3
+    Reasons: inflated_quality
+
+  File: 2308_台達電_factset_f6e2327f.md
+    Date: 2025/05/02
+    Age: 244 days
+    Quality: 9.3
+    Reasons: inflated_quality
+
+  File: 2308_台達電_factset_331259b9.md
+    Date: 2025/08/01
+    Age: 153 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  ... and 6 more files
+
+
+Stock: 2317 (鴻海)
+  Old files: 5
+
+  File: 2317_鴻海_factset_78dc95c1.md
+    Date: 2025/04/07
+    Age: 269 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2317_鴻海_factset_33a87a34.md
+    Date: 2025/08/18
+    Age: 136 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2317_鴻海_factset_46cef980.md
+    Date: 2025/10/08
+    Age: 85 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 2317_鴻海_factset_4a5b5399.md
+    Date: 2025/11/13
+    Age: 49 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 2317_鴻海_factset_588279bc.md
+    Date: 2025/11/13
+    Age: 49 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+
+Stock: 2324 (仁寶)
+  Old files: 3
+
+  File: 2324_仁寶_factset_dc0c98ac.md
+    Date: 2025/04/07
+    Age: 269 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 2324_仁寶_factset_09f1e9b2.md
+    Date: 2025/08/21
+    Age: 133 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2324_仁寶_factset_7b86e6a6.md
+    Date: 2025/11/24
+    Age: 38 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2330 (台積電)
+  Old files: 3
+
+  File: 2330_台積電_factset_4270e85a.md
+    Date: 2025/01/17
+    Age: 349 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2330_台積電_factset_842fc053.md
+    Date: 2025/10/17
+    Age: 76 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2330_台積電_factset_91757b89.md
+    Date: 2025/10/17
+    Age: 76 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2347 (聯強)
+  Old files: 2
+
+  File: 2347_聯強_factset_a70b5f9e.md
+    Date: 2025/06/05
+    Age: 210 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+  File: 2347_聯強_factset_88d8f433.md
+    Date: 2025/10/21
+    Age: 72 days
+    Quality: 8.0
+    Reasons: inflated_quality
+
+
+Stock: 2354 (鴻準)
+  Old files: 1
+
+  File: 2354_鴻準_factset_5eaf616e.md
+    Date: 2025/10/07
+    Age: 86 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+
+Stock: 2356 (英業達)
+  Old files: 4
+
+  File: 2356_英業達_factset_577c9abf.md
+    Date: 2025/07/22
+    Age: 163 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2356_英業達_factset_14bd68b1.md
+    Date: 2025/12/11
+    Age: 21 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2356_英業達_factset_817acfdb.md
+    Date: 2025/12/11
+    Age: 21 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 2356_英業達_factset_97066b7c.md
+    Date: 2025/12/15
+    Age: 17 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+
+Stock: 2357 (華碩)
+  Old files: 6
+
+  File: 2357_華碩_factset_677cedb1.md
+    Date: 2025/08/25
+    Age: 129 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 2357_華碩_factset_2ecaa80f.md
+    Date: 2025/10/30
+    Age: 63 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 2357_華碩_factset_88811b3b.md
+    Date: 2025/11/12
+    Age: 50 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 2357_華碩_factset_4f7a6a98.md
+    Date: 2025/12/23
+    Age: 9 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 2357_華碩_factset_ee742fad.md
+    Date: 2025/12/23
+    Age: 9 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  ... and 1 more files
+
+
+Stock: 2376 (技嘉)
+  Old files: 2
+
+  File: 2376_技嘉_factset_d3b57999.md
+    Date: 2025/09/24
+    Age: 99 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2376_技嘉_factset_c0aa95a2.md
+    Date: 2025/11/17
+    Age: 45 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2377 (微星)
+  Old files: 2
+
+  File: 2377_微星_factset_a37747a1.md
+    Date: 2025/03/13
+    Age: 294 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2377_微星_factset_97e193dd.md
+    Date: 2025/08/09
+    Age: 145 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2379 (瑞昱)
+  Old files: 3
+
+  File: 2379_瑞昱_factset_650478b4.md
+    Date: 2025/05/01
+    Age: 245 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2379_瑞昱_factset_5701a968.md
+    Date: 2025/10/30
+    Age: 63 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2379_瑞昱_factset_982d9122.md
+    Date: 2025/10/30
+    Age: 63 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+
+Stock: 2382 (廣達)
+  Old files: 2
+
+  File: 2382_廣達_factset_0a007689.md
+    Date: 2025/05/15
+    Age: 231 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2382_廣達_factset_9ba3bfe3.md
+    Date: 2025/08/13
+    Age: 141 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 2395 (研華)
+  Old files: 4
+
+  File: 2395_研華_factset_04f46df1.md
+    Date: 2025/06/27
+    Age: 188 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 2395_研華_factset_98b1088e.md
+    Date: 2025/10/09
+    Age: 84 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2395_研華_factset_552bd8c4.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2395_研華_factset_74a5c5b1.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+
+Stock: 2454 (聯發科)
+  Old files: 13
+
+  File: 2454_聯發科_factset_3212bda5.md
+    Date: 2025/02/08
+    Age: 327 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 2454_聯發科_factset_56a7f4ab.md
+    Date: 2025/05/05
+    Age: 241 days
+    Quality: 7.3
+    Reasons: inflated_quality
+
+  File: 2454_聯發科_factset_dab8f70d.md
+    Date: 2025/05/12
+    Age: 234 days
+    Quality: 7.3
+    Reasons: inflated_quality
+
+  File: 2454_聯發科_factset_08494435.md
+    Date: 2025/05/17
+    Age: 229 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 2454_聯發科_factset_31e0f2b0.md
+    Date: 2025/06/18
+    Age: 197 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  ... and 8 more files
+
+
+Stock: 2458 (義隆)
+  Old files: 3
+
+  File: 2458_義隆_factset_5b6061e8.md
+    Date: 2025/12/22
+    Age: 10 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 2458_義隆_factset_b1d77ddb.md
+    Date: 2025/12/22
+    Age: 10 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 2458_義隆_factset_608c9f4c.md
+    Date: 2025/12/29
+    Age: 3 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+
+Stock: 2603 (長榮)
+  Old files: 2
+
+  File: 2603_長榮_factset_a57a7788.md
+    Date: 2025/08/05
+    Age: 149 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 2603_長榮_factset_801d72cc.md
+    Date: 2025/12/29
+    Age: 3 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 3034 (聯詠)
+  Old files: 6
+
+  File: 3034_聯詠_factset_ef5a3a3f.md
+    Date: 2025/05/13
+    Age: 233 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 3034_聯詠_factset_a246364d.md
+    Date: 2025/08/06
+    Age: 148 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 3034_聯詠_factset_19adcc45.md
+    Date: 2025/10/13
+    Age: 80 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 3034_聯詠_factset_b9f613a1.md
+    Date: 2025/10/13
+    Age: 80 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 3034_聯詠_factset_2800c12d.md
+    Date: 2025/11/05
+    Age: 57 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  ... and 1 more files
+
+
+Stock: 3035 (智原)
+  Old files: 2
+
+  File: 3035_智原_factset_fd9e893b.md
+    Date: 2025/08/14
+    Age: 140 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 3035_智原_factset_26747b9f.md
+    Date: 2025/10/29
+    Age: 64 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 3231 (緯創)
+  Old files: 2
+
+  File: 3231_緯創_factset_a637f61f.md
+    Date: 2025/05/02
+    Age: 244 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 3231_緯創_factset_120e7492.md
+    Date: 2025/08/14
+    Age: 140 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+
+Stock: 3293 (鈊象)
+  Old files: 2
+
+  File: 3293_鈊象_factset_0becd7bb.md
+    Date: 2025/09/16
+    Age: 107 days
+    Quality: 8.0
+    Reasons: inflated_quality
+
+  File: 3293_鈊象_factset_006db421.md
+    Date: 2025/12/31
+    Age: 1 days
+    Quality: 8.0
+    Reasons: inflated_quality
+
+
+Stock: 4938 (和碩)
+  Old files: 6
+
+  File: 4938_和碩_factset_1d779f30.md
+    Date: 2025/08/14
+    Age: 140 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 4938_和碩_factset_766a12bc.md
+    Date: 2025/08/16
+    Age: 138 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 4938_和碩_factset_db8b7377.md
+    Date: 2025/11/14
+    Age: 48 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 4938_和碩_factset_bf1622d9.md
+    Date: 2025/11/17
+    Age: 45 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 4938_和碩_factset_1014c0c9.md
+    Date: 2025/12/01
+    Age: 31 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  ... and 1 more files
+
+
+Stock: 5269 (祥碩)
+  Old files: 4
+
+  File: 5269_祥碩_factset_9878bb0b.md
+    Date: 2025/10/02
+    Age: 91 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 5269_祥碩_factset_f8f75011.md
+    Date: 2025/10/02
+    Age: 91 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 5269_祥碩_factset_541bb7ac.md
+    Date: 2025/11/18
+    Age: 44 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 5269_祥碩_factset_c1527975.md
+    Date: 2025/11/18
+    Age: 44 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+
+Stock: 5274 (信驊)
+  Old files: 4
+
+  File: 5274_信驊_factset_1fe19fa4.md
+    Date: 2025/05/06
+    Age: 240 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 5274_信驊_factset_9a2c28a9.md
+    Date: 2025/11/06
+    Age: 56 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 5274_信驊_factset_5e9be637.md
+    Date: 2025/11/25
+    Age: 37 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+  File: 5274_信驊_factset_a4d93ba3.md
+    Date: 2025/11/25
+    Age: 37 days
+    Quality: 9.2
+    Reasons: inflated_quality
+
+
+Stock: 5434 (崇越)
+  Old files: 2
+
+  File: 5434_崇越_factset_700a5595.md
+    Date: 2025/12/14
+    Age: 18 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+  File: 5434_崇越_factset_91b75261.md
+    Date: 2025/12/14
+    Age: 18 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+
+Stock: 5904 (寶雅)
+  Old files: 1
+
+  File: 5904_寶雅_factset_7b36d66d.md
+    Date: 2025/07/28
+    Age: 157 days
+    Quality: 8.0
+    Reasons: inflated_quality
+
+
+Stock: 6182 (合晶)
+  Old files: 1
+
+  File: 6182_合晶_factset_7d000001.md
+    Date: 2025/07/19
+    Age: 166 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+
+Stock: 6285 (啟碁)
+  Old files: 5
+
+  File: 6285_啟碁_factset_2e8ab70e.md
+    Date: 2025/05/14
+    Age: 232 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 6285_啟碁_factset_8c1db413.md
+    Date: 2025/08/26
+    Age: 128 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 6285_啟碁_factset_1db04e02.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 6285_啟碁_factset_27e7c100.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 6285_啟碁_factset_fe290d4a.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+
+Stock: 6462 (神盾)
+  Old files: 1
+
+  File: 6462_神盾_factset_a8f8baf7.md
+    Date: 2025/06/11
+    Age: 204 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+
+Stock: 6526 (達發)
+  Old files: 2
+
+  File: 6526_達發_factset_06fdab9e.md
+    Date: 2025/10/10
+    Age: 83 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 6526_達發_factset_d5ed7a87.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 6669 (緯穎)
+  Old files: 3
+
+  File: 6669_緯穎_factset_6997110d.md
+    Date: 2025/08/18
+    Age: 136 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 6669_緯穎_factset_19cd9907.md
+    Date: 2025/10/24
+    Age: 69 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+  File: 6669_緯穎_factset_ec3199be.md
+    Date: 2025/10/24
+    Age: 69 days
+    Quality: 9.6
+    Reasons: inflated_quality
+
+
+Stock: 6962 (奕力-KY)
+  Old files: 2
+
+  File: 6962_奕力-KY_factset_4aa3f4d8.md
+    Date: 2025/10/31
+    Age: 62 days
+    Quality: 7.0
+    Reasons: inflated_quality
+
+  File: 6962_奕力-KY_factset_a7857cc9.md
+    Date: 2025/12/31
+    Age: 1 days
+    Quality: 7.0
+    Reasons: inflated_quality
+
+
+Stock: 7547 (碩網)
+  Old files: 2
+
+  File: 7547_碩網_factset_02571c35.md
+    Date: 2025/11/18
+    Age: 44 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+  File: 7547_碩網_factset_590c1ba6.md
+    Date: 2025/11/18
+    Age: 44 days
+    Quality: 9.0
+    Reasons: inflated_quality
+
+
+Stock: 7734 (印能科技)
+  Old files: 1
+
+  File: 7734_印能科技_factset_973d34ca.md
+    Date: 2025/11/14
+    Age: 48 days
+    Quality: 7.0
+    Reasons: inflated_quality
+
+
+Stock: 8299 (群聯)
+  Old files: 10
+
+  File: 8299_群聯_factset_ac98620b.md
+    Date: 2025/05/10
+    Age: 236 days
+    Quality: 8.3
+    Reasons: inflated_quality
+
+  File: 8299_群聯_factset_27ad9d5c.md
+    Date: 2025/07/18
+    Age: 167 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 8299_群聯_factset_272fd1b8.md
+    Date: 2025/08/15
+    Age: 139 days
+    Quality: 7.6
+    Reasons: inflated_quality
+
+  File: 8299_群聯_factset_d609598e.md
+    Date: 2025/08/15
+    Age: 139 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 8299_群聯_factset_42da19ef.md
+    Date: 2025/09/18
+    Age: 105 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  ... and 5 more files
+
+
+Stock: 9914 (美利達)
+  Old files: 5
+
+  File: 9914_美利達_factset_da7da75e.md
+    Date: 2025/11/07
+    Age: 55 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 9914_美利達_factset_46440e62.md
+    Date: 2025/11/22
+    Age: 40 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 9914_美利達_factset_76e435ab.md
+    Date: 2025/11/25
+    Age: 37 days
+    Quality: 8.6
+    Reasons: inflated_quality
+
+  File: 9914_美利達_factset_51e5bbf7.md
+    Date: 2025/12/12
+    Age: 20 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 9914_美利達_factset_24cf5ad4.md
+    Date: 2025/12/23
+    Age: 9 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+Stock: 9921 (巨大)
+  Old files: 3
+
+  File: 9921_巨大_factset_f1512af4.md
+    Date: 2025/11/18
+    Age: 44 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+  File: 9921_巨大_factset_cfb2e680.md
+    Date: 2025/11/28
+    Age: 34 days
+    Quality: 7.3
+    Reasons: inflated_quality
+
+  File: 9921_巨大_factset_687acb43.md
+    Date: 2025/12/12
+    Age: 20 days
+    Quality: 10.0
+    Reasons: inflated_quality
+
+
+================================================================================
+SUMMARY
+================================================================================
+Total stocks affected: 37
+Total files to quarantine: 133
+Average age: 103.8 days
+Inflated quality scores (high score, no data): 133
+Oldest file: 2330_台積電_factset_4270e85a.md (349 days)
+
+[OK] Report saved to: old_files_report.txt
+
+================================================================================
+Quarantine 133 old files? (yes/no): Traceback (most recent call last):
+  File "C:\Users\WJLEE\SynologyDrive\NAS\github.com\GoogleSearch.Factset\quarantine_files.py", line 599, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\WJLEE\SynologyDrive\NAS\github.com\GoogleSearch.Factset\quarantine_files.py", line 581, in main
+    response = input(f"Quarantine {len(results)} old files? (yes/no): ")
+EOFError: EOF when reading a line

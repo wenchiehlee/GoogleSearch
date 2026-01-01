@@ -1,0 +1,105 @@
+{
+  "query": "site:cnyes.com \"FactSet\" \"2317\" \"EPS\" \"預估\"",
+  "cached_at": "2025-12-30T17:20:09.549250",
+  "data": {
+    "query_info": {
+      "original_query": "site:cnyes.com \"FactSet\" \"2317\" \"EPS\" \"預估\"",
+      "total_results": "119",
+      "search_time": 0.401458,
+      "timestamp": "2025-12-30T17:20:09.548941",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.14元 ...",
+        "snippet": "Apr 7, 2025 ... 根據FactSet最新調查，共21位分析師，對鴻海(2317-TW)做出2025年EPS預估：中位數由14.25元下修至14.14元，其中最高估值15.28元，最低估值12.55元，預估目標價為225元。",
+        "url": "https://news.cnyes.com/news/id/5923034",
+        "domain": "news.cnyes.com",
+        "relevance_score": 21,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.92元 ...",
+        "snippet": "Aug 18, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6114348",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.97元 ...",
+        "snippet": "Oct 8, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6181046",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.3元 ...",
+        "snippet": "Mar 18, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/5903770",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.1元 ...",
+        "snippet": "Aug 8, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6097852",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.37元 ...",
+        "snippet": "Nov 13, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6235664",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.26元 ...",
+        "snippet": "Aug 14, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6110485",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.34元 ...",
+        "snippet": "Nov 13, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6235036",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至11.02元 ...",
+        "snippet": "Mar 15, 2025 ... FactSet 最新調查：鴻海(2317-TW)EPS預估下修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/5902285",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)目標價調升至300元 ...",
+        "snippet": "Nov 13, 2025 ... 延伸閱讀 · 〈台股開盤〉鴻海、廣達法說唱旺AI 力守月線伺機回攻2萬8 · 投信近5日買超個股 · 投信近3日買超個股 · 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至 ...",
+        "url": "https://news.cnyes.com/news/id/6235661",
+        "domain": "news.cnyes.com",
+        "relevance_score": 17,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

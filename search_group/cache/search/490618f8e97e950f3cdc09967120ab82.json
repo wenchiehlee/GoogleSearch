@@ -1,0 +1,105 @@
+{
+  "query": "\"鴻海\" \"EPS\" \"預估\" \"2025\" \"2026\"",
+  "cached_at": "2025-12-30T17:20:28.450405",
+  "data": {
+    "query_info": {
+      "original_query": "\"鴻海\" \"EPS\" \"預估\" \"2025\" \"2026\"",
+      "total_results": "8840",
+      "search_time": 0.461586,
+      "timestamp": "2025-12-30T17:20:28.450166",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.92元 ...",
+        "snippet": "Aug 18, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.92元，預估目標價為235元 ; 預估值, 2025年(前值), 2026年, 2027年 ; 最高值, 15.11(15.11), 19.31, 21.35 ; 最低值 ...",
+        "url": "https://news.cnyes.com/news/id/6114348",
+        "domain": "news.cnyes.com",
+        "relevance_score": 22,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.3元 ...",
+        "snippet": "Mar 18, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至14.3元，預估目標價為230元 ; 預估值, 2025年(前值), 2026年, 2027年 ; 最高值, 15.39(15.39), 18.56, 20.52 ; 最低值 ...",
+        "url": "https://news.cnyes.com/news/id/5903770",
+        "domain": "news.cnyes.com",
+        "relevance_score": 22,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.1元 ...",
+        "snippet": "Aug 8, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.1元，預估目標價為207.5元 ; 預估值, 2025年(前值), 2026年, 2027年 ; 最高值, 13.96(13.96), 16.41, 20.39 ; 最低 ...",
+        "url": "https://news.cnyes.com/news/id/6097852",
+        "domain": "news.cnyes.com",
+        "relevance_score": 22,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.34元 ...",
+        "snippet": "Nov 13, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.34元，預估目標價為300元 ; 預估值, 2025年(前值), 2026年 ; 最高值, 15.43(15.43), 19.78 ; 最低值, 13(12.09), 15 ...",
+        "url": "https://news.cnyes.com/news/id/6235036",
+        "domain": "news.cnyes.com",
+        "relevance_score": 21,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.97元 ...",
+        "snippet": "Oct 8, 2025 ... ... 2025年EPS預估：中位數由13.85元上修至13.97元，其中最高估值15.43元，最低估值12.96元，預估目標價為245元。 市場預估EPS. 預估值, 2025年(前值), 2026年, 2027年. 最高值 ...",
+        "url": "https://news.cnyes.com/news/id/6181046",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.53元 ...",
+        "snippet": "May 20, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.53元，預估目標價為201元 ; 預估值. 2025年(前值). 2026年 ; 最高值. 15.07(15.07). 16.16 ; 最低值. 11.63(11.63).",
+        "url": "https://tw.stock.yahoo.com/news/%E9%89%85%E4%BA%A8%E9%80%9F%E5%A0%B1-factset-%E6%9C%80%E6%96%B0%E8%AA%BF%E6%9F%A5-%E9%B4%BB%E6%B5%B7-2317-101113688.html",
+        "domain": "tw.stock.yahoo.com",
+        "relevance_score": 19,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.37元，預估目標 ...",
+        "snippet": "Nov 12, 2025 ... Factset 最新調查：鴻海(2317-TW)EPS預估上修至14.37元，預估目標價為300元 ; 預估值, 2025年(前值), 2026年, 2027年 ; 最高值, 15.43(15.43), 19.27, 22.52 ; 最低值, 13(13) ...",
+        "url": "https://www.sinotrade.com.tw/richclub/news/69155f148ff59b56a601e9a4",
+        "domain": "www.sinotrade.com.tw",
+        "relevance_score": 16,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.92元 ...",
+        "snippet": "Aug 17, 2025 ... 鉅亨速報- Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.92元，預估目標價為 ... 市場預估EPS. 預估值, 2025年(前值), 2026年, 2027年. 最高值, 15.11(15.11), 19.31 ...",
+        "url": "https://www.sinotrade.com.tw/richclub/news/68a274098ff59b56a6f95e8f",
+        "domain": "www.sinotrade.com.tw",
+        "relevance_score": 16,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.97元，預估目標 ...",
+        "snippet": "Oct 7, 2025 ... Factset 最新調查：鴻海(2317-TW)EPS預估上修至13.97元，預估目標價為245元. 鉅亨 ... 市場預估EPS. 預估值, 2025年(前值), 2026年, 2027年. 最高值, 15.43(15.43), 19.78 ...",
+        "url": "https://www.sinotrade.com.tw/richclub/news/68e5b09a8ff59b56a6f3d6ad",
+        "domain": "www.sinotrade.com.tw",
+        "relevance_score": 16,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：世芯-KY(3661-TW)EPS預估上修至70.4元",
+        "snippet": "Aug 27, 2025 ... ... 2025年EPS預估：中位數由68.98元上修至70.4元，其中最高估值78.08元，最低估值61.23元，預估目標價為4775元。 市場預估EPS. 預估值, 2025年(前值), 2026年, 2027年, 2028年.",
+        "url": "https://es.tradingview.com/news/cnyes:1eb960cdeacdf:0/",
+        "domain": "es.tradingview.com",
+        "relevance_score": 14,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

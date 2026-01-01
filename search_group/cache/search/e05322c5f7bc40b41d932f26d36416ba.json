@@ -1,0 +1,51 @@
+{
+  "query": "\"2330\" \"FactSet\" \"目標價\" after:2024",
+  "cached_at": "2025-12-30T17:19:14.208903",
+  "data": {
+    "query_info": {
+      "original_query": "\"2330\" \"FactSet\" \"目標價\" after:2024",
+      "total_results": "4",
+      "search_time": 0.3473,
+      "timestamp": "2025-12-30T17:19:14.208672",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "NVDA/輝達- 研究報告與輝達概念股分析｜股市爆料同學會",
+        "snippet": "Sep 24, 2025 ... ... 目標價自158 美元上調至201 美元，對應2026 年本淨比3.2 倍。惟仍需留意雲端資本 ... FactSet (FDS) 財報,週五(9/20)：無重大事件排程（注意三巫日選擇權結算波動 ...",
+        "url": "https://www.cmoney.tw/forum/usstock/NVDA?tab=report",
+        "domain": "www.cmoney.tw",
+        "relevance_score": 6,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "爲什麼英偉達和其他這些芯片股票被認爲是今年剩餘時間的熱門投資",
+        "snippet": "Sep 3, 2025 ... 分析師表示，Blackwell的推出使英偉達\"有望實現顯著的業績超出預期\"，其每股收益預計明年可能達到8美元，這將支持他們240美元的目標價。 ... 2330）、美國超微公司（AMD ...",
+        "url": "https://news.futunn.com/hk/post/61625023/why-nvidia-and-these-other-chip-stocks-were-just-deemed",
+        "domain": "news.futunn.com",
+        "relevance_score": 3,
+        "has_factset_content": false,
+        "has_financial_content": true
+      },
+      {
+        "title": "中国汽车芯片国产化的三大投资主题2025 06 零部件| PDF",
+        "snippet": "Jun 20, 2025 ... 报告还对相关公司的评级和目标价进行了调整，强调了本土化战略对全球汽车芯片 ... TSMC (2330.TW) O (02/07/2022) NT$1,035.00. UMC (2303.TW) E (10/28/2024) NT ...",
+        "url": "https://www.scribd.com/document/884972370/%E4%B8%AD%E5%9B%BD%E6%B1%BD%E8%BD%A6%E8%8A%AF%E7%89%87%E5%9B%BD%E4%BA%A7%E5%8C%96%E7%9A%84%E4%B8%89%E5%A4%A7%E6%8A%95%E8%B5%84%E4%B8%BB%E9%A2%98-2025-06-%E9%9B%B6%E9%83%A8%E4%BB%B6",
+        "domain": "www.scribd.com",
+        "relevance_score": 2,
+        "has_factset_content": false,
+        "has_financial_content": false
+      },
+      {
+        "title": "杯米的股市筆記",
+        "snippet": "Dec 13, 2025 ... ... 2,330 萬美元，其中OAS 部門的訂單達到了2,220 萬美元，顯示無人機的強勁增長 ... 暂时的目标价是170, 213。 如果会到170的话，可能会减仓 要注意的是: $MU 目前 ...",
+        "url": "https://www.facebook.com/61569938009012/mentions/",
+        "domain": "www.facebook.com",
+        "relevance_score": 1,
+        "has_factset_content": false,
+        "has_financial_content": false
+      }
+    ]
+  }
+}

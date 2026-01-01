@@ -1,0 +1,24 @@
+{
+  "query": "\"2317\" \"分析師\" \"共識\" \"目標價\"",
+  "cached_at": "2025-12-30T17:20:34.904153",
+  "data": {
+    "query_info": {
+      "original_query": "\"2317\" \"分析師\" \"共識\" \"目標價\"",
+      "total_results": "1",
+      "search_time": 0.343261,
+      "timestamp": "2025-12-30T17:20:34.904006",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "NVDA/輝達- 研究報告與輝達概念股分析｜股市爆料同學會",
+        "snippet": "Sep 24, 2025 ... ... 共識（2.86 美元）5.9%，顯示營收規模擴張與毛利率提升已成功轉化為獲利成長 ... ,分析師下調評等與目標價美國銀行將邁威爾評級由「買進」降至「中立」，並將目標 ...",
+        "url": "https://www.cmoney.tw/forum/usstock/NVDA?tab=report",
+        "domain": "www.cmoney.tw",
+        "relevance_score": 3,
+        "has_factset_content": false,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

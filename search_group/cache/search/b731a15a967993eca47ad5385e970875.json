@@ -1,0 +1,24 @@
+{
+  "query": "test factset",
+  "cached_at": "2025-12-30T16:57:08.503708",
+  "data": {
+    "query_info": {
+      "original_query": "test factset",
+      "total_results": "21000",
+      "search_time": 0.469489,
+      "timestamp": "2025-12-30T16:57:08.503589",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "FactSet Insight - Commentary and research from our desk to yours",
+        "snippet": "7 days ago ... FactSet S&P 500 earnings report: Analysts are most bullish on tech, energy ... expectations for at least one more rate cut in the months ahead, and ...",
+        "url": "https://insight.factset.com/",
+        "domain": "insight.factset.com",
+        "relevance_score": 18,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

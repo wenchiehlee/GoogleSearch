@@ -1,0 +1,105 @@
+{
+  "query": "site:cnyes.com \"FactSet\" \"2330\" \"EPS\" \"預估\"",
+  "cached_at": "2025-12-30T17:19:04.765815",
+  "data": {
+    "query_info": {
+      "original_query": "site:cnyes.com \"FactSet\" \"2330\" \"EPS\" \"預估\"",
+      "total_results": "195",
+      "search_time": 0.334982,
+      "timestamp": "2025-12-30T17:19:04.765561",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "鉅亨速報- Factset 最新調查：祥碩(5269-TW)EPS預估上修至72.24元 ...",
+        "snippet": "Sep 5, 2025 ... 根據FactSet最新調查，共10位分析師，對祥碩(5269-TW)做出2025年EPS預估：中位數由71.5元上修至72.24元，其中最高估值82.39元，最低估值63.5元，預估目標價為2330元。",
+        "url": "https://news.cnyes.com/news/id/6142102",
+        "domain": "news.cnyes.com",
+        "relevance_score": 21,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至59.66 ...",
+        "snippet": "Jan 17, 2025 ... FactSet 最新調查：台積電(2330-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/5839654",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：台積電(2330-TW)EPS預估上修至61.26 ...",
+        "snippet": "Oct 17, 2025 ... FactSet 最新調查：台積電(2330-TW)EPS預估上修，預估EPS、預估營收、目標價、歷史獲利表現、即時新聞資訊。",
+        "url": "https://news.cnyes.com/news/id/6194993",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：祥碩(5269-TW)EPS預估上修至73.6元 ...",
+        "snippet": "Jul 18, 2025 ... FactSet 最新調查：祥碩(5269-TW)EPS預估上修，預估EPS ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)目標價調升至1300元，幅度約4 ...",
+        "url": "https://news.cnyes.com/news/id/6069588",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：奇鋐(3017-TW)EPS預估上修至44.15元 ...",
+        "snippet": "Oct 16, 2025 ... 市場預估EPS. 預估值, 2025年(前 ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)目標價調升至1646元，幅度約4.24%. 下一篇. 鉅亨速報- Factset 最新調查：東陽(1319-TW)EPS ...",
+        "url": "https://news.cnyes.com/news/id/6194669",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：群聯(8299-TW)EPS預估下修至32.02元 ...",
+        "snippet": "Jul 18, 2025 ... FactSet 最新調查：群聯(8299-TW)EPS預估下修，預估EPS ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)目標價調升至1300元，幅度約4 ...",
+        "url": "https://news.cnyes.com/news/id/6069586",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：國巨(2327-TW)EPS預估下修至45.66元 ...",
+        "snippet": "Apr 18, 2025 ... FactSet 最新調查：國巨(2327-TW)EPS預估下修，預估EPS ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)目標價調降至1200元，幅度約 ...",
+        "url": "https://news.cnyes.com/news/id/5943391",
+        "domain": "news.cnyes.com",
+        "relevance_score": 20,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "鉅亨速報- Factset 最新調查：雙鴻(3324-TW)目標價調升至991.5元 ...",
+        "snippet": "Oct 16, 2025 ... 鉅亨速報- Factset 最新調查：台積電(2330-TW)目標價調升至1646元，幅度約4.24%. 下一篇. 鉅亨速報- Factset 最新調查：東陽(1319-TW)EPS預估下修至6.57元，預估目標價為120元.",
+        "url": "https://news.cnyes.com/news/id/6194668",
+        "domain": "news.cnyes.com",
+        "relevance_score": 17,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "盤中速報- 祥碩(5269)大跌7.41%，報1500元| 鉅亨網- 台股盤中",
+        "snippet": "Sep 19, 2025 ... 鉅亨速報- Factset 最新調查：祥碩(5269-TW)EPS預估上修至72.24元，預估目標價為2330元 · 〈台股盤後〉MCSI調整尾盤驚爆1224億大量輝達概念股撐盤收漲27點. ‌. section ...",
+        "url": "https://news.cnyes.com/news/id/6160104",
+        "domain": "news.cnyes.com",
+        "relevance_score": 15,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "晶豪科11月獲利大增近17倍記憶體族群多檔亮燈| 鉅亨網- 台股新聞",
+        "snippet": "3 hours ago ... 鉅亨速報- Factset 最新調查：東元(1504-TW)EPS預估上修至2.56元，預估目標價為116.5元 ... 台灣宜蘭外海發生規模7.0 地震，台積電(2330)營運影響輕微 · 台積電. 1.00 ...",
+        "url": "https://m.cnyes.com/news/id/6292952",
+        "domain": "m.cnyes.com",
+        "relevance_score": 15,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}

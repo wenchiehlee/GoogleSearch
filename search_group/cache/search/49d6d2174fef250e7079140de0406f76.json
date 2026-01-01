@@ -1,0 +1,33 @@
+{
+  "query": "\"2317\" \"FactSet\" \"目標價\" after:2024",
+  "cached_at": "2025-12-30T17:20:25.113486",
+  "data": {
+    "query_info": {
+      "original_query": "\"2317\" \"FactSet\" \"目標價\" after:2024",
+      "total_results": "2",
+      "search_time": 0.33685,
+      "timestamp": "2025-12-30T17:20:25.113408",
+      "api_key_used": 1
+    },
+    "items": [
+      {
+        "title": "Fact",
+        "snippet": "Dec 8, 2025 ... Factset 最新調查：鴻海(2317-TW)EPS預估下修至13.53元，預估目標價為201元. 嗨 ... FactSet最新S&P500 Earnings Insight報告. 2025Q1財報已經有96%進行揭露，78%的 ...",
+        "url": "https://vocus.cc/article/6937cc9ffd89780001726628",
+        "domain": "vocus.cc",
+        "relevance_score": 8,
+        "has_factset_content": true,
+        "has_financial_content": true
+      },
+      {
+        "title": "NVDA/輝達- 研究報告與輝達概念股分析｜股市爆料同學會",
+        "snippet": "Sep 24, 2025 ... ... 目標價自158 美元上調至201 美元，對應2026 年本淨比3.2 倍。惟仍需留意雲端資本 ... FactSet (FDS) 財報,週五(9/20)：無重大事件排程（注意三巫日選擇權結算波動 ...",
+        "url": "https://www.cmoney.tw/forum/usstock/NVDA?tab=report",
+        "domain": "www.cmoney.tw",
+        "relevance_score": 6,
+        "has_factset_content": true,
+        "has_financial_content": true
+      }
+    ]
+  }
+}
