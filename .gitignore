@@ -11,7 +11,3 @@ __pycache__
 /data/reports/validation_summary_2*.csv
 /logs
 /cache
-search_group/cache/
-search_group/logs/
-process_group/data/
-process_group/logs/
