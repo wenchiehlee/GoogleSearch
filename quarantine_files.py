@@ -3,17 +3,24 @@
 Quarantine MD Files Script
 Moves problematic MD files to quarantine directory
 
-Quarantine Criteria:
-  - Old files (older than X days)
-  - Low quality files (quality_score <= threshold)
+Quarantine Criteria (Optional Filters):
+  - Old files (--days X: older than X days)
+  - Low quality files (--max-quality N: quality_score <= N)
+
+Always Checked:
   - Inflated quality scores (high score but no actual data)
-  - Inconsistent quality metadata
+  - Inconsistent quality metadata (quality_score ≠ 品質評分)
+
+Performance:
+  - Optimized single-pass file reading
+  - Real-time progress indicators
+  - ETA and processing speed display
 
 Usage:
-    python quarantine_files.py                        # Scan and report only (no age filter)
+    python quarantine_files.py                        # Check inflated/inconsistent only
     python quarantine_files.py --quarantine           # Actually move files
-    python quarantine_files.py --days 90              # Custom age threshold
-    python quarantine_files.py --max-quality 5        # Quarantine low-quality files
+    python quarantine_files.py --days 90              # Add age filter (>90 days)
+    python quarantine_files.py --max-quality 5        # Add quality filter (≤5)
     python quarantine_files.py --days 90 --max-quality 5 --quarantine
 """
 
@@ -38,8 +45,21 @@ class OldFileQuarantiner:
 
     def __init__(self, days_threshold: int = None, max_quality: float = None):
         self.data_dir = Path("data/md")
-        self.quarantine_dir = Path("data/quarantine/old_files")
-        self.quarantine_dir.mkdir(parents=True, exist_ok=True)
+        self.quarantine_base_dir = Path("data/quarantine")
+        self.quarantine_base_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create subdirectories for different quarantine reasons
+        self.quarantine_dirs = {
+            'old': self.quarantine_base_dir / 'old',
+            'inflated_quality': self.quarantine_base_dir / 'inflated_quality',
+            'inconsistent': self.quarantine_base_dir / 'inconsistent',
+            'low_quality': self.quarantine_base_dir / 'low_quality'
+        }
+
+        # Create all subdirectories
+        for qdir in self.quarantine_dirs.values():
+            qdir.mkdir(parents=True, exist_ok=True)
+
         self.days_threshold = days_threshold
         self.max_quality = max_quality
 
@@ -62,11 +82,12 @@ class OldFileQuarantiner:
             filters.append(f"quality <= {self.max_quality}")
 
         if filters:
-            print(f"[INFO] Quarantine criteria: {' OR '.join(filters)}\n")
+            print(f"[INFO] Quarantine criteria: {' OR '.join(filters)}")
         else:
-            print(f"[INFO] No filters specified - will use default (90 days)\n")
-            self.days_threshold = 90
-            self.cutoff_date = datetime.now() - timedelta(days=90)
+            print(f"[INFO] No age/quality filters - will check for inflated/inconsistent quality scores only")
+
+        # Always check for inflated/inconsistent scores
+        print(f"[INFO] Always checking: inflated quality scores, inconsistent metadata\n")
 
     def extract_md_date(self, filepath: Path) -> Tuple[datetime, str]:
         """Extract md_date from MD file"""
@@ -185,6 +206,95 @@ class OldFileQuarantiner:
             print(f"[ERROR] Failed to check data in {filepath.name}: {e}")
             return True  # Assume has data if we can't check
 
+    def extract_all_info(self, filepath: Path) -> Dict:
+        """
+        Optimized: Extract all information from MD file in ONE read
+        Returns: dict with date_obj, date_str, quality_score, is_consistent, has_data
+        """
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()  # Read file ONCE
+
+            # Extract date (from first 2000 chars)
+            header = content[:2000]
+
+            # Look for md_date in YAML frontmatter
+            md_date_match = re.search(r'md_date:\s*(\d{4})/(\d{1,2})/(\d{1,2})', header)
+            if md_date_match:
+                year, month, day = md_date_match.groups()
+                date_str = f"{year}/{month.zfill(2)}/{day.zfill(2)}"
+                date_obj = datetime(int(year), int(month), int(day))
+            else:
+                # Fallback: Look for extracted_date
+                extracted_match = re.search(r'extracted_date:\s*(\d{4})-(\d{2})-(\d{2})', header)
+                if extracted_match:
+                    year, month, day = extracted_match.groups()
+                    date_str = f"{year}/{month}/{day}"
+                    date_obj = datetime(int(year), int(month), int(day))
+                else:
+                    # Fallback: Use file modification time
+                    mtime = filepath.stat().st_mtime
+                    date_obj = datetime.fromtimestamp(mtime)
+                    date_str = date_obj.strftime('%Y/%m/%d') + " (file mtime)"
+
+            # Extract quality scores
+            en_match = re.search(r'quality_score:\s*([0-9]+(?:\.[0-9]+)?)', header)
+            zh_match = re.search(r'品質評分:\s*([0-9]+(?:\.[0-9]+)?)', header)
+
+            en_score = float(en_match.group(1)) if en_match else None
+            zh_score = float(zh_match.group(1)) if zh_match else None
+
+            # Check for inconsistency
+            is_consistent = True
+            if en_score is not None and zh_score is not None:
+                if abs(en_score - zh_score) > 0.01:
+                    is_consistent = False
+
+            # Get final quality score
+            quality_score = en_score if en_score is not None else (zh_score if zh_score is not None else -1.0)
+
+            # Check for actual data (use full content)
+            eps_patterns = [
+                r'EPS.*?(\d{4}).*?(\d+\.?\d*)',
+                r'每股盈餘.*?(\d+\.?\d*)',
+                r'earnings.*?per.*?share',
+            ]
+            analyst_patterns = [
+                r'(\d+).*?位?分析師',
+                r'(\d+).*?analysts?',
+                r'分析師.*?(\d+)',
+            ]
+            target_patterns = [
+                r'目標價.*?(\d+\.?\d*)',
+                r'target.*?price.*?(\d+\.?\d*)',
+                r'NT\$?\s*(\d+\.?\d*)',
+            ]
+
+            has_eps = any(re.search(pattern, content, re.IGNORECASE) for pattern in eps_patterns)
+            has_analysts = any(re.search(pattern, content, re.IGNORECASE) for pattern in analyst_patterns)
+            has_target = any(re.search(pattern, content, re.IGNORECASE) for pattern in target_patterns)
+            has_factset = 'factset' in content.lower() or 'FactSet' in content
+
+            has_data = has_eps or has_analysts or has_target or has_factset
+
+            return {
+                'date_obj': date_obj,
+                'date_str': date_str,
+                'quality_score': quality_score,
+                'is_consistent': is_consistent,
+                'has_data': has_data
+            }
+
+        except Exception as e:
+            print(f"[ERROR] Failed to extract info from {filepath.name}: {e}")
+            return {
+                'date_obj': datetime(2020, 1, 1),
+                'date_str': "2020/01/01 (error)",
+                'quality_score': -1.0,
+                'is_consistent': True,
+                'has_data': True
+            }
+
     def _get_quarantine_reasons(self, date_obj: datetime, quality_score: float, is_consistent: bool, has_data: bool = True) -> List[str]:
         reasons = []
         # Check for data inconsistency first
@@ -206,15 +316,31 @@ class OldFileQuarantiner:
         results = []
 
         md_files = list(self.data_dir.glob("*.md"))
-        print(f"[INFO] Scanning {len(md_files)} MD files...\n")
+        total_files = len(md_files)
+        print(f"[INFO] Scanning {total_files} MD files...\n")
 
-        for filepath in md_files:
-            date_obj, date_str = self.extract_md_date(filepath)
-            quality_score, is_consistent = self.extract_quality_score(filepath)
+        # Progress tracking
+        progress_interval = max(10, total_files // 10)  # Show progress every 10% or every 10 files
+        start_time = datetime.now()
 
-            # Check if file has actual data (for inflated quality detection)
-            has_data = self.has_actual_data(filepath)
+        for idx, filepath in enumerate(md_files, 1):
+            # Show progress indicators
+            if idx % progress_interval == 0 or idx == total_files:
+                elapsed = (datetime.now() - start_time).total_seconds()
+                rate = idx / elapsed if elapsed > 0 else 0
+                eta = (total_files - idx) / rate if rate > 0 else 0
+                print(f"[PROGRESS] {idx}/{total_files} files ({idx*100//total_files}%) | "
+                      f"{rate:.1f} files/sec | ETA: {eta:.0f}s")
 
+            # Extract all info in ONE read (optimized!)
+            info = self.extract_all_info(filepath)
+            date_obj = info['date_obj']
+            date_str = info['date_str']
+            quality_score = info['quality_score']
+            is_consistent = info['is_consistent']
+            has_data = info['has_data']
+
+            # Check quarantine reasons
             reasons = self._get_quarantine_reasons(date_obj, quality_score, is_consistent, has_data)
 
             if reasons:
@@ -233,6 +359,11 @@ class OldFileQuarantiner:
                     'has_data': has_data,
                     'reasons': reasons
                 })
+
+        # Final summary
+        total_time = (datetime.now() - start_time).total_seconds()
+        print(f"\n[INFO] Scan completed in {total_time:.1f}s ({total_files/total_time:.1f} files/sec)")
+        print(f"[INFO] Found {len(results)} files matching quarantine criteria\n")
 
         return results
 
@@ -307,40 +438,67 @@ class OldFileQuarantiner:
         return '\n'.join(report_lines)
 
     def quarantine_files(self, results: List[Dict]) -> int:
-        """Move old files to quarantine"""
+        """Move files to quarantine, organized by reason"""
         moved_count = 0
 
-        # Group by month for organized quarantine
+        # Track counts by reason
+        reason_counts = {reason: 0 for reason in self.quarantine_dirs.keys()}
+
         for result in results:
             filepath = result['filepath']
             date_obj = result['date_obj']
+            reasons = result['reasons']
 
-            # Create subdirectory by year-month
-            month_dir = self.quarantine_dir / date_obj.strftime('%Y-%m')
-            month_dir.mkdir(exist_ok=True)
+            # Determine primary quarantine reason (priority order)
+            # Priority: inconsistent > inflated_quality > low_quality > old
+            primary_reason = None
+            if 'inconsistent_quality' in reasons:
+                primary_reason = 'inconsistent'
+            elif 'inflated_quality' in reasons:
+                primary_reason = 'inflated_quality'
+            elif 'low_quality' in reasons:
+                primary_reason = 'low_quality'
+            elif 'old' in reasons:
+                primary_reason = 'old'
 
-            dest_path = month_dir / filepath.name
+            if primary_reason:
+                # Get the appropriate quarantine directory
+                base_dir = self.quarantine_dirs[primary_reason]
 
-            try:
-                shutil.move(str(filepath), str(dest_path))
-                print(f"[OK] Moved: {filepath.name} -> {month_dir.name}/")
-                moved_count += 1
-            except Exception as e:
-                print(f"[ERROR] Failed to move {filepath.name}: {e}")
+                # Create subdirectory by year-month within the reason directory
+                month_dir = base_dir / date_obj.strftime('%Y-%m')
+                month_dir.mkdir(exist_ok=True)
+
+                dest_path = month_dir / filepath.name
+
+                try:
+                    shutil.move(str(filepath), str(dest_path))
+                    reason_counts[primary_reason] += 1
+                    print(f"[OK] Moved: {filepath.name} -> {primary_reason}/{month_dir.name}/")
+                    moved_count += 1
+                except Exception as e:
+                    print(f"[ERROR] Failed to move {filepath.name}: {e}")
+
+        # Print summary
+        print(f"\n[SUMMARY] Files moved by reason:")
+        for reason, count in reason_counts.items():
+            if count > 0:
+                print(f"  {reason}: {count} files")
 
         return moved_count
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Quarantine old MD files (default: >90 days)',
+        description='Quarantine problematic MD files (inflated/inconsistent quality, optional age/quality filters)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python quarantine_files.py                 # Scan and report (90 days)
-  python quarantine_files.py --days 60       # Use 60 days threshold
-  python quarantine_files.py --quarantine    # Actually quarantine files
-  python quarantine_files.py --days 180 --quarantine  # Quarantine >180 days
+  python quarantine_files.py                 # Check inflated/inconsistent only
+  python quarantine_files.py --days 60       # Add age filter (>60 days)
+  python quarantine_files.py --max-quality 5 # Add quality filter (≤5)
+  python quarantine_files.py --quarantine    # Actually move files
+  python quarantine_files.py --days 180 --quarantine  # Age filter + move
         """
     )
 
@@ -381,7 +539,8 @@ Examples:
 
         if response.lower() in ['yes', 'y']:
             moved = quarantiner.quarantine_files(results)
-            print(f"\n[OK] Quarantined {moved} files to: {quarantiner.quarantine_dir}")
+            print(f"\n[OK] Quarantined {moved} files to: {quarantiner.quarantine_base_dir}/")
+            print(f"[INFO] Files organized by reason: old/, inflated_quality/, inconsistent/, low_quality/")
         else:
             print("[INFO] Quarantine cancelled.")
     elif results and not args.quarantine:
