@@ -681,38 +681,10 @@ class SearchEngine:
             quality_data = self.quality_analyzer.analyze(parsed_data)
             return quality_data.get('quality_score', 0.0)
 
-        score = 0
-
-        # Content length scoring
-        if len(content) > 2000:
-            score += 2
-        elif len(content) > 1000:
-            score += 1
-
-        # Financial keywords
-        financial_keywords = [
-            'eps', '每股盈餘', '營收', '獲利', '分析師', '預估', 'factset',
-            '目標價', '評等', 'bloomberg', 'consensus'
-        ]
-
-        keyword_count = sum(1 for keyword in financial_keywords if keyword in content.lower())
-        score += min(keyword_count, 4)
-
-        # Source quality
-        if 'cnyes.com' in url:
-            score += 2
-        elif any(site in url for site in ['statementdog.com', 'moneydj.com', 'yahoo.com']):
-            score += 1
-
-        # Title quality
-        if any(word in title.lower() for word in ['factset', 'eps', '預估', '分析師']):
-            score += 1
-
-        # Numerical data presence
-        if re.search(r'\d+\.?\d*\s*元', content):
-            score += 1
-
-        return min(score, 10)
+        # No fallback heuristics - if proper analyzer isn't available, return 0
+        # This ensures only files with actual FactSet data get quality scores
+        print(f"⚠️ Quality analyzer not available, returning score 0")
+        return 0.0
 
 
 # Example usage and testing
