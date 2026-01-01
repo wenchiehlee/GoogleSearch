@@ -1,7 +1,7 @@
 name: Daily FactSet Process - Taiwan Financial Data
 on:
   workflow_run:
-    workflows: ["Quarantine Files (CSV-based)"]  # Trigger after Quarantine completes
+    workflows: ["Daily FactSet Search - Taiwan Financial Data"]  # Trigger after Search completes
     types:
       - completed
 
