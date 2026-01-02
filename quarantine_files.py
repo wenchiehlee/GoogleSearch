@@ -5,12 +5,12 @@ Moves problematic MD files to quarantine directory
 
 DEFAULT BEHAVIOR (no flags):
   - CSV-based detection: Uses factset_detailed_report_latest.csv
-  - Checks ONLY: quality_score >= 7 AND 分析師數量 = 0 (inflated quality)
+  - Checks ONLY: quality_score >= 7.5 (inflated quality)
   - Does NOT check: age, low quality (unless --days or --max-quality added)
 
 Detection Methods:
   1. CSV-based (RECOMMENDED, default): Fast, uses factset_detailed_report_latest.csv
-     - Criteria: quality_score >= 7 AND 分析師數量 = 0
+     - Criteria: quality_score >= 7.5
      - Only checks inflated quality scores
   2. File-based (--no-csv): Direct MD file parsing
      - Also checks: inconsistent quality metadata
@@ -348,7 +348,7 @@ class OldFileQuarantiner:
         if not is_consistent:
             reasons.append("inconsistent_quality")
         # Check for inflated quality score (high score but no actual data)
-        if quality_score >= 7.0 and not has_data:
+        if quality_score >= 7.5 and not has_data:
             reasons.append("inflated_quality")
         # Only check age if days_threshold was specified
         if self.cutoff_date is not None and date_obj < self.cutoff_date:
@@ -363,7 +363,7 @@ class OldFileQuarantiner:
         CSV-based detection (RECOMMENDED): Much faster and more reliable
 
         Quarantine files with:
-        - quality_score >= 7 AND 分析師數量 = 0
+        - quality_score >= 7.5
 
         This approach is simpler than parsing MD files and uses already-processed data.
         """
@@ -381,16 +381,13 @@ class OldFileQuarantiner:
             return self.scan_old_files()
 
         print(f"[INFO] Using CSV-based detection: {csv_path}")
-        print(f"[INFO] Criteria: quality_score >= 7 AND 分析師數量 = 0\n")
+        print(f"[INFO] Criteria: quality_score >= 7.5\n")
 
         # Read CSV
         df = pd.read_csv(csv_path, encoding='utf-8-sig')
 
-        # Find inflated: quality >= 7 but 0 analysts
-        inflated = df[
-            (df['品質評分'] >= 7) &
-            (df['分析師數量'] == 0)
-        ]
+        # Find inflated: quality >= 7.5
+        inflated = df[df['品質評分'] >= 7.5]
 
         print(f"[INFO] Found {len(inflated)} files with inflated quality scores")
 
@@ -621,7 +618,7 @@ DEFAULT BEHAVIOR (no flags):
   python quarantine_files.py                 # CSV-based: inflated quality ONLY
 
   What it checks:
-  - Inflated quality scores (score >= 7 AND 分析師數量 = 0)
+  - Inflated quality scores (score >= 7.5)
   - Source: data/reports/factset_detailed_report_latest.csv
 
   What it does NOT check (unless explicitly added):
@@ -638,7 +635,7 @@ Examples:
 
 CSV-based detection (DEFAULT):
   - Uses: data/reports/factset_detailed_report_latest.csv
-  - Checks ONLY: quality_score >= 7 AND 分析師數量 = 0
+  - Checks ONLY: quality_score >= 7.5
   - Fast, reliable, uses already-processed data
   - Perfect for daily automation (no age checking)
         """
