@@ -784,8 +784,7 @@ class ProcessCLI:
 
             # 4. 僅儲存詳細報告 CSV
             output_path = os.path.join(self.report_generator.output_dir, 'factset_detailed_report_latest.csv')
-            df = pd.DataFrame(detailed_report)
-            df.to_csv(output_path, index=False, encoding='utf-8-sig')
+            detailed_report.to_csv(output_path, index=False, encoding='utf-8-sig')
             print(f"💾 已儲存: {output_path}")
 
             print(f"\n✅ CSV 報告生成完成！")
