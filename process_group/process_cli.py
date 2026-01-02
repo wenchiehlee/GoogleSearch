@@ -291,8 +291,8 @@ class ProcessCLI:
             md_files = self.md_scanner.scan_all_md_files()
             
             if not md_files:
-                print("❌ 未找到任何 MD 檔案")
-                return False
+                print("⚠️ 未找到任何 MD 檔案 - 無需處理 (視為成功)")
+                return True
             
             print(f"📁 找到 {len(md_files)} 個 MD 檔案")
             
@@ -754,8 +754,8 @@ class ProcessCLI:
             md_files = self.md_scanner.scan_all_md_files()
 
             if not md_files:
-                print("❌ 未找到任何 MD 檔案")
-                return False
+                print("⚠️ 未找到任何 MD 檔案 - 無需生成 CSV (視為成功)")
+                return True
 
             print(f"✅ 找到 {len(md_files)} 個 MD 檔案")
 
