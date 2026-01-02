@@ -37,7 +37,7 @@ class ProcessCLI:
         # 1. MD Scanner (required)
         try:
             from md_scanner import MDScanner
-            self.md_scanner = MDScanner(md_dir="data/md")
+            self.md_scanner = MDScanner(md_dir="../data/md")
             print("[OK] MDScanner loaded")
         except ImportError as e:
             print(f"[ERROR] MDScanner failed: {e}")
