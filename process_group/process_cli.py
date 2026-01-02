@@ -762,21 +762,36 @@ class ProcessCLI:
             # 2. 解析 MD 檔案
             print("🔄 解析 MD 檔案...")
             processed_companies = []
+            total_files = len(md_files)
+            failed_count = 0
 
             for i, md_file in enumerate(md_files, 1):
                 try:
-                    print(f"   處理中 ({i}/{len(md_files)}): {os.path.basename(md_file)}")
+                    # Progress bar display
+                    progress_pct = (i / total_files) * 100
+                    bar_length = 30
+                    filled_length = int(bar_length * i // total_files)
+                    bar = '█' * filled_length + '░' * (bar_length - filled_length)
+
+                    print(f"\r   [{bar}] {progress_pct:>5.1f}% ({i}/{total_files}) - {os.path.basename(md_file)[:40]:<40}", end='', flush=True)
+
                     parsed_data = self.md_parser.parse_md_file(md_file)
                     processed_companies.append(parsed_data)
                 except Exception as e:
-                    print(f"   ⚠️ 解析失敗: {os.path.basename(md_file)} - {e}")
+                    failed_count += 1
                     continue
+
+            # Clear progress line and show summary
+            print(f"\r   {'':80}\r", end='')  # Clear line
+            print(f"✅ 成功處理 {len(processed_companies)}/{total_files} 家公司", end='')
+            if failed_count > 0:
+                print(f" (失敗: {failed_count})")
+            else:
+                print()
 
             if not processed_companies:
                 print("❌ 沒有成功處理的公司資料")
                 return False
-
-            print(f"✅ 成功處理 {len(processed_companies)} 家公司")
 
             # 3. 生成詳細報告 CSV
             print("📋 生成詳細報告...")

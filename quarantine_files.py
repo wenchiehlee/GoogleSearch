@@ -414,14 +414,20 @@ class OldFileQuarantiner:
                     date_obj = datetime.now()
                     date_str = date_obj.strftime('%Y/%m/%d')
 
+                # Calculate age in days
+                age_days = (datetime.now() - date_obj).days
+
                 results.append({
                     'filepath': md_file,
+                    'filename': md_file.name,
+                    'stock_code': stock_code,
+                    'company_name': company_name,
+                    'md_date': date_str,
                     'date_obj': date_obj,
-                    'date_str': date_str,
+                    'age_days': age_days,
                     'quality_score': quality_score,
-                    'reasons': ['inflated_quality'],
-                    'company': company_name,
-                    'stock_code': stock_code
+                    'has_data': False,  # inflated_quality means no actual data
+                    'reasons': ['inflated_quality']
                 })
                 break  # Only quarantine first matching file per row
 
@@ -565,7 +571,19 @@ class OldFileQuarantiner:
         # Track counts by reason
         reason_counts = {reason: 0 for reason in self.quarantine_dirs.keys()}
 
+        # Deduplicate by filepath to avoid moving the same file multiple times
+        seen_files = {}
         for result in results:
+            filepath_str = str(result['filepath'])
+            if filepath_str not in seen_files:
+                seen_files[filepath_str] = result
+            # If duplicate, keep the one with the most recent date
+            elif result['date_obj'] > seen_files[filepath_str]['date_obj']:
+                seen_files[filepath_str] = result
+
+        print(f"[INFO] Deduplicated {len(results)} entries to {len(seen_files)} unique files\n")
+
+        for result in seen_files.values():
             filepath = result['filepath']
             date_obj = result['date_obj']
             reasons = result['reasons']
