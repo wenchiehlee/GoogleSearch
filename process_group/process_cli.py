@@ -763,12 +763,13 @@ class ProcessCLI:
             print("🔄 解析 MD 檔案...")
             processed_companies = []
 
-            for md_file in md_files:
+            for i, md_file in enumerate(md_files, 1):
                 try:
+                    print(f"   處理中 ({i}/{len(md_files)}): {os.path.basename(md_file)}")
                     parsed_data = self.md_parser.parse_md_file(md_file)
                     processed_companies.append(parsed_data)
                 except Exception as e:
-                    print(f"⚠️ 解析檔案失敗 {md_file}: {e}")
+                    print(f"   ⚠️ 解析失敗: {os.path.basename(md_file)} - {e}")
                     continue
 
             if not processed_companies:
