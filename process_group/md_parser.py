@@ -74,6 +74,12 @@ class MDParser:
             r'target\s*price\s*[:：]\s*([0-9]+\.?[0-9]*)',
         ]
         
+        self.revenue_patterns = [
+            r'(\d{4})年[^|]*\|\s*([0-9,]+(?:\.[0-9]+)?)',
+            r'(\d{4})\s*年\s*營收\s*[:：]?\s*([0-9,]+(?:\.[0-9]+)?)',
+            r'revenue\s*(\d{4})\s*[:：]\s*([0-9,]+(?:\.[0-9]+)?)',
+        ]
+        
         self.analyst_patterns = [
             r'共\s*(\d+)\s*位分析師',
             r'(\d+)\s*位分析師',
@@ -243,11 +249,14 @@ class MDParser:
             # 原有功能：EPS 等資料提取
             eps_data = self._extract_eps_data(content)
             eps_stats = self._calculate_eps_statistics(eps_data)
+            revenue_stats = self._calculate_revenue_statistics(content)
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
 
-            # REMOVED: 不再重新計算 quality score，直接使用 YAML 中的值
-            # data_richness 已從上方 YAML 讀取
+            # 重新計算品質評分 (使用新邏輯覆蓋 YAML 值)
+            data_richness = self._calculate_data_richness_enhanced(
+                eps_stats, revenue_stats, target_price, analyst_count, content_date
+            )
             
             # 內容品質評估 (v3.6.1)
             content_quality_metrics = self._assess_content_quality(content)
@@ -266,10 +275,9 @@ class MDParser:
                 'extracted_date': yaml_data.get('extracted_date'),
                 'filename_date': file_info.get('parsed_timestamp'),
                 
-                # EPS 資料
+                # 財務資料
                 **eps_stats,
-                
-                # 其他財務資料
+                **revenue_stats,
                 'target_price': target_price,
                 'analyst_count': analyst_count,
                 
@@ -311,42 +319,130 @@ class MDParser:
             print(f"解析檔案失敗 {file_path}: {e}")
             return self._create_empty_result_enhanced(file_path, str(e))
 
-    def _calculate_data_richness_enhanced(self, eps_stats: Dict, target_price: Optional[float], 
+    def _calculate_data_richness_enhanced(self, eps_stats: Dict, revenue_stats: Dict, target_price: Optional[float], 
                                         analyst_count: int, content_date: str) -> float:
-        """MODIFIED: 計算資料豐富度分數 (0-10) - 對缺少內容日期進行嚴重懲罰"""
+        """MODIFIED: 計算資料豐富度分數 (0-10) - 包含 EPS 和 營收 的完整性評估"""
         
         # CRITICAL: Content date availability check
         if not content_date or content_date.strip() == "":
-            # Missing content date = severe quality penalty but not exclusion
-            print(f"⚠️  缺少內容日期，品質評分限制為1分 (財務資訊需要發布日期才有效)")
-            return 1.0  # Maximum score of 1 for files without content date
+            print(f"⚠️  缺少內容日期，品質評分限制為1分")
+            return 1.0
         
-        # Content date available - proceed with normal scoring
-        score = 3.0  # Base score for having content date
+        score = 2.0  # Base score for having content date
         
-        # EPS data scoring (reduced weight to accommodate base score)
-        eps_years = ['2025', '2026', '2027']
-        eps_available = sum(1 for year in eps_years if eps_stats.get(f'eps_{year}_avg') is not None)
-        score += (eps_available / len(eps_years)) * 4  # Reduced from 6 to 4
-        
-        # Target price scoring
+        # Target price (1.0)
         if target_price is not None:
-            score += 2
+            score += 1.0
         
-        # Analyst count scoring
+        # Analyst count (1.0)
         if analyst_count > 0:
-            if analyst_count >= 20:
-                score += 1
-            elif analyst_count >= 10:
-                score += 0.75
-            elif analyst_count >= 5:
-                score += 0.5
-            else:
-                score += 0.25
+            score += 1.0
+            
+        # EPS scoring (3.0 max, 1.0 per year)
+        for year in ['2025', '2026', '2027']:
+            year_score = 0
+            if eps_stats.get(f'eps_{year}_avg') is not None or eps_stats.get(f'eps_{year}_median') is not None:
+                year_score += 0.5
+            if eps_stats.get(f'eps_{year}_high') is not None or eps_stats.get(f'eps_{year}_low') is not None:
+                year_score += 0.5
+            score += year_score
+
+        # Revenue scoring (3.0 max, 1.0 per year)
+        for year in ['2025', '2026', '2027']:
+            year_score = 0
+            if revenue_stats.get(f'revenue_{year}_avg') is not None or revenue_stats.get(f'revenue_{year}_median') is not None:
+                year_score += 0.5
+            if revenue_stats.get(f'revenue_{year}_high') is not None or revenue_stats.get(f'revenue_{year}_low') is not None:
+                year_score += 0.5
+            score += year_score
         
         return round(min(score, 10), 2)
 
-    # Keep all other existing methods unchanged
+    def parse_md_file(self, file_path: str) -> Dict[str, Any]:
+        """v3.6.1 增強版 MD 檔案解析"""
+        try:
+            # 讀取檔案內容
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # 基本檔案資訊
+            file_info = self._extract_file_info(file_path)
+            company_code = file_info.get('company_code', '')
+            company_name = file_info.get('company_name', '')
+            
+            # 增強的 YAML front matter 解析
+            yaml_data = self._extract_yaml_frontmatter_enhanced(content)
+
+            # 查詢模式提取
+            search_keywords = self._extract_search_keywords_enhanced(content, yaml_data)
+
+            # 核心驗證
+            validation_result = self._validate_against_watch_list_enhanced(company_code, company_name)
+
+            # 日期提取
+            content_date = self._extract_content_date_bulletproof(content)
+            extraction_status = "content_extraction" if content_date else "no_date_found"
+
+            # 資料提取
+            eps_data = self._extract_eps_data(content)
+            eps_stats = self._calculate_eps_statistics(eps_data)
+            revenue_stats = self._calculate_revenue_statistics(content)
+            target_price = self._extract_target_price(content)
+            analyst_count = self._extract_analyst_count(content)
+
+            # 重新計算品質評分 (使用新邏輯覆蓋 YAML 值)
+            data_richness = self._calculate_data_richness_enhanced(
+                eps_stats, revenue_stats, target_price, analyst_count, content_date
+            )
+            
+            # 內容品質評估
+            content_quality_metrics = self._assess_content_quality(content)
+            
+            # 組合結果
+            result = {
+                'filename': os.path.basename(file_path),
+                'company_code': company_code,
+                'company_name': company_name,
+                'data_source': file_info.get('data_source', ''),
+                'file_mtime': datetime.fromtimestamp(os.path.getmtime(file_path)),
+                
+                'content_date': content_date,
+                'extracted_date': yaml_data.get('extracted_date'),
+                'filename_date': file_info.get('parsed_timestamp'),
+                
+                **eps_stats,
+                **revenue_stats,
+                'target_price': target_price,
+                'analyst_count': analyst_count,
+                
+                'has_eps_data': len(eps_data) > 0,
+                'has_target_price': target_price is not None,
+                'has_analyst_info': analyst_count > 0,
+                'data_richness_score': data_richness,
+                'quality_score': data_richness,
+                
+                'search_keywords': search_keywords,
+                'content_quality_metrics': content_quality_metrics,
+                'yaml_data': yaml_data,
+                'validation_result': validation_result,
+                'content_validation_passed': validation_result['overall_status'] == 'valid',
+                'validation_warnings': validation_result.get('warnings', []),
+                'validation_errors': validation_result.get('errors', []),
+                'validation_enabled': self.validation_enabled,
+                'content': content,
+                'content_length': len(content),
+                'parsed_at': datetime.now(),
+                'parser_version': self.version,
+                'date_extraction_method': extraction_status,
+                'debug_info': self._get_debug_info_enhanced(content, content_date, search_keywords)
+            }
+            
+            return result
+            
+        except Exception as e:
+            print(f"解析檔案失敗 {file_path}: {e}")
+            return self._create_empty_result_enhanced(file_path, str(e))
+
     def _extract_search_keywords_enhanced(self, content: str, yaml_data: Dict) -> List[str]:
         """v3.6.1 增強的搜尋關鍵字提取"""
         keywords = []
@@ -1138,7 +1234,18 @@ class MDParser:
             return eps_table_match.group(0)
         return None
 
-    def _parse_numeric_value(self, value: str) -> Optional[float]:
+    def _find_revenue_table_html(self, content: str) -> Optional[str]:
+        """定位市場預估營收表格"""
+        revenue_table_match = re.search(
+            r'市場預估營收.*?<table[^>]*>.*?</table>',
+            content,
+            re.DOTALL
+        )
+        if revenue_table_match:
+            return revenue_table_match.group(0)
+        return None
+
+    def _parse_numeric_value(self, value: str, min_val: float = 0) -> Optional[float]:
         """解析表格中的數值"""
         value = re.sub(r'\([^)]*\)', '', value)
         value = value.replace(',', '').strip()
@@ -1146,9 +1253,53 @@ class MDParser:
             number = float(value)
         except ValueError:
             return None
-        if not (0 < number < 1000):
+        
+        if number <= min_val:
             return None
         return number
+
+    def _extract_revenue_table_stats(self, content: str) -> Dict[str, Dict[str, float]]:
+        """從營收表格提取統計值"""
+        table_html = self._find_revenue_table_html(content)
+        if not table_html:
+            return {}
+
+        label_map = {
+            '最高值': 'high',
+            '最低值': 'low',
+            '平均值': 'avg',
+            '中位數': 'median',
+        }
+        stats: Dict[str, Dict[str, float]] = {}
+
+        row_pattern_3 = (
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>'
+        )
+        for label, v2025, v2026, v2027 in re.findall(row_pattern_3, table_html):
+            for year, raw in zip(['2025', '2026', '2027'], [v2025, v2026, v2027]):
+                value = self._parse_numeric_value(raw, min_val=1000)
+                if value is None:
+                    continue
+                stats.setdefault(year, {})[label_map[label]] = value
+
+        return stats
+
+    def _calculate_revenue_statistics(self, content: str) -> Dict[str, Any]:
+        """計算營收統計資料"""
+        result = {}
+        table_stats = self._extract_revenue_table_stats(content)
+
+        for year in ['2025', '2026', '2027']:
+            year_stats = table_stats.get(year, {})
+            result[f'revenue_{year}_high'] = year_stats.get('high')
+            result[f'revenue_{year}_low'] = year_stats.get('low')
+            result[f'revenue_{year}_avg'] = year_stats.get('avg')
+            result[f'revenue_{year}_median'] = year_stats.get('median')
+
+        return result
 
     def _extract_target_price(self, content: str) -> Optional[float]:
         """提取目標價格"""
@@ -1188,6 +1339,7 @@ class MDParser:
             high = table_year_stats.get('high')
             low = table_year_stats.get('low')
             avg = table_year_stats.get('avg')
+            median = table_year_stats.get('median')
 
             if high is None and values:
                 high = max(values)
@@ -1195,10 +1347,13 @@ class MDParser:
                 low = min(values)
             if avg is None and values:
                 avg = round(statistics.mean(values), 2)
+            if median is None and values:
+                median = round(statistics.median(values), 2)
 
             result[f'eps_{year}_high'] = high
             result[f'eps_{year}_low'] = low
             result[f'eps_{year}_avg'] = avg
+            result[f'eps_{year}_median'] = median
 
         return result
 
