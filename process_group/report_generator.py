@@ -16,10 +16,10 @@ import pytz
 
 class ReportGenerator:
     """報告生成器 v3.6.1-updated - 使用 Search Group 的 md_date 欄位"""
-    
-    def __init__(self, github_repo_base="https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main"):
+
+    def __init__(self, github_repo_base="https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main", output_dir="data/reports"):
         self.github_repo_base = github_repo_base
-        self.output_dir = "data/reports"
+        self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
         
         # 設定台北時區

@@ -25,54 +25,50 @@ Stage 1: Search Group (v3.6.0) → Stage 2: Process Group (v3.6.1)
 
 ### Search Group (Data Collection)
 
-Navigate to `search_group/` directory first:
+**Note**: All commands run from project root
 
 ```bash
-cd search_group
-
 # Validate API keys and setup
-python search_cli.py validate
+python search_group/search_cli.py validate
 
 # Search specific company
-python search_cli.py search --company 2330 --count 3 --min-quality 4
+python search_group/search_cli.py search --company 2330 --count 3 --min-quality 4
 
 # Search all companies (uses API key rotation)
-python search_cli.py search --all --count 2 --min-quality 4
+python search_group/search_cli.py search --all --count 2 --min-quality 4
 
 # Resume interrupted searches
-python search_cli.py search --resume --min-quality 4
+python search_group/search_cli.py search --resume --min-quality 4
 
 # Check status (API key rotation, quota, cache)
-python search_cli.py status
+python search_group/search_cli.py status
 ```
 
 ### Process Group (Analysis & Reporting)
 
-Navigate to `process_group/` directory first:
+**Note**: All commands run from project root
 
 ```bash
-cd process_group
-
 # Validate components
-python process_cli.py validate
+python process_group/process_cli.py validate
 
 # Full processing with all analysis + upload to Google Sheets
-python process_cli.py process
+python process_group/process_cli.py process
 
 # Process recent files only (incremental updates)
-python process_cli.py process-recent --hours=24
+python process_group/process_cli.py process-recent --hours=24
 
 # Process single company
-python process_cli.py process-single --company 2330
+python process_group/process_cli.py process-single --company 2330
 
 # Generate specific reports (without upload)
-python process_cli.py keyword-summary --no-upload
-python process_cli.py watchlist-summary --no-upload
+python process_group/process_cli.py keyword-summary --no-upload
+python process_group/process_cli.py watchlist-summary --no-upload
 
 # Analysis only
-python process_cli.py analyze-quality
-python process_cli.py analyze-keywords
-python process_cli.py analyze-watchlist
+python process_group/process_cli.py analyze-quality
+python process_group/process_cli.py analyze-keywords
+python process_group/process_cli.py analyze-watchlist
 ```
 
 ### Watchlist Update
@@ -268,38 +264,32 @@ Components are backward compatible within major version.
 python Get觀察名單.py
 
 # 2. Search (data collection)
-cd search_group
-python search_cli.py search --all --count 2 --min-quality 4
+python search_group/search_cli.py search --all --count 2 --min-quality 4
 
 # 3. Process (analysis)
-cd ../process_group
-python process_cli.py process
+python process_group/process_cli.py process
 
 # 4. Verify
-ls ../data/md/*.md | wc -l
-ls ../data/reports/*.csv
+ls data/md/*.md | wc -l
+ls data/reports/*.csv
 ```
 
 ### Testing Individual Components
 ```bash
 # Test Search Group only
-cd search_group
-python search_cli.py search --company 2330 --count 1
+python search_group/search_cli.py search --company 2330 --count 1
 
 # Test Process Group only
-cd process_group
-python process_cli.py process-single --company 2330 --no-upload
+python process_group/process_cli.py process-single --company 2330 --no-upload
 ```
 
 ### Incremental Updates
 ```bash
 # Search new companies only (resume)
-cd search_group
-python search_cli.py search --resume
+python search_group/search_cli.py search --resume
 
 # Process recent files only (last 24 hours)
-cd process_group
-python process_cli.py process-recent --hours=24
+python process_group/process_cli.py process-recent --hours=24
 ```
 
 ## Troubleshooting
@@ -330,7 +320,8 @@ Workflows split work into parallel batches for efficiency.
 
 ## Important Notes
 
-- Always navigate to `search_group/` or `process_group/` before running their respective CLIs
+- All commands run from project root (e.g., `python search_group/search_cli.py ...`)
+- All generated data (MD files, reports) stored in `data/` directory (project root)
 - Search Group quota is ~100 searches per API key per day
 - MD files use UTF-8 encoding with BOM for Chinese characters
 - Quality threshold of 4+ is recommended for production

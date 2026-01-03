@@ -26,7 +26,7 @@ class MDScanner:
     MD 檔案掃描器 v3.6.1 (Refined) - 處理群組的檔案系統介面
     負責掃描 data/md/ 目錄中的所有 MD 檔案，支援觀察名單統計
     """
-    
+
     def __init__(self, md_dir="data/md"):
         self.md_dir = md_dir
         self.version = "3.6.1"
