@@ -406,7 +406,15 @@ class OldFileQuarantiner:
         print(f"[INFO] Of these, {len(inflated)} have missing data (truly inflated)")
         print(f"[INFO] Skipping {len(high_quality) - len(inflated)} files with legitimate high quality\n")
 
+        # Also check for low quality files if max_quality is specified
+        low_quality_files = pd.DataFrame()
+        if self.max_quality is not None:
+            low_quality_files = df[df['品質評分'] <= self.max_quality].copy()
+            print(f"[INFO] Found {len(low_quality_files)} files with quality <= {self.max_quality} (low quality)\n")
+
         results = []
+
+        # Process inflated quality files
         for idx, row in inflated.iterrows():
             stock_code = row['代號']
             company_name = row['名稱']
@@ -462,6 +470,59 @@ class OldFileQuarantiner:
                 'quality_score': quality_score,
                 'has_data': False,  # These are confirmed inflated (high score, no data)
                 'reasons': ['inflated_quality']
+            })
+
+        # Process low quality files
+        for idx, row in low_quality_files.iterrows():
+            stock_code = row['代號']
+            company_name = row['名稱']
+            quality_score = row['品質評分']
+            md_date = str(row['MD日期'])
+            md_file_url = str(row['MD File']) if pd.notna(row.get('MD File')) else None
+
+            # Extract filename from URL if available
+            target_filename = None
+            if md_file_url and 'data/md/' in md_file_url:
+                target_filename = md_file_url.split('data/md/')[-1]
+
+            # Find matching MD file
+            if target_filename:
+                md_file = self.data_dir / target_filename
+                if not md_file.exists():
+                    md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+                    md_file = md_files[0] if md_files else None
+            else:
+                md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+                md_file = md_files[0] if md_files else None
+
+            if not md_file:
+                continue
+
+            # Parse date
+            if pd.notna(md_date) and len(md_date) >= 10:
+                try:
+                    date_obj = datetime.strptime(md_date, '%Y-%m-%d')
+                    date_str = date_obj.strftime('%Y/%m/%d')
+                except:
+                    date_obj = datetime.now()
+                    date_str = date_obj.strftime('%Y/%m/%d')
+            else:
+                date_obj = datetime.now()
+                date_str = date_obj.strftime('%Y/%m/%d')
+
+            age_days = (datetime.now() - date_obj).days
+
+            results.append({
+                'filepath': md_file,
+                'filename': md_file.name,
+                'stock_code': stock_code,
+                'company_name': company_name,
+                'md_date': date_str,
+                'date_obj': date_obj,
+                'age_days': age_days,
+                'quality_score': quality_score,
+                'has_data': True,  # Doesn't matter for low quality
+                'reasons': ['low_quality']
             })
 
         print(f"[INFO] CSV scan completed. Found {len(results)} files to quarantine\n")
