@@ -24,7 +24,16 @@
       "Bash(mv:*)",
       "Bash(git checkout:*)",
       "Bash(git reset:*)",
-      "Bash(git ls-files:*)"
+      "Bash(git ls-files:*)",
+      "Bash(PYTHONIOENCODING=utf-8 python:*)",
+      "Bash(PYTHONIOENCODING=utf-8 timeout 30 python:*)",
+      "Bash(head:*)",
+      "Bash(while [ ! -f /tmp/claude_process_complete ])",
+      "Bash(do sleep:*)",
+      "Bash(if [ -f /tmp/force_rescan_output.txt ])",
+      "Bash(then grep -B2 -A8 \"2308_台達電\" /tmp/force_rescan_output.txt)",
+      "Bash(else echo \"Log file not found yet\")",
+      "Bash(fi)"
     ]
   }
 }
