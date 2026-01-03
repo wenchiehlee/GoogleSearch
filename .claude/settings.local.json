@@ -33,7 +33,8 @@
       "Bash(if [ -f /tmp/force_rescan_output.txt ])",
       "Bash(then grep -B2 -A8 \"2308_台達電\" /tmp/force_rescan_output.txt)",
       "Bash(else echo \"Log file not found yet\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(du:*)"
     ]
   }
 }
