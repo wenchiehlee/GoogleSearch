@@ -5,12 +5,12 @@ Moves problematic MD files to quarantine directory
 
 DEFAULT BEHAVIOR (no flags):
   - CSV-based detection: Uses factset_detailed_report_latest.csv
-  - Checks ONLY: quality_score >= 7.5 AND missing revenue/EPS data (truly inflated)
+  - Checks ONLY: quality_score >= 7.6 AND missing revenue/EPS data (truly inflated)
   - Does NOT check: age, low quality (unless --days or --max-quality added)
 
 Detection Methods:
   1. CSV-based (RECOMMENDED, default): Fast, uses factset_detailed_report_latest.csv
-     - Criteria: quality_score >= 7.5 AND missing revenue/EPS data
+     - Criteria: quality_score >= 7.6 AND missing revenue/EPS data
      - Files with high quality AND actual data are NOT flagged (legitimate)
   2. File-based (--no-csv): Direct MD file parsing
      - Also checks: inconsistent quality metadata
@@ -348,7 +348,7 @@ class OldFileQuarantiner:
         if not is_consistent:
             reasons.append("inconsistent_quality")
         # Check for inflated quality score (high score but no actual data)
-        if quality_score >= 7.5 and not has_data:
+        if quality_score >= 7.6 and not has_data:
             reasons.append("inflated_quality")
         # Only check age if days_threshold was specified
         if self.cutoff_date is not None and date_obj < self.cutoff_date:
@@ -381,7 +381,7 @@ class OldFileQuarantiner:
             return self.scan_old_files()
 
         print(f"[INFO] Using CSV-based detection: {csv_path}")
-        print(f"[INFO] Criteria: quality_score >= 7.5 AND missing revenue/EPS data\n")
+        print(f"[INFO] Criteria: quality_score >= 7.6 AND missing revenue/EPS data\n")
 
         # Read CSV
         df = pd.read_csv(csv_path, encoding='utf-8-sig')
@@ -391,7 +391,7 @@ class OldFileQuarantiner:
         eps_cols = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值']
 
         # Find files with high quality scores
-        high_quality = df[df['品質評分'] >= 7.5].copy()
+        high_quality = df[df['品質評分'] >= 7.6].copy()
 
         # Check if they actually have data
         # A file has data if ANY revenue column OR ANY EPS column has a value
@@ -402,7 +402,7 @@ class OldFileQuarantiner:
         # Only flag files with high quality BUT no actual data (truly inflated)
         inflated = high_quality[~high_quality['has_data']]
 
-        print(f"[INFO] Found {len(high_quality)} files with quality >= 7.5")
+        print(f"[INFO] Found {len(high_quality)} files with quality >= 7.6")
         print(f"[INFO] Of these, {len(inflated)} have missing data (truly inflated)")
         print(f"[INFO] Skipping {len(high_quality) - len(inflated)} files with legitimate high quality\n")
 
@@ -669,7 +669,7 @@ DEFAULT BEHAVIOR (no flags):
   python quarantine_files.py                 # CSV-based: truly inflated quality ONLY
 
   What it checks:
-  - Inflated quality scores (score >= 7.5 BUT missing revenue/EPS data)
+  - Inflated quality scores (score >= 7.6 BUT missing revenue/EPS data)
   - Source: data/reports/factset_detailed_report_latest.csv
   - Files with high quality AND actual data are skipped (legitimate)
 
@@ -687,7 +687,7 @@ Examples:
 
 CSV-based detection (DEFAULT):
   - Uses: data/reports/factset_detailed_report_latest.csv
-  - Checks: quality_score >= 7.5 AND missing revenue/EPS data
+  - Checks: quality_score >= 7.6 AND missing revenue/EPS data
   - Skips: Files with high quality AND actual data (legitimate)
   - Fast, reliable, uses already-processed data
   - Perfect for daily automation (no false positives)
