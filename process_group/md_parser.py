@@ -207,6 +207,125 @@ class MDParser:
         print("系統將在無驗證模式下運行")
         return {}
 
+    def _check_and_migrate_version(self, file_path: str, yaml_data: Dict) -> bool:
+        """
+        檢查 MD 檔案版本，若過時則更新 metadata
+        返回: True 表示有更新, False 表示無需更新
+        """
+        file_version = yaml_data.get('version', 'unknown')
+
+        print(f"[DEBUG] 檢查版本: 檔案={file_version}, 當前={self.version}")
+
+        # 如果版本相同，無需更新
+        if file_version == self.version:
+            print(f"[DEBUG] 版本相同，跳過遷移")
+            return False
+
+        print(f"🔄 偵測到版本差異: {file_version} → {self.version}")
+
+        try:
+            # 讀取檔案內容
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # 重新計算 quality_score (使用當前版本的邏輯)
+            new_quality_score = self._recalculate_quality_score(content)
+
+            # 更新 frontmatter
+            updated = self._update_md_frontmatter(
+                file_path,
+                content,
+                yaml_data,
+                new_quality_score
+            )
+
+            if updated:
+                print(f"✅ 已更新檔案版本: {file_version} → {self.version}, quality_score: {yaml_data.get('quality_score')} → {new_quality_score}")
+                return True
+
+        except Exception as e:
+            print(f"⚠️  版本遷移失敗: {e}")
+
+        return False
+
+    def _recalculate_quality_score(self, content: str) -> float:
+        """使用當前版本邏輯重新計算 quality_score"""
+        try:
+            # 提取關鍵數據
+            eps_data = self._extract_eps_data(content)
+            analyst_count = self._extract_analyst_count(content)
+            target_price = self._extract_target_price(content)
+
+            # 計算數據豐富度 (簡化版評分邏輯)
+            score = 0.0
+
+            # EPS 數據 (最多 4 分)
+            if eps_data:
+                score += min(len(eps_data) * 1.0, 4.0)
+
+            # 分析師數量 (最多 3 分)
+            if analyst_count and analyst_count > 0:
+                score += min(analyst_count / 10.0 * 3.0, 3.0)
+
+            # 目標價 (3 分)
+            if target_price and target_price > 0:
+                score += 3.0
+
+            # 限制在 0-10 範圍
+            return round(min(max(score, 0.0), 10.0), 1)
+
+        except Exception as e:
+            print(f"⚠️  重新計算 quality_score 失敗: {e}")
+            return 0.0
+
+    def _update_md_frontmatter(self, file_path: str, content: str, yaml_data: Dict, new_quality_score: float) -> bool:
+        """更新 MD 檔案的 YAML frontmatter"""
+        try:
+            # 找到 YAML frontmatter 的範圍
+            yaml_match = re.match(r'^---\n(.*?)\n---\n', content, re.DOTALL)
+            if not yaml_match:
+                print("⚠️  找不到 YAML frontmatter")
+                return False
+
+            yaml_content = yaml_match.group(1)
+            rest_content = content[yaml_match.end():]
+
+            # 更新版本和 quality_score
+            updated_yaml = re.sub(
+                r'version:\s*[^\n]+',
+                f'version: {self.version}',
+                yaml_content
+            )
+            updated_yaml = re.sub(
+                r'quality_score:\s*[^\n]+',
+                f'quality_score: {new_quality_score}',
+                updated_yaml
+            )
+
+            # 添加更新時間戳記
+            update_timestamp = datetime.now().isoformat()
+            if 'updated_date:' in updated_yaml:
+                updated_yaml = re.sub(
+                    r'updated_date:\s*[^\n]+',
+                    f'updated_date: {update_timestamp}',
+                    updated_yaml
+                )
+            else:
+                updated_yaml += f'\nupdated_date: {update_timestamp}'
+
+            # 重組完整內容
+            new_content = f'---\n{updated_yaml}\n---\n{rest_content}'
+
+            # 寫回檔案
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+
+            return True
+
+        except Exception as e:
+            print(f"⚠️  更新 frontmatter 失敗: {e}")
+            return False
+
     def parse_md_file(self, file_path: str) -> Dict[str, Any]:
         """v3.6.1 增強版 MD 檔案解析"""
         try:
@@ -221,6 +340,15 @@ class MDParser:
             
             # 增強的 YAML front matter 解析
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
+
+            # 版本檢查與自動遷移 (v3.6.1 新功能)
+            was_migrated = self._check_and_migrate_version(file_path, yaml_data)
+
+            # 如果檔案被更新，重新讀取以獲得新的 metadata
+            if was_migrated:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                yaml_data = self._extract_yaml_frontmatter_enhanced(content)
 
             # CRITICAL: Read quality_score from MD file YAML (不重新計算)
             # 直接讀取 Search Group 寫入的 quality_score，作為 品質評分
@@ -372,6 +500,15 @@ class MDParser:
             
             # 增強的 YAML front matter 解析
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
+
+            # 版本檢查與自動遷移 (v3.6.1 新功能)
+            was_migrated = self._check_and_migrate_version(file_path, yaml_data)
+
+            # 如果檔案被更新，重新讀取以獲得新的 metadata
+            if was_migrated:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                yaml_data = self._extract_yaml_frontmatter_enhanced(content)
 
             # 查詢模式提取
             search_keywords = self._extract_search_keywords_enhanced(content, yaml_data)
