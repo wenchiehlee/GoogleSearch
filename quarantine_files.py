@@ -5,13 +5,13 @@ Moves problematic MD files to quarantine directory
 
 DEFAULT BEHAVIOR (no flags):
   - CSV-based detection: Uses factset_detailed_report_latest.csv
-  - Checks ONLY: quality_score >= 7.5 (inflated quality)
+  - Checks ONLY: quality_score >= 7.5 AND missing revenue/EPS data (truly inflated)
   - Does NOT check: age, low quality (unless --days or --max-quality added)
 
 Detection Methods:
   1. CSV-based (RECOMMENDED, default): Fast, uses factset_detailed_report_latest.csv
-     - Criteria: quality_score >= 7.5
-     - Only checks inflated quality scores
+     - Criteria: quality_score >= 7.5 AND missing revenue/EPS data
+     - Files with high quality AND actual data are NOT flagged (legitimate)
   2. File-based (--no-csv): Direct MD file parsing
      - Also checks: inconsistent quality metadata
 
@@ -363,7 +363,7 @@ class OldFileQuarantiner:
         CSV-based detection (RECOMMENDED): Much faster and more reliable
 
         Quarantine files with:
-        - quality_score >= 7.5
+        - quality_score >= 7.5 AND missing revenue/EPS data (truly inflated)
 
         This approach is simpler than parsing MD files and uses already-processed data.
         """
@@ -381,15 +381,30 @@ class OldFileQuarantiner:
             return self.scan_old_files()
 
         print(f"[INFO] Using CSV-based detection: {csv_path}")
-        print(f"[INFO] Criteria: quality_score >= 7.5\n")
+        print(f"[INFO] Criteria: quality_score >= 7.5 AND missing revenue/EPS data\n")
 
         # Read CSV
         df = pd.read_csv(csv_path, encoding='utf-8-sig')
 
-        # Find inflated: quality >= 7.5
-        inflated = df[df['品質評分'] >= 7.5]
+        # Define data columns to check
+        revenue_cols = ['2025營收平均值', '2026營收平均值', '2027營收平均值']
+        eps_cols = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值']
 
-        print(f"[INFO] Found {len(inflated)} files with inflated quality scores")
+        # Find files with high quality scores
+        high_quality = df[df['品質評分'] >= 7.5].copy()
+
+        # Check if they actually have data
+        # A file has data if ANY revenue column OR ANY EPS column has a value
+        high_quality['has_revenue'] = high_quality[revenue_cols].notna().any(axis=1)
+        high_quality['has_eps'] = high_quality[eps_cols].notna().any(axis=1)
+        high_quality['has_data'] = high_quality['has_revenue'] | high_quality['has_eps']
+
+        # Only flag files with high quality BUT no actual data (truly inflated)
+        inflated = high_quality[~high_quality['has_data']]
+
+        print(f"[INFO] Found {len(high_quality)} files with quality >= 7.5")
+        print(f"[INFO] Of these, {len(inflated)} have missing data (truly inflated)")
+        print(f"[INFO] Skipping {len(high_quality) - len(inflated)} files with legitimate high quality\n")
 
         results = []
         for idx, row in inflated.iterrows():
@@ -397,39 +412,57 @@ class OldFileQuarantiner:
             company_name = row['名稱']
             quality_score = row['品質評分']
             md_date = str(row['MD日期'])
+            md_file_url = str(row['MD File']) if pd.notna(row.get('MD File')) else None
 
-            # Find matching MD file(s)
-            md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+            # Extract filename from URL if available
+            target_filename = None
+            if md_file_url and 'data/md/' in md_file_url:
+                # Extract filename from URL: ...data/md/2301_光寶科_factset_83089811.md
+                target_filename = md_file_url.split('data/md/')[-1]
 
-            for md_file in md_files:
-                # Parse date for directory organization
-                if pd.notna(md_date) and len(md_date) >= 10:
-                    try:
-                        date_obj = datetime.strptime(md_date, '%Y-%m-%d')
-                        date_str = date_obj.strftime('%Y/%m/%d')
-                    except:
-                        date_obj = datetime.now()
-                        date_str = date_obj.strftime('%Y/%m/%d')
-                else:
+            # Find matching MD file
+            if target_filename:
+                # Try exact match first
+                md_file = self.data_dir / target_filename
+                if not md_file.exists():
+                    # Fallback to glob if exact match not found
+                    md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+                    md_file = md_files[0] if md_files else None
+            else:
+                # No URL in CSV, use glob
+                md_files = list(self.data_dir.glob(f'{stock_code}_*_factset_*.md'))
+                md_file = md_files[0] if md_files else None
+
+            if not md_file:
+                continue  # Skip if file not found
+
+            # Parse date for directory organization
+            if pd.notna(md_date) and len(md_date) >= 10:
+                try:
+                    date_obj = datetime.strptime(md_date, '%Y-%m-%d')
+                    date_str = date_obj.strftime('%Y/%m/%d')
+                except:
                     date_obj = datetime.now()
                     date_str = date_obj.strftime('%Y/%m/%d')
+            else:
+                date_obj = datetime.now()
+                date_str = date_obj.strftime('%Y/%m/%d')
 
-                # Calculate age in days
-                age_days = (datetime.now() - date_obj).days
+            # Calculate age in days
+            age_days = (datetime.now() - date_obj).days
 
-                results.append({
-                    'filepath': md_file,
-                    'filename': md_file.name,
-                    'stock_code': stock_code,
-                    'company_name': company_name,
-                    'md_date': date_str,
-                    'date_obj': date_obj,
-                    'age_days': age_days,
-                    'quality_score': quality_score,
-                    'has_data': False,  # inflated_quality means no actual data
-                    'reasons': ['inflated_quality']
-                })
-                break  # Only quarantine first matching file per row
+            results.append({
+                'filepath': md_file,
+                'filename': md_file.name,
+                'stock_code': stock_code,
+                'company_name': company_name,
+                'md_date': date_str,
+                'date_obj': date_obj,
+                'age_days': age_days,
+                'quality_score': quality_score,
+                'has_data': False,  # These are confirmed inflated (high score, no data)
+                'reasons': ['inflated_quality']
+            })
 
         print(f"[INFO] CSV scan completed. Found {len(results)} files to quarantine\n")
         return results
@@ -633,19 +666,20 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 DEFAULT BEHAVIOR (no flags):
-  python quarantine_files.py                 # CSV-based: inflated quality ONLY
+  python quarantine_files.py                 # CSV-based: truly inflated quality ONLY
 
   What it checks:
-  - Inflated quality scores (score >= 7.5)
+  - Inflated quality scores (score >= 7.5 BUT missing revenue/EPS data)
   - Source: data/reports/factset_detailed_report_latest.csv
+  - Files with high quality AND actual data are skipped (legitimate)
 
   What it does NOT check (unless explicitly added):
   - Age-based filtering (no --days flag)
   - Low quality filtering (no --max-quality flag)
 
 Examples:
-  python quarantine_files.py                 # Dry-run: Check inflated quality only
-  python quarantine_files.py --quarantine    # Move files: inflated quality only
+  python quarantine_files.py                 # Dry-run: Check truly inflated quality
+  python quarantine_files.py --quarantine    # Move files: truly inflated quality
   python quarantine_files.py --no-csv        # File-based: inflated + inconsistent
   python quarantine_files.py --days 60       # CSV + ADD age filter (>60 days)
   python quarantine_files.py --max-quality 5 # CSV + ADD quality filter (≤5)
@@ -653,9 +687,10 @@ Examples:
 
 CSV-based detection (DEFAULT):
   - Uses: data/reports/factset_detailed_report_latest.csv
-  - Checks ONLY: quality_score >= 7.5
+  - Checks: quality_score >= 7.5 AND missing revenue/EPS data
+  - Skips: Files with high quality AND actual data (legitimate)
   - Fast, reliable, uses already-processed data
-  - Perfect for daily automation (no age checking)
+  - Perfect for daily automation (no false positives)
         """
     )
 
