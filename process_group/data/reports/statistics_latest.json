@@ -1,7 +1,7 @@
 {
   "version": "3.6.1-updated-for-md-date",
   "report_type": "comprehensive_with_md_date_priority",
-  "timestamp": "2026-01-03T09:47:52.586555",
+  "timestamp": "2026-01-03T16:52:00.324503",
   "total_companies": 97,
   "companies_with_data": 97,
   "success_rate": 100.0,
@@ -25,15 +25,15 @@
     "filtered_out": 0
   },
   "quality_analysis": {
-    "average_quality_score": 9.0,
+    "average_quality_score": 8.2,
     "highest_quality_score": 10.0,
-    "lowest_quality_score": 6.0,
+    "lowest_quality_score": 4.5,
     "files_with_quality_1_or_less": 0,
     "quality_distribution": {
-      "excellent_9_10": 69,
-      "good_7_8": 19,
-      "fair_5_6": 9,
-      "poor_3_4": 0,
+      "excellent_9_10": 34,
+      "good_7_8": 42,
+      "fair_5_6": 18,
+      "poor_3_4": 3,
       "very_poor_1_2": 0,
       "missing_date_or_error_0_1": 0
     }

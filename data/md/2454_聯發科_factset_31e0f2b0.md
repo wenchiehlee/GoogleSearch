@@ -1,7 +1,7 @@
 ---
 url: https://m.fastbull.com/tw/news-detail/%E9%89%85%E4%BA%A8%E9%80%9F%E5%A0%B1--factset-%E6%9C%80%E6%96%B0%E8%AA%BF%E6%9F%A5%E8%81%AF%E7%99%BC%E7%A7%912454tweps%E9%A0%90%E4%BC%B0%E4%B8%8B%E4%BF%AE%E8%87%B37229%E5%85%83%E9%A0%90%E4%BC%B0%E7%9B%AE%E6%A8%99%E5%83%B9%E7%82%BA1700%E5%85%83-news_10100_2_2025_2_55572_3
 title: 鉅亨速報- Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29 ...
-quality_score: 10.0
+quality_score: 9.7
 company: 聯發科
 stock_code: 2454
 md_date: 2025/06/18
@@ -10,7 +10,7 @@ search_query: "2454" "聯發科" "EPS" "目標價"
 result_index: 30
 content_validation: {'is_valid': True, 'reason': 'Valid content about 2454 (聯發科) - symbol in proper context and name found', 'confidence': 1.1, 'symbol_found': True, 'symbol_in_context': True, 'name_found': True, 'false_positive': False}
 version: 3.6.1-modified
-updated_date: 2026-01-03T09:41:27.058435
+updated_date: 2026-01-03T16:40:34.689845
 ---
 <!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" dir="ltr" style="--color:#01e0af;--fontColor:rgba(31,37,51,.6);--fontFamily:-apple-system,BlinkMacSystemFont,Inter, segoe ui,Roboto,Helvetica,Arial,sans-serif;--fontFamilyRegular:-apple-system,BlinkMacSystemFont,Inter, segoe ui,Roboto,Helvetica,Arial,sans-serif;--GoogleSansMedium:-apple-system,BlinkMacSystemFont,Inter, segoe ui,Roboto,Helvetica,Arial,sans-serif"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元 - FastBull</title><meta name="keywords" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元"><meta name="description" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元"><meta property="og:type" content="website"><meta property="og:title" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元 - FastBull"><meta name="og:description" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元"><meta property="og:image" content="https://img.fastbull.com/static/images/shear_1tw.jpg"><meta name="twitter:description" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元"><meta property="twitter:image" content="https://img.fastbull.com/static/images/shear_1tw.jpg"><meta property="twitter:title" content="鉅亨速報 - Factset 最新調查：聯發科(2454-TW)EPS預估下修至72.29元，預估目標價為1700元 - FastBull"><meta name="twitter:card" content="summary_large_image"><style type="text/css">
       :root {

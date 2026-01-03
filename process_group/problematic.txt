@@ -1,0 +1,6 @@
+Code: 2330
+Name: 台積電
+Date: 2025-10-17
+Score: 7.5
+Analysts: 43
+MD File: https://raw.githubusercontent.com/wenchiehlee/GoogleSearch/refs/heads/main/data/md/2330_%E5%8F%B0%E7%A9%8D%E9%9B%BB_factset_91757b89.md

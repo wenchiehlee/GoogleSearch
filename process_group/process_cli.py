@@ -813,6 +813,48 @@ class ProcessCLI:
             traceback.print_exc()
             return False
 
+    def force_rescan_all_md_files(self, upload_sheets: bool = True) -> bool:
+        """強制重新掃描所有 MD 檔案 (即使版本相同也重新計算 quality_score)
+
+        用途:
+        - 修復已遷移但分數不正確的檔案 (例如: 舊版本評分算法導致的錯誤分數)
+        - 使用最新的 quality_analyzer_simplified.py 重新評分所有檔案
+        - 包含營收資料評分 (25% 權重)
+
+        流程:
+        1. 設定 md_parser.force_rescan = True
+        2. 掃描所有 MD 檔案
+        3. 重新解析並更新每個檔案的 quality_score
+        4. 生成報告並上傳
+        """
+        print(f"\n=== 強制重新掃描所有 MD 檔案 (v{self.version}) ===")
+        print(f"⚠️ 將重新計算所有檔案的 quality_score (包含營收評分)")
+
+        try:
+            # 啟用強制掃描模式
+            self.md_parser.force_rescan = True
+            print(f"✅ 已啟用強制掃描模式")
+
+            # 調用完整的處理流程
+            success = self.process_all_md_files(upload_sheets=upload_sheets)
+
+            # 還原強制掃描模式
+            self.md_parser.force_rescan = False
+
+            if success:
+                print(f"\n✅ 強制重新掃描完成！")
+                print(f"📊 所有檔案的 quality_score 已使用最新算法重新計算")
+            else:
+                print(f"\n❌ 強制重新掃描失敗")
+
+            return success
+
+        except Exception as e:
+            self.md_parser.force_rescan = False  # 確保還原
+            print(f"❌ 強制重新掃描失敗: {e}")
+            traceback.print_exc()
+            return False
+
     def show_stats(self) -> bool:
         """顯示統計資訊 - 增強內容日期統計"""
         print(f"\n=== ProcessCLI v{self.version} 統計資訊 ===")
@@ -880,6 +922,8 @@ def main():
   python process_cli.py process                     # 完整處理所有檔案
   python process_cli.py process --no-upload         # 處理但不上傳
   python process_cli.py generate-csv                # 僅生成 CSV (用於 Quarantine)
+  python process_cli.py force-rescan                # 強制重新掃描所有檔案 (重新計算分數)
+  python process_cli.py force-rescan --no-upload    # 強制重新掃描但不上傳
   python process_cli.py analyze-content-date        # 分析內容日期提取
   python process_cli.py analyze-keywords            # 查詢模式分析
   python process_cli.py analyze-watchlist           # 觀察名單分析
@@ -902,6 +946,7 @@ v3.6.1-modified 增強功能:
         'process-recent',          # 處理最近的 MD 檔案
         'process-single',          # 處理單一公司
         'generate-csv',            # 僅生成 CSV (用於 Quarantine)
+        'force-rescan',            # 強制重新掃描所有 MD 檔案 (重新計算 quality_score)
         'analyze-quality',         # 品質分析
         'analyze-keywords',        # 查詢模式分析 (v3.6.1)
         'analyze-watchlist',       # 觀察名單分析 (v3.6.1)
@@ -941,6 +986,9 @@ v3.6.1-modified 增強功能:
 
         elif args.command == 'generate-csv':
             success = cli.generate_csv_only()
+
+        elif args.command == 'force-rescan':
+            success = cli.force_rescan_all_md_files(upload_sheets=upload_sheets)
 
         elif args.command == 'analyze-content-date':
             success = cli.analyze_content_date_extraction()

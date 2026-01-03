@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 import statistics
 import json
+from quality_analyzer_simplified import QualityAnalyzerSimplified
 
 # Set UTF-8 encoding for Windows console (only if not already set)
 if sys.platform == 'win32' and hasattr(sys.stdout, 'buffer'):
@@ -89,7 +90,13 @@ class MDParser:
         # 載入觀察名單並進行嚴格驗證
         self.watch_list_mapping = self._load_watch_list_mapping_enhanced()
         self.validation_enabled = len(self.watch_list_mapping) > 0
-        
+
+        # 初始化品質分析器 (用於版本遷移時重新計算分數)
+        self.quality_analyzer = QualityAnalyzerSimplified()
+
+        # 強制重新掃描標記 (用於修復已遷移但分數不正確的檔案)
+        self.force_rescan = False
+
         print(f"MDParser v{self.version} 初始化完成")
         print(f"觀察名單驗證: {'啟用' if self.validation_enabled else '停用'} ({len(self.watch_list_mapping)} 家公司)")
 
@@ -207,21 +214,31 @@ class MDParser:
         print("系統將在無驗證模式下運行")
         return {}
 
-    def _check_and_migrate_version(self, file_path: str, yaml_data: Dict) -> bool:
+    def _check_and_migrate_version(self, file_path: str, yaml_data: Dict, force_rescan: bool = False) -> bool:
         """
         檢查 MD 檔案版本，若過時則更新 metadata
-        返回: True 表示有更新, False 表示無需更新
+
+        Args:
+            file_path: MD 檔案路徑
+            yaml_data: 檔案的 YAML metadata
+            force_rescan: 是否強制重新掃描 (即使版本相同)
+
+        Returns:
+            True 表示有更新, False 表示無需更新
         """
         file_version = yaml_data.get('version', 'unknown')
 
-        print(f"[DEBUG] 檢查版本: 檔案={file_version}, 當前={self.version}")
+        print(f"[DEBUG] 檢查版本: 檔案={file_version}, 當前={self.version}, 強制掃描={force_rescan}")
 
-        # 如果版本相同，無需更新
-        if file_version == self.version:
+        # 如果版本相同且未強制掃描，無需更新
+        if file_version == self.version and not force_rescan:
             print(f"[DEBUG] 版本相同，跳過遷移")
             return False
 
-        print(f"🔄 偵測到版本差異: {file_version} → {self.version}")
+        if force_rescan:
+            print(f"🔄 強制重新掃描: {file_version}")
+        else:
+            print(f"🔄 偵測到版本差異: {file_version} → {self.version}")
 
         try:
             # 讀取檔案內容
@@ -249,33 +266,49 @@ class MDParser:
         return False
 
     def _recalculate_quality_score(self, content: str) -> float:
-        """使用當前版本邏輯重新計算 quality_score"""
+        """使用當前版本邏輯重新計算 quality_score (完整版 - 使用 quality_analyzer_simplified.py)"""
         try:
-            # 提取關鍵數據
+            # 提取所有關鍵數據
             eps_data = self._extract_eps_data(content)
+            eps_stats = self._calculate_eps_statistics(eps_data)
+
+            revenue_stats = self._calculate_revenue_statistics(content)
+
             analyst_count = self._extract_analyst_count(content)
             target_price = self._extract_target_price(content)
+            content_date = self._extract_content_date_bulletproof(content)
 
-            # 計算數據豐富度 (簡化版評分邏輯)
-            score = 0.0
+            # 構建 parsed_data 字典 (與 quality_analyzer_simplified.py 兼容)
+            parsed_data = {
+                'company_code': 'unknown',  # 版本遷移時無法從 content 提取
+                'company_name': 'unknown',
+                'content_date': content_date,
+                'analyst_count': analyst_count,
+                'target_price': target_price,
+            }
 
-            # EPS 數據 (最多 4 分)
-            if eps_data:
-                score += min(len(eps_data) * 1.0, 4.0)
+            # 添加 EPS 統計數據
+            parsed_data.update(eps_stats)
 
-            # 分析師數量 (最多 3 分)
-            if analyst_count and analyst_count > 0:
-                score += min(analyst_count / 10.0 * 3.0, 3.0)
+            # 添加營收統計數據
+            parsed_data.update(revenue_stats)
 
-            # 目標價 (3 分)
-            if target_price and target_price > 0:
-                score += 3.0
+            # 使用完整的 quality_analyzer_simplified.py 進行評分
+            quality_result = self.quality_analyzer.analyze(parsed_data)
+            quality_score = quality_result.get('quality_score', 0.0)
 
-            # 限制在 0-10 範圍
-            return round(min(max(score, 0.0), 10.0), 1)
+            print(f"✓ 重新計算 quality_score: {quality_score}")
+            print(f"  - EPS years: {quality_result.get('summary_metrics', {}).get('eps_years_available', 0)}")
+            print(f"  - Revenue years: {quality_result.get('summary_metrics', {}).get('revenue_years_available', 0)}")
+            print(f"  - Analyst count: {analyst_count}")
+            print(f"  - Component scores: EPS={quality_result.get('component_scores', {}).get('eps_quality', 0):.1f}, Revenue={quality_result.get('component_scores', {}).get('revenue_quality', 0):.1f}")
+
+            return quality_score
 
         except Exception as e:
             print(f"⚠️  重新計算 quality_score 失敗: {e}")
+            import traceback
+            traceback.print_exc()
             return 0.0
 
     def _update_md_frontmatter(self, file_path: str, content: str, yaml_data: Dict, new_quality_score: float) -> bool:
@@ -342,7 +375,7 @@ class MDParser:
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
 
             # 版本檢查與自動遷移 (v3.6.1 新功能)
-            was_migrated = self._check_and_migrate_version(file_path, yaml_data)
+            was_migrated = self._check_and_migrate_version(file_path, yaml_data, force_rescan=self.force_rescan)
 
             # 如果檔案被更新，重新讀取以獲得新的 metadata
             if was_migrated:
@@ -381,10 +414,8 @@ class MDParser:
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
 
-            # 重新計算品質評分 (使用新邏輯覆蓋 YAML 值)
-            data_richness = self._calculate_data_richness_enhanced(
-                eps_stats, revenue_stats, target_price, analyst_count, content_date
-            )
+            # FIXED: 不再重新計算品質評分，直接使用從 YAML 讀取的值
+            # Process Group 應該只讀取 Search Group 寫入的 quality_score，保持兩階段架構分離
             
             # 內容品質評估 (v3.6.1)
             content_quality_metrics = self._assess_content_quality(content)
@@ -502,7 +533,7 @@ class MDParser:
             yaml_data = self._extract_yaml_frontmatter_enhanced(content)
 
             # 版本檢查與自動遷移 (v3.6.1 新功能)
-            was_migrated = self._check_and_migrate_version(file_path, yaml_data)
+            was_migrated = self._check_and_migrate_version(file_path, yaml_data, force_rescan=self.force_rescan)
 
             # 如果檔案被更新，重新讀取以獲得新的 metadata
             if was_migrated:
@@ -527,11 +558,17 @@ class MDParser:
             target_price = self._extract_target_price(content)
             analyst_count = self._extract_analyst_count(content)
 
-            # 重新計算品質評分 (使用新邏輯覆蓋 YAML 值)
-            data_richness = self._calculate_data_richness_enhanced(
-                eps_stats, revenue_stats, target_price, analyst_count, content_date
-            )
-            
+            # CRITICAL: Read quality_score from MD file YAML (不重新計算)
+            # 直接讀取 Search Group 寫入的 quality_score，作為 品質評分
+            quality_score_from_yaml = yaml_data.get('quality_score')
+            if quality_score_from_yaml is not None:
+                try:
+                    data_richness = float(quality_score_from_yaml)
+                except (ValueError, TypeError):
+                    data_richness = 0.0
+            else:
+                data_richness = 0.0
+
             # 內容品質評估
             content_quality_metrics = self._assess_content_quality(content)
             
