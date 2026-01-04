@@ -34,7 +34,12 @@
       "Bash(then grep -B2 -A8 \"2308_台達電\" /tmp/force_rescan_output.txt)",
       "Bash(else echo \"Log file not found yet\")",
       "Bash(fi)",
-      "Bash(du:*)"
+      "Bash(du:*)",
+      "Bash(git fetch:*)",
+      "Bash(git push:*)",
+      "Bash(gh run view:*)",
+      "Bash(python3 -c \"import sys; sys.path.insert\\(0, ''..''\\); from process_group.quality_analyzer_simplified import QualityAnalyzerSimplified\")",
+      "Bash(PYTHONPATH=/c/Users/WJLEE/SynologyDrive/NAS/github.com/GoogleSearch.Factset python:*)"
     ]
   }
 }
