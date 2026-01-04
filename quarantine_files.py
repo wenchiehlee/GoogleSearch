@@ -36,6 +36,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Dict, Tuple
+from urllib.parse import unquote
 
 # Set UTF-8 encoding for Windows console
 if sys.platform == 'win32':
@@ -427,6 +428,8 @@ class OldFileQuarantiner:
             if md_file_url and 'data/md/' in md_file_url:
                 # Extract filename from URL: ...data/md/2301_光寶科_factset_83089811.md
                 target_filename = md_file_url.split('data/md/')[-1]
+                # URL-decode the filename to handle Chinese characters
+                target_filename = unquote(target_filename)
 
             # Find matching MD file
             if target_filename:
@@ -484,6 +487,8 @@ class OldFileQuarantiner:
             target_filename = None
             if md_file_url and 'data/md/' in md_file_url:
                 target_filename = md_file_url.split('data/md/')[-1]
+                # URL-decode the filename to handle Chinese characters
+                target_filename = unquote(target_filename)
 
             # Find matching MD file
             if target_filename:
