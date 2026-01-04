@@ -14,7 +14,10 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Tuple
 import statistics
 import json
-from quality_analyzer_simplified import QualityAnalyzerSimplified
+try:
+    from quality_analyzer_simplified import QualityAnalyzerSimplified
+except ImportError:
+    from process_group.quality_analyzer_simplified import QualityAnalyzerSimplified
 
 # Set UTF-8 encoding for Windows console (only if not already set)
 if sys.platform == 'win32' and hasattr(sys.stdout, 'buffer'):
