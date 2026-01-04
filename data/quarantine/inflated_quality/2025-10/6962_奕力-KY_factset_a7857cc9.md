@@ -1,7 +1,7 @@
 ---
 url: https://uc913.com/stock-4961/
 title: 天鈺(4961) 4.7分[價值]→領息首選標的，但營運崩跌(12/28) - 913 ...
-quality_score: 7
+quality_score: 1.6
 company: 奕力-KY
 stock_code: 6962
 md_date: 2025/12/31
@@ -9,7 +9,8 @@ extracted_date: 2025-12-31T18:48:24.960570
 search_query: "奕力-KY" "EPS" "預估" "2025" "2026"
 result_index: 2
 content_validation: {'is_valid': True, 'reason': 'Valid content - symbol and name found within 15 characters', 'confidence': 0.985, 'symbol_found': True, 'symbol_in_context': True, 'name_found': True, 'false_positive': False, 'validation_layer': 'proximity_check', 'proximity_distance': 15}
-version: 3.6.0
+version: 3.6.1-modified
+updated_date: 2026-01-04T08:02:40.693364
 ---
 <!DOCTYPE html>
 <html lang="zh-TW" prefix="og: https://ogp.me/ns#">
