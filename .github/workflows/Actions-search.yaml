@@ -84,20 +84,21 @@ jobs:
     - name: Setup Environment Variables
       run: |
         echo "Setting up environment variables..."
-        echo "GOOGLE_SEARCH_API_KEY=${{ secrets.GOOGLE_SEARCH_API_KEY }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY1=${{ secrets.GOOGLE_SEARCH_API_KEY1 }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY2=${{ secrets.GOOGLE_SEARCH_API_KEY2 }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY3=${{ secrets.GOOGLE_SEARCH_API_KEY3 }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY4=${{ secrets.GOOGLE_SEARCH_API_KEY4 }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY5=${{ secrets.GOOGLE_SEARCH_API_KEY5 }}" >> .env
-        echo "GOOGLE_SEARCH_API_KEY6=${{ secrets.GOOGLE_SEARCH_API_KEY6 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID=${{ secrets.GOOGLE_SEARCH_CSE_ID }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID1=${{ secrets.GOOGLE_SEARCH_CSE_ID1 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID2=${{ secrets.GOOGLE_SEARCH_CSE_ID2 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID3=${{ secrets.GOOGLE_SEARCH_CSE_ID3 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID4=${{ secrets.GOOGLE_SEARCH_CSE_ID4 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID5=${{ secrets.GOOGLE_SEARCH_CSE_ID5 }}" >> .env
-        echo "GOOGLE_SEARCH_CSE_ID6=${{ secrets.GOOGLE_SEARCH_CSE_ID6 }}" >> .env
+        # Trim whitespace from secrets to prevent API errors
+        echo "GOOGLE_SEARCH_API_KEY=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY1=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY1 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY2=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY2 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY3=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY3 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY4=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY4 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY5=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY5 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_API_KEY6=$(echo '${{ secrets.GOOGLE_SEARCH_API_KEY6 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID1=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID1 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID2=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID2 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID3=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID3 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID4=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID4 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID5=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID5 }}' | tr -d '[:space:]')" >> .env
+        echo "GOOGLE_SEARCH_CSE_ID6=$(echo '${{ secrets.GOOGLE_SEARCH_CSE_ID6 }}' | tr -d '[:space:]')" >> .env
         echo "SEARCH_RATE_LIMIT_PER_SECOND=${{ env.SEARCH_RATE_LIMIT_PER_SECOND }}" >> .env
         echo "SEARCH_DAILY_QUOTA=${{ env.SEARCH_DAILY_QUOTA }}" >> .env
         echo "MIN_QUALITY_THRESHOLD=${{ env.MIN_QUALITY_THRESHOLD }}" >> .env
