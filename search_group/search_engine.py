@@ -399,6 +399,12 @@ class SearchEngine:
         
         file_path = os.path.join(output_dir, filename)
         
+        # IDEMPOTENCY CHECK: If file exists (same hash), don't overwrite it.
+        # This prevents git conflicts caused solely by 'extracted_date' timestamp updates.
+        if os.path.exists(file_path):
+            print(f"⏭️ File content identical (by hash), skipping write: {filename}")
+            return file_path
+        
         try:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)

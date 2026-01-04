@@ -267,9 +267,8 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-        # Stage MD files and CSV
+        # Stage MD files only
         git add data/md/*.md || true
-        git add data/reports/factset_detailed_report_latest.csv || true
 
         if git diff --staged --quiet; then
           echo "No search changes to commit"

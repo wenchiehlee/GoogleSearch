@@ -35,6 +35,11 @@ jobs:
           echo "📊 Files before quarantine:"
           ls -1 data/md/*.md 2>/dev/null | wc -l || echo "0"
 
+      - name: Generate CSV for detection
+        run: |
+          echo "📊 Generating CSV for quarantine detection..."
+          python process_group/process_cli.py generate-csv
+
       - name: Run quarantine script (CSV-based detection)
         run: |
           echo "🗂️ Starting CSV-based quarantine process..."
