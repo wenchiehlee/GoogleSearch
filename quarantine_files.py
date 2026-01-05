@@ -388,8 +388,8 @@ class OldFileQuarantiner:
         df = pd.read_csv(csv_path, encoding='utf-8-sig')
 
         # Define data columns to check
-        revenue_cols = ['2026營收平均值', '2027營收平均值', '2028營收平均值']
-        eps_cols = ['2026EPS平均值', '2027EPS平均值', '2028EPS平均值']
+        revenue_cols = ['2025營收平均值', '2026營收平均值', '2027營收平均值', '2028營收平均值']
+        eps_cols = ['2025EPS平均值', '2026EPS平均值', '2027EPS平均值', '2028EPS平均值']
 
         # Find files with high quality scores
         high_quality = df[df['品質評分'] >= 7.5].copy()

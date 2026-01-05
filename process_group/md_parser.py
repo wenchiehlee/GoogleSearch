@@ -500,23 +500,23 @@ class MDParser:
         if analyst_count > 0:
             score += 1.0
             
-        # EPS scoring (3.0 max, 1.0 per year)
-        for year in ['2026', '2027', '2028']:
-            year_score = 0
+        # EPS scoring (3.0 max, 1.0 per year present, capped at 3.0)
+        eps_available = 0
+        for year in ['2025', '2026', '2027', '2028']:
             if eps_stats.get(f'eps_{year}_avg') is not None or eps_stats.get(f'eps_{year}_median') is not None:
-                year_score += 0.5
+                eps_available += 0.5
             if eps_stats.get(f'eps_{year}_high') is not None or eps_stats.get(f'eps_{year}_low') is not None:
-                year_score += 0.5
-            score += year_score
+                eps_available += 0.5
+        score += min(eps_available, 3.0)
 
-        # Revenue scoring (3.0 max, 1.0 per year)
-        for year in ['2026', '2027', '2028']:
-            year_score = 0
+        # Revenue scoring (3.0 max, 1.0 per year present, capped at 3.0)
+        revenue_available = 0
+        for year in ['2025', '2026', '2027', '2028']:
             if revenue_stats.get(f'revenue_{year}_avg') is not None or revenue_stats.get(f'revenue_{year}_median') is not None:
-                year_score += 0.5
+                revenue_available += 0.5
             if revenue_stats.get(f'revenue_{year}_high') is not None or revenue_stats.get(f'revenue_{year}_low') is not None:
-                year_score += 0.5
-            score += year_score
+                revenue_available += 0.5
+        score += min(revenue_available, 3.0)
         
         return round(min(score, 10), 2)
 
