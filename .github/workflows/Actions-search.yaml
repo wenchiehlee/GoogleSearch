@@ -291,7 +291,7 @@ jobs:
             fi
             echo "Push failed (attempt $count), pulling and retrying..."
             sleep $(( 5 + $RANDOM % 15 ))
-            git pull --rebase
+            git pull --rebase -X ours
           done
           echo "Search results and CSV committed and pushed"
         fi
