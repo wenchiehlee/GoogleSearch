@@ -770,6 +770,8 @@ CSV-based detection (DEFAULT):
                        help='Quarantine files with quality_score <= max-quality')
     parser.add_argument('--output', type=str, default='old_files_report.txt',
                        help='Output report filename')
+    parser.add_argument('--yes', action='store_true',
+                       help='Skip confirmation prompt (auto-confirm)')
 
     args = parser.parse_args()
 
@@ -801,7 +803,11 @@ CSV-based detection (DEFAULT):
     if args.quarantine and results:
         print()
         print("=" * 80)
-        response = input(f"Quarantine {len(results)} old files? (yes/no): ")
+        
+        if args.yes:
+            response = 'yes'
+        else:
+            response = input(f"Quarantine {len(results)} old files? (yes/no): ")
 
         if response.lower() in ['yes', 'y']:
             moved = quarantiner.quarantine_files(results)

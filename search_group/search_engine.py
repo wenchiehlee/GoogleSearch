@@ -382,7 +382,11 @@ class SearchEngine:
             if isinstance(value, dict):
                 yaml_lines.append(f'{key}: {value}')
             elif isinstance(value, str):
-                yaml_lines.append(f'{key}: {value}')
+                # Fix: Wrap search_query in single quotes if it contains double quotes
+                if key == 'search_query' and '"' in value:
+                    yaml_lines.append(f'{key}: \'{value}\'')
+                else:
+                    yaml_lines.append(f'{key}: {value}')
             else:
                 yaml_lines.append(f'{key}: {value}')
         yaml_lines.append('---')

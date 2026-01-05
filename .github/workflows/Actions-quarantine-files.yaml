@@ -11,8 +11,8 @@ on:
 jobs:
   quarantine-files:
     runs-on: ubuntu-latest
-    # Only run if Search workflow succeeded (skip if failed)
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    # Run if Search workflow completed (even if failed, but skip if cancelled/skipped)
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion != 'cancelled' && github.event.workflow_run.conclusion != 'skipped') }}
 
     steps:
       - name: Checkout repository
@@ -46,7 +46,7 @@ jobs:
           echo "📋 Using: data/reports/factset_detailed_report_latest.csv"
           echo "📌 Criteria: quality_score >= 7.5 AND (missing revenue OR EPS) OR quality_score <= 7.4"
           echo ""
-          echo "yes" | python quarantine_files.py --max-quality 7.4 --quarantine
+          python quarantine_files.py --max-quality 7.4 --quarantine --yes
 
       - name: Count files after quarantine
         run: |
