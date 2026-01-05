@@ -1,18 +1,18 @@
 {
   "version": "3.6.1-modified",
-  "timestamp": "2026-01-04T19:00:12.791107",
+  "timestamp": "2026-01-05T07:26:13.705265",
   "results": {
     "md_scanner": {
       "status": "success",
-      "message": "\u627e\u5230 68 \u500b MD \u6a94\u6848",
-      "files_count": 68
+      "message": "\u627e\u5230 71 \u500b MD \u6a94\u6848",
+      "files_count": 71
     },
     "md_parser": {
       "status": "success",
       "message": "MD Parser v3.6.1-modified \u904b\u884c\u6b63\u5e38",
-      "test_file": "9921_\u5de8\u5927_factset_cfb2e680.md",
+      "test_file": "9921_\u5de8\u5927_factset_687acb43.md",
       "content_date_extracted": true,
-      "quality_score": 8.0,
+      "quality_score": 7.7,
       "enhanced_scoring": false
     },
     "keyword_analyzer": {
