@@ -103,9 +103,9 @@ class QualityAnalyzerSimplified:
                 },
 
                 'summary_metrics': {
-                    'eps_years_available': sum(1 for year in ['2025', '2026', '2027']
+                    'eps_years_available': sum(1 for year in ['2025', '2026', '2027', '2028']
                                               if parsed_data.get(f'eps_{year}_avg') is not None),
-                    'revenue_years_available': sum(1 for year in ['2025', '2026', '2027']
+                    'revenue_years_available': sum(1 for year in ['2025', '2026', '2027', '2028']
                                                   if parsed_data.get(f'revenue_{year}_avg') is not None),
                     'analyst_count': parsed_data.get('analyst_count', 0),
                     'has_target_price': parsed_data.get('target_price') is not None,
@@ -130,7 +130,7 @@ class QualityAnalyzerSimplified:
         - 覆蓋率 (50%): 有幾年的 EPS 資料
         - 品質 (50%): EPS 範圍是否有效
         """
-        eps_years = ['2025', '2026', '2027']
+        eps_years = ['2025', '2026', '2027', '2028']
 
         # 先進行嚴格驗證
         for year in eps_years:
@@ -158,7 +158,7 @@ class QualityAnalyzerSimplified:
         eps_available = sum(1 for year in eps_years
                            if data.get(f'eps_{year}_avg') is not None)
 
-        coverage_score = (eps_available / 3) * 5.0
+        coverage_score = (eps_available / 4) * 5.0
         score += coverage_score
 
         # 2. 範圍品質評分 (最高5分)
@@ -196,7 +196,7 @@ class QualityAnalyzerSimplified:
         - 覆蓋率 (50%): 有幾年的營收資料
         - 品質 (50%): 營收範圍是否有效
         """
-        revenue_years = ['2025', '2026', '2027']
+        revenue_years = ['2025', '2026', '2027', '2028']
 
         # 先進行嚴格驗證
         for year in revenue_years:
@@ -224,7 +224,7 @@ class QualityAnalyzerSimplified:
         revenue_available = sum(1 for year in revenue_years
                                if data.get(f'revenue_{year}_avg') is not None)
 
-        coverage_score = (revenue_available / 3) * 5.0
+        coverage_score = (revenue_available / 4) * 5.0
         score += coverage_score
 
         # 2. 範圍品質評分 (最高5分)
@@ -314,17 +314,22 @@ class QualityAnalyzerSimplified:
         eps_2025 = data.get('eps_2025_avg')
         eps_2026 = data.get('eps_2026_avg')
         eps_2027 = data.get('eps_2027_avg')
+        eps_2028 = data.get('eps_2028_avg')
 
         consistency_score = 4.0
 
         # 檢查異常變化 (>1000% YoY)
         if eps_2025 and eps_2026 and eps_2025 > 0:
             if abs(eps_2026 - eps_2025) > eps_2025 * 10:
-                consistency_score -= 2.0
+                consistency_score -= 1.33
 
         if eps_2026 and eps_2027 and eps_2026 > 0:
             if abs(eps_2027 - eps_2026) > eps_2026 * 10:
-                consistency_score -= 2.0
+                consistency_score -= 1.33
+
+        if eps_2027 and eps_2028 and eps_2027 > 0:
+            if abs(eps_2028 - eps_2027) > eps_2027 * 10:
+                consistency_score -= 1.33
 
         score += max(0, consistency_score)
 

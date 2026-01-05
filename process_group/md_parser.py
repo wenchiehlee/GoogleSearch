@@ -500,22 +500,22 @@ class MDParser:
         if analyst_count > 0:
             score += 1.0
             
-        # EPS scoring (3.0 max, 1.0 per year)
-        for year in ['2025', '2026', '2027']:
+        # EPS scoring (3.0 max, 0.75 per year)
+        for year in ['2025', '2026', '2027', '2028']:
             year_score = 0
             if eps_stats.get(f'eps_{year}_avg') is not None or eps_stats.get(f'eps_{year}_median') is not None:
-                year_score += 0.5
+                year_score += 0.375
             if eps_stats.get(f'eps_{year}_high') is not None or eps_stats.get(f'eps_{year}_low') is not None:
-                year_score += 0.5
+                year_score += 0.375
             score += year_score
 
-        # Revenue scoring (3.0 max, 1.0 per year)
-        for year in ['2025', '2026', '2027']:
+        # Revenue scoring (3.0 max, 0.75 per year)
+        for year in ['2025', '2026', '2027', '2028']:
             year_score = 0
             if revenue_stats.get(f'revenue_{year}_avg') is not None or revenue_stats.get(f'revenue_{year}_median') is not None:
-                year_score += 0.5
+                year_score += 0.375
             if revenue_stats.get(f'revenue_{year}_high') is not None or revenue_stats.get(f'revenue_{year}_low') is not None:
-                year_score += 0.5
+                year_score += 0.375
             score += year_score
         
         return round(min(score, 10), 2)
@@ -1291,7 +1291,7 @@ class MDParser:
 
     def _extract_eps_data(self, content: str) -> Dict[str, List[float]]:
         """提取 EPS 資料"""
-        eps_data = {'2025': [], '2026': [], '2027': []}
+        eps_data = {'2025': [], '2026': [], '2027': [], '2028': []}
 
         table_stats = self._extract_eps_table_stats(content)
         if table_stats:
@@ -1311,18 +1311,24 @@ class MDParser:
                 except (ValueError, IndexError):
                     continue
 
-        for year in ['2025', '2026', '2027']:
+        for year in ['2025', '2026', '2027', '2028']:
             eps_data[year] = list(set(eps_data[year]))
 
         return eps_data
 
     def _extract_eps_from_table(self, content: str) -> Dict[str, List[float]]:
         """從表格中提取 EPS 資料"""
-        eps_data = {'2025': [], '2026': [], '2027': []}
+        eps_data = {'2025': [], '2026': [], '2027': [], '2028': []}
         
         table_patterns = [
+            r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
             r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
             r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)',
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
+            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
             r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
             r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
             r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
@@ -1336,7 +1342,16 @@ class MDParser:
             matches = re.findall(pattern, content)
             for match in matches:
                 try:
-                    if len(match) == 4:
+                    if len(match) == 5:
+                        years = ['2025', '2026', '2027', '2028']
+                        for i, year in enumerate(years):
+                            value_str = match[i + 1].strip()
+                            value_str = re.sub(r'\([^)]*\)', '', value_str)
+                            value_str = value_str.replace(',', '')
+                            value = float(value_str)
+                            if 0 < value < 1000:
+                                eps_data[year].append(value)
+                    elif len(match) == 4:
                         years = ['2025', '2026', '2027']
                         for i, year in enumerate(years):
                             value_str = match[i + 1].strip()
@@ -1372,6 +1387,20 @@ class MDParser:
             '中位數': 'median',
         }
         stats: Dict[str, Dict[str, float]] = {}
+
+        row_pattern_4 = (
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>'
+        )
+        for label, v2025, v2026, v2027, v2028 in re.findall(row_pattern_4, table_html):
+            for year, raw in zip(['2025', '2026', '2027', '2028'], [v2025, v2026, v2027, v2028]):
+                value = self._parse_numeric_value(raw)
+                if value is None:
+                    continue
+                stats.setdefault(year, {})[label_map[label]] = value
 
         row_pattern_3 = (
             r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
@@ -1449,6 +1478,20 @@ class MDParser:
         }
         stats: Dict[str, Dict[str, float]] = {}
 
+        row_pattern_4 = (
+            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>\s*'
+            r'<td[^>]*>([^<]+)</td>'
+        )
+        for label, v2025, v2026, v2027, v2028 in re.findall(row_pattern_4, table_html):
+            for year, raw in zip(['2025', '2026', '2027', '2028'], [v2025, v2026, v2027, v2028]):
+                value = self._parse_numeric_value(raw, min_val=1000)
+                if value is None:
+                    continue
+                stats.setdefault(year, {})[label_map[label]] = value
+
         row_pattern_3 = (
             r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
             r'<td[^>]*>([^<]+)</td>\s*'
@@ -1469,7 +1512,7 @@ class MDParser:
         result = {}
         table_stats = self._extract_revenue_table_stats(content)
 
-        for year in ['2025', '2026', '2027']:
+        for year in ['2025', '2026', '2027', '2028']:
             year_stats = table_stats.get(year, {})
             result[f'revenue_{year}_high'] = year_stats.get('high')
             result[f'revenue_{year}_low'] = year_stats.get('low')
@@ -1509,7 +1552,7 @@ class MDParser:
         result = {}
         table_stats = eps_data.get('_table_stats', {})
 
-        for year in ['2025', '2026', '2027']:
+        for year in ['2025', '2026', '2027', '2028']:
             values = eps_data.get(year, [])
             table_year_stats = table_stats.get(year, {})
 
@@ -1569,6 +1612,7 @@ class MDParser:
             'eps_2025_high': None, 'eps_2025_low': None, 'eps_2025_avg': None,
             'eps_2026_high': None, 'eps_2026_low': None, 'eps_2026_avg': None,
             'eps_2027_high': None, 'eps_2027_low': None, 'eps_2027_avg': None,
+            'eps_2028_high': None, 'eps_2028_low': None, 'eps_2028_avg': None,
             'target_price': None,
             'analyst_count': 0,
             'has_eps_data': False,
