@@ -1289,6 +1289,36 @@ class MDParser:
         
         return result
 
+    def _extract_table_years(self, table_html: str) -> List[str]:
+        """從表格標題列提取年份列表"""
+        try:
+            # 尋找第一個 tr (標題列)
+            first_row_match = re.search(r'<tr>(.*?)</tr>', table_html, re.DOTALL | re.IGNORECASE)
+            if not first_row_match:
+                return []
+            
+            row_content = first_row_match.group(1)
+            # 移除所有 HTML 標籤
+            clean_row = re.sub(r'<[^>]+>', '', row_content)
+            # 尋找所有 4 位數字 (年份)
+            years = re.findall(r'(\d{4})', clean_row)
+            
+            # 過濾合理的年份範圍 (2023-2030)
+            valid_years = [y for y in years if 2023 <= int(y) <= 2030]
+            
+            # 去重並保持順序
+            seen = set()
+            ordered_years = []
+            for y in valid_years:
+                if y not in seen:
+                    ordered_years.append(y)
+                    seen.add(y)
+            
+            return ordered_years
+        except Exception as e:
+            print(f"⚠️ 提取表格年份失敗: {e}")
+            return []
+
     def _extract_eps_data(self, content: str) -> Dict[str, List[float]]:
         """提取 EPS 資料"""
         eps_data = {'2025': [], '2026': [], '2027': [], '2028': []}
@@ -1375,57 +1405,31 @@ class MDParser:
         return eps_data
 
     def _extract_eps_table_stats(self, content: str) -> Dict[str, Dict[str, float]]:
-        """從 EPS 表格提取統計值"""
+        """從 EPS 表格提取統計值 (動態年份)"""
         table_html = self._find_eps_table_html(content)
         if not table_html:
             return {}
 
-        label_map = {
-            '最高值': 'high',
-            '最低值': 'low',
-            '平均值': 'avg',
-            '中位數': 'median',
-        }
+        label_map = {'最高值': 'high', '最低值': 'low', '平均值': 'avg', '中位數': 'median'}
         stats: Dict[str, Dict[str, float]] = {}
 
-        row_pattern_4 = (
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>'
-        )
-        for label, v2025, v2026, v2027, v2028 in re.findall(row_pattern_4, table_html):
-            for year, raw in zip(['2025', '2026', '2027', '2028'], [v2025, v2026, v2027, v2028]):
-                value = self._parse_numeric_value(raw)
-                if value is None:
-                    continue
-                stats.setdefault(year, {})[label_map[label]] = value
+        # 動態提取年份
+        table_years = self._extract_table_years(table_html)
+        if not table_years:
+            return {}
 
-        row_pattern_3 = (
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>'
-        )
-        for label, v2025, v2026, v2027 in re.findall(row_pattern_3, table_html):
-            for year, raw in zip(['2025', '2026', '2027'], [v2025, v2026, v2027]):
+        num_years = len(table_years)
+        # 構建對應年份數量的 td 模式
+        td_patterns = "".join([r'\s*<td[^>]*>([^<]+)</td>' for _ in range(num_years)])
+        row_pattern = rf'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>{td_patterns}'
+        
+        for match in re.findall(row_pattern, table_html, re.IGNORECASE | re.DOTALL):
+            label = match[0]
+            values = match[1:]
+            for year, raw in zip(table_years, values):
                 value = self._parse_numeric_value(raw)
-                if value is None:
-                    continue
-                stats.setdefault(year, {})[label_map[label]] = value
-
-        row_pattern_2 = (
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>'
-        )
-        for label, v2025, v2026 in re.findall(row_pattern_2, table_html):
-            for year, raw in zip(['2025', '2026'], [v2025, v2026]):
-                value = self._parse_numeric_value(raw)
-                if value is None:
-                    continue
-                stats.setdefault(year, {})[label_map[label]] = value
+                if value is not None:
+                    stats.setdefault(year, {})[label_map[label]] = value
 
         return stats
 
@@ -1465,45 +1469,29 @@ class MDParser:
         return number
 
     def _extract_revenue_table_stats(self, content: str) -> Dict[str, Dict[str, float]]:
-        """從營收表格提取統計值"""
+        """從營收表格提取統計值 (動態年份)"""
         table_html = self._find_revenue_table_html(content)
         if not table_html:
             return {}
 
-        label_map = {
-            '最高值': 'high',
-            '最低值': 'low',
-            '平均值': 'avg',
-            '中位數': 'median',
-        }
+        label_map = {'最高值': 'high', '最低值': 'low', '平均值': 'avg', '中位數': 'median'}
         stats: Dict[str, Dict[str, float]] = {}
 
-        row_pattern_4 = (
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>'
-        )
-        for label, v2025, v2026, v2027, v2028 in re.findall(row_pattern_4, table_html):
-            for year, raw in zip(['2025', '2026', '2027', '2028'], [v2025, v2026, v2027, v2028]):
-                value = self._parse_numeric_value(raw, min_val=1000)
-                if value is None:
-                    continue
-                stats.setdefault(year, {})[label_map[label]] = value
+        table_years = self._extract_table_years(table_html)
+        if not table_years:
+            return {}
 
-        row_pattern_3 = (
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>\s*'
-            r'<td[^>]*>([^<]+)</td>'
-        )
-        for label, v2025, v2026, v2027 in re.findall(row_pattern_3, table_html):
-            for year, raw in zip(['2025', '2026', '2027'], [v2025, v2026, v2027]):
+        num_years = len(table_years)
+        td_patterns = "".join([r'\s*<td[^>]*>([^<]+)</td>' for _ in range(num_years)])
+        row_pattern = rf'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>{td_patterns}'
+        
+        for match in re.findall(row_pattern, table_html, re.IGNORECASE | re.DOTALL):
+            label = match[0]
+            values = match[1:]
+            for year, raw in zip(table_years, values):
                 value = self._parse_numeric_value(raw, min_val=1000)
-                if value is None:
-                    continue
-                stats.setdefault(year, {})[label_map[label]] = value
+                if value is not None:
+                    stats.setdefault(year, {})[label_map[label]] = value
 
         return stats
 
