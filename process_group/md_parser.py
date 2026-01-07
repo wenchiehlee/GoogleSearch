@@ -338,6 +338,17 @@ class MDParser:
                 updated_yaml
             )
 
+            # Fix malformed search_query if present
+            search_query = yaml_data.get('search_query', '')
+            if isinstance(search_query, str) and '"' in search_query:
+                if not (search_query.startswith("'") and search_query.endswith("'")):
+                    safe_query = f"'{search_query}'"
+                    updated_yaml = re.sub(
+                        r'search_query:\s*[^\n]+',
+                        f'search_query: {safe_query}',
+                        updated_yaml
+                    )
+
             # 添加更新時間戳記
             update_timestamp = datetime.now().isoformat()
             if 'updated_date:' in updated_yaml:
