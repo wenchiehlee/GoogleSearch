@@ -1347,60 +1347,51 @@ class MDParser:
         return eps_data
 
     def _extract_eps_from_table(self, content: str) -> Dict[str, List[float]]:
-        """從表格中提取 EPS 資料"""
+        """從表格中提取 EPS 資料 (增強版：動態年份)"""
         eps_data = {'2025': [], '2026': [], '2027': [], '2028': []}
         
-        table_patterns = [
-            r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
-            r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)\s*\|\s*([0-9]+\.?[0-9]*)',
-            r'\|\s*(最高值|最低值|平均值|中位數)[^|]*\|\s*([0-9]+\.?[0-9]*)[^|]*\|\s*([0-9]+\.?[0-9]*)',
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
-            r'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*'
-            r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>',
-        ]
+        # 1. 定位表格並提取年份
+        table_html = self._find_eps_table_html(content)
+        if not table_html:
+            return eps_data
+            
+        table_years = self._extract_table_years(table_html)
+        if not table_years:
+            return eps_data
+            
+        num_years = len(table_years)
         
-        for pattern in table_patterns:
-            matches = re.findall(pattern, content)
-            for match in matches:
-                try:
-                    if len(match) == 5:
-                        years = ['2025', '2026', '2027', '2028']
-                        for i, year in enumerate(years):
-                            value_str = match[i + 1].strip()
-                            value_str = re.sub(r'\([^)]*\)', '', value_str)
-                            value_str = value_str.replace(',', '')
-                            value = float(value_str)
+        # 2. 根據年份數量提取數據
+        # Markdown 表格模式
+        if '|' in content:
+            md_td_pattern = "".join([r'[^|]*\|\s*([0-9]+\.?[0-9]*)' for _ in range(num_years)])
+            md_row_pattern = rf'\|\s*(最高值|最低值|平均值|中位數){md_td_pattern}'
+            
+            for match in re.findall(md_row_pattern, content):
+                label = match[0]
+                values = match[1:]
+                for year, val_str in zip(table_years, values):
+                    if year in eps_data:
+                        try:
+                            value = float(val_str)
                             if 0 < value < 1000:
                                 eps_data[year].append(value)
-                    elif len(match) == 4:
-                        years = ['2025', '2026', '2027']
-                        for i, year in enumerate(years):
-                            value_str = match[i + 1].strip()
-                            value_str = re.sub(r'\([^)]*\)', '', value_str)
-                            value_str = value_str.replace(',', '')
-                            value = float(value_str)
-                            if 0 < value < 1000:
-                                eps_data[year].append(value)
-                    elif len(match) == 3:
-                        years = ['2025', '2026']
-                        for i, year in enumerate(years):
-                            value_str = match[i + 1].strip()
-                            value_str = re.sub(r'\([^)]*\)', '', value_str)
-                            value_str = value_str.replace(',', '')
-                            value = float(value_str)
-                            if 0 < value < 1000:
-                                eps_data[year].append(value)
-                except (ValueError, IndexError):
-                    continue
+                        except: continue
+
+        # HTML 表格模式
+        td_patterns = "".join([r'<td[^>]*>([0-9,]+(?:\.[0-9]+)?)[^<]*</td>\s*' for _ in range(num_years)])
+        html_row_pattern = rf'<tr>\s*<td[^>]*>(最高值|最低值|平均值|中位數)</td>\s*{td_patterns}'
+        
+        for match in re.findall(html_row_pattern, table_html, re.IGNORECASE | re.DOTALL):
+            label = match[0]
+            values = match[1:]
+            for year, val_str in zip(table_years, values):
+                if year in eps_data:
+                    try:
+                        value = float(val_str.replace(',', ''))
+                        if 0 < value < 1000:
+                            eps_data[year].append(value)
+                    except: continue
         
         return eps_data
 
