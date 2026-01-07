@@ -39,7 +39,10 @@
       "Bash(git push:*)",
       "Bash(gh run view:*)",
       "Bash(python3 -c \"import sys; sys.path.insert\\(0, ''..''\\); from process_group.quality_analyzer_simplified import QualityAnalyzerSimplified\")",
-      "Bash(PYTHONPATH=/c/Users/WJLEE/SynologyDrive/NAS/github.com/GoogleSearch.Factset python:*)"
+      "Bash(PYTHONPATH=/c/Users/WJLEE/SynologyDrive/NAS/github.com/GoogleSearch.Factset python:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh auth refresh -s workflow)"
     ]
   }
 }

@@ -67,7 +67,7 @@ __date__ = "2025-07-01"
 # Import search group components
 try:
     from search_engine import SearchEngine
-    from api_manager import APIManager
+    from api_manager import APIManager, AllKeysExhaustedException, QuotaExceededException
 except ImportError as e:
     print(f"Error importing search components: {e}")
     print("Make sure search_engine.py and api_manager.py are in the same directory")
@@ -659,6 +659,10 @@ class SearchCLI:
                 self.logger.warning(f"❌ {symbol} - no financial data found")
                 return False
                 
+        except (AllKeysExhaustedException, QuotaExceededException):
+            # Propagate critical errors to caller (batch loop)
+            raise
+            
         except Exception as e:
             print(f"❌ Search company failed: {e}")
             self.logger.error(f"Search company failed: {e}")
@@ -717,11 +721,21 @@ class SearchCLI:
                 try:
                     if self.cmd_search_company(symbol, result_count, min_quality):
                         successful += 1
+                
+                except (AllKeysExhaustedException, QuotaExceededException) as e:
+                    print(f"🛑 Critical API Error: {e}")
+                    self.logger.critical(f"Aborting search all: {e}")
+                    break
                     
                 except Exception as e:
                     print(f"❌ {symbol} failed: {e}")
                     self.logger.error(f"❌ {symbol} failed: {e}")
                     self._record_failure(symbol, str(e))
+                    
+                    # Check for exhausted keys in generic exception message
+                    if "exhausted" in str(e).lower() or "quota" in str(e).lower():
+                        print("🛑 Detected quota exhaustion in error message. Aborting.")
+                        break
                 
                 # Progress update with key status
                 if i % 10 == 0:
@@ -793,11 +807,20 @@ class SearchCLI:
             try:
                 if self.cmd_search_company(symbol, result_count, min_quality):
                     successful += 1
+            
+            except (AllKeysExhaustedException, QuotaExceededException) as e:
+                print(f"🛑 Critical API Error: {e}")
+                self.logger.critical(f"Aborting resume: {e}")
+                break
                 
             except Exception as e:
                 print(f"❌ {symbol} failed: {e}")
                 self.logger.error(f"❌ {symbol} failed: {e}")
                 self._record_failure(symbol, str(e))
+                
+                if "exhausted" in str(e).lower() or "quota" in str(e).lower():
+                    print("🛑 Detected quota exhaustion in error message. Aborting.")
+                    break
         
         # Final summary
         final_key_status = self.api_manager.get_key_status()
