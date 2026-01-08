@@ -109,14 +109,30 @@ class SearchConfig:
                 "google_api_key4": os.getenv("GOOGLE_SEARCH_API_KEY4"),
                 "google_api_key5": os.getenv("GOOGLE_SEARCH_API_KEY5"),
                 "google_api_key6": os.getenv("GOOGLE_SEARCH_API_KEY6"),
+                "google_api_key7": os.getenv("GOOGLE_SEARCH_API_KEY7"),
+                "google_api_key8": os.getenv("GOOGLE_SEARCH_API_KEY8"),
+                "google_api_key9": os.getenv("GOOGLE_SEARCH_API_KEY9"),
+                "google_api_key10": os.getenv("GOOGLE_SEARCH_API_KEY10"),
+                "google_api_key11": os.getenv("GOOGLE_SEARCH_API_KEY11"),
+                "google_api_key12": os.getenv("GOOGLE_SEARCH_API_KEY12"),
+                "google_api_key13": os.getenv("GOOGLE_SEARCH_API_KEY13"),
+                "google_api_key14": os.getenv("GOOGLE_SEARCH_API_KEY14"),
                 
-                # Additional CSE IDs (1-6)
+                # Additional CSE IDs (1-14)
                 "google_cse_id1": os.getenv("GOOGLE_SEARCH_CSE_ID1"),
                 "google_cse_id2": os.getenv("GOOGLE_SEARCH_CSE_ID2"),
                 "google_cse_id3": os.getenv("GOOGLE_SEARCH_CSE_ID3"),
                 "google_cse_id4": os.getenv("GOOGLE_SEARCH_CSE_ID4"),
                 "google_cse_id5": os.getenv("GOOGLE_SEARCH_CSE_ID5"),
-                "google_cse_id6": os.getenv("GOOGLE_SEARCH_CSE_ID6")
+                "google_cse_id6": os.getenv("GOOGLE_SEARCH_CSE_ID6"),
+                "google_cse_id7": os.getenv("GOOGLE_SEARCH_CSE_ID7"),
+                "google_cse_id8": os.getenv("GOOGLE_SEARCH_CSE_ID8"),
+                "google_cse_id9": os.getenv("GOOGLE_SEARCH_CSE_ID9"),
+                "google_cse_id10": os.getenv("GOOGLE_SEARCH_CSE_ID10"),
+                "google_cse_id11": os.getenv("GOOGLE_SEARCH_CSE_ID11"),
+                "google_cse_id12": os.getenv("GOOGLE_SEARCH_CSE_ID12"),
+                "google_cse_id13": os.getenv("GOOGLE_SEARCH_CSE_ID13"),
+                "google_cse_id14": os.getenv("GOOGLE_SEARCH_CSE_ID14")
             },
             "quality": {
                 "min_relevance_score": 2,
@@ -159,7 +175,7 @@ class SearchConfig:
         if primary_key and primary_key.strip():
             api_keys.append("Primary")
         
-        for i in range(1, 7):
+        for i in range(1, 15):
             key = self.config["api"][f"google_api_key{i}"]
             if key and key.strip():
                 api_keys.append(f"Key{i}")
@@ -170,7 +186,7 @@ class SearchConfig:
         if primary_cse and primary_cse.strip():
             cse_ids.append("Primary")
         
-        for i in range(1, 7):
+        for i in range(1, 15):
             cse = self.config["api"][f"google_cse_id{i}"]
             if cse and cse.strip():
                 cse_ids.append(f"CSE{i}")
@@ -998,7 +1014,8 @@ Examples:
 
 API KEY ROTATION FEATURES:
   - Automatic rotation on quota exceeded (429 errors)
-  - Support for up to 7 API keys (GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_API_KEY1-6)
+  - Support for up to 15 API keys (GOOGLE_SEARCH_API_KEY, GOOGLE_SEARCH_API_KEY1-14)
+  - Randomized start index to distribute load across parallel batches
   - Intelligent key status tracking and monitoring
   - Enhanced error handling and recovery
   - Comprehensive key usage statistics
