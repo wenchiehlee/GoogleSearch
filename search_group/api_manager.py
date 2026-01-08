@@ -407,8 +407,8 @@ class APIManager:
             if primary_cse and primary_cse.strip():
                 cse_ids.append(primary_cse.strip())
         
-        # Load additional keys (1-6)
-        for i in range(1, 7):
+        # Load additional keys (1-14)
+        for i in range(1, 15):
             key = self.config.get(f'api.google_api_key{i}')
             cse = self.config.get(f'api.google_cse_id{i}')
             
