@@ -18,6 +18,7 @@ import time
 import json
 import hashlib
 import logging
+import random
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Union, Tuple
@@ -51,7 +52,9 @@ class APIKeyManager:
     def __init__(self, api_keys: List[str], cse_ids: List[str]):
         self.api_keys = api_keys
         self.cse_ids = cse_ids
-        self.current_key_index = 0
+        # Randomize starting key to distribute load across all keys
+        # This prevents Batch 1-4 from all hammering Key #1 simultaneously
+        self.current_key_index = random.randint(0, len(api_keys) - 1)
         self.exhausted_keys = set()
         self.key_stats = {}
         
