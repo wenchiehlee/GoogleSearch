@@ -673,7 +673,8 @@ class SearchCLI:
                 print(f"📊 Search stats: {patterns_executed} patterns executed, {api_calls_made} API calls")
                 print(f"🔑 Key rotation: {key_rotations} rotations, ended with key #{final_key_status['current_key_index']}")
                 self.logger.warning(f"❌ {symbol} - no financial data found")
-                return False
+                # Treat as success (completed without error) even if no results found
+                return True
                 
         except (AllKeysExhaustedException, QuotaExceededException):
             # Propagate critical errors to caller (batch loop)
@@ -707,7 +708,7 @@ class SearchCLI:
         print(f"\n📊 Batch completed: {successful}/{len(symbols)} successful")
         print(f"🔑 Total key rotations: {total_rotations}, final key: #{final_key_status['current_key_index']}")
         self.logger.info(f"Batch completed: {successful}/{len(symbols)} successful with {total_rotations} key rotations")
-        return successful > 0
+        return True
     
     def cmd_search_all(self, result_count: str = '1', min_quality: int = None) -> bool:
         """Search all companies with key rotation support"""
@@ -768,7 +769,7 @@ class SearchCLI:
             print(f"\n🎉 Comprehensive search with key rotation completed! {successful}/{total} companies successful")
             print(f"🔑 Final key status: #{final_key_status['current_key_index']}, {total_rotations} total rotations")
             self.logger.info(f"Search completed: {successful}/{total} successful with {total_rotations} key rotations")
-            return successful > 0
+            return True
             
         except Exception as e:
             print(f"❌ Search all failed: {e}")
@@ -845,7 +846,7 @@ class SearchCLI:
         print(f"\n🎉 Resume with key rotation completed! {successful}/{len(remaining)} companies successful")
         print(f"🔑 Final key status: #{final_key_status['current_key_index']}, {total_rotations} total rotations")
         self.logger.info(f"Resume completed: {successful}/{len(remaining)} successful with {total_rotations} key rotations")
-        return successful > 0
+        return True
     
     def show_status(self):
         """Show current status with key rotation information"""
