@@ -55,8 +55,8 @@ IMPROVED_SEARCH_PATTERNS = {
         '"{name}" "目標價" "投資評等" "分析師" -論壇',  # Exclude forums
 
         # Institutional reports
-        'site:statementdog.com "{name}" "預估EPS"',
-        'site:wantgoo.com "{name}" "EPS" "預測"',
+        # 'site:statementdog.com "{name}" "預估EPS"',  # Often blocks scrapers
+        # 'site:wantgoo.com "{name}" "EPS" "預測"',    # Often blocks scrapers
     ],
 }
 

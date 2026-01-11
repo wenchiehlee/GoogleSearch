@@ -66,10 +66,8 @@ class SearchEngine:
             'factset_direct': [
                 # The single most effective query for recent FactSet reports
                 'site:cnyes.com "FactSet" "{symbol}" "EPS" "預估"',
-                # Backup query for broader coverage
-                '"{symbol}" "FactSet" "目標價" after:2024',
+                # Specific company + FactSet on CnYES
                 'site:cnyes.com "{symbol}" "{name}" "FactSet"',
-                'site:cnyes.com "{symbol}" "聯強" "FactSet"',
                 '"{symbol}" "{name}" "FactSet" "共識"'
             ],
             'eps_forecast': [
@@ -77,13 +75,7 @@ class SearchEngine:
                 '"{name}" "EPS" "預估" "2025" "2026"',
                 # Analyst consensus specific
                 '"{symbol}" "分析師" "共識" "目標價"',
-                '"{symbol}" "{name}" "分析師" "FactSet"',
-                '"{symbol}" "{name}" "EPS" "目標價"'
-            ],
-            'factset_secondary': [
-                'site:statementdog.com "{symbol}" "FactSet"',
-                'site:moneydj.com "{symbol}" "FactSet"',
-                'site:yahoo.com "{symbol}" "FactSet"'
+                '"{symbol}" "{name}" "分析師" "FactSet"'
             ]
         }
         
